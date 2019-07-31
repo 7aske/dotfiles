@@ -62,15 +62,6 @@ $color${cpubar cpu3 8, 160}  ${cpubar cpu7 8, 160}
 $color${cpubar cpu4 8, 160}  ${cpubar cpu8 8, 160}
 ${color2}Temp:$color ${exec sensors | grep "Package id 0:" | awk '{print $4}'} ${color2}Procs: $color${processes} ${color2}Freq: $color${freq_g}GHz
 
-${color1}GPU $color$hr
-
-${color2}Name: $color${exec nvidia-smi --format=csv,noheader --query-gpu=name}
-$color${execbar nvidia-smi --format=csv,noheader --query-gpu=utilization.gpu}  $color${execbar nvidia-smi --format=csv,noheader --query-gpu=utilization.memory}
-${color2}Utilization: $color${exec nvidia-smi --format=csv,noheader --query-gpu=utilization.gpu}$alignr${color2}Memory: $color${exec nvidia-smi --format=csv,noheader --query-gpu=memory.used | cut -d ' ' -f1}/${exec nvidia-smi --format=csv,noheader --query-gpu=memory.total} \
-
-${color2}Temp:$color +${exec nvidia-smi --format=csv,noheader --query-gpu=temperature.gpu}°C \
-${color2}State: $color${exec nvidia-smi --format=csv,noheader --query-gpu=pstate}
-
 ${color1}RAM $color$hr
 
 ${color2}Percent:$color $memperc% ${membar 8, 240}
@@ -115,3 +106,12 @@ ${execi 600 CODE=/home/nik/Code /home/nik/Code/c/cgs/build/cgs --no-color}
 -- ${goto 40}$color2${top name 4}$alignr$color${top cpu 4}%
 -- # ${goto 40}$color2${top name 5}$alignr$color${top cpu 5}%
 -- #
+
+-- ${color1}GPU $color$hr
+-- 
+-- ${color2}Name: $color${exec nvidia-smi --format=csv,noheader --query-gpu=name}
+-- $color${execbar nvidia-smi --format=csv,noheader --query-gpu=utilization.gpu}  $color${execbar nvidia-smi --format=csv,noheader --query-gpu=utilization.memory}
+-- ${color2}Utilization: $color${exec nvidia-smi --format=csv,noheader --query-gpu=utilization.gpu}$alignr${color2}Memory: $color${exec nvidia-smi --format=csv,noheader --query-gpu=memory.used | cut -d ' ' -f1}/${exec nvidia-smi --format=csv,noheader --query-gpu=memory.total} \
+-- 
+-- ${color2}Temp:$color +${exec nvidia-smi --format=csv,noheader --query-gpu=temperature.gpu}°C \
+-- ${color2}State: $color${exec nvidia-smi --format=csv,noheader --query-gpu=pstate}
