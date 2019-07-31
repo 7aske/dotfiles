@@ -40,7 +40,7 @@ conky.config = {
     -- show_graph_range = false,
     color1 = "#3498DB",
     color2 = "#8EC4D9",
-    default_bar_width = 160,
+    -- default_bar_width = 160,
 }
 
 conky.text = [[
@@ -62,6 +62,15 @@ $color${cpubar cpu3 8, 160}  ${cpubar cpu7 8, 160}
 $color${cpubar cpu4 8, 160}  ${cpubar cpu8 8, 160}
 ${color2}Temp:$color ${exec sensors | grep "Package id 0:" | awk '{print $4}'} ${color2}Procs: $color${processes} ${color2}Freq: $color${freq_g}GHz
 
+${color1}Battery $color$hr
+
+${color2}Percent:$color ${exec acpi | awk '{print $4}' | cut -d ',' -f1} ${execbar exec acpi | awk '{print $4}' | cut -d ',' -f1}
+${if_match "Discharging" == "${exec acpi | awk '{print $3}' | cut -d ',' -f1}"}\
+${color2}Remaining: $color ${exec acpi | awk '{print $5}'}
+${else}\
+${if_match "Discharging" == "${exec acpi | awk '{print $3}' | cut -d ',' -f1}"}\
+${color2}Until full: $color ${exec acpi | awk '{print $5}'}${endif}${endif}\
+
 ${color1}RAM $color$hr
 
 ${color2}Percent:$color $memperc% ${membar 8, 240}
@@ -80,14 +89,13 @@ ${color2}I/O: $color$diskio_write / $diskio_read
 ${color1}Networking $color$hr
 ${if_existing /proc/net/route eno1}
 ${color2}UP:$color ${upspeed eno1} ${color2}${alignr 10}DOWN: $color ${downspeed eno1}
-${upspeedgraph eno1 80,160 -l}${downspeedgraph eno1 80,160 -l}
-${else}
+${upspeedgraph eno1 40,160 -l}  ${downspeedgraph eno1 40,160 -l}
 ${if_existing /proc/net/route wlo1}
 ${color2}UP:$color ${upspeed wlo1}${color2}${alignr 10}DOWN: $color ${downspeed wlo1}
-${upspeedgraph wlo1 80,160 -l}${downspeedgraph wlo1 80,160 -l}
-${color2}SSID: $color ${wireless_essid wlo1} ${wireless_link_bar wlo1}${endif}
+${upspeedgraph wlo1 40,160 -l}  ${downspeedgraph wlo1 40,160 -l}
+${color2}Signal: ${color}${wireless_link_qual_perc wlo1}% ${wireless_link_bar 6, 240 wlo1}
+${color2}SSID: $color ${wireless_essid wlo1}
 ${endif}
-
 ${color1}Repositories $color$hr
 
 ${execi 600 CODE=/home/nik/Code /home/nik/Code/c/cgs/build/cgs --no-color}
@@ -106,12 +114,3 @@ ${execi 600 CODE=/home/nik/Code /home/nik/Code/c/cgs/build/cgs --no-color}
 -- ${goto 40}$color2${top name 4}$alignr$color${top cpu 4}%
 -- # ${goto 40}$color2${top name 5}$alignr$color${top cpu 5}%
 -- #
-
--- ${color1}GPU $color$hr
--- 
--- ${color2}Name: $color${exec nvidia-smi --format=csv,noheader --query-gpu=name}
--- $color${execbar nvidia-smi --format=csv,noheader --query-gpu=utilization.gpu}  $color${execbar nvidia-smi --format=csv,noheader --query-gpu=utilization.memory}
--- ${color2}Utilization: $color${exec nvidia-smi --format=csv,noheader --query-gpu=utilization.gpu}$alignr${color2}Memory: $color${exec nvidia-smi --format=csv,noheader --query-gpu=memory.used | cut -d ' ' -f1}/${exec nvidia-smi --format=csv,noheader --query-gpu=memory.total} \
--- 
--- ${color2}Temp:$color +${exec nvidia-smi --format=csv,noheader --query-gpu=temperature.gpu}°C \
--- ${color2}State: $color${exec nvidia-smi --format=csv,noheader --query-gpu=pstate}
