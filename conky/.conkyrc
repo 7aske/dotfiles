@@ -48,7 +48,6 @@ ${voffset 8}$color1${font Bitstream Vera Sans:size=16}${time %A}$font\
 ${voffset -8}$alignr$color${font Bitstream Vera Sans:size=38}${time %e}$font
 $color${voffset -30}$color${font Bitstream Vera Sans:size=18}${time %b}$font\
 ${voffset -3} $color${font Bitstream Vera Sans:size=20}${time %Y}$font$color1$hr
-#
 
 $nodename $kernel ($machine)
 ${color2}Uptime:$color $uptime
@@ -64,7 +63,12 @@ $color${cpubar cpu5 8, 160}  ${cpubar cpu13 8, 160}
 $color${cpubar cpu6 8, 160}  ${cpubar cpu14 8, 160}
 $color${cpubar cpu7 8, 160}  ${cpubar cpu15 8, 160}
 $color${cpubar cpu8 8, 160}  ${cpubar cpu16 8, 160}
-${color2}Temp:$color ${exec sensors | grep Tdie | awk '{print $2}'} ${color2}Procs: $color${processes} ${color2}Freq: $color${freq_g}GHz
+${color2}Temp:$color ${exec sensors | grep Tdie | awk '{print $2}'} ${color2}Procs: $color${processes} ${color2}Freq: $color${freq_g}GHz${alignr}${color2}Total: ${color}${cpu cpu0}%
+
+$color2${top name 1}$alignr$color${top cpu 1}%
+$color2${top name 2}$alignr$color${top cpu 2}%
+$color2${top name 3}$alignr$color${top cpu 3}%
+$color2${top name 4}$alignr$color${top cpu 4}%
 
 ${color1}GPU $color$hr
 
@@ -100,17 +104,3 @@ ${color1}Repositories $color$hr
 
 ${execi 600 CODE=/home/nik/Code /home/nik/Code/c/cgs/build/cgs --no-color}
 ]]
-
--- ${alignr 0}${execi 3 /home/nik/Code/go/gitstats-go/out/gitstats | perl -pe 's/\e\[?.*?[\@-~]//g' | cut -c 43-} 
--- ${color1}Battery $color$hr
-
--- ${color2}Percentage:$color ${exec acpi | awk '{print $4}' | cut -d ',' -f1}${alignr}${color2}Remaining: $color ${exec acpi | awk '{print $5}'}
--- ${execbar exec acpi | awk '{print $4}' | cut -d ',' -f1}
--- ${execp python3 /home/nik/Code/py/utils-py/gitstatus.py | perl -pe 's/\e\[?.*?[\@-~]//g' | cat}
--- ${voffset 20}${goto 40}${color}CPU${font Bitstream Vera Sans:bold:size=8}$alignr$cpu%
--- ${voffset 5}${goto 40}$font$color2${top name 1}$alignr$color${top cpu 1}%
--- ${goto 40}$color2${top name 2}$alignr$color${top cpu 2}%
--- ${goto 40}$color2${top name 3}$alignr$color${top cpu 3}%
--- ${goto 40}$color2${top name 4}$alignr$color${top cpu 4}%
--- # ${goto 40}$color2${top name 5}$alignr$color${top cpu 5}%
--- #
