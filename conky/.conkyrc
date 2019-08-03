@@ -68,8 +68,8 @@ ${color2}Percent:$color ${exec acpi | awk '{print $4}' | cut -d ',' -f1} ${execb
 ${if_match "Discharging" == "${exec acpi | awk '{print $3}' | cut -d ',' -f1}"}\
 ${color2}Remaining: $color ${exec acpi | awk '{print $5}'}
 ${else}\
-${if_match "Discharging" == "${exec acpi | awk '{print $3}' | cut -d ',' -f1}"}\
-${color2}Until full: $color ${exec acpi | awk '{print $5}'}${endif}${endif}\
+${if_match "Charging" == "${exec acpi | awk '{print $3}' | cut -d ',' -f1}"}\
+${color2}Until full: $color ${exec acpi | awk '{print $5}'}${endif}${endif}
 
 ${color1}RAM $color$hr
 
