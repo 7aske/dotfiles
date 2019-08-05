@@ -1,3 +1,22 @@
+local colorsFile = '.conkycolors' 
+
+function file_exists(file)
+    local f = io.open(file, "rb")
+    if f then f:close() end
+    return f ~= nil
+end
+
+function load_colors(file)
+    if not file_exists(file) then
+        print("'.conkycolors' file not found")
+    end
+    counter = 1
+    for line in io.lines(file) do
+        conky.config["color" .. counter] = line
+        counter =  counter + 1
+    end
+end
+  
 conky.config = {
     own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
     own_window_transparent = false,
@@ -8,20 +27,12 @@ conky.config = {
     background = true,
     border_width = 1,
     cpu_avg_samples = 3,
-    -- default_color = 'white',
-    -- default_outline_color = 'white',
     default_shade_color = '090909',
-    -- draw_borders = false,
-    -- draw_graph_borders = true,
-    -- draw_outline = false,
-    -- draw_shades = false,
     double_buffer = true,
     use_xft = true,
     font = 'Ubuntu Mono:size=11',
     -- gap_x = 5,
     gap_y = 0,
-    -- minimum_height = 5,
-    -- minimum_width = 5,
     net_avg_samples = 2,
     no_buffers = true,
     out_to_console = false,
@@ -32,16 +43,13 @@ conky.config = {
     own_window = true,
     own_window_class = 'Conky',
     own_window_type = 'desktop',
-    -- stippled_borders = 0,
     update_interval = 1.0,
     uppercase = false,
-    -- use_spacer = 'none',
-    -- show_graph_scale = false,
-    -- show_graph_range = false,
-    color1 = "#3498DB",
-    color2 = "#8EC4D9",
+    -- color1 = lines[1],
+    -- color2 = lines[2],
     default_bar_width = 160,
 }
+load_colors(colorsFile)
 
 conky.text = [[
 ${voffset 8}$color1${font Bitstream Vera Sans:size=16}${time %A}$font\
