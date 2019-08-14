@@ -60,13 +60,13 @@ $color${cpubar cpu1 8, 160}  ${cpubar cpu5 8, 160}
 $color${cpubar cpu2 8, 160}  ${cpubar cpu6 8, 160}
 $color${cpubar cpu3 8, 160}  ${cpubar cpu7 8, 160}
 $color${cpubar cpu4 8, 160}  ${cpubar cpu8 8, 160}
-${color2}Temp:$color ${exec sensors | grep "Package id 0:" | awk '{print $4}'} ${color2}Procs: $color${processes} ${color2}Freq: $color${freq_g}GHz
+${color2}Temp:$color ${exec sensors | grep "Package id 0:" | awk '{print $4}' | tr -d "+"} ${color2}Proc: $color${processes} ${color2}Freq: $color${freq_g}GHz ${color2}Max: ${color}${exec awk "BEGIN { print $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq) / 1000000 }"}GHz
 
 ${color1}Battery $color$hr
 
 ${color2}Percent:$color ${exec acpi | awk '{print $4}' | cut -d ',' -f1} ${execbar exec acpi | awk '{print $4}' | cut -d ',' -f1}
 ${if_match "Discharging" == "${exec acpi | awk '{print $3}' | cut -d ',' -f1}"}\
-${color2}Remaining: $color ${exec acpi | awk '{print $5}'}
+${color2}Remaining: $color ${exec acpi | awk '{print $5}'}\
 ${else}\
 ${if_match "Charging" == "${exec acpi | awk '{print $3}' | cut -d ',' -f1}"}\
 ${color2}Until full: $color ${exec acpi | awk '{print $5}'}${endif}${endif}
