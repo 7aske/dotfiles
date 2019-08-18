@@ -4,7 +4,7 @@
   <property name="backdrop" type="empty">
     <property name="screen0" type="empty">
       <property name="monitor0" type="empty">
-        <property name="image-path" type="string" value="/home/nik/Pictures/1920x1200-2851727-earth-stars-space-minimalism___cosmos-space-wallpapers.png"/>
+        <property name="image-path" type="string" value="/home/nik/Pictures/9b98e62ca0b12c77549e58e55406bf89.png"/>
         <property name="last-image" type="string" value="/usr/share/backgrounds/xfce/illyria-default.jpg"/>
         <property name="last-single-image" type="string" value="/usr/share/backgrounds/xfce/illyria-default.jpg"/>
         <property name="image-style" type="int" value="5"/>
@@ -195,7 +195,29 @@
         <property name="workspace3" type="empty">
           <property name="color-style" type="int" value="0"/>
           <property name="image-style" type="int" value="5"/>
-          <property name="last-image" type="string" value="/usr/share/backgrounds/xfce/xfce-teal.jpg"/>
+          <property name="last-image" type="string" value="/home/nik/Pictures/1920x1200-2851727-earth-stars-space-minimalism___cosmos-space-wallpapers.png"/>
+        </property>
+      </property>
+      <property name="monitorDVI-D-0" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="color-style" type="int" value="0"/>
+          <property name="image-style" type="int" value="5"/>
+          <property name="last-image" type="string" value="/home/nik/Pictures/1920x1200-2851727-earth-stars-space-minimalism___cosmos-space-wallpapers.png"/>
+        </property>
+        <property name="workspace1" type="empty">
+          <property name="color-style" type="int" value="0"/>
+          <property name="image-style" type="int" value="5"/>
+          <property name="last-image" type="string" value="/home/nik/Pictures/1920x1200-2851727-earth-stars-space-minimalism___cosmos-space-wallpapers.png"/>
+        </property>
+        <property name="workspace2" type="empty">
+          <property name="color-style" type="int" value="0"/>
+          <property name="image-style" type="int" value="5"/>
+          <property name="last-image" type="string" value="/home/nik/Pictures/1920x1200-2851727-earth-stars-space-minimalism___cosmos-space-wallpapers.png"/>
+        </property>
+        <property name="workspace3" type="empty">
+          <property name="color-style" type="int" value="0"/>
+          <property name="image-style" type="int" value="6"/>
+          <property name="last-image" type="string" value="/home/nik/Pictures/9b98e62ca0b12c77549e58e55406bf89.png"/>
         </property>
       </property>
     </property>

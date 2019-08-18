@@ -6,6 +6,9 @@
     <value type="int" value="1"/>
     <value type="int" value="2"/>
     <value type="int" value="3"/>
+    <value type="int" value="4"/>
+    <value type="int" value="5"/>
+    <value type="int" value="6"/>
     <property name="panel-0" type="empty">
       <property name="position" type="string" value="p=6;x=960;y=14"/>
       <property name="length" type="uint" value="100"/>
@@ -21,7 +24,7 @@
       <property name="role" type="string" value="xfce4-panel-12965750720"/>
       <property name="length-adjust" type="bool" value="true"/>
       <property name="background-style" type="uint" value="1"/>
-      <property name="size" type="int" value="27"/>
+      <property name="size" type="uint" value="27"/>
       <property name="mode" type="uint" value="0"/>
       <property name="autohide-behavior" type="uint" value="0"/>
       <property name="background-rgba" type="array">
@@ -34,7 +37,7 @@
       <property name="leave-opacity" type="uint" value="100"/>
       <property name="icon-size" type="uint" value="0"/>
       <property name="span-monitors" type="bool" value="false"/>
-      <property name="output-name" type="string" value="Automatic"/>
+      <property name="output-name" type="string" value="Primary"/>
       <property name="background-image" type="string" value="/home/nik"/>
       <property name="background-alpha" type="int" value="100"/>
       <property name="background-color" type="array">
@@ -48,7 +51,7 @@
       <property name="position" type="string" value="p=10;x=956;y=1055"/>
       <property name="size" type="int" value="55"/>
       <property name="mode" type="uint" value="0"/>
-      <property name="length" type="uint" value="33"/>
+      <property name="length" type="uint" value="25"/>
       <property name="length-adjust" type="bool" value="true"/>
       <property name="position-locked" type="bool" value="true"/>
       <property name="icon-size" type="uint" value="0"/>
@@ -68,7 +71,7 @@
         <value type="double" value="0.000000"/>
       </property>
       <property name="leave-opacity" type="uint" value="100"/>
-      <property name="output-name" type="string" value="Automatic"/>
+      <property name="output-name" type="string" value="Primary"/>
       <property name="background-image" type="string" value="/home/nik"/>
       <property name="background-alpha" type="int" value="0"/>
       <property name="background-color" type="array">
@@ -77,6 +80,7 @@
         <value type="uint" value="54741"/>
         <value type="uint" value="65535"/>
       </property>
+      <property name="span-monitors" type="bool" value="false"/>
     </property>
     <property name="panel-2" type="empty">
       <property name="position" type="string" value="p=8;x=25;y=1026"/>
@@ -98,7 +102,7 @@
         <value type="double" value="0.000000"/>
       </property>
       <property name="leave-opacity" type="uint" value="40"/>
-      <property name="output-name" type="string" value="Automatic"/>
+      <property name="output-name" type="string" value="Primary"/>
       <property name="background-image" type="string" value="/home/nik"/>
       <property name="background-alpha" type="int" value="0"/>
       <property name="background-color" type="array">
@@ -107,6 +111,7 @@
         <value type="uint" value="54741"/>
         <value type="uint" value="65535"/>
       </property>
+      <property name="span-monitors" type="bool" value="false"/>
     </property>
     <property name="panel-3" type="empty">
       <property name="position" type="string" value="p=9;x=962;y=25"/>
@@ -124,7 +129,7 @@
       </property>
       <property name="length" type="uint" value="1"/>
       <property name="disable-struts" type="bool" value="false"/>
-      <property name="output-name" type="string" value="Automatic"/>
+      <property name="output-name" type="string" value="Primary"/>
       <property name="background-image" type="string" value="/home/nik"/>
       <property name="background-alpha" type="int" value="0"/>
       <property name="background-color" type="array">
@@ -135,6 +140,65 @@
       </property>
       <property name="length-adjust" type="bool" value="true"/>
       <property name="leave-opacity" type="uint" value="100"/>
+    </property>
+    <property name="panel-4" type="empty">
+      <property name="position" type="string" value="p=9;x=2872;y=25"/>
+      <property name="size" type="uint" value="27"/>
+      <property name="length" type="uint" value="100"/>
+      <property name="position-locked" type="bool" value="true"/>
+      <property name="background-style" type="uint" value="1"/>
+      <property name="background-rgba" type="array">
+        <value type="double" value="0.750000"/>
+        <value type="double" value="0.250000"/>
+        <value type="double" value="0.250000"/>
+        <value type="double" value="0.000000"/>
+      </property>
+      <property name="plugin-ids" type="array">
+        <value type="int" value="3"/>
+        <value type="int" value="6"/>
+        <value type="int" value="8"/>
+        <value type="int" value="10"/>
+      </property>
+      <property name="output-name" type="string" value="HDMI-2"/>
+    </property>
+    <property name="panel-5" type="empty">
+      <property name="position" type="string" value="p=9;x=2881;y=34"/>
+      <property name="size" type="uint" value="27"/>
+      <property name="length" type="uint" value="1"/>
+      <property name="position-locked" type="bool" value="true"/>
+      <property name="output-name" type="string" value="HDMI-2"/>
+      <property name="background-style" type="uint" value="1"/>
+      <property name="background-rgba" type="array">
+        <value type="double" value="0.750000"/>
+        <value type="double" value="0.250000"/>
+        <value type="double" value="0.250000"/>
+        <value type="double" value="0.000000"/>
+      </property>
+      <property name="plugin-ids" type="array">
+        <value type="int" value="18"/>
+      </property>
+    </property>
+    <property name="panel-6" type="empty">
+      <property name="position" type="string" value="p=10;x=2877;y=1055"/>
+      <property name="size" type="uint" value="55"/>
+      <property name="output-name" type="string" value="HDMI-2"/>
+      <property name="position-locked" type="bool" value="true"/>
+      <property name="disable-struts" type="bool" value="true"/>
+      <property name="length" type="uint" value="1"/>
+      <property name="plugin-ids" type="array">
+        <value type="int" value="22"/>
+        <value type="int" value="21"/>
+        <value type="int" value="23"/>
+      </property>
+      <property name="background-style" type="uint" value="1"/>
+      <property name="background-rgba" type="array">
+        <value type="double" value="0.750000"/>
+        <value type="double" value="0.250000"/>
+        <value type="double" value="0.250000"/>
+        <value type="double" value="0.000000"/>
+      </property>
+      <property name="length-adjust" type="bool" value="true"/>
+      <property name="autohide-behavior" type="uint" value="1"/>
     </property>
   </property>
   <property name="plugins" type="empty">
@@ -162,11 +226,6 @@
       <property name="expand" type="bool" value="true"/>
       <property name="style" type="uint" value="0"/>
     </property>
-    <property name="plugin-9" type="string" value="pulseaudio">
-      <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
-      <property name="mpris-players" type="string" value="audacious;chrome.instance10061;chrome.instance10157;chrome.instance10500;chrome.instance11266;chrome.instance11467;chrome.instance11546;chrome.instance11715;chrome.instance11910;chrome.instance11917;chrome.instance12271;chrome.instance12285;chrome.instance12532;chrome.instance13328;chrome.instance13344;chrome.instance13554;chrome.instance13611;chrome.instance13675;chrome.instance1385;chrome.instance1391;chrome.instance1412;chrome.instance14569;chrome.instance1520;chrome.instance15737;chrome.instance16803;chrome.instance16978;chrome.instance17125;chrome.instance17165;chrome.instance17215;chrome.instance17690;chrome.instance17977;chrome.instance18929;chrome.instance18966;chrome.instance19066;chrome.instance19712;chrome.instance19774;chrome.instance19886;chrome.instance20196;chrome.instance20329;chrome.instance20343;chrome.instance20736;chrome.instance20851;chrome.instance2088;chrome.instance20939;chrome.instance21208;chrome.instance21404;chrome.instance21625;chrome.instance22007;chrome.instance22175;chrome.instance22411;chrome.instance2260;chrome.instance22634;chrome.instance22822;chrome.instance22907;chrome.instance2312;chrome.instance23175;chrome.instance23223;chrome.instance23701;chrome.instance2397;chrome.instance24090;chrome.instance24202;chrome.instance2430;chrome.instance24417;chrome.instance24452;chrome.instance2591;chrome.instance26180;chrome.instance2644;chrome.instance26802;chrome.instance2686;chrome.instance27024;chrome.instance27151;chrome.instance27754;chrome.instance2785;chrome.instance27856;chrome.instance27869;chrome.instance27944;chrome.instance2795;chrome.instance27975;chrome.instance28008;chrome.instance28139;chrome.instance2815;chrome.instance28300;chrome.instance2840;chrome.instance28530;chrome.instance28700;chrome.instance28764;chrome.instance28897;chrome.instance29049;chrome.instance29263;chrome.instance29725;chrome.instance30244;chrome.instance30268;chrome.instance3060;chrome.instance30614;chrome.instance31032;chrome.instance31253;chrome.instance3138;chrome.instance31542;chrome.instance31897;chrome.instance3385;chrome.instance3431;chrome.instance3557;chrome.instance3637;chrome.instance3825;chrome.instance3981;chrome.instance4546;chrome.instance4762;chrome.instance5026;chrome.instance5324;chrome.instance5497;chrome.instance5710;chrome.instance5790;chrome.instance5858;chrome.instance5917;chrome.instance5995;chrome.instance6086;chrome.instance7128;chrome.instance7343;chrome.instance7601;chrome.instance7773;chrome.instance8475;chrome.instance9219;chrome.instance9972;spotify;vlc"/>
-      <property name="blacklisted-players" type="string" value=""/>
-    </property>
     <property name="plugin-12" type="string" value="tasklist">
       <property name="show-wireframes" type="bool" value="false"/>
       <property name="grouping" type="uint" value="1"/>
@@ -177,6 +236,7 @@
       <property name="middle-click" type="uint" value="1"/>
       <property name="show-handle" type="bool" value="false"/>
       <property name="window-scrolling" type="bool" value="false"/>
+      <property name="include-all-monitors" type="bool" value="false"/>
     </property>
     <property name="plugin-19" type="string" value="whiskermenu"/>
     <property name="plugin-11" type="string" value="separator">
@@ -197,6 +257,7 @@
     </property>
     <property name="plugin-1" type="string" value="systray">
       <property name="names-ordered" type="array">
+        <value type="string" value="screenkey"/>
         <value type="string" value="msm notifier"/>
         <value type="string" value="messengerfordesktop"/>
         <value type="string" value="obs"/>
@@ -227,6 +288,64 @@
       <property name="tweaks" type="empty">
         <property name="never-confirm-history-clear" type="bool" value="false"/>
       </property>
+    </property>
+    <property name="plugin-3" type="string" value="pager"/>
+    <property name="plugin-6" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+      <property name="expand" type="bool" value="true"/>
+    </property>
+    <property name="plugin-10" type="string" value="actions">
+      <property name="appearance" type="uint" value="0"/>
+      <property name="items" type="array">
+        <value type="string" value="-lock-screen"/>
+        <value type="string" value="-switch-user"/>
+        <value type="string" value="-separator"/>
+        <value type="string" value="-suspend"/>
+        <value type="string" value="-hibernate"/>
+        <value type="string" value="-hybrid-sleep"/>
+        <value type="string" value="-separator"/>
+        <value type="string" value="-shutdown"/>
+        <value type="string" value="-restart"/>
+        <value type="string" value="-separator"/>
+        <value type="string" value="+logout"/>
+        <value type="string" value="-logout-dialog"/>
+      </property>
+    </property>
+    <property name="plugin-18" type="string" value="clock">
+      <property name="digital-format" type="string" value="%T"/>
+    </property>
+    <property name="plugin-21" type="string" value="tasklist">
+      <property name="show-labels" type="bool" value="false"/>
+      <property name="show-handle" type="bool" value="false"/>
+      <property name="flat-buttons" type="bool" value="true"/>
+      <property name="grouping" type="uint" value="1"/>
+      <property name="middle-click" type="uint" value="1"/>
+      <property name="window-scrolling" type="bool" value="false"/>
+      <property name="include-all-monitors" type="bool" value="false"/>
+      <property name="show-only-minimized" type="bool" value="false"/>
+    </property>
+    <property name="plugin-22" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+      <property name="expand" type="bool" value="true"/>
+    </property>
+    <property name="plugin-23" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+      <property name="expand" type="bool" value="true"/>
+    </property>
+    <property name="plugin-8" type="string" value="pulseaudio">
+      <property name="enable-keyboard-shortcuts" type="bool" value="false"/>
+      <property name="enable-wnck" type="bool" value="false"/>
+      <property name="enable-multimedia-keys" type="bool" value="false"/>
+      <property name="enable-mpris" type="bool" value="false"/>
+      <property name="mpris-players" type="string" value="chrome.instance11906;chrome.instance13967;chrome.instance15540;chrome.instance16577;chrome.instance16652;chrome.instance16742;chrome.instance18891;chrome.instance20643;chrome.instance2172;chrome.instance23117;chrome.instance24219;chrome.instance24644;chrome.instance2514;chrome.instance25814;chrome.instance29116;chrome.instance31407;chrome.instance5241;chrome.instance5446;chrome.instance6284;chrome.instance7880;chrome.instance8597;spotify;vlc"/>
+      <property name="show-notifications" type="bool" value="false"/>
+    </property>
+    <property name="plugin-9" type="string" value="pulseaudio">
+      <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
+      <property name="enable-wnck" type="bool" value="false"/>
+      <property name="enable-multimedia-keys" type="bool" value="true"/>
+      <property name="enable-mpris" type="bool" value="true"/>
+      <property name="mpris-players" type="string" value="chrome.instance11906;chrome.instance13967;chrome.instance15540;chrome.instance16577;chrome.instance16652;chrome.instance16742;chrome.instance18891;chrome.instance20643;chrome.instance2172;chrome.instance23117;chrome.instance24219;chrome.instance24644;chrome.instance2514;chrome.instance25814;chrome.instance29116;chrome.instance31407;chrome.instance5241;chrome.instance5446;chrome.instance6284;chrome.instance7880;chrome.instance8597;spotify;vlc"/>
     </property>
   </property>
   <property name="configver" type="int" value="2"/>

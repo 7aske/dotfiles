@@ -84,7 +84,7 @@
     <property name="cycle_tabwin_mode" type="int" value="0"/>
     <property name="sync_to_vblank" type="bool" value="true"/>
     <property name="zoom_desktop" type="bool" value="true"/>
-    <property name="cycle_raise" type="bool" value="true"/>
+    <property name="cycle_raise" type="bool" value="false"/>
     <property name="horiz_scroll_opacity" type="bool" value="false"/>
     <property name="vblank_mode" type="string" value="auto"/>
     <property name="margin_top" type="int" value="0"/>

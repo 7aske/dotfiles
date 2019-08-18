@@ -10,6 +10,7 @@
     <property name="known_applications" type="array">
       <value type="string" value="Blueman"/>
       <value type="string" value="brasero"/>
+      <value type="string" value="deepin-picker"/>
       <value type="string" value="discord"/>
       <value type="string" value="google-chrome"/>
       <value type="string" value="jetbrains-toolbox"/>

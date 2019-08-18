@@ -53,6 +53,8 @@
       <property name="&lt;Super&gt;s" type="string" value="xfce4-popup-whiskermenu"/>
       <property name="&lt;Shift&gt;&lt;Super&gt;p" type="string" value="/home/nik/Code/sh/utils-sh/padefsink.sh"/>
       <property name="&lt;Primary&gt;&lt;Shift&gt;&lt;Super&gt;p" type="string" value="/home/nik/Code/sh/utils-sh/painputsink.sh"/>
+      <property name="&lt;Primary&gt;&lt;Super&gt;Left" type="string" value="/home/nik/.scripts/move-to-next-monitor.sh left"/>
+      <property name="&lt;Primary&gt;&lt;Super&gt;Right" type="string" value="/home/nik/.scripts/move-to-next-monitor.sh right"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
