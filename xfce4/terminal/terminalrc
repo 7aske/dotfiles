@@ -9,7 +9,7 @@ MiscInheritGeometry=FALSE
 MiscMenubarDefault=FALSE
 MiscMouseAutohide=FALSE
 MiscToolbarDefault=FALSE
-MiscConfirmClose=FALSE
+MiscConfirmClose=TRUE
 MiscCycleTabs=TRUE
 MiscTabCloseButtons=TRUE
 MiscTabCloseMiddleClick=TRUE
@@ -35,8 +35,4 @@ ScrollingBar=TERMINAL_SCROLLBAR_NONE
 DropdownWidth=100
 ColorForeground=#d3d3d7d7cfcf
 DropdownStatusIcon=FALSE
-MiscSearchDialogOpacity=100
-MiscShowUnsafePasteDialog=TRUE
-DropdownAlwaysShowTabs=FALSE
-DropdownShowBorders=TRUE
 

@@ -38,6 +38,7 @@
       <property name="&lt;Primary&gt;&lt;Shift&gt;Print" type="string" value="xfce4-screenshooter -r"/>
       <property name="&lt;Super&gt;w" type="string" value="exo-open --launch WebBrowser"/>
       <property name="&lt;Super&gt;e" type="string" value="exo-open --launch FileManager"/>
+      <property name="&lt;Super&gt;a" type="string" value="xfce4-popup-whiskermenu"/>
       <property name="F12" type="string" value="xfce4-terminal --drop-down"/>
       <property name="&lt;Primary&gt;&lt;Shift&gt;Escape" type="string" value="xfce4-taskmanager"/>
       <property name="&lt;Super&gt;n" type="string" value="google-chrome-stable --incognito"/>
@@ -48,11 +49,7 @@
       <property name="&lt;Super&gt;q" type="string" value="xfce4-appfinder"/>
       <property name="&lt;Primary&gt;&lt;Alt&gt;t" type="string" value="xfce4-terminal"/>
       <property name="&lt;Super&gt;t" type="string" value="exo-open --launch TerminalEmulator"/>
-      <property name="&lt;Shift&gt;&lt;Super&gt;w" type="string" value="/home/nik/.scripts/url-open.sh"/>
       <property name="&lt;Primary&gt;&lt;Super&gt;p" type="string" value="/home/nik/Code/sh/utils-sh/patoggle.sh"/>
-      <property name="&lt;Super&gt;s" type="string" value="xfce4-popup-whiskermenu"/>
-      <property name="&lt;Shift&gt;&lt;Super&gt;p" type="string" value="/home/nik/Code/sh/utils-sh/padefsink.sh"/>
-      <property name="&lt;Primary&gt;&lt;Shift&gt;&lt;Super&gt;p" type="string" value="/home/nik/Code/sh/utils-sh/painputsink.sh"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
