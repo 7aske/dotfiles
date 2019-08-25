@@ -62,6 +62,11 @@ $color${cpubar cpu3 8, 160}  ${cpubar cpu7 8, 160}
 $color${cpubar cpu4 8, 160}  ${cpubar cpu8 8, 160}
 ${color2}Temp:$color ${exec sensors | grep "Package id 0:" | awk '{print $4}' | tr -d "+"} ${color2}Proc: $color${processes} ${color2}Freq: $color${freq_g}GHz ${color2}Max: ${color}${exec awk "BEGIN { print $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq) / 1000000 }"}GHz
 
+$color2${top name 1}$alignr$color${top cpu 1}%
+$color2${top name 2}$alignr$color${top cpu 2}%
+$color2${top name 3}$alignr$color${top cpu 3}%
+$color2${top name 4}$alignr$color${top cpu 4}%
+
 ${color1}Battery $color$hr
 
 ${color2}Percent:$color ${exec acpi | awk '{print $4}' | cut -d ',' -f1} ${execbar exec acpi | awk '{print $4}' | cut -d ',' -f1}
@@ -87,15 +92,15 @@ ${color2}nvme0n1p2 $color${fs_free /}/${fs_size /} ${fs_bar 6 /}
 ${color2}I/O: $color$diskio_write / $diskio_read
 
 ${color1}Networking $color$hr
-${if_existing /proc/net/route eno1}
+${if_existing /proc/net/route eno1}\
 ${color2}UP:$color ${upspeed eno1} ${color2}${alignr 10}DOWN: $color ${downspeed eno1}
-${upspeedgraph eno1 40,160 -l}  ${downspeedgraph eno1 40,160 -l}
-${if_existing /proc/net/route wlo1}
+${upspeedgraph eno1 40,160 -l}  ${downspeedgraph eno1 40,160 -l}${endif}
+${if_existing /proc/net/route wlo1}\
 ${color2}UP:$color ${upspeed wlo1}${color2}${alignr 10}DOWN: $color ${downspeed wlo1}
 ${upspeedgraph wlo1 40,160 -l}  ${downspeedgraph wlo1 40,160 -l}
 ${color2}Signal: ${color}${wireless_link_qual_perc wlo1}% ${wireless_link_bar 6, 240 wlo1}
-${color2}SSID: $color ${wireless_essid wlo1}
-${endif}
+${color2}SSID: $color ${wireless_essid wlo1}${endif}
+
 ${color1}Repositories $color$hr
 
 ${execi 600 CODE=/home/nik/Code /home/nik/Code/c/cgs/build/cgs --no-color}
@@ -107,10 +112,3 @@ ${execi 600 CODE=/home/nik/Code /home/nik/Code/c/cgs/build/cgs --no-color}
 -- ${color2}Percentage:$color ${exec acpi | awk '{print $4}' | cut -d ',' -f1}${alignr}${color2}Remaining: $color ${exec acpi | awk '{print $5}'}
 -- ${execbar exec acpi | awk '{print $4}' | cut -d ',' -f1}
 -- ${execp python3 /home/nik/Code/py/utils-py/gitstatus.py | perl -pe 's/\e\[?.*?[\@-~]//g' | cat}
--- ${voffset 20}${goto 40}${color}CPU${font Bitstream Vera Sans:bold:size=8}$alignr$cpu%
--- ${voffset 5}${goto 40}$font$color2${top name 1}$alignr$color${top cpu 1}%
--- ${goto 40}$color2${top name 2}$alignr$color${top cpu 2}%
--- ${goto 40}$color2${top name 3}$alignr$color${top cpu 3}%
--- ${goto 40}$color2${top name 4}$alignr$color${top cpu 4}%
--- # ${goto 40}$color2${top name 5}$alignr$color${top cpu 5}%
--- #
