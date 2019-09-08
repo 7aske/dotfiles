@@ -17,10 +17,8 @@ set expandtab
 set hlsearch 
 
 " Color Scheme
-"colorscheme carbo
-"colorscheme dracula_perso
-"colorscheme orbital
-colorscheme iceberg
+colorscheme darcula
+"colorscheme iceberg
 
 " create location to store swap (.swp) files
 set directory^=$HOME/.vim/tmp//
@@ -113,13 +111,6 @@ nmap <C-d> :call Fzf_git_diff_files_with_dev_icons()<CR>
 " Paste multiple in visual mode
 xnoremap p pgvy
 
-" Tabularize Plugin to align according to a symbol
-"ca Tab Tabularize
-"nmap :t= :Tab /^[^=]*\zs=/l1c1<CR>
-"vmap :t= :Tab /^[^=]*\zs=/l1c1<CR>
-" Tab only the first space
-"nmap :t<Space> :Tab /^[ ]*\zs[^ ]*\zs /l0c0<CR>
-"vmap :t<Space> :Tab /^[ ]*\zs[^ ]*\zs /l0c0<CR>
 
 " Correct indentation JSON files
 nmap :json<CR> :%!python -m json.tool<CR>
