@@ -17,9 +17,7 @@ set expandtab
 set hlsearch 
 
 " Color Scheme
-"colorscheme carbo
-"colorscheme dracula_perso
-"colorscheme orbital
+"colorscheme darcula
 colorscheme iceberg
 
 " create location to store swap (.swp) files
