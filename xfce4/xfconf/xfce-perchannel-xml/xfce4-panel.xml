@@ -34,7 +34,7 @@
       <property name="leave-opacity" type="uint" value="100"/>
       <property name="icon-size" type="uint" value="0"/>
       <property name="span-monitors" type="bool" value="false"/>
-      <property name="output-name" type="string" value="eDP1"/>
+      <property name="output-name" type="string" value="Primary"/>
       <property name="background-image" type="string" value="/home/nik"/>
       <property name="background-alpha" type="int" value="100"/>
       <property name="background-color" type="array">
@@ -68,7 +68,7 @@
         <value type="double" value="0.000000"/>
       </property>
       <property name="leave-opacity" type="uint" value="100"/>
-      <property name="output-name" type="string" value="eDP1"/>
+      <property name="output-name" type="string" value="Primary"/>
       <property name="background-image" type="string" value="/home/nik"/>
       <property name="background-alpha" type="int" value="0"/>
       <property name="background-color" type="array">
@@ -98,7 +98,7 @@
         <value type="double" value="0.000000"/>
       </property>
       <property name="leave-opacity" type="uint" value="40"/>
-      <property name="output-name" type="string" value="eDP1"/>
+      <property name="output-name" type="string" value="Primary"/>
       <property name="background-image" type="string" value="/home/nik"/>
       <property name="background-alpha" type="int" value="0"/>
       <property name="background-color" type="array">
@@ -124,7 +124,7 @@
       </property>
       <property name="length" type="uint" value="1"/>
       <property name="disable-struts" type="bool" value="false"/>
-      <property name="output-name" type="string" value="eDP1"/>
+      <property name="output-name" type="string" value="Primary"/>
       <property name="background-image" type="string" value="/home/nik"/>
       <property name="background-alpha" type="int" value="0"/>
       <property name="background-color" type="array">
