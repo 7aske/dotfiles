@@ -99,8 +99,9 @@ $color2${top_mem name 4}$alignr$color${top_mem pid 4}${top_mem cpu 4} ${top_mem 
 
 ${color1}File systems $color $hr
 
-${color2}nvme0n1p2 $color${fs_free /}/${fs_size /} ${fs_bar 6 /}
-${color2}sda1      $color${fs_free /mnt/storage0}/${fs_size /mnt/storage0}  ${fs_bar 6 /mnt/storage0}
+${color2}/ $alignr$color${fs_free /}/${fs_size /} ${fs_bar 6 /}
+${color2}/home $alignr$color${fs_free /home}/${fs_size /home} ${fs_bar 6 /home}
+${color2}/sda1 $alignr$color${fs_free /mnt/storage0}/${fs_size /mnt/storage0} ${fs_bar 6 /mnt/storage0}
 ${color2}I/O: $color$diskio_write / $diskio_read
 
 ${color1}Networking $color$hr
