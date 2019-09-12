@@ -1,5 +1,4 @@
 local colorsFile = '.conkycolors' 
-
 function file_exists(file)
     local f = io.open(file, "rb")
     if f then f:close() end
@@ -9,13 +8,27 @@ end
 function load_colors(file)
     if not file_exists(file) then
         print("'.conkycolors' file not found")
+        -- some default colors
+        conky.config["color0"] = "#101012"
+        conky.config["color1"] = "#F74D15"
+        conky.config["color2"] = "#FF6D00"
+        conky.config["color3"] = "#F79204"
+        conky.config["color4"] = "#FFB003"
+        conky.config["color5"] = "#FFC601"
+        conky.config["color6"] = "#FFE50B"
+        conky.config["color7"] = "#e8d2a3"
+        conky.config["color8"] = "#a29372"
+        conky.config["color9"] = "#F74D15"
+        
     end
-    counter = 1
     for line in io.lines(file) do
-        conky.config["color" .. counter] = line
-        counter =  counter + 1
+        print(line)
+        line = " "..line.."\n"
+        for k, v in string.gmatch(line, "(%S-)=(%S-)\n") do
+            conky.config[k] = v
+        end
     end
-end
+end  
   
 conky.config = {
     own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
@@ -45,8 +58,6 @@ conky.config = {
     own_window_type = 'desktop',
     update_interval = 1.0,
     uppercase = false,
-    -- color1 = lines[1],
-    -- color2 = lines[2],
     default_bar_width = 160,
 }
 load_colors(colorsFile)
@@ -58,11 +69,11 @@ $color${voffset -30}$color${font Bitstream Vera Sans:size=18}${time %b}$font\
 ${voffset -3} $color${font Bitstream Vera Sans:size=20}${time %Y}$font$color1$hr
 
 $nodename $kernel ($machine)
-${color2}Uptime:$color $uptime
+${color2}Uptime:$color0 $uptime
 
 ${color1}CPU $color$hr
 
-${color2}Name:$color${exec lscpu | grep name | tr -s ' ' | cut -d ':' -f2 | cut -c -28}
+${color2}Name:$color3${exec lscpu | grep name | tr -s ' ' | cut -d ':' -f2 | cut -c -28}
 $color${cpubar cpu1 8, 160}  ${cpubar cpu9  8, 160}
 $color${cpubar cpu2 8, 160}  ${cpubar cpu10 8, 160}
 $color${cpubar cpu3 8, 160}  ${cpubar cpu11 8, 160}
@@ -106,10 +117,10 @@ ${color2}I/O: $color$diskio_write / $diskio_read
 
 ${color1}Networking $color$hr
 ${if_existing /proc/net/route enp4s0}
-${color2}UP:$color ${upspeed enp4s0}${color2}${alignr 10}DOWN: $color ${downspeed enp4s0}
+${color2}UP:${color} ${upspeed enp4s0}${color2}${alignr 10}DOWN: ${color} ${downspeed enp4s0}
 ${upspeedgraph enp4s0 40,160 -l}  ${downspeedgraph enp4s0 40,160 -l}
 ${endif}
 ${color1}Repositories $color$hr
 
-${execi 600 CODE=/home/nik/Code /home/nik/Code/c/cgs/build/cgs --no-color}
+${color3}${execi 600 CODE=/home/nik/Code /home/nik/Code/c/cgs/build/cgs --no-color}
 ]]
