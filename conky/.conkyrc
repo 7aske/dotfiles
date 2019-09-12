@@ -69,7 +69,7 @@ $color${voffset -30}$color${font Bitstream Vera Sans:size=18}${time %b}$font\
 ${voffset -3} $color${font Bitstream Vera Sans:size=20}${time %Y}$font$color1$hr
 
 $nodename $kernel ($machine)
-${color2}Uptime:$color0 $uptime
+${color2}Uptime:$color $uptime
 
 ${color1}CPU $color$hr
 
