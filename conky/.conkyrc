@@ -1,27 +1,39 @@
+local colorsFile = '.conkycolors'
+
+function file_exits(file)
+    local f = io.open(file, "rb")
+    if f then f:close() end
+    return f ~= nil
+end
+
+function load_colors(file)
+    if not file_exits(file) then
+        print("'.conkycolors' not found")
+    end
+    for line in io.lines(file)do
+        print(line)
+        line = " "..line.."\n"
+        for k, v in string.gmatch(line, "(%S-)=(%S-)\n") do
+            conky.config[k] = v
+        end
+    end
+end
+
 conky.config = {
     own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
     own_window_transparent = false,
     own_window_argb_visual = true,
-    own_window_argb_value = 70,
-    own_window_colour = '050505',
+    own_window_argb_value = 0,
+    own_window_colour = '000000',
     alignment = 'middle_right',
     background = true,
     border_width = 1,
     cpu_avg_samples = 3,
-    -- default_color = 'white',
-    -- default_outline_color = 'white',
     default_shade_color = '090909',
-    -- draw_borders = false,
-    -- draw_graph_borders = true,
-    -- draw_outline = false,
-    -- draw_shades = false,
     double_buffer = true,
     use_xft = true,
     font = 'Ubuntu Mono:size=11',
-    -- gap_x = 5,
     gap_y = 0,
-    -- minimum_height = 5,
-    -- minimum_width = 5,
     net_avg_samples = 2,
     no_buffers = true,
     out_to_console = false,
@@ -32,83 +44,69 @@ conky.config = {
     own_window = true,
     own_window_class = 'Conky',
     own_window_type = 'desktop',
-    -- stippled_borders = 0,
     update_interval = 1.0,
     uppercase = false,
-    -- use_spacer = 'none',
-    -- show_graph_scale = false,
-    -- show_graph_range = false,
-    color1 = "#3498DB",
-    color2 = "#8EC4D9",
-    -- default_bar_width = 160,
 }
-
+load_colors(colorsFile)
 conky.text = [[
-${voffset 8}$color1${font Bitstream Vera Sans:size=16}${time %A}$font\
-${voffset -8}$alignr$color${font Bitstream Vera Sans:size=38}${time %e}$font
-$color${voffset -30}$color${font Bitstream Vera Sans:size=18}${time %b}$font\
-${voffset -3} $color${font Bitstream Vera Sans:size=20}${time %Y}$font$color1$hr
+${voffset 8}${color1}${font Bitstream Vera Sans:size=16}${time %A}$font\
+${voffset -8}$alignr${color8}${font Bitstream Vera Sans:size=38}${time %e}$font
+${color8}${voffset -30}${color8}${font Bitstream Vera Sans:size=18}${time %b}$font\
+${voffset -3} ${color8}${font Bitstream Vera Sans:size=20}${time %Y}$font${color8}1$hr
 #
 
 $nodename $kernel ($machine)
-${color2}Uptime:$color $uptime
+${color2}Uptime:${color8} $uptime
 
-${color1}CPU $color$hr
+${color1}CPU ${color8}$hr
 
-${color2}Name:$color${exec lscpu | grep name | tr -s ' ' | cut -d ':' -f2 | cut -c -28}
-$color${cpubar cpu1 8, 160}  ${cpubar cpu5 8, 160}
-$color${cpubar cpu2 8, 160}  ${cpubar cpu6 8, 160}
-$color${cpubar cpu3 8, 160}  ${cpubar cpu7 8, 160}
-$color${cpubar cpu4 8, 160}  ${cpubar cpu8 8, 160}
-${color2}Temp:$color ${exec sensors | grep "Package id 0:" | awk '{print $4}' | tr -d "+"} ${color2}Proc: $color${processes} ${color2}Freq: $color${freq_g}GHz ${color2}Max: ${color}${exec awk "BEGIN { print $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq) / 1000000 }"}GHz
+${color2}Name:${color4}${exec lscpu | grep name | tr -s ' ' | cut -d ':' -f2 | cut -c -28}
+${color8}${cpubar cpu1 8, 160}  ${cpubar cpu5 8, 160}
+${color8}${cpubar cpu2 8, 160}  ${cpubar cpu6 8, 160}
+${color8}${cpubar cpu3 8, 160}  ${cpubar cpu7 8, 160}
+${color8}${cpubar cpu4 8, 160}  ${cpubar cpu8 8, 160}
+${color2}Temp:${color8} ${exec sensors | grep "Package id 0:" | awk '{print $4}' | tr -d "+"} ${color2}Proc: ${color8}${processes} ${color2}Freq: ${color8}${freq_g}GHz ${color2}Max: ${color8}${exec awk "BEGIN { print $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq) / 1000000 }"}GHz
 
-$color2${top name 1}$alignr$color${top cpu 1}%
-$color2${top name 2}$alignr$color${top cpu 2}%
-$color2${top name 3}$alignr$color${top cpu 3}%
-$color2${top name 4}$alignr$color${top cpu 4}%
+${color2}${top name 1}$alignr${color8}${top cpu 1}%
+${color2}${top name 2}$alignr${color8}${top cpu 2}%
+${color2}${top name 3}$alignr${color8}${top cpu 3}%
+${color2}${top name 4}$alignr${color8}${top cpu 4}%
 
-${color1}Battery $color$hr
+${color1}Battery ${color8}$hr
 
-${color2}Percent:$color ${exec acpi | awk '{print $4}' | cut -d ',' -f1} ${execbar exec acpi | awk '{print $4}' | cut -d ',' -f1}
+${color2}Percent:${color8} ${exec acpi | awk '{print $4}' | cut -d ',' -f1} ${execbar exec acpi | awk '{print $4}' | cut -d ',' -f1}
 ${if_match "Discharging" == "${exec acpi | awk '{print $3}' | cut -d ',' -f1}"}\
-${color2}Remaining: $color ${exec acpi | awk '{print $5}'}\
+${color2}Remaining: ${color8} ${exec acpi | awk '{print $5}'}\
 ${else}\
 ${if_match "Charging" == "${exec acpi | awk '{print $3}' | cut -d ',' -f1}"}\
-${color2}Until full: $color ${exec acpi | awk '{print $5}'}${endif}${endif}
+${color2}Until full: ${color8} ${exec acpi | awk '{print $5}'}${endif}${endif}
 
-${color1}RAM $color$hr
+${color1}RAM ${color8}$hr
 
-${color2}Percent:$color $memperc% ${membar 8, 240}
-${color2}Usage:  $color $mem / $memmax
+${color2}Percent:${color8} $memperc% ${membar 8, 240}
+${color2}Usage:  ${color8} $mem / $memmax
 
-$color2${top_mem name 1}$alignr$color${top_mem pid 1}${top_mem cpu 1} ${top_mem mem_res 1}
-$color2${top_mem name 2}$alignr$color${top_mem pid 2}${top_mem cpu 2} ${top_mem mem_res 2}
-$color2${top_mem name 3}$alignr$color${top_mem pid 3}${top_mem cpu 3} ${top_mem mem_res 3}
-$color2${top_mem name 4}$alignr$color${top_mem pid 4}${top_mem cpu 4} ${top_mem mem_res 4}
+${color2}${top_mem name 1}$alignr${color8}${top_mem pid 1}${top_mem cpu 1} ${top_mem mem_res 1}
+${color2}${top_mem name 2}$alignr${color8}${top_mem pid 2}${top_mem cpu 2} ${top_mem mem_res 2}
+${color2}${top_mem name 3}$alignr${color8}${top_mem pid 3}${top_mem cpu 3} ${top_mem mem_res 3}
+${color2}${top_mem name 4}$alignr${color8}${top_mem pid 4}${top_mem cpu 4} ${top_mem mem_res 4}
 
-${color1}File systems $color $hr
+${color1}File systems ${color8} $hr
 
-${color2}nvme0n1p2 $color${fs_free /}/${fs_size /} ${fs_bar 6 /}
-${color2}I/O: $color$diskio_write / $diskio_read
+${color2}nvme0n1p2 ${color8}${fs_free /}/${fs_size /} ${fs_bar 6 /}
+${color2}I/O: ${color8}$diskio_write / $diskio_read
 
-${color1}Networking $color$hr
+${color1}Networking ${color8}$hr
 ${if_existing /proc/net/route eno1}\
-${color2}UP:$color ${upspeed eno1} ${color2}${alignr 10}DOWN: $color ${downspeed eno1}
+${color2}UP:${color8} ${upspeed eno1} ${color2}${alignr 10}DOWN: ${color8} ${downspeed eno1}
 ${upspeedgraph eno1 40,160 -l}  ${downspeedgraph eno1 40,160 -l}${endif}
 ${if_existing /proc/net/route wlo1}\
-${color2}UP:$color ${upspeed wlo1}${color2}${alignr 10}DOWN: $color ${downspeed wlo1}
+${color2}UP:${color8} ${upspeed wlo1}${color2}${alignr 10}DOWN: ${color8} ${downspeed wlo1}
 ${upspeedgraph wlo1 40,160 -l}  ${downspeedgraph wlo1 40,160 -l}
-${color2}Signal: ${color}${wireless_link_qual_perc wlo1}% ${wireless_link_bar 6, 240 wlo1}
-${color2}SSID: $color ${wireless_essid wlo1}${endif}
+${color2}Signal: ${color8}${wireless_link_qual_perc wlo1}% ${wireless_link_bar 6, 240 wlo1}
+${color2}SSID: ${color8} ${wireless_essid wlo1}${endif}
 
-${color1}Repositories $color$hr
+${color1}Repositories ${color8}$hr
 
 ${execi 600 CODE=/home/nik/Code /home/nik/Code/c/cgs/build/cgs --no-color}
 ]]
-
--- ${alignr 0}${execi 3 /home/nik/Code/go/gitstats-go/out/gitstats | perl -pe 's/\e\[?.*?[\@-~]//g' | cut -c 43-} 
--- ${color1}Battery $color$hr
-
--- ${color2}Percentage:$color ${exec acpi | awk '{print $4}' | cut -d ',' -f1}${alignr}${color2}Remaining: $color ${exec acpi | awk '{print $5}'}
--- ${execbar exec acpi | awk '{print $4}' | cut -d ',' -f1}
--- ${execp python3 /home/nik/Code/py/utils-py/gitstatus.py | perl -pe 's/\e\[?.*?[\@-~]//g' | cat}
