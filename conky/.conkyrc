@@ -52,7 +52,7 @@ conky.text = [[
 ${voffset 8}${color1}${font Bitstream Vera Sans:size=16}${time %A}$font\
 ${voffset -8}$alignr${color8}${font Bitstream Vera Sans:size=38}${time %e}$font
 ${color8}${voffset -30}${color8}${font Bitstream Vera Sans:size=18}${time %b}$font\
-${voffset -3} ${color8}${font Bitstream Vera Sans:size=20}${time %Y}$font${color8}1$hr
+${voffset -3} ${color8}${font Bitstream Vera Sans:size=20}${time %Y}$font${color8}$hr
 #
 
 $nodename $kernel ($machine)
@@ -60,7 +60,7 @@ ${color2}Uptime:${color8} $uptime
 
 ${color1}CPU ${color8}$hr
 
-${color2}Name:${color4}${exec lscpu | grep name | tr -s ' ' | cut -d ':' -f2 | cut -c -28}
+${color2}Name:${color3}${exec lscpu | grep name | tr -s ' ' | cut -d ':' -f2 | cut -c -28}
 ${color8}${cpubar cpu1 8, 160}  ${cpubar cpu5 8, 160}
 ${color8}${cpubar cpu2 8, 160}  ${cpubar cpu6 8, 160}
 ${color8}${cpubar cpu3 8, 160}  ${cpubar cpu7 8, 160}
