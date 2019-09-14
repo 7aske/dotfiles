@@ -57,6 +57,7 @@ ${voffset -3} ${color8}${font Bitstream Vera Sans:size=20}${time %Y}$font${color
 
 $nodename $kernel ($machine)
 ${color2}Uptime:${color8} $uptime
+${color2}Updates:${color8} ${execi 3600 /usr/bin/pacman -Qu | tail -n +6 | wc -l}
 
 ${color1}CPU ${color8}$hr
 
