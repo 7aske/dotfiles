@@ -1,4 +1,5 @@
 {
+    "arduino.path": "/opt/arduino-1.8.10",
     "breadcrumbs.enabled": true,
     "editor.cursorSmoothCaretAnimation": true,
     "editor.cursorBlinking": "solid",
@@ -35,4 +36,5 @@
         "statusBar.noFolderBackground": "#343434",
         "statusBar.background": "#232323",
     },
+    "python.jediEnabled": false,
 }
