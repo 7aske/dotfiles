@@ -17,8 +17,8 @@ set expandtab
 set hlsearch 
 
 " Color Scheme
-colorscheme darcula
-"colorscheme iceberg
+" colorscheme darcula
+colorscheme iceberg
 
 " create location to store swap (.swp) files
 set directory^=$HOME/.vim/tmp//
