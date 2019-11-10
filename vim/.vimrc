@@ -2,8 +2,10 @@
 
 syntax enable
 set number
+" set cursorline
 set cursorline
-set ruler
+hi CursorLine cterm=bold term=bold ctermbg=black
+" set ruler
 set encoding=utf-8
 set backspace=indent,eol,start
 set laststatus=2
@@ -18,7 +20,7 @@ set hlsearch
 
 " Color Scheme
 " colorscheme darcula
-colorscheme iceberg
+" colorscheme iceberg
 
 " create location to store swap (.swp) files
 set directory^=$HOME/.vim/tmp//
