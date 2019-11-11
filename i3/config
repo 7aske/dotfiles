@@ -27,7 +27,7 @@ bindsym $mod+n border normal
 font xft:Fira Code Medium 11
 
 # set background
-exec --no-startup-id wal --backend color2 -i ~/Pictures/blueblue.jpg
+exec --no-startup-id wal --backend color2 -i ~/.config/default_wallpaper
 
 # Use Mouse+$mod to drag floating windows
 floating_modifier $mod
