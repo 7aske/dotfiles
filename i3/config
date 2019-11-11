@@ -24,7 +24,7 @@ bindsym $mod+n border normal
 font xft:URWGothic-Book 11
 
 # set background
-wal --backend color2 -i ~/Pictures/blueblue.jpg
+exec wal --backend color2 -i ~/Pictures/blueblue.jpg
 
 # Use Mouse+$mod to drag floating windows
 floating_modifier $mod
