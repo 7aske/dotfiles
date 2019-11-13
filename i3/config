@@ -12,7 +12,7 @@ default_border pixel 1
 default_floating_border normal
 
 # alternating split layout
-exec sleep 1; python3 /home/nik/.local/bin/alternating_layouts
+exec_always pkill alternating_layouts; sleep 1; /home/nik/.local/bin/alternating_layouts
 
 # Hide borders
 hide_edge_borders none
@@ -50,8 +50,8 @@ bindsym $mod+a exec --no-startup-id rofi -show run
 
 #exec --no-startup-id volumeicon
 #bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
-exec_always killall pulseaudio; sleep 1; pulseaudio -D
-exec_always killall pa-applet; sleep 2; pa-applet
+exec_always pulseaudio -D
+exec_always pgrep pa-applet || pa-applet
 bindsym $mod+p exec pavucontrol
 
 ################################################################################################
