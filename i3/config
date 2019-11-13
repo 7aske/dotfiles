@@ -12,7 +12,7 @@ default_border pixel 1
 default_floating_border normal
 
 # alternating split layout
-exec --no-startup-id /home/nik/.local/bin/alternating_layouts
+exec sleep 1; python3 /home/nik/.local/bin/alternating_layouts
 
 # Hide borders
 hide_edge_borders none
@@ -50,8 +50,8 @@ bindsym $mod+a exec --no-startup-id rofi -show run
 
 #exec --no-startup-id volumeicon
 #bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
-exec --no-startup-id pulseaudio -D
-exec --no-startup-id pa-applet
+exec sleep 1; pulseaudio -D
+exec sleep 2; pa-applet
 bindsym $mod+p exec pavucontrol
 
 ################################################################################################
@@ -136,7 +136,7 @@ exec --no-startup-id xinput set-prop $(xinput list | grep Touchpad | awk '{print
 exec --no-startup-id xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 303 1
 exec --no-startup-id xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 304 0.5
 exec --no-startup-id xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 305 0.5
-exec --no-startup-id xset r rate 195 55
+exec xset r rate 195 55
 
 
 # change focus between tiling / floating windows
