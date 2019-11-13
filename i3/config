@@ -50,8 +50,8 @@ bindsym $mod+a exec --no-startup-id rofi -show run
 
 #exec --no-startup-id volumeicon
 #bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
-exec sleep 1; pulseaudio -D
-exec sleep 2; pa-applet
+exec_always killall pulseaudio; sleep 1; pulseaudio -D
+exec_always killall pa-applet; sleep 2; pa-applet
 bindsym $mod+p exec pavucontrol
 
 ################################################################################################
