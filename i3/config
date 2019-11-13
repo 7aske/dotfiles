@@ -12,7 +12,7 @@ default_border pixel 1
 default_floating_border normal
 
 # alternating split layout
-exec --no-startup-id ~/.local/bin/alternating_layouts
+exec --no-startup-id /home/nik/.local/bin/alternating_layouts
 
 # Hide borders
 hide_edge_borders none
@@ -218,9 +218,12 @@ for_window [class="gnome-calculator"] floating enable border pixel 1
 for_window [class="Gnome-calculator"] floating enable border pixel 1
 for_window [class="gnome-disks"] floating enable border pixel 1
 for_window [class="Gnome-disks"] floating enable border pixel 1
+for_window [class="java-lang-Thread"] floating enable border pixel 1 move position center
+for_window [title="win0"] floating enable border pixel 1 move position center
 for_window [class="jetbrains-toolbox"] floating enable border pixel 1
 for_window [class="Jetbrains Toolbox"] floating enable border pixel 1
 for_window [class="GParted"] floating enable border normal
+for_window [class="gparted"] floating enable border normal
 for_window [title="i3_help"] floating enable sticky enable border normal
 for_window [class="Lightdm-settings"] floating enable
 for_window [class="Lxappearance"] floating enable sticky enable border normal
