@@ -21,7 +21,7 @@ let mapleader =" "
 set wildmode=longest,list,full
 
 " Disables automatic commenting on newline:
-	autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 syntax enable
 set number
@@ -41,7 +41,7 @@ set expandtab
 set hlsearch 
 
 " Check file in shellcheck:
-	map <leader>s :!clear && shellcheck %<CR>
+map <leader>s :!clear && shellcheck %<CR>
 
 syntax on
 filetype indent plugin on
@@ -117,10 +117,6 @@ nmap <silent> <A-Left> <C-W>h
 nmap <silent> <A-Right> <C-W>l
 nmap <silent> <A-Up> <C-W>k
 nmap <silent> <A-Down> <C-W>j
-
-" Vertical/Horizontal split window
-nmap <C-S-h> :sp<CR>
-nmap <C-S-v> :vsp<CR>
 
 " Previous/Next/Toggle switching buffers
 "nmap <C-P> :bprev<CR>
