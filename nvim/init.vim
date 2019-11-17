@@ -1,9 +1,33 @@
 " GENERAL ----------------------------------------
+" PLUGINS
+
+if ! filereadable(expand('~/.config/nvim/autoload/plug.vim'))
+	echo "Downloading junegunn/vim-plug to manage plugins..."
+	silent !mkdir -p ~/.config/nvim/autoload/
+	silent !curl "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" > ~/.config/nvim/autoload/plug.vim
+	autocmd VimEnter * PlugInstall
+endif
+
+call plug#begin('~/.config/vim/plugged')
+Plug 'tpope/vim-surround'
+Plug 'PotatoesMaster/i3-vim-syntax'
+Plug 'vimwiki/vimwiki'
+Plug 'terryma/vim-multiple-cursors'
+call plug#end()
+
+let mapleader =" "
+
+" Enable autocompletion:
+set wildmode=longest,list,full
+
+" Disables automatic commenting on newline:
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 syntax enable
 set number
 set cursorline
-set ruler
+hi CursorLine cterm=bold term=bold ctermbg=black
+" set ruler
 set encoding=utf-8
 set backspace=indent,eol,start
 set laststatus=2
@@ -16,12 +40,8 @@ set shiftwidth=4
 set expandtab
 set hlsearch 
 
-" Color Scheme
-" colorscheme darcula
-colorscheme iceberg
-
-" create location to store swap (.swp) files
-set directory^=$HOME/.vim/tmp//
+" Check file in shellcheck:
+map <leader>s :!clear && shellcheck %<CR>
 
 syntax on
 filetype indent plugin on
@@ -30,10 +50,10 @@ filetype indent plugin on
 
 " Status bar style
 set statusline=
-set statusline +=%7*%{(mode()=='n')?'\ \ NORMAL\ ':''}
-set statusline +=%8*%{(mode()=='i')?'\ \ INSERT\ ':''}
-set statusline +=%8*%{(mode()=='R')?'\ \ REPLAC\ ':''}
-set statusline +=%6*%{(mode()=='v')?'\ \ VISUAL\ ':''}
+set statusline +=%7*%{(mode()=='n')?'\ \ N\ ':''}
+set statusline +=%8*%{(mode()=='i')?'\ \ I\ ':''}
+set statusline +=%8*%{(mode()=='R')?'\ \ R\ ':''}
+set statusline +=%6*%{(mode()=='v')?'\ \ V\ ':''}
 set statusline +=%1*\ %n\ %*        "  buffer number
 set statusline +=%3*%{&ff}%*        "  file format
 set statusline +=%5*\ %y%*          "  file type
@@ -72,15 +92,31 @@ inoremap {<CR>  {<CR>}<Esc>O
 inoremap {{     {
 inoremap {}     {}
 
+
+" Automaticaly close brackets
+inoremap (      ()<Left>
+inoremap (<CR>  (<CR>)<Esc>O
+inoremap ((     (
+inoremap ()     ()
+
+
+" Automaticaly close brackets
+inoremap [      []<Left>
+inoremap [<CR>  [<CR>]<Esc>O
+inoremap [[     [
+inoremap []     []
+
+" Automaticaly close quotes
+inoremap "      "<Left>
+inoremap "<CR>  "<CR><Esc>O
+inoremap ""     "
+inoremap "     ""
+
 " Switch windows with Alt + Arrows
 nmap <silent> <A-Left> <C-W>h
 nmap <silent> <A-Right> <C-W>l
 nmap <silent> <A-Up> <C-W>k
 nmap <silent> <A-Down> <C-W>j
-
-" Vertical/Horizontal split window
-nmap <C-S-h> :sp<CR>
-nmap <C-S-v> :vsp<CR>
 
 " Previous/Next/Toggle switching buffers
 "nmap <C-P> :bprev<CR>
