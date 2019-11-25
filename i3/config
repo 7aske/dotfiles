@@ -122,6 +122,9 @@ bindsym $mod+f fullscreen toggle
 # bindsym $mod+w layout tabbed
 # bindsym $mod+e layout toggle split
 
+# google search
+bindsym $mod+s exec ~/Code/sh/utils-sh/google-search.sh
+
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
 
