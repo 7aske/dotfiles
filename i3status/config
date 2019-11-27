@@ -41,7 +41,7 @@ disk "/" {
 
 ethernet _first_ {
 # if you use %speed, i3status requires root privileges
-        format_up = " lan: %ip %speed "
+        format_up = " lan: %ip "
         format_down = ""
 }
 
