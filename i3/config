@@ -12,7 +12,7 @@ default_border pixel 1
 default_floating_border normal
 
 # alternating split layout
-exec_always pkill alternating_layouts; sleep 1; /home/nik/.local/bin/alternating_layouts
+exec_always --no-startup-id python3 /home/nik/.local/bin/alternating_layouts
 
 # Hide borders
 hide_edge_borders none
@@ -50,9 +50,12 @@ bindsym $mod+a exec --no-startup-id rofi -show run
 
 #exec --no-startup-id volumeicon
 #bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
-exec_always pulseaudio -D
-exec_always pgrep pa-applet || pa-applet
+exec_always --no-startup-id pulseaudio -D
+exec_always --no-startup-id pgrep pa-applet || pa-applet
 bindsym $mod+p exec pavucontrol
+bindsym $mod+Ctrl+p exec --no-startup-id ~/Code/sh/utils-sh/patoggle.sh
+bindsym $mod+Shift+p exec --no-startup-id ~/Code/sh/utils-sh/padefsink.sh
+bindsym $mod+Ctrl+Shift+p exec --no-startup-id ~/Code/sh/utils-sh/painputsink.sh
 
 ################################################################################################
 
@@ -60,7 +63,16 @@ bindsym $mod+p exec pavucontrol
 # bindsym XF86MonBrightnessUp exec "xbacklight -inc 10; notify-send 'brightness up'"
 # bindsym XF86MonBrightnessDown exec "xbacklight -dec 10; notify-send 'brightness down'"
 
+# Media player controls
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioPause exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
 
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
 
 # Start Applications
 # bindsym $mod+Ctrl+b exec terminal -e 'bmenu'
@@ -139,7 +151,7 @@ exec --no-startup-id xinput set-prop $(xinput list | grep Touchpad | awk '{print
 exec --no-startup-id xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 303 1
 exec --no-startup-id xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 304 0.5
 exec --no-startup-id xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 305 0.5
-exec xset r rate 195 55
+exec --no-startup-id xset r rate 195 55
 
 
 # change focus between tiling / floating windows
@@ -317,7 +329,6 @@ exec --no-startup-id pamac-tray
 # exec --no-startup-id blueman-applet
 # exec_always --no-startup-id sbxkb
 exec --no-startup-id conky -c ~/.config/conky/conky-top.conf
-# exec --no-startup-id start_conky_green
 exec --no-startup-id xautolock -time 10 -locker blurlock
 # exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
