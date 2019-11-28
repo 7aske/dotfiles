@@ -141,17 +141,8 @@ bindsym $mod+s exec ~/Code/sh/utils-sh/google-search.sh
 bindsym $mod+Shift+space floating toggle
 
 # touchpad and keyboard config
-exec xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 284 1
-exec xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 285 1
-exec xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 292 1
-exec xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 293 1
-exec xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 294 0
-exec xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 295 0
-exec xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 302 1
-exec xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 303 1
-exec xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 304 0.5
-exec xinput set-prop $(xinput list | grep Touchpad | awk '{print $6}' | sed 's/id=//') 305 0.5
-exec --no-startup-id xset r rate 195 55
+exec_always --no-startup-id ~/Code/sh/utils-sh/fix_touchpad.sh
+exec_always --no-startup-id xset r rate 195 55
 
 
 # change focus between tiling / floating windows
