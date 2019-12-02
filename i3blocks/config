@@ -27,7 +27,7 @@ command=~/Code/sh/utils-sh/statusbar/disk /
 
 [battery]
 interval=5
-command=~/Code/utils-sh/statusbar/battery BAT1
+command=~/Code/sh/utils-sh/statusbar/battery BAT1
 
 [clock]
 label=
