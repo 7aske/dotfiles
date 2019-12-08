@@ -5,7 +5,7 @@
     "editor.cursorBlinking": "solid",
     "editor.cursorStyle": "block",
     "editor.fontFamily": "Fira Code Medium",
-    "editor.fontSize": 18,
+    "editor.fontSize": 16,
     "editor.fontWeight": "400",
     "editor.fontLigatures": true,
     "editor.multiCursorModifier": "ctrlCmd",
