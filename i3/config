@@ -76,11 +76,11 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute s
 
 # Start Applications
 # bindsym $mod+Ctrl+b exec terminal -e 'bmenu'
-bindsym $mod+e exec pcmanfm
+bindsym $mod+e exec thunar
 bindsym $mod+w exec chromium
 bindsym $mod+Shift+w exec chromium --incognito
 bindsym $mod+F3 exec ranger
-bindsym $mod+Shift+F3 exec pcmanfm_pkexec
+#bindsym $mod+Shift+F3 exec pcmanfm_pkexec
 bindsym $mod+F5 exec terminal -e 'mocp'
 bindsym $mod+Shift+t exec --no-startup-id pkill compton
 bindsym $mod+Ctrl+t exec --no-startup-id compton -b
@@ -380,8 +380,8 @@ bar {
 #	tray_output primary
 #	tray_output eDP1
 
-	bindsym button4 nop
-	bindsym button5 nop
+	#bindsym button4 nop
+	#bindsym button5 nop
     font xft:Fira Code Medium 10
 	strip_workspace_numbers yes
 
