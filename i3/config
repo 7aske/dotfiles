@@ -264,7 +264,8 @@ for_window [class="Skype"] floating enable border normal
 for_window [class="Timeset-gui"] floating enable border normal
 for_window [class="(?i)virtualbox"] floating enable border normal
 for_window [class="Xfburn"] floating enable
-for_window [class="VirtualBox Marchine"] floating disable
+for_window [class="VirtualBox Machine"] floating disable
+for_window [class="VirtualBox Manager"] floating disable
 for_window [class="Baobab"] floating enable resize set 1024 720 move position center
 
 # switch to workspace with urgent window automatically
