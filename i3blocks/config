@@ -3,25 +3,29 @@ separator_block_width=15
 markup=pango
 
 [music]
-label= 
+label=
 interval=5
 color=#787878
 
 [cpu]
 interval=5
-label=
+label=🐹
+
+[temp]
+interval=5
+label=🧊
 
 [memory]
 interval=10
-label=
+label=🐏
 
 [ipaddr]
-label=IP: 
+label=🔗 
 interval=60
 color=#787878
 
 [disk]
-label=
+label=💽
 interval=60
 command=~/Code/sh/utils-sh/statusbar/disk /
 
@@ -30,6 +34,6 @@ interval=5
 command=~/Code/sh/utils-sh/statusbar/battery BAT1
 
 [clock]
-label=
+label=🕐
 interval=1
 
