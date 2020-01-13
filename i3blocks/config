@@ -1,35 +1,32 @@
 command=~/Code/sh/utils-sh/statusbar/$BLOCK_NAME
 separator_block_width=15
 markup=pango
+color=#999999
 
 [music]
 label=
 interval=5
-color=#787878
 
 [cpu]
-interval=5
 label=🐹
+interval=5
 
 [temp]
-interval=5
 label=🧊
-color=#787878
+interval=5
 
 [memory]
-interval=10
 label=🐏
+interval=10
 
 [ipaddr]
-label=🔗 
+label=💻
 interval=60
-color=#787878
 
 [bandwidth]
-label= 
+label=
 interval=2
-color=#787878
-command=~/Code/sh/utils-sh/statusbar/bandwidth wlp2s0
+command=~/Code/sh/utils-sh/statusbar/bandwidth
 
 [disk]
 label=💽
@@ -46,11 +43,9 @@ interval=5
 command=~/Code/sh/utils-sh/statusbar/battery BAT1
 
 [weather]
-label=
+label=🌡 
 interval=60
-color=#787878
 
 [clock]
 label=🕐
 interval=1
-
