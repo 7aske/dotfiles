@@ -14,6 +14,7 @@ label=🐹
 [temp]
 interval=5
 label=🧊
+color=#787878
 
 [memory]
 interval=10
@@ -24,14 +25,30 @@ label=🔗
 interval=60
 color=#787878
 
+[bandwidth]
+label= 
+interval=2
+color=#787878
+command=~/Code/sh/utils-sh/statusbar/bandwidth wlp2s0
+
 [disk]
 label=💽
 interval=60
 command=~/Code/sh/utils-sh/statusbar/disk /
 
+[disk]
+label=💽
+interval=60
+command=~/Code/sh/utils-sh/statusbar/disk /home
+
 [battery]
 interval=5
 command=~/Code/sh/utils-sh/statusbar/battery BAT1
+
+[weather]
+label=
+interval=60
+color=#787878
 
 [clock]
 label=🕐
