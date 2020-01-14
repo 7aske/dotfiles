@@ -7,6 +7,12 @@ color=#999999
 label=
 interval=5
 
+[cgs]
+label=💾
+interval=60
+command=~/Code/sh/utils-sh/statusbar/cgs
+
+
 [cpu]
 label=🐹
 interval=5
@@ -26,7 +32,6 @@ interval=60
 [bandwidth]
 label=
 interval=2
-command=~/Code/sh/utils-sh/statusbar/bandwidth
 
 [disk]
 label=💽
