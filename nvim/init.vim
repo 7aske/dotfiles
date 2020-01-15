@@ -23,11 +23,26 @@ set wildmode=longest,list,full
 " Disables automatic commenting on newline:
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
+
+" Colors for status bar
+hi User1 ctermfg=166 ctermbg=236
+hi User2 ctermfg=9   ctermbg=236
+hi User3 ctermfg=13  ctermbg=236
+hi User4 ctermfg=12  ctermbg=236
+hi User5 ctermfg=11  ctermbg=236
+
+hi User6 ctermfg=255 ctermbg=60
+hi User7 ctermfg=255 ctermbg=28
+hi User8 ctermfg=255 ctermbg=94
+
+" Wal Colors -------------------------------------
+Plug 'dylanaraps/wal.vim'
+
+colorscheme wal
+
 syntax enable
 set number
 set cursorline
-hi CursorLine cterm=bold term=bold ctermbg=black
-" set ruler
 set encoding=utf-8
 set backspace=indent,eol,start
 set laststatus=2
@@ -65,17 +80,6 @@ set statusline +=%1*%4v\ %*         "  virtual column number
 set statusline +=%2*0x%04B\ %*      "  character under cursor
 set statusline +=%3*%{winwidth(0)}  "  window width
 
-" Colors for status bar
-hi User1 ctermfg=166 ctermbg=236
-hi User2 ctermfg=9   ctermbg=236
-hi User3 ctermfg=13  ctermbg=236
-hi User4 ctermfg=12  ctermbg=236
-hi User5 ctermfg=11  ctermbg=236
-
-hi User6 ctermfg=255 ctermbg=60
-hi User7 ctermfg=255 ctermbg=28
-hi User8 ctermfg=255 ctermbg=94
-
 " BINDINGS ---------------------------------------
 
 " ESC key to jk or kj or jj
@@ -85,32 +89,6 @@ inoremap jj <Esc>
 
 " No highlight search
 nnoremap :/<CR> :nohlsearch<CR>
-
-" Automaticaly close brackets
-inoremap {      {}<Left>
-inoremap {<CR>  {<CR>}<Esc>O
-inoremap {{     {
-inoremap {}     {}
-
-
-" Automaticaly close brackets
-inoremap (      ()<Left>
-inoremap (<CR>  (<CR>)<Esc>O
-inoremap ((     (
-inoremap ()     ()
-
-
-" Automaticaly close brackets
-inoremap [      []<Left>
-inoremap [<CR>  [<CR>]<Esc>O
-inoremap [[     [
-inoremap []     []
-
-" Automaticaly close quotes
-inoremap "      "<Left>
-inoremap "<CR>  "<CR><Esc>O
-inoremap ""     "
-inoremap "     ""
 
 " Switch windows with Alt + Arrows
 nmap <silent> <A-Left> <C-W>h
