@@ -12,7 +12,7 @@ default_border pixel 1
 default_floating_border normal
 
 # alternating split layout
-exec_always --no-startup-id python3 /home/nik/.local/bin/alternating_layouts
+exec_always --no-startup-id python3 ~/.local/bin/alternating_layouts
 
 # Hide borders
 hide_edge_borders none
