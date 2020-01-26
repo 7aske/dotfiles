@@ -369,9 +369,9 @@ client.background       $bg
 #############################
 
 # Set inner/outer gaps
-gaps inner 14
-gaps outer 6
-bindsym $mod+g gaps inner all set 14; gaps outer all set 6; exec notify-send "gaps" "gaps reset to default"
+gaps inner 10
+gaps outer -6
+bindsym $mod+g gaps inner all set 10; gaps outer all set -6; exec notify-send "gaps" "gaps reset to default"
 
 # Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
 # gaps inner|outer current|all set|plus|minus <px>
