@@ -20,7 +20,7 @@
     selected-urgent-background: {color3};
     selected-urgent-foreground: @foreground;
     
-    font: "Fira Code Medium 12"
+    font: "Fira Code Medium 12";
     background-color: @background;
     background: {background};
     foreground: {foreground};
