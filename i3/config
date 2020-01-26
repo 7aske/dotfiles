@@ -27,7 +27,7 @@ bindsym $mod+n border normal
 font xft:Fira Code Medium 11
 
 # set background
-exec --no-startup-id wal -c; wal --backend color2 -i ~/.config/default_wallpaper
+exec --no-startup-id wal -c; wal --backend wal -i ~/.config/wallpaper
 
 # Use Mouse+$mod to drag floating windows
 floating_modifier $mod
@@ -361,7 +361,7 @@ set_from_resource $term_color10    color10
 set_from_resource $term_color11    color11
 set_from_resource $term_color12    color12
 set_from_resource $term_color13    color13
-set_from_resource $term_color14    color14
+set_from_resource $term_color14    color
 set_from_resource $term_color15    color15
 
 # Start i3bar to display a workspace bar (plus the system information i3status if available)
@@ -411,6 +411,9 @@ bindsym $mod+m bar mode toggle
   #client.placeholder      #000000 #0c0c0c #ffffff #000000 
 
   #client.background       #2B2C2B
+
+set_from_resource $fg i3wm.color7 #f0f0f0
+set_from_resource $bg i3wm.color2 #f0f0f0
 
 client.focused          $bg     $bg     $fg  $bg       $bg
 client.focused_inactive $bg     $bg     $fg  $bg       $bg
