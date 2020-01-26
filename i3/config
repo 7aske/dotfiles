@@ -211,6 +211,7 @@ for_window [class="(?i)gnome-disks"] floating enable border pixel 1
 for_window [class="java-lang-Thread"] floating enable border pixel 1 move position center
 for_window [title="Lutris"] floating enable border pixel 1 move position center
 for_window [class="(?i)jetbrains-toolbox"] floating enable border pixel 1
+for_window [title="win0"] floating enable border pixel 1 move position center
 for_window [class="(?i)GParted"] floating enable border normal
 for_window [title="i3_help"] floating enable sticky enable border normal
 for_window [class="Lightdm-settings"] floating enable
