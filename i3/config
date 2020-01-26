@@ -17,14 +17,17 @@ exec_always --no-startup-id python3 ~/.local/bin/alternating_layouts
 # Hide borders
 hide_edge_borders none
 
+# Set title format
+for_window [class=".*"] title_format " %title"; title_align center
+# title_align center
+
+
 # change borders
-bindsym $mod+u border none
-bindsym $mod+y border pixel 1
-bindsym $mod+n border normal
+bindsym $mod+u border toggle 1
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font xft:Fira Code Medium 11
+font xft:Fira Code Medium 12
 
 # set background
 exec --no-startup-id wal -c; wal --backend wal -i ~/.config/wallpaper
@@ -41,23 +44,13 @@ bindsym $mod+q kill
 # start program launcher
 bindsym $mod+a exec --no-startup-id rofi -show run
 
-# launch categorized menu
-# bindsym $mod+z exec --no-startup-id morc_menu
-
-################################################################################################
-## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -> Pulseaudio later! ##
-################################################################################################
-
-#exec --no-startup-id volumeicon
-#bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
+# Sound daemons and bindings
 exec_always --no-startup-id pgrep pulseaudio || pulseaudio -D
 exec_always --no-startup-id pgrep pa-applet || pa-applet
 bindsym $mod+p exec pavucontrol
 bindsym $mod+Ctrl+p exec --no-startup-id ~/Code/sh/utils-sh/patoggle.sh
 bindsym $mod+Shift+p exec --no-startup-id ~/Code/sh/utils-sh/padefsink.sh
 bindsym $mod+Ctrl+Shift+p exec --no-startup-id ~/Code/sh/utils-sh/painputsink.sh
-
-################################################################################################
 
 # Screen brightness controls
 # bindsym XF86MonBrightnessUp exec "xbacklight -inc 10; notify-send 'brightness up'"
@@ -84,7 +77,7 @@ bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart du
 bindsym Print exec --no-startup-id i3-scrot
 bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
 bindsym $mod+Shift+Print --release exec --no-startup-id maim -s --format=png /dev/stdout | xclip -sel c -t image/png -i && notify-send "Copied to clipboard"
-bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
+bindsym $mod+Shift+x --release exec --no-startup-id xkill
 
 # change focus
 bindsym $mod+h focus left
@@ -116,28 +109,19 @@ bindsym $mod+b workspace back_and_forth
 bindsym $mod+Shift+b move container to workspace back_and_forth; workspace back_and_forth
 
 # split orientation
-# bindsym $mod+h split h;exec notify-send 'tile horizontally'
-# bindsym $mod+v split v;exec notify-send 'tile vertically'
 bindsym $mod+v split toggle; exec notify-send 'toggled tiling'
 
 # toggle fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 
-# change container layout (stacked, tabbed, toggle split)
-# bindsym $mod+s layout stacking
-# bindsym $mod+w layout tabbed
-# bindsym $mod+e layout toggle split
+# Toggle floating/tiling
+bindsym $mod+t floating toggle
 
 # google search
 bindsym $mod+s exec ~/Code/sh/utils-sh/google-search.sh
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
-
-# touchpad and keyboard config
-exec_always --no-startup-id ~/Code/sh/utils-sh/fix_touchpad.sh
-exec_always --no-startup-id xset r rate 195 55
-
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
@@ -152,7 +136,6 @@ bindsym $mod+Shift+s sticky toggle
 bindsym $mod+Shift+minus move scratchpad
 
 # Show the next scratchpad window or hide the focused scratchpad window.
-# If there are multiple scratchpad windows, this command cycles through them.
 bindsym $mod+minus scratchpad show
 
 #navigate workspaces next / previous
@@ -160,9 +143,6 @@ bindsym $mod+Ctrl+Shift+Right workspace next
 bindsym $mod+Ctrl+Shift+Left workspace prev
 
 # Workspace names
-# to display names or symbols instead of plain workspace numbers you can use
-# something like: set $ws1 1:mail
-#                 set $ws2 2:
 set $ws1 1
 set $ws2 2
 set $ws3 3
@@ -171,6 +151,7 @@ set $ws5 5
 set $ws6 6
 set $ws7 7
 set $ws8 8
+set $ws9 9
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -181,6 +162,7 @@ bindsym $mod+5 workspace $ws5
 bindsym $mod+6 workspace $ws6
 bindsym $mod+7 workspace $ws7
 bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
 
 # Move focused container to workspace
 bindsym $mod+Ctrl+1 move container to workspace $ws1
@@ -191,6 +173,7 @@ bindsym $mod+Ctrl+5 move container to workspace $ws5
 bindsym $mod+Ctrl+6 move container to workspace $ws6
 bindsym $mod+Ctrl+7 move container to workspace $ws7
 bindsym $mod+Ctrl+8 move container to workspace $ws8
+bindsym $mod+Ctrl+9 move container to workspace $ws9
 
 # Move to workspace with focused container
 bindsym $mod+Shift+1 move container to workspace $ws1; workspace $ws1
@@ -201,6 +184,7 @@ bindsym $mod+Shift+5 move container to workspace $ws5; workspace $ws5
 bindsym $mod+Shift+6 move container to workspace $ws6; workspace $ws6
 bindsym $mod+Shift+7 move container to workspace $ws7; workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8; workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9; workspace $ws9
 
 
 # Move workspaces to other windows
@@ -211,31 +195,23 @@ bindsym $mod+Ctrl+Down move workspace to output down
 
 
 # Open applications on specific workspaces
-# assign [class="Thunderbird"] $ws1
-# assign [class="Pale moon"] $ws2
-# assign [class="Pcmanfm"] $ws3
-# assign [class="Skype"] $ws5
-for_window [class="spotify"] move to workspace $ws8
-for_window [class="Spotify"] move to workspace $ws8
-for_window [title="Spotify"] move to workspace $ws8
-assign [class="discord"] $ws8
+for_window [class="(?i)caprine"] move to workspace $ws9
+for_window [class="(?i)spotify"] move to workspace $ws9
+for_window [class="(?i)discord"] move to workspace $ws9
+assign [class="(?i)spotify"] $ws9
+assign [class="(?i)discord"] $ws9
+assign [class="(?i)caprine"] $ws9
 
 # Open specific applications in floating mode
 for_window [title="alsamixer"] floating enable border pixel 1
-for_window [class="calamares"] floating enable border normal
-for_window [class="Clipgrab"] floating enable
 for_window [title="File Transfer*"] floating enable
 for_window [class="fpakman"] floating enable
-for_window [class="gnome-calculator"] floating enable border pixel 1
-for_window [class="Gnome-calculator"] floating enable border pixel 1
-for_window [class="gnome-disks"] floating enable border pixel 1
-for_window [class="Gnome-disks"] floating enable border pixel 1
+for_window [class="(?i)gnome-calculator"] floating enable border pixel 1
+for_window [class="(?i)gnome-disks"] floating enable border pixel 1
 for_window [class="java-lang-Thread"] floating enable border pixel 1 move position center
-for_window [title="win0"] floating enable border pixel 1 move position center
-for_window [class="jetbrains-toolbox"] floating enable border pixel 1
-for_window [class="Jetbrains Toolbox"] floating enable border pixel 1
-for_window [class="GParted"] floating enable border normal
-for_window [class="gparted"] floating enable border normal
+for_window [title="Lutris"] floating enable border pixel 1 move position center
+for_window [class="(?i)jetbrains-toolbox"] floating enable border pixel 1
+for_window [class="(?i)GParted"] floating enable border normal
 for_window [title="i3_help"] floating enable sticky enable border normal
 for_window [class="Lightdm-settings"] floating enable
 for_window [class="Lxappearance"] floating enable sticky enable border normal
@@ -243,8 +219,7 @@ for_window [class="Manjaro-hello"] floating enable
 for_window [class="Manjaro Settings Manager"] floating enable border normal
 for_window [title="MuseScore: Play Panel"] floating enable
 for_window [class="Nitrogen"] floating enable sticky enable border normal
-for_window [class="Nm-connection-editor"] floating enable border normal
-for_window [class="nm-connection-editor"] floating enable border normal
+for_window [class="(?i)nm-connection-editor"] floating enable border normal
 for_window [class="Oblogout"] fullscreen enable
 for_window [class="octopi"] floating enable
 for_window [title="About Pale Moon"] floating enable
@@ -254,7 +229,6 @@ for_window [class="qt5ct"] floating enable sticky enable border normal
 for_window [class="Qtconfig-qt4"] floating enable sticky enable border normal
 for_window [class="Simple-scan"] floating enable border normal
 for_window [class="(?i)System-config-printer.py"] floating enable border normal
-for_window [class="Skype"] floating enable border normal
 for_window [class="Timeset-gui"] floating enable border normal
 for_window [class="(?i)virtualbox"] floating enable border normal
 for_window [class="Xfburn"] floating enable
@@ -295,10 +269,6 @@ mode "$mode_system" {
 bindsym $mod+r mode "resize"
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
         bindsym h resize shrink width 5 px or 5 ppt
         bindsym j resize grow height 5 px or 5 ppt
         bindsym k resize shrink height 5 px or 5 ppt
@@ -315,9 +285,6 @@ mode "resize" {
         bindsym Escape mode "default"
 }
 
-# Lock screen
-bindsym $mod+9 exec --no-startup-id blurlock
-
 # Autostart applications
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id nitrogen --restore; sleep 1; compton -b
@@ -325,77 +292,60 @@ exec --no-startup-id nm-applet
 exec --no-startup-id xfce4-power-manager
 exec --no-startup-id pamac-tray
 exec --no-startup-id barrier
-# exec --no-startup-id clipit
-# exec --no-startup-id blueman-applet
-# exec_always --no-startup-id sbxkb
-# exec --no-startup-id conky -c ~/.config/conky/conky-top.conf
 exec --no-startup-id xautolock -time 10 -locker blurlock -corners +---
-# exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
 
+# touchpad and keyboard config
+exec_always --no-startup-id ~/Code/sh/utils-sh/fix_touchpad.sh
+exec_always --no-startup-id xset r rate 195 55
+
+
 # Color palette used for the terminal ( ~/.Xresources file )
-# Colors are gathered based on the documentation:
-# https://i3wm.org/docs/userguide.html#xresources
-# Change the variable name at the place you want to match the color
-# of your terminal like this:
-# [example]
-# If you want your bar to have the same background color as your 
-# terminal background change the line 362 from:
-# background #14191D
-# to:
-# background $term_background
-# Same logic applied to everything else.
-set_from_resource $term_background background
-set_from_resource $term_foreground foreground
-set_from_resource $term_color0     color0
-set_from_resource $term_color1     color1
-set_from_resource $term_color2     color2
-set_from_resource $term_color3     color3
-set_from_resource $term_color4     color4
-set_from_resource $term_color5     color5
-set_from_resource $term_color6     color6
-set_from_resource $term_color7     color7
-set_from_resource $term_color8     color8
-set_from_resource $term_color9     color9
-set_from_resource $term_color10    color10
-set_from_resource $term_color11    color11
-set_from_resource $term_color12    color12
-set_from_resource $term_color13    color13
-set_from_resource $term_color14    color
-set_from_resource $term_color15    color15
+# Colors are parsed from wal (python-pywal)
+set_from_resource $background background
+set_from_resource $foreground foreground
+set_from_resource $color0     i3wm.color0
+set_from_resource $color1     i3wm.color1
+set_from_resource $color2     i3wm.color2
+set_from_resource $color3     i3wm.color3
+set_from_resource $color4     i3wm.color4
+set_from_resource $color5     i3wm.color5
+set_from_resource $color6     i3wm.color6
+set_from_resource $color7     i3wm.color7
+set_from_resource $color8     i3wm.color8
+set_from_resource $color9     i3wm.color9
+set_from_resource $color10    i3wm.color10
+set_from_resource $color11    i3wm.color11
+set_from_resource $color12    i3wm.color12
+set_from_resource $color13    i3wm.color13
+set_from_resource $color14    i3wm.color14
+set_from_resource $color15    i3wm.color15
 
 # Start i3bar to display a workspace bar (plus the system information i3status if available)
 bar {
 	i3bar_command i3bar
 	status_command i3blocks
-	# status_command i3status
-	position top
+    position top
 
-## please set your primary output first. Example: 'xrandr --output eDP1 --primary'
 	tray_output primary
-#	tray_output eDP1
 
-	#bindsym button4 nop
-	#bindsym button5 nop
+	bindsym button4 nop
+	bindsym button5 nop
     font xft:Fira Code Medium 10
 	strip_workspace_numbers yes
 
     colors {
         #background $background
-        background #222D31
-        #statusline $color2
-        statusline #F9FAF9
-        #separator  $color4
-        separator  #454947
+        background $background
+        statusline $color1
+        separator  $color1
 
         #                   border  backgr. text
-        # focused_workspace  #F9FAF9 #16a085 #292F34
-        focused_workspace  #dddddd #101010 #dddddd
-        # active_workspace   #595B5B #353836 #FDF6E3
-        active_workspace   #dddddd #343434 #dddddd
-        inactive_workspace #595B5B #222D31 #EEE8D5
-        binding_mode       #16a085 #2C2C2C #F9FAF9
-        urgent_workspace   #16a085 #FDF6E3 #E5201D
+        focused_workspace  $color2 $color7 $background
+        active_workspace   $color2 $background $foreground
+        inactive_workspace $color2 $background $foreground
+        binding_mode       $color5 color3 $color0
+        urgent_workspace   $color5 color3 $color0
     }
 }
 
@@ -403,32 +353,25 @@ bar {
 bindsym $mod+m bar mode toggle
 
 # Theme colors
-# class                   border  backgr. text    indic.   child_border
-  #client.focused          #556064 #556064 #80FFF9 #FDF6E3
-  #client.focused_inactive #2F3D44 #2F3D44 #1ABC9C #454948
-  #client.unfocused        #2F3D44 #2F3D44 #1ABC9C #454948
-  #client.urgent           #CB4B16 #FDF6E3 #1ABC9C #268BD2
-  #client.placeholder      #000000 #0c0c0c #ffffff #000000 
-
-  #client.background       #2B2C2B
-
 set_from_resource $fg i3wm.color7 #f0f0f0
 set_from_resource $bg i3wm.color2 #f0f0f0
 
+# class              border  backgr    tex indic   cborder
 client.focused          $bg     $bg     $fg  $bg       $bg
 client.focused_inactive $bg     $bg     $fg  $bg       $bg
 client.unfocused        $bg     $bg     $fg  $bg       $bg
 client.urgent           $bg     $bg     $fg  $bg       $bg
 client.placeholder      $bg     $bg     $fg  $bg       $bg
-
 client.background       $bg
+
 #############################
 ### settings for i3-gaps: ###
 #############################
 
 # Set inner/outer gaps
 gaps inner 14
-gaps outer -2
+gaps outer 6
+bindsym $mod+g gaps inner all set 14; gaps outer all set 6; exec notify-send "gaps" "gaps reset to default"
 
 # Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
 # gaps inner|outer current|all set|plus|minus <px>
@@ -436,11 +379,11 @@ gaps outer -2
 # gaps outer all plus 5
 
 # Smart gaps (gaps used if only more than one container on the workspace)
-smart_gaps on
+# smart_gaps on
+
 
 # Smart borders (draw borders around container only if it is not the only container on this workspace) 
-# on|no_gaps (on=always activate and no_gaps=only activate if the gap size to the edge of the screen is 0)
-smart_borders on
+smart_borders no_gaps #on|no_gaps
 
 # Press $mod+Shift+g to enter the gap mode. Choose o or i for modifying outer/inner gaps. Press one of + / - (in-/decrement for current workspace) or 0 (remove gaps for current workspace). If you also press Shift with these keys, the change will be global for all workspaces.
 set $mode_gaps Gaps: (o) outer, (i) inner
