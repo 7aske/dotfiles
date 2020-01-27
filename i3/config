@@ -73,7 +73,7 @@ bindsym $mod+w exec $BROWSER
 bindsym $mod+Shift+w exec $BROWSER --incognito
 bindsym $mod+Shift+t exec --no-startup-id pkill compton
 bindsym $mod+Ctrl+t exec --no-startup-id compton -b
-bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
+bindsym $mod+Shift+d --release exec ~/Code/sh/utils-sh/reload_dunst.sh
 bindsym Print exec --no-startup-id i3-scrot
 bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
 bindsym $mod+Shift+Print --release exec --no-startup-id maim -s --format=png /dev/stdout | xclip -sel c -t image/png -i && notify-send "Copied to clipboard"
@@ -341,12 +341,12 @@ bar {
         statusline $color1
         separator  $color1
 
-        #                   border  backgr. text
-        focused_workspace  $color2 $color7 $background
-        active_workspace   $color2 $background $foreground
+        #                   border      backgr        text
+        focused_workspace  $color2     $color5 $background
+        active_workspace   $color2     $color9     $color0
         inactive_workspace $color2 $background $foreground
-        binding_mode       $color5 color3 $color0
-        urgent_workspace   $color5 color3 $color0
+        binding_mode       $color13    $color13    $color0
+        urgent_workspace   $color2     $color5 $background
     }
 }
 
