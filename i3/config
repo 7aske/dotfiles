@@ -46,7 +46,7 @@ bindsym $mod+a exec --no-startup-id rofi -show run
 
 # Sound daemons and bindings
 exec_always --no-startup-id pgrep pulseaudio || pulseaudio -D
-exec_always --no-startup-id pgrep pa-applet || pa-applet
+exec_always --no-startup-id pgrep pasystray || pasystray
 bindsym $mod+p exec pavucontrol
 bindsym $mod+Ctrl+p exec --no-startup-id ~/Code/sh/utils-sh/patoggle.sh
 bindsym $mod+Shift+p exec --no-startup-id ~/Code/sh/utils-sh/padefsink.sh
