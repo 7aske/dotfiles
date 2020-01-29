@@ -3,6 +3,10 @@ separator_block_width=15
 markup=pango
 color=#999999
 
+[title]
+label=
+interval=1 
+
 [music]
 label=
 interval=5
@@ -47,7 +51,7 @@ interval=5
 command=~/Code/sh/utils-sh/statusbar/battery BAT1
 
 [weather]
-label=🌡 
+label=
 interval=60
 
 [clock]
