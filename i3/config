@@ -374,6 +374,7 @@ client.background       $bg
 gaps inner 10
 gaps outer -6
 bindsym $mod+g gaps inner all set 10; gaps outer all set -6; exec notify-send "gaps" "gaps reset to default"
+bindsym $mod+Ctrl+g gaps inner all set 1; gaps outer all set 1; exec notify-send "gaps" "disabled gaps"
 
 # Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
 # gaps inner|outer current|all set|plus|minus <px>
