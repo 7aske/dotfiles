@@ -165,7 +165,7 @@
     
     # Close all notifications.
     # close_all = ctrl+shift+space
-    close_all = ctrl+mod1+space
+    close_all = ctrl+mod4+n
 
     # Redisplay last message(s).
     # On the US keyboard layout "grave" is normally above TAB and left
@@ -173,7 +173,7 @@
     history = ctrl+mod4+h 
     
     # Context menu.
-    context = ctrl+mod4+c
+    context = mod4+n
 
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.
