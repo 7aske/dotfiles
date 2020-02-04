@@ -22,6 +22,8 @@ for_window [class=".*"] title_format " %title"; title_align center
 for_window [class=".*"] border pixel 1
 # title_align center
 
+# float and center the current window
+bindsym $mod+c floating enable; move position center
 
 # change borders
 bindsym $mod+u border toggle 1
