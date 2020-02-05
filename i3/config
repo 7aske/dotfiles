@@ -90,7 +90,7 @@ bindsym Print exec --no-startup-id i3-scrot
 bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
 bindsym $mod+Shift+Print --release exec --no-startup-id maim -s --format=png /dev/stdout | xclip -sel c -t image/png -i && notify-send "Copied to clipboard"
 bindsym $mod+Shift+x --release exec --no-startup-id xkill
-bindsym $mod+i exec i3-msg "[class=(?i)spotify] move container to workspace current floating enable focus"
+bindsym $mod+i exec --no-startup-id i3-msg "[class=(?i)spotify] move container to workspace current floating enable focus"
 
 # change focus
 bindsym $mod+h focus left
