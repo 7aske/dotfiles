@@ -6,7 +6,7 @@ set $mod Mod4
 
 # terminal command
 set $terminal urxvt -fn "xft:Fira Code Medium"
-
+set $player $PLAYER
 # set default desktop layout (default is tiling)
 # workspace_layout tabbed <stacking|tabbed>
 
@@ -65,11 +65,12 @@ bindsym $mod+Ctrl+Shift+p exec --no-startup-id ~/Code/sh/utils-sh/painputsink.sh
 # Media player controls
 bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
 bindsym XF86AudioPause exec --no-startup-id playerctl play-pause
-bindsym $mod+slash exec --no-startup-id playerctl play-pause
 bindsym XF86AudioNext exec --no-startup-id playerctl next
-bindsym $mod+period exec --no-startup-id playerctl next
 bindsym XF86AudioPrev exec --no-startup-id playerctl previous
-bindsym $mod+comma exec --no-startup-id playerctl previous
+# media controls re-using i3blocks script
+bindsym $mod+period exec --no-startup-id BLOCK_BUTTON=1 ~/Code/sh/utils-sh/statusbar/music
+bindsym $mod+slash exec --no-startup-id BLOCK_BUTTON=2 ~/Code/sh/utils-sh/statusbar/music
+bindsym $mod+comma exec --no-startup-id BLOCK_BUTTON=3 ~/Code/sh/utils-sh/statusbar/music
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
@@ -91,7 +92,8 @@ bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
 bindsym $mod+Shift+Print --release exec --no-startup-id maim -s --format=png /dev/stdout | xclip -sel c -t image/png -i && notify-send "Copied to clipboard"
 bindsym $mod+Shift+x --release exec --no-startup-id xkill
 bindsym $mod+i exec --no-startup-id i3-msg "[class=(?i)spotify] move container to workspace current floating enable focus"
-bindsym $mod+o exec $terminal -e bash ~/Code/sh/utils-sh/opencode.sh
+bindsym $mod+Shift+i exec --no-startup-id i3-msg "[class=(?i)spotify] move scratchpad"
+bindsym $mod+o exec --no-startup-id ROFI=1 ~/Code/sh/utils-sh/ocode.sh
 
 # change focus
 bindsym $mod+h focus left
