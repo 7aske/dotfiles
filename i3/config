@@ -94,6 +94,7 @@ bindsym $mod+Shift+x --release exec --no-startup-id xkill
 bindsym $mod+i exec --no-startup-id i3-msg "[class=(?i)spotify] move container to workspace current floating enable focus"
 bindsym $mod+Shift+i exec --no-startup-id i3-msg "[class=(?i)spotify] move scratchpad"
 bindsym $mod+o exec --no-startup-id ROFI=1 ~/Code/sh/utils-sh/ocode.sh
+bindsym $mod+v exec --no-startup-id clipmenu
 
 # change focus
 bindsym $mod+h focus left
@@ -125,7 +126,7 @@ bindsym $mod+b workspace back_and_forth
 bindsym $mod+Shift+b move container to workspace back_and_forth; workspace back_and_forth
 
 # split orientation
-bindsym $mod+v split toggle; exec notify-send 'toggled tiling'
+bindsym $mod+Ctrl+v split toggle; exec --no-startup-id notify-send 'toggled tiling'
 
 # toggle fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -144,9 +145,6 @@ bindsym $mod+space focus mode_toggle
 
 # toggle sticky
 bindsym $mod+Shift+s sticky toggle
-
-# focus the parent container
-# bindsym $mod+a focus parent
 
 # move the currently focused window to the scratchpad
 bindsym $mod+Shift+minus move scratchpad
@@ -202,13 +200,11 @@ bindsym $mod+Shift+7 move container to workspace $ws7; workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8; workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9; workspace $ws9
 
-
 # Move workspaces to other windows
 bindsym $mod+Ctrl+Left move workspace to output left
 bindsym $mod+Ctrl+Up move workspace to output up
 bindsym $mod+Ctrl+Right move workspace to output right
 bindsym $mod+Ctrl+Down move workspace to output down
-
 
 # Open applications on specific workspaces
 # for_window [class="(?i)caprine"] move to workspace $ws9
@@ -309,6 +305,7 @@ exec --no-startup-id nm-applet
 exec --no-startup-id xfce4-power-manager
 exec --no-startup-id pamac-tray
 exec --no-startup-id barrier
+exec --no-startup-id clipmenud
 exec --no-startup-id xautolock -time 10 -locker blurlock -corners +---
 exec_always --no-startup-id fix_xcursor
 
@@ -398,7 +395,6 @@ bindsym $mod+Ctrl+g gaps inner all set 1; gaps outer all set 1; exec notify-send
 
 # Smart gaps (gaps used if only more than one container on the workspace)
 # smart_gaps on
-
 
 # Smart borders (draw borders around container only if it is not the only container on this workspace) 
 smart_borders no_gaps #on|no_gaps
