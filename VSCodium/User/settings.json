@@ -37,5 +37,6 @@
         "statusBar.noFolderBackground": "#343434",
         "statusBar.background": "#232323",
     },
+    "liveSassCompile.settings.generateMap": false,
     "python.jediEnabled": false,
 }
