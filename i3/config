@@ -253,6 +253,9 @@ for_window [class="Baobab"] floating enable resize set 1024 720 move position ce
 # switch to workspace with urgent window automatically
 for_window [urgent=latest] focus
 
+# open alt tab equivalent window picker
+bindsym $mod+Tab exec --no-startup-id rofi -show window
+
 # reload the configuration file
 bindsym $mod+Shift+c reload
 
