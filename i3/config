@@ -4,6 +4,9 @@
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
 
+# disable help in most programs
+bindsym F1 nop
+
 # terminal command
 set $terminal urxvt
 set $player $PLAYER
@@ -57,6 +60,7 @@ bindsym $mod+p exec pavucontrol
 bindsym $mod+Ctrl+p exec --no-startup-id ~/Code/sh/utils-sh/patoggle.sh
 bindsym $mod+Shift+p exec --no-startup-id ~/Code/sh/utils-sh/padefsink.sh
 bindsym $mod+Ctrl+Shift+p exec --no-startup-id ~/Code/sh/utils-sh/painputsink.sh
+exec_always --no-startup-id sleep 2 && ~/Code/sh/utils-sh/fix_pulseaudio.sh
 
 # Screen brightness controls
 # bindsym XF86MonBrightnessUp exec "xbacklight -inc 10; notify-send 'brightness up'"
