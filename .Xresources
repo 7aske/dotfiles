@@ -9,11 +9,10 @@ Xft.lcdfilter: lcddefault
 XTerm*background:        #222D31
 XTerm*foreground:        #d8d8d8
 XTerm*pointerColor:      #1ABB9B
-XTerm*faceName:          Fira Code Medium
-XTerm*faceSize:          12
+XTerm*faceName:          Fixed
+XTerm*faceSize:          11
 XTerm*reverseVideo:      on
 XTerm*selectToClipboard: true
-XTerm*boldColors:        true
 
 *background:                      #222D31
 *foreground:                      #d8d8d8
@@ -55,10 +54,11 @@ XTerm*boldColors:        true
 !*color7:                          #d8d8d8
 !*color15:                         #f8f8f8
 
-Xcursor.theme: xcursor-breeze-snow
+Xcursor.theme: Breeze_Snow
 Xcursor.size:                     0
 
-URxvt.font:                       9x15,xft:Fira Code Medium
+URxvt.font:                         xft:FiraCode-Medium
+URxvt*utf8:                       1
 
 ! alternative font settings with 'terminus':
 ! URxvt.font:      -xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso10646-1
@@ -70,11 +70,11 @@ URxvt.background:                 [50]#222D31
 URxvt*scrollBar:                  false
 URxvt*mouseWheelScrollPage:       false
 URxvt*cursorBlink:                false
-URxvt*background:                 [50]#222D31
+URxvt*background:                 black
 URxvt*foreground:                 grey
 URxvt*saveLines:                  5000
 
-! for 'fake' transparency (without Compton) uncomment the following three lines
+!for 'fake' transparency (without Compton) uncomment the following three lines
 URxvt*inheritPixmap:            true
 URxvt*transparent:              true
 URxvt*shading:                  20
@@ -92,6 +92,7 @@ URxvt.keysym.Control-Up:          \033[1;5A
 URxvt.keysym.Shift-Control-Up:    \033[1;6A
 URxvt.keysym.Control-Down:        \033[1;5B
 URxvt.keysym.Shift-Control-Down:  \033[1;6B
+URxvt*termName:                   rxvt-unicode
 ! Rxvt.perl-ext-common:             ...,clipboard
 ! URxvt.keysym.M-C-c:               perl:clipboard:copy
 ! URxvt.keysym.M-v:                 perl:clipboard:paste
