@@ -29,7 +29,7 @@
     "window.title": "${dirty}${rootName}${separator}${activeEditorShort}",
     "window.titleBarStyle": "custom",
     "window.openFilesInNewWindow": "off",
-    "workbench.colorTheme": "Darcula Theme from IntelliJ",
+    "workbench.colorTheme": "Nord",
     "workbench.iconTheme": "material-icon-theme",
     "workbench.sideBar.location": "left",
     "workbench.startupEditor": "none",
@@ -39,4 +39,6 @@
     },
     "liveSassCompile.settings.generateMap": false,
     "python.jediEnabled": false,
+    "window.zoomLevel": 0,
+    "extensions.autoUpdate": true,
 }
