@@ -99,6 +99,7 @@ bindsym $mod+i exec --no-startup-id i3-msg "[class=(?i)spotify] move container t
 bindsym $mod+Shift+i exec --no-startup-id i3-msg "[class=(?i)spotify] move scratchpad"
 bindsym $mod+o exec --no-startup-id TYPE=term ROFI=1 ~/Code/sh/utils-sh/ocode.sh
 bindsym $mod+Shift+o exec --no-startup-id TYPE=vscode ROFI=1 ~/Code/sh/utils-sh/ocode.sh
+bindsym $mod+Ctrl+o exec --no-startup-id TYPE=jetbrains ROFI=1 ~/Code/sh/utils-sh/ocode.sh
 bindsym $mod+v exec --no-startup-id clipmenu
 
 # change focus
