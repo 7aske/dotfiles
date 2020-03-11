@@ -256,6 +256,7 @@ for_window [class="Xfburn"] floating enable
 for_window [class="VirtualBox Machine"] floating disable border pixel 1
 for_window [class="VirtualBox Manager"] floating disable
 for_window [class="Baobab"] floating enable resize set 1024 720 move position center
+for_window [title=".*Emulator.*"] floating enable
 
 # switch to workspace with urgent window automatically
 for_window [urgent=latest] focus
