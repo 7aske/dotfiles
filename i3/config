@@ -9,6 +9,7 @@ bindsym F1 nop
 
 # terminal command
 set $terminal urxvt
+set $terminal2 kitty
 set $player $PLAYER
 # set default desktop layout (default is tiling)
 # workspace_layout tabbed <stacking|tabbed>
@@ -46,6 +47,7 @@ floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec $terminal
+bindsym $mod+Shift+Return exec $terminal2
 
 # kill focused window
 bindsym $mod+q kill
