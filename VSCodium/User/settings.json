@@ -1,7 +1,7 @@
 {
     "arduino.path": "/opt/arduino-1.8.10",
     "breadcrumbs.enabled": true,
-    "editor.cursorSmoothCaretAnimation": true,
+    "editor.cursorhCaretAnimation": true,
     "editor.cursorBlinking": "solid",
     "editor.cursorStyle": "block",
     "editor.fontFamily": "Fira Code Medium",
@@ -9,7 +9,6 @@
     "editor.fontWeight": "400",
     "editor.fontLigatures": true,
     "editor.multiCursorModifier": "ctrlCmd",
-    "editor.smoothScrolling": true,
     "editor.suggestSelection": "first",
     "editor.tabSize": 4,
     "explorer.confirmDelete": false,
