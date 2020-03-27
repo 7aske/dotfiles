@@ -103,6 +103,7 @@ bindsym $mod+o exec --no-startup-id TYPE=term ROFI=1 ~/Code/sh/utils-sh/ocode.sh
 bindsym $mod+Shift+o exec --no-startup-id TYPE=vscode ROFI=1 ~/Code/sh/utils-sh/ocode.sh
 bindsym $mod+Ctrl+o exec --no-startup-id TYPE=jetbrains ROFI=1 ~/Code/sh/utils-sh/ocode.sh
 bindsym $mod+v exec --no-startup-id clipmenu
+bindsym $mod+F2 exec --no-startup-id ~/Code/sh/utils-sh/lang.sh
 
 # change focus
 bindsym $mod+h focus left
