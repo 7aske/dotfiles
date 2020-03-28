@@ -271,7 +271,7 @@ bindsym $mod+Ctrl+Shift+Left workspace prev
 # spec|_|ific window settings 
 # Open applications on specific workspaces
 for_window [class="(?i)caprine"] move to workspace $ws9
-for_window [class="(?i)discord"] move to workspace $ws9
+assign [class="(?i)discord"] $ws9
 for_window [class="(?i)telegram-desktop"] move to workspace $ws9
 for_window [class="(?i)viber"] move to workspace $ws9
 # for_window [class="(?i)spotify"] move to workspace $ws9
