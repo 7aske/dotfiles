@@ -1,68 +1,54 @@
 # i3 config file (v4)
-# Please see http://i3wm.org/docs/userguide.html for a complete reference!
+#  _____         _        _       _ _____                    __ _       
+# |___  |_ _ ___| | _____( )___  (_)___ /    ___ ___  _ __  / _(_) __ _ 
+#    / / _` / __| |/ / _ \// __| | | |_ \   / __/ _ \| '_ \| |_| |/ _` |
+#   / / (_| \__ \   <  __/ \__ \ | |___) | | (_| (_) | | | |  _| | (_| |
+#  /_/ \__,_|___/_|\_\___| |___/ |_|____/   \___\___/|_| |_|_| |_|\__, |
+# 7aske's i3 config                                               |___/ 
 
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
 
-# disable help in most programs
+# disable help button in most programs
 bindsym F1 nop
+                  
+#    ___ _ ____   __
+#   / _ \ '_ \ \ / /
+#  |  __/ | | \ V / 
+# (_)___|_| |_|\_/  
+# env
+# load default apps from environment
+# set these variables in your .profile or .xprofile
+# eg. EDITOR=nvim
+set $editor $EDITOR
+set $browser $BROWSER
+set $file $FILE
+set $reader $READER
+set $player $PLAYER
 
-# terminal command
+# set terminal commands
 set $terminal urxvt
 set $terminal2 kitty
-set $player $PLAYER
-# set default desktop layout (default is tiling)
-# workspace_layout tabbed <stacking|tabbed>
 
-# Configure border style <normal|1pixel|pixel xx|none|pixel>
-default_border pixel 1
-default_floating_border normal
-
-# alternating split layout
+# alternating split layout 
+# https://github.com/olemartinorg/i3-alternating-layout
 exec_always --no-startup-id python3 ~/.local/bin/alternating_layouts
 
-# Hide borders
-hide_edge_borders none
-
-# Set title format
-for_window [class=".*"] title_format " %title"; title_align center
-for_window [class=".*"] border pixel 1
-# title_align center
-
-# float and center the current window
-bindsym $mod+c floating enable; move position center
-
-# change borders
-bindsym $mod+u border toggle 1
-
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below.
-font xft:Fira Code Medium 12
-
-# set background
+# set background and theme using wal
 exec --no-startup-id wal -c; wal --backend wal -i ~/.config/wallpaper
 
-# Use Mouse+$mod to drag floating windows
-floating_modifier $mod
+# sound&music                _  ___                       _      
+#  ___  ___  _   _ _ __   __| |( _ )  _ __ ___  _   _ ___(_) ___ 
+# / __|/ _ \| | | | '_ \ / _` |/ _ \/\ '_ ` _ \| | | / __| |/ __|
+# \__ \ (_) | |_| | | | | (_| | (_>  < | | | | | |_| \__ \ | (__ 
+# |___/\___/ \__,_|_| |_|\__,_|\___/\/_| |_| |_|\__,_|___/_|\___|                                                               
 
-# start a terminal
-bindsym $mod+Return exec $terminal
-bindsym $mod+Shift+Return exec $terminal2
-
-# kill focused window
-bindsym $mod+q kill
-
-# start program launcher
-bindsym $mod+a exec --no-startup-id rofi -show run
-
-# Sound daemons and bindings
-exec_always --no-startup-id pgrep pulseaudio || pulseaudio -D
-exec_always --no-startup-id pgrep pasystray || pasystray
-bindsym $mod+p exec pavucontrol
+# start pulseaudio in xprofile
+# start pasystray in xprofile
+bindsym $mod+p exec --no-startup-id pavucontrol
 bindsym $mod+Ctrl+p exec --no-startup-id ~/Code/sh/utils-sh/patoggle.sh
 bindsym $mod+Shift+p exec --no-startup-id ~/Code/sh/utils-sh/padefsink.sh
 bindsym $mod+Ctrl+Shift+p exec --no-startup-id ~/Code/sh/utils-sh/painputsink.sh
-exec_always --no-startup-id sleep 2 && ~/Code/sh/utils-sh/fix_pulseaudio.sh
 
 # Screen brightness controls
 # bindsym XF86MonBrightnessUp exec "xbacklight -inc 10; notify-send 'brightness up'"
@@ -73,6 +59,7 @@ bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
 bindsym XF86AudioPause exec --no-startup-id playerctl play-pause
 bindsym XF86AudioNext exec --no-startup-id playerctl next
 bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+
 # media controls re-using i3blocks script
 bindsym $mod+period exec --no-startup-id BLOCK_BUTTON=1 ~/Code/sh/utils-sh/statusbar/music
 bindsym $mod+slash exec --no-startup-id BLOCK_BUTTON=2 ~/Code/sh/utils-sh/statusbar/music
@@ -83,15 +70,22 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #i
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
 
-# Start Applications
+#                    _ _           _   _                 
+#   __ _ _ __  _ __ | (_) ___ __ _| |_(_) ___  _ __  ___ 
+#  / _` | '_ \| '_ \| | |/ __/ _` | __| |/ _ \| '_ \/ __|
+# | (_| | |_) | |_) | | | (_| (_| | |_| | (_) | | | \__ \
+#  \__,_| .__/| .__/|_|_|\___\__,_|\__|_|\___/|_| |_|___/
+# applic|_|ati|_|ons                                        
+bindsym $mod+Return exec --no-startup-id $terminal
+bindsym $mod+Shift+Return exec --no-startup-id $terminal2
+bindsym $mod+a exec --no-startup-id rofi -show run
+bindsym $mod+d exec --no-startup-id dmenu_run -fn 'Fira Code-12'
 bindsym $mod+grave exec $terminal -e htop
 bindsym $mod+Shift+grave exec $terminal -e vim ~/.config/i3/config
 bindsym $mod+e exec $FILE
 bindsym $mod+Shift+e exec $terminal -e vim
 bindsym $mod+w exec $BROWSER
 bindsym $mod+Shift+w exec $BROWSER --incognito
-bindsym $mod+Shift+t exec --no-startup-id pkill compton
-bindsym $mod+Ctrl+t exec --no-startup-id compton -b
 bindsym $mod+Shift+d exec --no-startup-id ~/Code/sh/utils-sh/reload_dunst.sh
 bindsym Print exec --no-startup-id i3-scrot
 bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
@@ -104,7 +98,15 @@ bindsym $mod+Shift+o exec --no-startup-id TYPE=vscode ROFI=1 ~/Code/sh/utils-sh/
 bindsym $mod+Ctrl+o exec --no-startup-id TYPE=jetbrains ROFI=1 ~/Code/sh/utils-sh/ocode.sh
 bindsym $mod+v exec --no-startup-id clipmenu
 bindsym $mod+F2 exec --no-startup-id ~/Code/sh/utils-sh/lang.sh
+bindsym $mod+Shift+s exec ~/Code/sh/utils-sh/google-search.sh
+bindsym $mod+Tab exec --no-startup-id rofi -show window
 
+#                    _             _   _             
+#  _ __   __ ___   _(_) __ _  __ _| |_(_) ___  _ __  
+# | '_ \ / _` \ \ / / |/ _` |/ _` | __| |/ _ \| '_ \ 
+# | | | | (_| |\ V /| | (_| | (_| | |_| | (_) | | | |
+# |_| |_|\__,_| \_/ |_|\__, |\__,_|\__|_|\___/|_| |_|
+# navigation                 |___/                         
 # change focus
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -134,38 +136,74 @@ workspace_auto_back_and_forth yes
 bindsym $mod+b workspace back_and_forth
 bindsym $mod+Shift+b move container to workspace back_and_forth; workspace back_and_forth
 
+# windows   _           _                   
+# __      _(_)_ __   __| | _____      _____ 
+# \ \ /\ / / | '_ \ / _` |/ _ \ \ /\ / / __|
+#  \ V  V /| | | | | (_| | (_) \ V  V /\__ \
+#   \_/\_/ |_|_| |_|\__,_|\___/ \_/\_/ |___/
+# set title format
+font xft:Fira Code Medium 12
+title_format " %title"
+
+# configure border style <normal|1pixel|pixel xx|none|pixel>
+default_border pixel 1
+hide_edge_borders smart
+
+# use Mouse+$mod to drag floating windows
+floating_modifier $mod
+
+# float and center the current window
+bindsym $mod+c floating enable; move position center
+
+# change borders
+bindsym $mod+u border toggle 1; exec notify-send "border" "border toggled"
+
+# kill focused window
+bindsym $mod+q kill
+
 # split orientation
 bindsym $mod+Ctrl+v split toggle; exec --no-startup-id notify-send 'toggled tiling'
 
 # toggle fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
+bindsym $mod+f fullscreen toggle; exec notify-send "fullscreen" "fullscreen toggled"
 
 # Toggle floating/tiling
-bindsym $mod+t floating toggle
-
-# google search
-bindsym $mod+s exec ~/Code/sh/utils-sh/google-search.sh
+bindsym $mod+t floating toggle; exec notify-send "floating" "floating toggled"
 
 # toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
+bindsym $mod+Shift+space floating toggle; exec notify-send "floating" "floating toggled"
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
 
 # toggle sticky
-bindsym $mod+Shift+s sticky toggle
+bindsym $mod+s sticky toggle; exec notify-send "sticky" "sticky toggled"
 
-# move the currently focused window to the scratchpad
-bindsym $mod+Shift+minus move scratchpad
+# switch to workspace with urgent window automatically
+for_window [urgent="latest"] focus
+focus_on_window_activation focus
 
-# Show the next scratchpad window or hide the focused scratchpad window.
-bindsym $mod+minus scratchpad show
+# layout toggling mode
+bindsym $mod+Shift+t mode "$mode_layout"
+set $mode_layout set window layout: (d)efault (t)abbed (s)tacking
+mode "$mode_layout" {
+    # set default desktop layout <stacking|tabbed>
+    bindsym t layout tabbed; exec notify-send "layout" "switched to tabbed layout", mode "default"
+    bindsym s layout stacking; exec notify-send "layout" "switched to stacking layout", mode "default"
+    bindsym d layout default; exec notify-send "layout" "switched to default layout", mode "default"
 
-#navigate workspaces next / previous
-bindsym $mod+Ctrl+Shift+Right workspace next
-bindsym $mod+Ctrl+Shift+Left workspace prev
+    # exit system mode: "Enter" or "Escape"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
 
-# Workspace names
+#                     _                                  
+# __      _____  _ __| | _____ _ __   __ _  ___ ___  ___ 
+# \ \ /\ / / _ \| '__| |/ / __| '_ \ / _` |/ __/ _ \/ __|
+#  \ V  V / (_) | |  |   <\__ \ |_) | (_| | (_|  __/\__ \
+#   \_/\_/ \___/|_|  |_|\_\___/ .__/ \__,_|\___\___||___/
+# workspaces                  |_|                        
+# workspace names
 set $ws1 1
 set $ws2 2
 set $ws3 3
@@ -215,13 +253,28 @@ bindsym $mod+Ctrl+Up move workspace to output up
 bindsym $mod+Ctrl+Right move workspace to output right
 bindsym $mod+Ctrl+Down move workspace to output down
 
+# move the currently focused window to the scratchpad
+bindsym $mod+Shift+minus move scratchpad
+
+# Show the next scratchpad window or hide the focused scratchpad window.
+bindsym $mod+minus scratchpad show
+
+#navigate workspaces next / previous
+bindsym $mod+Ctrl+Shift+Right workspace next
+bindsym $mod+Ctrl+Shift+Left workspace prev
+
+#                      _  __ _                 _           _                   
+#  ___ _ __   ___  ___(_)/ _(_) ___  __      _(_)_ __   __| | _____      _____ 
+# / __| '_ \ / _ \/ __| | |_| |/ __| \ \ /\ / / | '_ \ / _` |/ _ \ \ /\ / / __|
+# \__ \ |_) |  __/ (__| |  _| | (__   \ V  V /| | | | | (_| | (_) \ V  V /\__ \
+# |___/ .__/ \___|\___|_|_| |_|\___|   \_/\_/ |_|_| |_|\__,_|\___/ \_/\_/ |___/
+# spec|_|ific window settings 
 # Open applications on specific workspaces
-# for_window [class="(?i)caprine"] move to workspace $ws9
+for_window [class="(?i)caprine"] move to workspace $ws9
+for_window [class="(?i)discord"] move to workspace $ws9
+for_window [class="(?i)telegram-desktop"] move to workspace $ws9
+for_window [class="(?i)viber"] move to workspace $ws9
 # for_window [class="(?i)spotify"] move to workspace $ws9
-# for_window [class="(?i)discord"] move to workspace $ws9
-# assign [class="(?i)spotify"] $ws9
-# assign [class="(?i)discord"] $ws9
-# assign [class="(?i)caprine"] $ws9
 
 # Open specific applications in floating mode
 for_window [title="alsamixer"] floating enable border pixel 1
@@ -253,23 +306,25 @@ for_window [class="Simple-scan"] floating enable border normal
 for_window [class="(?i)System-config-printer.py"] floating enable border normal
 for_window [class="Timeset-gui"] floating enable border normal
 for_window [class="(?i)virtualbox"] floating enable border normal
+for_window [class="(?i)anydesk.bin"] floating enable border normal
 for_window [class="Xfburn"] floating enable
 for_window [class="VirtualBox Machine"] floating disable border pixel 1
 for_window [class="VirtualBox Manager"] floating disable
 for_window [class="Baobab"] floating enable resize set 1024 720 move position center
 for_window [title=".*Emulator.*"] floating enable
 
-# switch to workspace with urgent window automatically
-for_window [urgent=latest] focus
-
-# open alt tab equivalent window picker
-bindsym $mod+Tab exec --no-startup-id rofi -show window
+#            _                                                          _     
+#  _ __ ___ (_)___  ___    ___ ___  _ __ ___  _ __ ___   __ _ _ __   __| |___ 
+# | '_ ` _ \| / __|/ __|  / __/ _ \| '_ ` _ \| '_ ` _ \ / _` | '_ \ / _` / __|
+# | | | | | | \__ \ (__  | (_| (_) | | | | | | | | | | | (_| | | | | (_| \__ \
+# |_| |_| |_|_|___/\___|  \___\___/|_| |_| |_|_| |_| |_|\__,_|_| |_|\__,_|___/
+# misc commands
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+bindsym $mod+Shift+c reload; exec notify-send "config" "i3 config reloaded"
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart
+bindsym $mod+Shift+r restart; exec notify-send "restart" "i3 restarted"
 
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+0 exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
@@ -311,22 +366,32 @@ mode "resize" {
         bindsym Escape mode "default"
 }
 
-# Autostart applications
-exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec --no-startup-id nitrogen --restore; sleep 1; compton -b
-exec --no-startup-id nm-applet
-exec --no-startup-id xfce4-power-manager
-exec --no-startup-id pamac-tray
-exec --no-startup-id barrier
-exec --no-startup-id clipmenud
-exec --no-startup-id xautolock -time 10 -locker blurlock -corners +---
-exec_always --no-startup-id fix_xcursor
+#              _            _             _   
+#   __ _ _   _| |_ ___  ___| |_ __ _ _ __| |_ 
+#  / _` | | | | __/ _ \/ __| __/ _` | '__| __|
+# | (_| | |_| | || (_) \__ \ || (_| | |  | |_ 
+#  \__,_|\__,_|\__\___/|___/\__\__,_|_|   \__|
+# autostart                                            
+
+# exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+# exec --no-startup-id nitrogen --restore; sleep 1; compton -b
+# exec --no-startup-id nm-applet
+# exec --no-startup-id xfce4-power-manager
+# exec --no-startup-id pamac-tray
+# exec --no-startup-id barrier
+# exec --no-startup-id clipmenud
+# exec --no-startup-id xautolock -time 10 -locker blurlock -corners +---
+# exec_always --no-startup-id fix_xcursor
 
 # touchpad and keyboard config
-exec_always --no-startup-id ~/Code/sh/utils-sh/fix_touchpad.sh
-exec_always --no-startup-id xset r rate 195 55
+# exec_always --no-startup-id ~/Code/sh/utils-sh/fix_touchpad.sh
+# exec_always --no-startup-id xset r rate 195 55
 
-
+#            _                
+#   ___ ___ | | ___  _ __ ___ 
+#  / __/ _ \| |/ _ \| '__/ __|
+# | (_| (_) | | (_) | |  \__ \
+#  \___\___/|_|\___/|_|  |___/
 # Color palette used for the terminal ( ~/.Xresources file )
 # Colors are parsed from wal (python-pywal)
 set_from_resource $background background
@@ -348,16 +413,36 @@ set_from_resource $color13    i3wm.color13
 set_from_resource $color14    i3wm.color14
 set_from_resource $color15    i3wm.color15
 
+# Theme colors
+set_from_resource $fg i3wm.color7 #f0f0f0
+set_from_resource $bg i3wm.color2 #f0f0f0
+
+# class              border  background    texture indicator   cborder
+client.focused          $bg         $bg        $fg       $bg       $bg
+client.focused_inactive $bg         $bg        $fg       $bg       $bg
+client.unfocused        $bg         $bg        $fg       $bg       $bg
+client.urgent           $bg         $bg        $fg       $bg       $bg
+client.placeholder      $bg         $bg        $fg       $bg       $bg
+client.background       $bg
+
+#      _        _               _                
+#  ___| |_ __ _| |_ _   _ ___  | |__   __ _ _ __ 
+# / __| __/ _` | __| | | / __| | '_ \ / _` | '__|
+# \__ \ || (_| | |_| |_| \__ \ | |_) | (_| | |   
+# |___/\__\__,_|\__|\__,_|___/ |_.__/ \__,_|_|   
+# status bar
+
 # Start i3bar to display a workspace bar (plus the system information i3status if available)
 bar {
-	i3bar_command i3bar
 	status_command i3blocks
     position top
 
 	tray_output primary
 
-	bindsym button4 nop
-	bindsym button5 nop
+    # disable scroll wheel
+	#bindsym button4 nop
+	#bindsym button5 nop
+
     font xft:Fira Code Medium 10
 	strip_workspace_numbers yes
 
@@ -367,33 +452,24 @@ bar {
         statusline $color1
         separator  $color1
 
-        #                   border      backgr        text
-        focused_workspace  $color2     $color5 $background
-        active_workspace   $color2     $color9     $color0
-        inactive_workspace $color2 $background $foreground
-        binding_mode       $color13    $color13    $color0
-        urgent_workspace   $color2     $color5 $background
+        #                     border      background        text
+        focused_workspace    $color2         $color5 $background
+        active_workspace     $color2         $color9     $color0
+        inactive_workspace   $color2     $background $foreground
+        binding_mode        $color13        $color13     $color0
+        urgent_workspace     $color2         $color5 $background
     }
 }
 
-# hide/unhide i3status bar
+# hide/unhide status bar
 bindsym $mod+m bar mode toggle
 
-# Theme colors
-set_from_resource $fg i3wm.color7 #f0f0f0
-set_from_resource $bg i3wm.color2 #f0f0f0
-
-# class              border  backgr    tex indic   cborder
-client.focused          $bg     $bg     $fg  $bg       $bg
-client.focused_inactive $bg     $bg     $fg  $bg       $bg
-client.unfocused        $bg     $bg     $fg  $bg       $bg
-client.urgent           $bg     $bg     $fg  $bg       $bg
-client.placeholder      $bg     $bg     $fg  $bg       $bg
-client.background       $bg
-
-#############################
-### settings for i3-gaps: ###
-#############################
+#  _ _____                             
+# (_)___ /        __ _  __ _ _ __  ___ 
+# | | |_ \ _____ / _` |/ _` | '_ \/ __|
+# | |___) |_____| (_| | (_| | |_) \__ \
+# |_|____/       \__, |\__,_| .__/|___/
+# i3-gaps        |___/      |_|
 
 # Set inner/outer gaps
 gaps inner 10
