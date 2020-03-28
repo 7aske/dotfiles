@@ -1,0 +1,16 @@
+[ -f "$HOME/.profile" ] && . "$HOME/.profile"
+
+pulseaudio -D &
+pasystray &
+
+nm-applet &
+xfce4-power-manager &
+pamac-tray &
+barrier &
+clipmenud &
+xautolock -time 10 -locker blurlock -corners +--- &
+fix_xcursor &
+nitrogen --restore; sleep 1; compton -b &
+
+~/Code/sh/utils-sh/fix_touchpad.sh &
+xset r rate 195 55 &
