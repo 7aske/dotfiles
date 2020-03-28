@@ -51,8 +51,8 @@ bindsym $mod+Shift+p exec --no-startup-id ~/Code/sh/utils-sh/padefsink.sh
 bindsym $mod+Ctrl+Shift+p exec --no-startup-id ~/Code/sh/utils-sh/painputsink.sh
 
 # Screen brightness controls
-# bindsym XF86MonBrightnessUp exec "xbacklight -inc 10; notify-send 'brightness up'"
-# bindsym XF86MonBrightnessDown exec "xbacklight -dec 10; notify-send 'brightness down'"
+# bindsym XF86MonBrightnessUp exec --no-startup-id "xbacklight -inc 10; notify-send 'brightness up'"
+# bindsym XF86MonBrightnessDown exec --no-startup-id "xbacklight -dec 10; notify-send 'brightness down'"
 
 # Media player controls
 bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
@@ -80,12 +80,12 @@ bindsym $mod+Return exec --no-startup-id $terminal
 bindsym $mod+Shift+Return exec --no-startup-id $terminal2
 bindsym $mod+a exec --no-startup-id rofi -show run
 bindsym $mod+d exec --no-startup-id dmenu_run -fn 'Fira Code-12'
-bindsym $mod+grave exec $terminal -e htop
-bindsym $mod+Shift+grave exec $terminal -e vim ~/.config/i3/config
-bindsym $mod+e exec $FILE
-bindsym $mod+Shift+e exec $terminal -e vim
-bindsym $mod+w exec $BROWSER
-bindsym $mod+Shift+w exec $BROWSER --incognito
+bindsym $mod+grave exec --no-startup-id $terminal -e htop
+bindsym $mod+Shift+grave exec --no-startup-id $terminal -e vim ~/.config/i3/config
+bindsym $mod+e exec --no-startup-id $FILE
+bindsym $mod+Shift+e exec --no-startup-id $terminal -e vim
+bindsym $mod+w exec --no-startup-id $BROWSER
+bindsym $mod+Shift+w exec --no-startup-id $BROWSER --incognito
 bindsym $mod+Shift+d exec --no-startup-id ~/Code/sh/utils-sh/reload_dunst.sh
 bindsym Print exec --no-startup-id i3-scrot
 bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
@@ -98,7 +98,7 @@ bindsym $mod+Shift+o exec --no-startup-id TYPE=vscode ROFI=1 ~/Code/sh/utils-sh/
 bindsym $mod+Ctrl+o exec --no-startup-id TYPE=jetbrains ROFI=1 ~/Code/sh/utils-sh/ocode.sh
 bindsym $mod+v exec --no-startup-id clipmenu
 bindsym $mod+F2 exec --no-startup-id ~/Code/sh/utils-sh/lang.sh
-bindsym $mod+Shift+s exec ~/Code/sh/utils-sh/google-search.sh
+bindsym $mod+Shift+s exec --no-startup-id ~/Code/sh/utils-sh/google-search.sh
 bindsym $mod+Tab exec --no-startup-id rofi -show window
 
 #                    _             _   _             
@@ -156,7 +156,7 @@ floating_modifier $mod
 bindsym $mod+c floating enable; move position center
 
 # change borders
-bindsym $mod+u border toggle 1; exec notify-send "border" "border toggled"
+bindsym $mod+u border toggle 1; exec --no-startup-id notify-send "border" "border toggled"
 
 # kill focused window
 bindsym $mod+q kill
@@ -165,19 +165,19 @@ bindsym $mod+q kill
 bindsym $mod+Ctrl+v split toggle; exec --no-startup-id notify-send 'toggled tiling'
 
 # toggle fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle; exec notify-send "fullscreen" "fullscreen toggled"
+bindsym $mod+f fullscreen toggle; exec --no-startup-id notify-send "fullscreen" "fullscreen toggled"
 
 # Toggle floating/tiling
-bindsym $mod+t floating toggle; exec notify-send "floating" "floating toggled"
+bindsym $mod+t floating toggle; exec --no-startup-id notify-send "floating" "floating toggled"
 
 # toggle tiling / floating
-bindsym $mod+Shift+space floating toggle; exec notify-send "floating" "floating toggled"
+bindsym $mod+Shift+space floating toggle; exec --no-startup-id notify-send "floating" "floating toggled"
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
 
 # toggle sticky
-bindsym $mod+s sticky toggle; exec notify-send "sticky" "sticky toggled"
+bindsym $mod+s sticky toggle; exec --no-startup-id notify-send "sticky" "sticky toggled"
 
 # switch to workspace with urgent window automatically
 for_window [urgent="latest"] focus
@@ -188,9 +188,9 @@ bindsym $mod+Shift+t mode "$mode_layout"
 set $mode_layout set window layout: (d)efault (t)abbed (s)tacking
 mode "$mode_layout" {
     # set default desktop layout <stacking|tabbed>
-    bindsym t layout tabbed; exec notify-send "layout" "switched to tabbed layout", mode "default"
-    bindsym s layout stacking; exec notify-send "layout" "switched to stacking layout", mode "default"
-    bindsym d layout default; exec notify-send "layout" "switched to default layout", mode "default"
+    bindsym t layout tabbed; exec --no-startup-id notify-send "layout" "switched to tabbed layout", mode "default"
+    bindsym s layout stacking; exec --no-startup-id notify-send "layout" "switched to stacking layout", mode "default"
+    bindsym d layout default; exec --no-startup-id notify-send "layout" "switched to default layout", mode "default"
 
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode "default"
@@ -321,13 +321,13 @@ for_window [title=".*Emulator.*"] floating enable
 # misc commands
 
 # reload the configuration file
-bindsym $mod+Shift+c reload; exec notify-send "config" "i3 config reloaded"
+bindsym $mod+Shift+c reload; exec --no-startup-id notify-send "config" "i3 config reloaded"
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart; exec notify-send "restart" "i3 restarted"
+bindsym $mod+Shift+r restart; exec --no-startup-id notify-send "restart" "i3 restarted"
 
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+0 exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+0 exec --no-startup-id "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # Set shut down, restart and locking features
 bindsym $mod+0 mode "$mode_system"
@@ -372,6 +372,8 @@ mode "resize" {
 # | (_| | |_| | || (_) \__ \ || (_| | |  | |_ 
 #  \__,_|\__,_|\__\___/|___/\__\__,_|_|   \__|
 # autostart                                            
+
+# its better to handle your autostart applications through .xprofile
 
 # exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 # exec --no-startup-id nitrogen --restore; sleep 1; compton -b
@@ -474,8 +476,8 @@ bindsym $mod+m bar mode toggle
 # Set inner/outer gaps
 gaps inner 10
 gaps outer -6
-bindsym $mod+g gaps inner all set 10; gaps outer all set -6; exec notify-send "gaps" "gaps reset to default"
-bindsym $mod+Ctrl+g gaps inner all set 1; gaps outer all set 1; exec notify-send "gaps" "disabled gaps"
+bindsym $mod+g gaps inner all set 10; gaps outer all set -6; exec --no-startup-id notify-send "gaps" "gaps reset to default"
+bindsym $mod+Ctrl+g gaps inner all set 1; gaps outer all set 1; exec --no-startup-id notify-send "gaps" "disabled gaps"
 
 # Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
 # gaps inner|outer current|all set|plus|minus <px>
