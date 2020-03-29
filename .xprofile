@@ -12,5 +12,5 @@ xautolock -time 10 -locker blurlock -corners +--- &
 fix_xcursor &
 nitrogen --restore; sleep 1; compton -b &
 
-~/Code/sh/utils-sh/fix_touchpad.sh &
+fix_touchpad &
 xset r rate 195 55 &

@@ -46,9 +46,12 @@ exec --no-startup-id wal --backend wal -i ~/.config/wallpaper
 # start pulseaudio in xprofile
 # start pasystray in xprofile
 bindsym $mod+p exec --no-startup-id pavucontrol
-bindsym $mod+Ctrl+p exec --no-startup-id ~/Code/sh/utils-sh/patoggle.sh
-bindsym $mod+Shift+p exec --no-startup-id ~/Code/sh/utils-sh/padefsink.sh
-bindsym $mod+Ctrl+Shift+p exec --no-startup-id ~/Code/sh/utils-sh/painputsink.sh
+# 7aske-scripts
+bindsym $mod+Ctrl+p exec --no-startup-id patoggle 
+# 7aske-scripts
+bindsym $mod+Shift+p exec --no-startup-id padefault
+# 7aske-scripts
+bindsym $mod+Ctrl+Shift+p exec --no-startup-id pafocus
 
 # Screen brightness controls
 # bindsym XF86MonBrightnessUp exec --no-startup-id "xbacklight -inc 10; notify-send 'brightness up'"
@@ -66,9 +69,9 @@ bindsym $mod+slash exec --no-startup-id BLOCK_BUTTON=2 ~/Code/sh/utils-sh/status
 bindsym $mod+comma exec --no-startup-id BLOCK_BUTTON=3 ~/Code/sh/utils-sh/statusbar/music
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle
 
 #                    _ _           _   _                 
 #   __ _ _ __  _ __ | (_) ___ __ _| |_(_) ___  _ __  ___ 
@@ -86,19 +89,25 @@ bindsym $mod+e exec --no-startup-id $FILE
 bindsym $mod+Shift+e exec --no-startup-id $terminal -e vim
 bindsym $mod+w exec --no-startup-id $BROWSER
 bindsym $mod+Shift+w exec --no-startup-id $BROWSER --incognito
-bindsym $mod+Shift+d exec --no-startup-id ~/Code/sh/utils-sh/reload_dunst.sh
+# 7aske-scripts
+bindsym $mod+Shift+d exec --no-startup-id dunst_reload && notify-send "dunst" "dunst reloaded"
 bindsym Print exec --no-startup-id i3-scrot
 bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
-bindsym $mod+Shift+Print --release exec --no-startup-id maim -s --format=png /dev/stdout | xclip -sel c -t image/png -i && notify-send "Copied to clipboard"
+bindsym $mod+Shift+Print --release exec --no-startup-id maim -s --format=png /dev/stdout | xclip -sel c -t image/png -i && notify-send "screenshot" "copied to clipboard"
 bindsym $mod+Shift+x --release exec --no-startup-id xkill
-bindsym $mod+i exec --no-startup-id ~/Code/sh/utils-sh/spotifi3.sh
-bindsym $mod+Shift+i exec --no-startup-id i3-msg "[class=(?i)spotify] move scratchpad"
-bindsym $mod+o exec --no-startup-id TYPE=term ROFI=1 ~/Code/sh/utils-sh/ocode.sh
-bindsym $mod+Shift+o exec --no-startup-id TYPE=vscode ROFI=1 ~/Code/sh/utils-sh/ocode.sh
-bindsym $mod+Ctrl+o exec --no-startup-id TYPE=jetbrains ROFI=1 ~/Code/sh/utils-sh/ocode.sh
+# 7aske-scripts
+bindsym $mod+i exec --no-startup-id i3btf $player
+# 7aske-scripts
+bindsym $mod+o exec --no-startup-id TYPE=term ROFI=1 codeopen
+# 7aske-scripts
+bindsym $mod+Shift+o exec --no-startup-id TYPE=vscode ROFI=1 codeopen
+# 7aske-scripts
+bindsym $mod+Ctrl+o exec --no-startup-id TYPE=jetbrains ROFI=1 codeopen
 bindsym $mod+v exec --no-startup-id clipmenu
-bindsym $mod+F2 exec --no-startup-id ~/Code/sh/utils-sh/lang.sh
-bindsym $mod+Shift+s exec --no-startup-id ~/Code/sh/utils-sh/google-search.sh
+# 7aske-scripts
+bindsym $mod+F2 exec --no-startup-id kblang
+# 7aske-scripts
+bindsym $mod+Shift+s exec --no-startup-id google-search
 bindsym $mod+Tab exec --no-startup-id rofi -show window
 
 #                    _             _   _             
