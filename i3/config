@@ -35,7 +35,7 @@ set $terminal2 kitty
 exec_always --no-startup-id python3 ~/.local/bin/alternating_layouts
 
 # set background and theme using wal
-exec --no-startup-id wal -c; wal --backend wal -i ~/.config/wallpaper
+exec --no-startup-id wal --backend wal -i ~/.config/wallpaper
 
 # sound&music                _  ___                       _      
 #  ___  ___  _   _ _ __   __| |( _ )  _ __ ___  _   _ ___(_) ___ 
@@ -143,7 +143,7 @@ bindsym $mod+Shift+b move container to workspace back_and_forth; workspace back_
 #   \_/\_/ |_|_| |_|\__,_|\___/ \_/\_/ |___/
 # set title format
 font xft:Fira Code Medium 12
-title_format " %title"
+for_window [class=".*"] title_format " %title"
 
 # configure border style <normal|1pixel|pixel xx|none|pixel>
 default_border pixel 1
