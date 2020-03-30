@@ -1,28 +1,50 @@
 #!/usr/bin/env sh
 
-setwal_usage(){
-    echo -e "  setval.sh <file>\n"
-    echo "      -l, list      lists all wallpapers in wallpaper dir"
+WALLPAPERS="${WALLPAPERS:-$HOME/Pictures/wallpaper}"
+DEFAULT_WALLPAPER="${DEFAULT_WALLPAPER:-$HOME/.config/wallpaper}"
+
+[ -z "$(command -v wal)" ] && echo "wal: command not found" && exit 2
+[ -z "$(command -v sxiv)" ] && echo "sxiv: command not found" && exit 2
+
+setwal_usage() {
+    echo "  setval.sh"
+    echo ""
+    echo "      -w <file>     sets file as wallpaper"
+    echo "      -l            set on from wallpapers dir"
+    echo "      -R            sets a random wallpaper"
     echo "      -h, --help    shows this message"
-    exit 1
+    exit 2
 }
 
-setwal_list(){
-    find "$WALS" -printf "%f\n" | sort 
-    exit 0
-}
 
-    
-WALS="$HOME"/Pictures/wallpaper
-WAL="$HOME"/.config/wallpaper
-
-[ "$1" = "-l" ] || [ "$1" = "list" ] && setwal_list
 [ "$1" = "-h" ] || [ "$1" = "--help" ] && setwal_usage
-[ -z "$1" ] && setwal_usage
 
-PIC="$(find "$WALS" -name "$1"\*)" 
+if [ -z "$1" ];then
+    sxiv -t "$WALLPAPERS" &
+    exit 0
+fi
 
-[ ! -f "$PIC" ] && echo "$1: file not found" && exit 1
+if [ "$1" = "-R" ]; then
+    PICTURE="$(find "$WALLPAPERS" -printf "$WALLPAPERS/%f\n" | shuf -n 1)"
+    setwal -w "$PICTURE" && exit 0 || exit 1
+fi
 
-ln -sf "$PIC" "$WAL"
-wal -c; wal --backend wal -i "$PIC"
+if [ "$1" = "-l" ]; then
+    # PICTURE="$(find "$WALLPAPERS" -printf "$WALLPAPERS/%f\n" | sort | fzf --reverse --cycle)"
+    PICTURE="$(find "$WALLPAPERS" -printf "$WALLPAPERS/%f\n" | sxiv -tio | sed '1q')"
+    setwal -w "$PICTURE" && exit 0 || exit 1
+fi
+
+if [ $# -eq 2 ] && [ "$1" = "-w" ] && [ -f "$2" ]; then
+    if echo "$2" | grep '^/' >/dev/null; then
+        PICTURE="$2"
+    else
+        PICTURE="$(pwd)/$2"
+    fi
+
+    ln -sf "$PICTURE" "$DEFAULT_WALLPAPER"
+    wal -c
+    wal --backend wal -i "$PICTURE" && exit 0 || exit 1
+else
+    setwal_usage
+fi
