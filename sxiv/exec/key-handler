@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+while read file
+do
+    case "$1" in
+    "w") setwal -w "$file" && notify-send "setwal" "setting wallpaper" & ;;
+    "r") convert -rotate 90 "$file" "$file" ;;
+	"R") convert -rotate -90 "$file" "$file" ;;
+    "d")
+		[ "$(printf "No\\nYes" | dmenu -i -p "Really delete $file?")" = "Yes" ] && rm "$file" && notify-send "$file deleted." ;;
+	"y")
+		echo -n "$file" | xclip -selection clipboard && notify-send "$file copied to clipboard" & ;;
+    esac
+done
