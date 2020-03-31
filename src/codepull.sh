@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
-[ ! -x "$(command -v git)" ] && echo -e "\e[1;31mgit: command not found\e[0m" && exit 1
-[ -z "$CODE" ] && echo -e "\e[1;31m'CODE' env variable not set\e[0m" && exit 1
+[ ! -x "$(command -v git)" ] && echo -e "\e[1;31mgit: command not found\e[0m" && exit 2
+[ -z "$CODE" ] && echo -e "\e[1;31m'CODE' env variable not set\e[0m" && exit 2
 
-REPOS=("sh/utils-sh" "sh/dotfiles" "sh/bashrc" "sh/autosetup" "uni")
+REPOS=("sh/utils-sh" "sh/dotfiles" "sh/bashrc" "sh/autosetup" "uni" "sh/scripts")
 
 usage() {
     echo "pullall.sh [options]"
     echo "options:"
     echo "  -A      pull all repos from 'CODE'"
+    exit 1
 }
 
 git_pull() {
@@ -40,5 +41,4 @@ elif [ -z "$1" ]; then
     done
 else
     usage
-    exit 1
 fi

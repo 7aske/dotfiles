@@ -9,5 +9,5 @@ usage() {
 
 for f in "$1"/*.sh; do
     base=$(basename "$f" | cut -d "." -f 1)
-    [ -f "$2/$base" ] && rm "$2/$base"        
+    [ -f "$2/$base" ] && rm -v "$2/$base"
 done
