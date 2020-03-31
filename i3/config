@@ -428,13 +428,13 @@ set_from_resource $color15    i3wm.color15
 set_from_resource $fg i3wm.color7 #f0f0f0
 set_from_resource $bg i3wm.color2 #f0f0f0
 
-# class              border  background    texture indicator   cborder
-client.focused          $bg         $bg        $fg       $bg       $bg
-client.focused_inactive $bg         $bg        $fg       $bg       $bg
-client.unfocused        $bg         $bg        $fg       $bg       $bg
-client.urgent           $bg         $bg        $fg       $bg       $bg
-client.placeholder      $bg         $bg        $fg       $bg       $bg
-client.background       $bg
+# class                  border  background    texture indicator   cborder
+client.focused          $color3         $fg    $color3   $color3       $color3
+client.focused_inactive     $bg         $bg        $fg       $bg       $bg
+client.unfocused            $bg         $bg        $fg       $bg       $bg
+client.urgent               $bg         $bg        $fg       $bg       $bg
+client.placeholder          $bg         $bg        $fg       $bg       $bg
+client.background           $bg
 
 #      _        _               _                
 #  ___| |_ __ _| |_ _   _ ___  | |__   __ _ _ __ 
