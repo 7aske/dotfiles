@@ -1,4 +1,9 @@
 configuration {
     theme: "~/.cache/wal/colors-rofi-dark.rasi";
+    sidebar-mode: true;
+    fake-transparency: true;
+    combi-hide-mode-prefix: true;
+    kb-mode-next: "Alt+Right,Control+Tab";
+    kb-mode-previous: "Alt+Left,Control+ISO_Left_Tab";
 }
 
