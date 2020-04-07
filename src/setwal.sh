@@ -12,6 +12,7 @@ setwal_usage() {
     echo "      -w <file>     sets file as wallpaper"
     echo "      -l            set on from wallpapers dir"
     echo "      -R            sets a random wallpaper"
+    echo "      -r            reload current wallpaper"
     echo "      -h, --help    shows this message"
     exit 2
 }
@@ -29,20 +30,23 @@ if [ "$1" = "-R" ]; then
     setwal -w "$PICTURE" && exit 0 || exit 1
 fi
 
+if [ "$1" = "-r" ]; then
+    setwal -w "$DEFAULT_WALLPAPER" && exit 0 || exit 1
+fi
+
 if [ "$1" = "-l" ]; then
     # PICTURE="$(find "$WALLPAPERS" -printf "$WALLPAPERS/%f\n" | sort | fzf --reverse --cycle)"
     PICTURE="$(find "$WALLPAPERS" -printf "$WALLPAPERS/%f\n" | sxiv -tio | sed '1q')"
     setwal -w "$PICTURE" && exit 0 || exit 1
 fi
 
-if [ $# -eq 2 ] && [ "$1" = "-w" ] && [ -f "$2" ]; then
+if [ $# -eq 2 ] && [ "$1" = "-w" ] && [ -e "$2" ]; then
     if echo "$2" | grep '^/' >/dev/null; then
         PICTURE="$2"
     else
         PICTURE="$(pwd)/$2"
     fi
-
-    ln -sf "$PICTURE" "$DEFAULT_WALLPAPER"
+    [ ! -L "$PICTURE" ] && ln -sf "$PICTURE" "$DEFAULT_WALLPAPER"
     wal -c
     wal --backend wal -i "$PICTURE" && exit 0 || exit 1
 else
