@@ -10,3 +10,7 @@ install:
 .PHONY: uninstall
 uninstall:
 	./uninstall.sh $(INDIR) $(OUTDIR)
+
+add:
+	touch src/$(s).sh
+	chmod u+x src/$(s).sh
