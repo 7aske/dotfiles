@@ -338,6 +338,21 @@ bindsym $mod+Shift+r restart; exec --no-startup-id notify-send "restart" "i3 res
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+0 exec --no-startup-id "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
+# mode to invoke my startup management script
+bindsym $mod+F3 mode "$mode_startup"
+set $mode_startup startup (r)estart (s)top s(t)art (a)dd re(m)ove
+mode "$mode_startup" {
+    bindsym r exec --no-startup-id startup restart, mode "default"
+    bindsym t exec --no-startup-id startup start, mode "default"
+    bindsym s exec --no-startup-id startup stop, mode "default"
+    bindsym a exec --no-startup-id echo | dmenu | xargs -d'\n' startup add, mode "default"
+    bindsym m exec --no-startup-id startup remove, mode "default"
+
+    # exit system mode: "Enter" or "Escape"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
 # Set shut down, restart and locking features
 bindsym $mod+0 mode "$mode_system"
 set $mode_system (l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown
