@@ -11,8 +11,12 @@ get_cmd() {
 }
 
 startup_stop() {
-    [ -z "$1" ] && return 1
-    killall "$(get_cmd "$1")" && notif "$(get_cmd "$1") killed"
+    if [ -z "$1" ] && [ -n "$MENU" ]; then
+        cmd="$(startup_list | $MENU | awk '{print $1}')"
+    else
+        cmd="$(echo "$1" | awk '{print $1}')"
+    fi
+    killall "$(get_cmd "$cmd")" && notif "$(get_cmd "$cmd") killed"
     return 0
 }
 
