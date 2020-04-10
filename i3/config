@@ -91,9 +91,9 @@ bindsym $mod+w exec --no-startup-id $BROWSER
 bindsym $mod+Shift+w exec --no-startup-id $BROWSER --incognito
 # 7aske-scripts
 bindsym $mod+Shift+d exec --no-startup-id dunst_reload && notify-send "dunst" "dunst reloaded"
-bindsym Print exec --no-startup-id i3-scrot
-bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
-bindsym $mod+Shift+Print --release exec --no-startup-id maim -s --format=png /dev/stdout | xclip -sel c -t image/png -i && notify-send "screenshot" "copied to clipboard"
+bindsym Print --release exec --no-startup-id scrot && notify-send "screenshot" "saved to homedir"
+bindsym $mod+Print --release exec --no-startup-id scrot -u && notify-send "screenshot (window)" "saved to homedir"
+bindsym $mod+Shift+Print --release exec --no-startup-id scrot -s -o /dev/stdout | xclip -sel c -t image/png && notify-send "screenshot (selection)" "copied to clipboard"
 bindsym $mod+Shift+x --release exec --no-startup-id xkill
 # 7aske-scripts
 bindsym $mod+i exec --no-startup-id i3btf $player
