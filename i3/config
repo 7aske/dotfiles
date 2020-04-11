@@ -84,11 +84,11 @@ bindsym $mod+Shift+Return exec --no-startup-id $terminal2
 bindsym $mod+a exec --no-startup-id rofi -show run
 bindsym $mod+d exec --no-startup-id dmenu_run -fn 'Fira Code-12'
 bindsym $mod+grave exec --no-startup-id $terminal -e htop
-bindsym $mod+Shift+grave exec --no-startup-id $terminal -e vim ~/.config/i3/config
-bindsym $mod+e exec --no-startup-id $FILE
-bindsym $mod+Shift+e exec --no-startup-id $terminal -e vim
-bindsym $mod+w exec --no-startup-id $BROWSER
-bindsym $mod+Shift+w exec --no-startup-id $BROWSER --incognito
+bindsym $mod+Shift+grave exec --no-startup-id $terminal -e $editor ~/.config/i3/config
+bindsym $mod+e exec --no-startup-id $file
+bindsym $mod+Shift+e exec --no-startup-id $terminal -e $editor
+bindsym $mod+w exec --no-startup-id $browser
+bindsym $mod+Shift+w exec --no-startup-id $browser --incognito
 # 7aske-scripts
 bindsym $mod+Shift+d exec --no-startup-id dunst_reload && notify-send "dunst" "dunst reloaded"
 bindsym Print --release exec --no-startup-id scrot && notify-send "screenshot" "saved to homedir"

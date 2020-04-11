@@ -44,5 +44,6 @@
         "editor.defaultFormatter": "ms-vscode.cpptools"
     },
     "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4, ColumnLimit: 0}",
-    "arduino.defaultBaudRate": 9600
+    "arduino.defaultBaudRate": 9600,
+    "shellcheck.customArgs": ["-x"]
 }
