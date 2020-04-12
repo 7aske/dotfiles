@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-output="$(xrandr | grep ' connected primary' | awk '{print $1}')"
+output="${OUTPUT:-$(xrandr | grep ' connected primary' | awk '{print $1}')}"
 
 [ -z "$output" ] && echo "Unable to get primary output" && exit 1
 
@@ -20,6 +20,6 @@ echo "$modename$modeline"
 
 echo "$modename$modeline" | xargs xrandr --newmode && echo "Added $modename"
 
-xrandr --addmode "$output" "$modename" && echo "Added $modename to $output"
+xrandr --addmode "$output" "$modename" && echo "Added $modename to $output" || exit 1
 
-xrandr --output "$output" --mode "$modename" && echo "Setting resolution of $output to $modename"
+xrandr --output "$output" --mode "$modename" && echo "Setting resolution of $output to $modename" || exit 1
