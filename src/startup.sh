@@ -4,7 +4,8 @@
 
 XPROFILE="$HOME/Code/sh/dotfiles/.xprofile"
 MENU="${MENU:-"dmenu -l 20"}"
-echo "$MENU"
+
+prog="$(basename "$0")"
 
 get_cmd() {
     startup_list | grep "$1" | sed '1q' | awk '{print $1}'
@@ -16,8 +17,8 @@ startup_stop() {
     else
         cmd="$(echo "$1" | awk '{print $1}')"
     fi
+    [ -z "$1" ] && return 1 
     killall "$(get_cmd "$cmd")" && notif "$(get_cmd "$cmd") killed"
-    return 0
 }
 
 startup_restart() {
@@ -26,6 +27,7 @@ startup_restart() {
     else
         cmd="$(echo "$1" | awk '{print $1}')"
     fi
+    [ -z "$1" ] && return 1 
     startup_stop "$cmd" && startup_start "$cmd"
 }
 
@@ -35,10 +37,10 @@ startup_start() {
     else
         cmd="$(echo "$1" | awk '{print $1}')"
     fi
-
+    [ -z "$1" ] && return 1 
     pgrep "$cmd" >/dev/null 2>&1 && notif "$(get_cmd "$cmd") already running" && exit 0
     cmd="$(startup_list | grep "$cmd" | sed '1q')"
-    echo "$cmd &"
+    [ -z "$1" ] && return 1 
     eval "($cmd &)" >/dev/null 2>&1 &&  notif "$(get_cmd "$cmd") started" && exit 0
     echo "startup: $(get_cmd "$cmd") failed" && exit 1
 }
@@ -46,25 +48,27 @@ startup_start() {
 startup_add() {
     [ -z "$1" ] && return 1
     cmd="$(echo "$1" | awk '{print $1}')"
+    [ -z "$1" ] && return 1 
     [ -z "$(command -v "$cmd")" ] && notif "$cmd not found" && exit 1
     echo "$1 &" | tee -a "$XPROFILE"
 }
+
 startup_remove() {
     if [ -z "$1" ] && [ -n "$MENU" ]; then
         cmd="$(startup_list | $MENU | awk '{print $1}')"
     else
         cmd="$(echo "$1" | awk '{print $1}')"
     fi
-
+    [ -z "$1" ] && return 1 
     sed -i "s/^$cmd.*$//" "$XPROFILE"
 }
 
 startup_list() {
-    grep "&$" "$XPROFILE" | sed 's/ &$//'
+    grep "&$" "$XPROFILE" | sed 's/ &$//' | sed '1s/.*/ &/'
 }
 
 notif(){
-    notify-send "$0" "$1"; echo "$0: $1" 
+    notify-send "$prog" "$1"; echo "$prog: $1" 
 }
 
 usage() {
@@ -80,10 +84,6 @@ usage() {
     exit 2
 }
 
-[ -z "$1" ] && usage
-[ "$1" = "-h" ] && usage
-[ "$1" = "help" ] && usage
-
 case "$1" in
 "stop") startup_stop "${@:2}" ;;
 "start") startup_start "${@:2}" ;;
@@ -91,4 +91,6 @@ case "$1" in
 "add") startup_add "${@:2}" ;;
 "remove") startup_remove "${@:2}" ;;
 "list") startup_list "${@:2}" ;;
-esac || usage
+"-h"|"--help") usage ;;
+*) echo "$prog: unrecognized command '$1'" && usage ;;
+esac
