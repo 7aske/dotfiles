@@ -17,7 +17,7 @@ startup_stop() {
     else
         cmd="$(echo "$1" | awk '{print $1}')"
     fi
-    [ -z "$1" ] && return 1 
+    [ -z "$cmd" ] && return 1 
     killall "$(get_cmd "$cmd")" && notif "$(get_cmd "$cmd") killed"
 }
 
@@ -27,7 +27,7 @@ startup_restart() {
     else
         cmd="$(echo "$1" | awk '{print $1}')"
     fi
-    [ -z "$1" ] && return 1 
+    [ -z "$cmd" ] && return 1 
     startup_stop "$cmd" && startup_start "$cmd"
 }
 
@@ -37,10 +37,10 @@ startup_start() {
     else
         cmd="$(echo "$1" | awk '{print $1}')"
     fi
-    [ -z "$1" ] && return 1 
+    [ -z "$cmd" ] && return 1 
     pgrep "$cmd" >/dev/null 2>&1 && notif "$(get_cmd "$cmd") already running" && exit 0
     cmd="$(startup_list | grep "$cmd" | sed '1q')"
-    [ -z "$1" ] && return 1 
+    [ -z "$cmd" ] && return 1 
     eval "($cmd &)" >/dev/null 2>&1 &&  notif "$(get_cmd "$cmd") started" && exit 0
     echo "startup: $(get_cmd "$cmd") failed" && exit 1
 }
@@ -59,12 +59,12 @@ startup_remove() {
     else
         cmd="$(echo "$1" | awk '{print $1}')"
     fi
-    [ -z "$1" ] && return 1 
+    [ -z "$cmd" ] && return 1 
     sed -i "s/^$cmd.*$//" "$XPROFILE"
 }
 
 startup_list() {
-    grep "&$" "$XPROFILE" | sed 's/ &$//' | sed '1s/.*/ &/'
+    grep "&$" "$XPROFILE" | sed 's/ &$//'
 }
 
 notif(){
