@@ -12,7 +12,7 @@ export COLORTERM=rxvt
 export TERMINAL=urxvt
 export TERM=rxvt-unicode
 
-export PATH="$PATH":"$HOME/.local/bin"
+export PATH="$HOME/.local/bin":"$PATH"
 
 export PATH="$PATH":"$HOME/.cargo/bin"
 export PATH="$PATH":"$HOME/.gem/ruby/2.7.0/bin"

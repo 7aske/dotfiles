@@ -105,7 +105,7 @@ bindsym $mod+Shift+o exec --no-startup-id TYPE=vscode ROFI=1 codeopen
 bindsym $mod+Ctrl+o exec --no-startup-id TYPE=jetbrains ROFI=1 codeopen
 bindsym $mod+v exec --no-startup-id clipmenu
 # 7aske-scripts
-bindsym $mod+F2 exec --no-startup-id kblang
+bindsym $mod+F2 exec --no-startup-id kblang -fn 'Fira Code-12'
 # 7aske-scripts
 bindsym $mod+Shift+s exec --no-startup-id google-search
 bindsym $mod+Tab exec --no-startup-id rofi -show window
@@ -347,7 +347,7 @@ mode "$mode_startup" {
     bindsym r exec --no-startup-id startup restart, mode "default"
     bindsym t exec --no-startup-id startup start, mode "default"
     bindsym s exec --no-startup-id startup stop, mode "default"
-    bindsym a exec --no-startup-id echo | dmenu | xargs -d'\n' startup add, mode "default"
+    bindsym a exec --no-startup-id echo | dmenu -fn 'Fira Code-12' | xargs -d'\n' startup add, mode "default"
     bindsym m exec --no-startup-id startup remove, mode "default"
 
     # exit system mode: "Enter" or "Escape"
