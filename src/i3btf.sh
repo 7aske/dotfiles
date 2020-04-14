@@ -20,18 +20,19 @@ is_visible() {
 [ -z "$1" ] && usage
 
 visible="$(xdotool search --all --onlyvisible --desktop "$(xprop -notype -root _NET_CURRENT_DESKTOP | cut -c 24-)" "" 2>/dev/null)"
-processes="$(pgrep "$1")"
+program="$(basename $1)"
+processes="$(pgrep "$program")"
 
 if [ -n "$processes" ]; then
     for proc in $processes; do
-        is_visible "$proc" && i3-msg "[class=(?i)$1] move container to scratchpad" && exit 0
+        is_visible "$proc" && i3-msg "[class=(?i)$program] move container to scratchpad" && exit 0
     done
 
-    i3-msg "[class=(?i)$1] move container to workspace current floating enable focus"
+    i3-msg "[class=(?i)$program] move container to workspace current floating enable focus"
 else
     (
         i3-msg "exec --no-startup-id $1"
         sleep 1
-        i3-msg "[class=(?i)$1] floating enable focus"
+        i3-msg "[class=(?i)$program] floating enable focus"
     ) &
 fi
