@@ -81,6 +81,7 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle && notif
 #  \__,_| .__/| .__/|_|_|\___\__,_|\__|_|\___/|_| |_|___/
 # applic|_|ati|_|ons                                        
 bindsym $mod+Return exec --no-startup-id $terminal
+bindsym $mod+BackSpace exec --no-startup-id i3btf $terminal2 --class floating
 bindsym $mod+Shift+Return exec --no-startup-id $terminal2
 bindsym $mod+a exec --no-startup-id rofi -show run
 bindsym $mod+d exec --no-startup-id dmenu_run -fn 'Fira Code-12'
@@ -155,9 +156,12 @@ bindsym $mod+Shift+b move container to workspace back_and_forth; workspace back_
 font xft:Fira Code Medium 12
 for_window [class=".*"] title_format " %title"
 
+# some role configuration
+for_window [class="floating"] floating enable
+
 # configure border style <normal|1pixel|pixel xx|none|pixel>
 default_border pixel 1
-hide_edge_borders smart
+#hide_edge_borders smart
 
 # use Mouse+$mod to drag floating windows
 floating_modifier $mod
