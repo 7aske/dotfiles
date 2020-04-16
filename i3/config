@@ -326,6 +326,8 @@ for_window [class="VirtualBox Machine"] floating disable border pixel 1
 for_window [class="VirtualBox Manager"] floating disable
 for_window [class="Baobab"] floating enable resize set 1024 720 move position center
 for_window [title=".*Emulator.*"] floating enable
+for_window [title=".*World of Warcraft.*"] layout tabbed
+
 
 #            _                                                          _     
 #  _ __ ___ (_)___  ___    ___ ___  _ __ ___  _ __ ___   __ _ _ __   __| |___ 
