@@ -90,7 +90,7 @@ bindsym $mod+grave exec --no-startup-id $terminal -e htop
 bindsym $mod+Shift+grave exec --no-startup-id $terminal -e $editor ~/.config/i3/config
 bindsym $mod+e exec --no-startup-id $file
 bindsym $mod+Shift+e exec --no-startup-id $terminal2 bash -i $file2
-bindsym $mod+Shift+v exec --no-startup-id $terminal $editor
+bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor
 bindsym $mod+w exec --no-startup-id $browser
 bindsym $mod+Shift+w exec --no-startup-id $browser --incognito
 # 7aske-scripts
