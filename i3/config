@@ -23,6 +23,7 @@ bindsym F1 nop
 set $editor $EDITOR
 set $browser $BROWSER
 set $file $FILE
+set $file2 ranger
 set $reader $READER
 set $player $PLAYER
 
@@ -88,7 +89,8 @@ bindsym $mod+d exec --no-startup-id dmenu_run -fn 'Fira Code-12'
 bindsym $mod+grave exec --no-startup-id $terminal -e htop
 bindsym $mod+Shift+grave exec --no-startup-id $terminal -e $editor ~/.config/i3/config
 bindsym $mod+e exec --no-startup-id $file
-bindsym $mod+Shift+e exec --no-startup-id $terminal -e $editor
+bindsym $mod+Shift+e exec --no-startup-id $terminal2 bash -i $file2
+bindsym $mod+Shift+v exec --no-startup-id $terminal $editor
 bindsym $mod+w exec --no-startup-id $browser
 bindsym $mod+Shift+w exec --no-startup-id $browser --incognito
 # 7aske-scripts
