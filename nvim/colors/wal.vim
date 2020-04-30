@@ -193,3 +193,6 @@ hi ALEWarning ctermbg=NONE ctermfg=3
 let g:limelight_conceal_ctermfg = 8
 
 " }}}
+
+hi Normal ctermbg=0
+hi NonText ctermbg=0
