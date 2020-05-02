@@ -54,7 +54,6 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 set hlsearch 
-
 " Check file in shellcheck:
 map <leader>s :!clear && shellcheck %<CR>
 
