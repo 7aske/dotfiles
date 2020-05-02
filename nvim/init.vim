@@ -16,7 +16,7 @@ Plug 'terryma/vim-multiple-cursors'
 call plug#end()
 
 let mapleader =" "
-
+set updatetime=100
 " Enable autocompletion:
 set wildmode=longest,list,full
 
