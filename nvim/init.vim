@@ -106,15 +106,10 @@ nmap :bt<CR> <C-^>
 map <C-@> <Plug>NERDCommenterToggle
 
 " GitGutter Plugin
-nmap :gd <Plug>GitGutterPreviewHunk
-nmap :ga <Plug>GitGutterStageHunk
-nmap :gn <Plug>GitGutterNextHunk
+nmap <leader>gd <Plug>(GitGutterPreviewHunk)
+nmap <leader>ga <Plug>(GitGutterStageHunk)
+nmap <leader>gn <Plug>(GitGutterNextHunk)
 
-" FZF Plugin -------------------------------------------------------------------
-" Files (':Files' with devicons)
-nmap <C-p> :call Fzf_files_with_dev_icons($FZF_DEFAULT_COMMAND)<CR>
-" Git tracked files (ignore submodules + .gitignore files)
-nmap <C-g> :call Fzf_files_with_dev_icons("git ls-files \| uniq")<CR>
 " Lines
 nmap <C-f> :Lines<CR>
 " Tags
@@ -132,10 +127,6 @@ nmap :json<CR> :%!python -m json.tool<CR>
 nmap <C-_> :set hlsearch!<CR>
 
 " Abbreviations ----------------------------------
-
-" Abbreviation for ack tool
-ca Ack Ack!
-nnoremap <C-a> :Ack!<Space>
 
 " Vertical resize abbreviation
 ca vr vertical resize
