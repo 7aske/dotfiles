@@ -91,6 +91,7 @@ Personal dotfiles and configs that I use on my Linux machines, primarily on Arch
 │   │       └── xsettings.xml
 │   └── xfwm4
 ├── .xprofile
+├── .profile
 └── .Xresources
 ```
 <small>xfce4 config is outdated - haven't used that DE in a long time</small>
