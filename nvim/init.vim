@@ -68,15 +68,15 @@ inoremap jj <Esc>
 nnoremap :/<CR> :nohlsearch<CR>
 
 " Switch windows with Alt + Arrows
-nmap <silent> <A-Left> <C-W>h
+nmap <silent> <A-Left>  <C-W>h
 nmap <silent> <A-Right> <C-W>l
-nmap <silent> <A-Up> <C-W>k
-nmap <silent> <A-Down> <C-W>j
+nmap <silent> <A-Up>    <C-W>k
+nmap <silent> <A-Down>  <C-W>j
 
 " Previous/Next/Toggle switching buffers
 "nmap <C-P> :bprev<CR>
 "nmap <C-N> :bnext<CR>
-nmap <C-B> <C-^>
+nmap <C-B>   <C-^>
 nmap :bt<CR> <C-^>
 
 " Toggle comments
