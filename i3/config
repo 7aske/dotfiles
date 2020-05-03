@@ -87,7 +87,7 @@ bindsym $mod+Shift+Return exec --no-startup-id $terminal2
 bindsym $mod+a exec --no-startup-id rofi -show run
 bindsym $mod+d exec --no-startup-id dmenu_run -fn 'Fira Code-12'
 bindsym $mod+grave exec --no-startup-id $terminal -e htop
-bindsym $mod+Shift+grave exec --no-startup-id $terminal -e $editor ~/.config/i3/config
+bindsym $mod+Shift+grave exec --no-startup-id $terminal -e vimcfg
 bindsym $mod+e exec --no-startup-id $file
 bindsym $mod+Shift+e exec --no-startup-id $terminal2 bash -i $file2
 bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor
