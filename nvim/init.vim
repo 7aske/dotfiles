@@ -24,6 +24,8 @@ call plug#end()
 
 " GENERAL ----------------------------------------
 let mapleader = " "
+set nu rnu
+set updatetime=100
 
 " Enable autocompletion:
 set wildmode=longest,list,full
