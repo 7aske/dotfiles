@@ -20,6 +20,8 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'preservim/nerdcommenter'
     Plug 'dylanaraps/wal.vim'
     Plug 'preservim/nerdtree'
+    Plug 'kien/ctrlp.vim'
+    Plug 'tasn/vim-tsx'
 call plug#end()
 
 " GENERAL ----------------------------------------
@@ -113,3 +115,6 @@ map <A-1> :NERDTreeToggle<CR>
 " Spellchecker -----------------------------------
 map <F6> :setlocal spell! spelllang=en<CR>
 
+" CtrlP ------------------------------------------
+
+nmap <leader><leader> :CtrlP .<CR>

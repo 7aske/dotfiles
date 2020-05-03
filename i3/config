@@ -87,7 +87,23 @@ bindsym $mod+Shift+Return exec --no-startup-id $terminal2
 bindsym $mod+a exec --no-startup-id rofi -show run
 bindsym $mod+d exec --no-startup-id dmenu_run -fn 'Fira Code-12'
 bindsym $mod+grave exec --no-startup-id $terminal -e htop
-bindsym $mod+Shift+grave exec --no-startup-id $terminal -e vimcfg
+    #bindsym $mod+Shift+grave exec --no-startup-id $terminal -e vimcfg
+    #bindsym $mod+Ctrl+grave exec --no-startup-id $terminal -e vimcfg --etc
+
+# edit config files
+bindsym $mod+Shift+grave mode "$mode_config"
+set $mode_config list config files to open: (e)tc (h)ome (d)dotfiles
+mode "$mode_config" {
+    bindsym e exec --no-startup-id vimcfg --etc , mode 'default'
+    bindsym h exec --no-startup-id vimcfg --home, mode 'default'
+    bindsym d exec --no-startup-id vimcfg       , mode 'default'
+
+    # exit system mode: "Enter" or "Escape"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+
+}
+
 bindsym $mod+e exec --no-startup-id $file
 bindsym $mod+Shift+e exec --no-startup-id $terminal2 bash -i $file2
 bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor
