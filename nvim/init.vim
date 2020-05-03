@@ -26,16 +26,8 @@ call plug#end()
 let mapleader = " "
 set nu rnu
 set updatetime=100
-
-" Enable autocompletion:
-set wildmode=longest,list,full
-
-" Disables automatic commenting on newline:
-autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-" Wal Colors -------------------------------------
-colorscheme wal
-
+syntax on
+filetype indent plugin on
 syntax enable
 set number
 set cursorline
@@ -50,46 +42,46 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 set hlsearch 
-" Check file in shellcheck:
-map <leader>s :!clear && shellcheck %<CR>
 
-syntax on
-filetype indent plugin on
+" Enable autocompletion --------------------------
+set wildmode=longest,list,full
+
+" Disables automatic commenting on newline -------
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+" Wal Colors -------------------------------------
+colorscheme wal
+" Check file in shellcheck -----------------------
+map <leader>s :!clear && shellcheck %<CR>
 
 " STATUS BAR -------------------------------------
 " Handled by airline plugin
 
 " BINDINGS ---------------------------------------
 
-" ESC key to jk or kj or jj
+" ESC key to jk or kj or jj ----------------------
 inoremap kj <Esc>
 inoremap jk <Esc>
 inoremap jj <Esc>
 
-" No highlight search
+" No highlight search ----------------------------
 nnoremap :/<CR> :nohlsearch<CR>
 
-" Switch windows with Alt + Arrows
+" Switch windows with Alt + Arrows ---------------
 nmap <silent> <A-Left>  <C-W>h
 nmap <silent> <A-Right> <C-W>l
 nmap <silent> <A-Up>    <C-W>k
 nmap <silent> <A-Down>  <C-W>j
 
-" Previous/Next/Toggle switching buffers
-"nmap <C-P> :bprev<CR>
-"nmap <C-N> :bnext<CR>
-nmap <C-B>   <C-^>
-nmap :bt<CR> <C-^>
-
-" Toggle comments
+" Toggle comments --------------------------------
 map <C-\> <Plug>NERDCommenterToggle <^> j
 
- "GitGutter Plugin
+"GitGutter Plugin --------------------------------
 nmap <leader>gd <Plug>(GitGutterPreviewHunk)
 nmap <leader>ga <Plug>(GitGutterStageHunk)
 nmap <leader>gn <Plug>(GitGutterNextHunk)
 
-" Paste multiple in visual mode
+" Paste multiple in visual mode ------------------
 xnoremap p pgvy
 
 " Correct indentation JSON files
@@ -113,8 +105,11 @@ nmap <silent> <C-T>8 :tabn 8<CR>
 nmap <silent> <C-T>9 :tabn 9<CR>
 nmap <silent> <C-T>c :tabnew<CR>
 
-
 " NERDTree --------------------------------------- 
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 map <A-1> :NERDTreeToggle<CR>
+
+" Spellchecker -----------------------------------
+map <F6> :setlocal spell! spelllang=en<CR>
+
