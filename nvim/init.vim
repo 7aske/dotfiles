@@ -1,21 +1,29 @@
-" GENERAL ----------------------------------------
-" PLUGINS
+"            _           
+" _ ____   _(_)_ __ ___  
+" | '_ \ \ / / | '_ ` _ \ 
+" | | | \ V /| | | | | | |
+" |_| |_|\_/ |_|_| |_| |_|
 
+" PLUGINS ----------------------------------------
 if ! filereadable(expand('~/.config/nvim/autoload/plug.vim'))
-	echo "Downloading junegunn/vim-plug to manage plugins..."
-	silent !mkdir -p ~/.config/nvim/autoload/
-	silent !curl "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" > ~/.config/nvim/autoload/plug.vim
-	autocmd VimEnter * PlugInstall
+    echo "Downloading junegunn/vim-plug to manage plugins..."
+    silent !mkdir -p ~/.config/nvim/autoload/
+    silent !curl "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" > ~/.config/nvim/autoload/plug.vim
+    autocmd VimEnter * PlugInstall
 endif
 
-call plug#begin('~/.config/vim/plugged')
-Plug 'tpope/vim-surround'
-Plug 'PotatoesMaster/i3-vim-syntax'
-Plug 'vimwiki/vimwiki'
-Plug 'terryma/vim-multiple-cursors'
+call plug#begin('~/.config/nvim/plugged')
+    Plug 'PotatoesMaster/i3-vim-syntax'
+    Plug 'vim-airline/vim-airline'
+    Plug 'tpope/vim-fugitive'
+    Plug 'airblade/vim-gitgutter'
+    Plug 'preservim/nerdcommenter'
+    Plug 'dylanaraps/wal.vim'
+    Plug 'preservim/nerdtree'
 call plug#end()
 
-let mapleader =" "
+" GENERAL ----------------------------------------
+let mapleader = " "
 
 " Enable autocompletion:
 set wildmode=longest,list,full
@@ -23,21 +31,7 @@ set wildmode=longest,list,full
 " Disables automatic commenting on newline:
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-
-" Colors for status bar
-hi User1 ctermfg=166 ctermbg=236
-hi User2 ctermfg=9   ctermbg=236
-hi User3 ctermfg=13  ctermbg=236
-hi User4 ctermfg=12  ctermbg=236
-hi User5 ctermfg=11  ctermbg=236
-
-hi User6 ctermfg=255 ctermbg=60
-hi User7 ctermfg=255 ctermbg=28
-hi User8 ctermfg=255 ctermbg=94
-
 " Wal Colors -------------------------------------
-Plug 'dylanaraps/wal.vim'
-
 colorscheme wal
 
 syntax enable
@@ -61,23 +55,7 @@ syntax on
 filetype indent plugin on
 
 " STATUS BAR -------------------------------------
-
-" Status bar style
-set statusline=
-set statusline +=%7*%{(mode()=='n')?'\ \ N\ ':''}
-set statusline +=%8*%{(mode()=='i')?'\ \ I\ ':''}
-set statusline +=%8*%{(mode()=='R')?'\ \ R\ ':''}
-set statusline +=%6*%{(mode()=='v')?'\ \ V\ ':''}
-set statusline +=%1*\ %n\ %*        "  buffer number
-set statusline +=%3*%{&ff}%*        "  file format
-set statusline +=%5*\ %y%*          "  file type
-set statusline +=%4*\ %<%F%*        "  full path
-set statusline +=%2*%m%*            "  modified flag
-set statusline +=%1*%=%5l%*         "  current line
-set statusline +=%2*/%L%*           "  total lines
-set statusline +=%1*%4v\ %*         "  virtual column number
-set statusline +=%2*0x%04B\ %*      "  character under cursor
-set statusline +=%3*%{winwidth(0)}  "  window width
+" Handled by airline plugin
 
 " BINDINGS ---------------------------------------
 
@@ -102,31 +80,39 @@ nmap <C-B> <C-^>
 nmap :bt<CR> <C-^>
 
 " Toggle comments
-map <C-@> <Plug>NERDCommenterToggle
+map <C-\> <Plug>NERDCommenterToggle <^> j
 
-" GitGutter Plugin
+ "GitGutter Plugin
 nmap <leader>gd <Plug>(GitGutterPreviewHunk)
 nmap <leader>ga <Plug>(GitGutterStageHunk)
 nmap <leader>gn <Plug>(GitGutterNextHunk)
 
-" Lines
-nmap <C-f> :Lines<CR>
-" Tags
-nmap <C-t> :Tags<CR>
-" Git diff
-nmap <C-d> :call Fzf_git_diff_files_with_dev_icons()<CR> 
-
 " Paste multiple in visual mode
 xnoremap p pgvy
-
 
 " Correct indentation JSON files
 nmap :json<CR> :%!python -m json.tool<CR>
 
-nmap <C-_> :set hlsearch!<CR>
-
 " Abbreviations ----------------------------------
+nmap <C-_> :set hlsearch!<CR>
 
 " Vertical resize abbreviation
 ca vr vertical resize
 
+" Tabs -------------------------------------------
+nmap <silent> <C-T>1 :tabn 1<CR>
+nmap <silent> <C-T>2 :tabn 2<CR>
+nmap <silent> <C-T>3 :tabn 3<CR>
+nmap <silent> <C-T>4 :tabn 4<CR>
+nmap <silent> <C-T>5 :tabn 5<CR>
+nmap <silent> <C-T>6 :tabn 6<CR>
+nmap <silent> <C-T>7 :tabn 7<CR>
+nmap <silent> <C-T>8 :tabn 8<CR>
+nmap <silent> <C-T>9 :tabn 9<CR>
+nmap <silent> <C-T>c :tabnew<CR>
+
+
+" NERDTree --------------------------------------- 
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+map <A-1> :NERDTreeToggle<CR>
