@@ -10,6 +10,8 @@ Personal dotfiles and configs that I use on my Linux machines, primarily on Arch
 .
 ├── albert
 │   └── albert.conf
+├── bug.n
+│   └── Config.ini
 ├── conky
 │   ├── .conkycolors
 │   ├── conky.conf
@@ -38,16 +40,27 @@ Personal dotfiles and configs that I use on my Linux machines, primarily on Arch
 │   │   └── plug.vim
 │   ├── colors
 │   │   └── wal.vim
-│   ├── init.vim
-│   └── .netrwhist
+│   ├── .gitignore
+│   └── init.vim
+├── .profile
+├── README.md
 ├── rofi
-│   └── config
+│   └── config.rasi
+├── sxiv
+│   └── exec
+│       └── key-handler
 ├── tmux
 │   └── .tmux.conf
 ├── VSCodium
 │   └── User
 │       ├── keybindings.json
 │       └── settings.json
+├── wal
+│   ├── colorschemes
+│   │   ├── dark
+│   │   └── light
+│   └── templates
+│       └── colors-rofi-dark.rasi
 ├── xfce4
 │   ├── helpers.rc
 │   ├── help.rc
@@ -77,6 +90,7 @@ Personal dotfiles and configs that I use on my Linux machines, primarily on Arch
 │   │       ├── xfwm4.xml
 │   │       └── xsettings.xml
 │   └── xfwm4
+├── .xprofile
 └── .Xresources
 ```
 <small>xfce4 config is outdated - haven't used that DE in a long time</small>
