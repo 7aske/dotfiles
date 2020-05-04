@@ -44,6 +44,8 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 set hlsearch 
+set path+=**
+set wildmenu
 
 " Enable autocompletion --------------------------
 set wildmode=longest,list,full
@@ -76,7 +78,7 @@ nmap <silent> <A-Up>    <C-W>k
 nmap <silent> <A-Down>  <C-W>j
 
 " Toggle comments --------------------------------
-map <C-\> <Plug>NERDCommenterToggle <^> j
+map <C-\> <Plug>NERDCommenterToggle^j
 
 "GitGutter Plugin --------------------------------
 nmap <leader>gd <Plug>(GitGutterPreviewHunk)
