@@ -65,9 +65,9 @@ bindsym XF86AudioNext exec --no-startup-id playerctl next
 bindsym XF86AudioPrev exec --no-startup-id playerctl previous
 
 # media controls re-using i3blocks script
-bindsym $mod+period exec --no-startup-id BLOCK_BUTTON=1 ~/Code/sh/utils-sh/statusbar/music
-bindsym $mod+slash exec --no-startup-id BLOCK_BUTTON=2 ~/Code/sh/utils-sh/statusbar/music
-bindsym $mod+comma exec --no-startup-id BLOCK_BUTTON=3 ~/Code/sh/utils-sh/statusbar/music
+bindsym $mod+period exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/music
+bindsym $mod+slash exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/music
+bindsym $mod+comma exec --no-startup-id BLOCK_BUTTON=3 ~/.local/bin/statusbar/music
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% && notify-send "volume" "+5%"
@@ -437,7 +437,7 @@ mode "resize" {
 # exec_always --no-startup-id fix_xcursor
 
 # touchpad and keyboard config
-# exec_always --no-startup-id ~/Code/sh/utils-sh/fix_touchpad.sh
+# exec_always --no-startup-id fix_touchpad
 # exec_always --no-startup-id xset r rate 195 55
 
 #            _                
