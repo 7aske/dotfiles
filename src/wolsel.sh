@@ -1,12 +1,19 @@
 #!/bin/bash
 
-mapfile -t options < ~/Code/sh/utils-sh/hosts
+prog="$(basename $0)"
+
+hosts="$HOME/.local/etc/hosts"
+
+[ ! -e "$hosts" ] && echo "$prog: $hosts: no such file or directory" && exit 1
+
+mapfile -t options < "$hosts"
+
 if [ "$?" -eq 1 ]; then
-    echo "Could not read hosts file"
+    echo "$prog: could not read hosts file"
     exit 1
 fi
-for i in "${!options[@]}"
-do 
+
+for i in "${!options[@]}"; do 
     host="$(echo "${options[$i]}" | cut -d ' ' -f1)"
     ip="$(echo "${options[$i]}" | cut -d ' ' -f2)"
     mac="$(echo "${options[$i]}" | cut -d ' ' -f3)"
@@ -21,7 +28,9 @@ else
     printf "%s" "Select the device: "
     read -r reply
 fi
+
 reply=$((reply-1))
+
 if [ "$reply" -lt $(("${#options[@]}"+1)) ]; then
     host="$(echo "${options[$reply]}" | cut -d ' ' -f1)"
     ip="$(echo "${options[$reply]}" | cut -d ' ' -f2)"
