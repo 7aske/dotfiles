@@ -1,4 +1,4 @@
-command=~/Code/sh/utils-sh/statusbar/$BLOCK_NAME
+command=~/.local/bin/statusbar/$BLOCK_NAME
 separator_block_width=15
 markup=pango
 
@@ -13,7 +13,6 @@ interval=5
 [cgs]
 label=💾 
 interval=60
-command=~/Code/sh/utils-sh/statusbar/cgs
 
 [cpu]
 label=🐹 
@@ -38,16 +37,16 @@ interval=2
 [disk]
 label=💽
 interval=60
-command=~/Code/sh/utils-sh/statusbar/disk /
+command=~/.local/bin/statusbar/disk /
 
 [disk]
 label=💽
 interval=60
-command=~/Code/sh/utils-sh/statusbar/disk /home
+command=~/.local/bin/statusbar/disk /home
 
 [battery]
 interval=5
-command=~/Code/sh/utils-sh/statusbar/battery BAT1
+command=~/.local/bin/statusbar/battery BAT1
 
 [weather]
 label=

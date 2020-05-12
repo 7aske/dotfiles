@@ -25,7 +25,9 @@ mklink conky
 
 # dunst
 mklink dunst
+
 # i3
+mklink i3
 
 # i3blocks
 mklink i3blocks
