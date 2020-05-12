@@ -6,11 +6,18 @@ prog="$(basename $0 .sh)"
 [ ! -e "$HOME/.config" ] && mkdir "$HOME/.config"
 
 mklink () {
+    echo "$prog: process '$1'"
 	if [ -e "$HOME/.config/$1" ] && [ ! -L "$HOME/.config/$1" ]; then
+        echo "$prog: backup '$HOME/.config/$1'"
 		mv "$HOME/.config/$1" "$HOME/.config/$1.bak"
 	fi
+        
+    if [ ! -e "$(dirname $HOME/.config/$1)" ]; then
+        mkdir -p "$(dirname $HOME/.config/$1)"
+    fi
 
 	if [ ! -e "$HOME/.config/$1" ]; then
+        echo "$prog: configure '$1'"
 		ln -s "$(pwd)/.config/$1" "$HOME/.config/$1"
 	fi
 }
@@ -54,7 +61,7 @@ mklink sxiv
 
 # tmux
 mklink tmux
-ln -s "$HOME/.config/tmux/.tmux.conf" "$HOME/.tmux.conf"
+ln -sf "$HOME/.config/tmux/.tmux.conf" "$HOME/.tmux.conf"
 
 # VSCodium
 mklink "VSCodium/User/settings.json"
