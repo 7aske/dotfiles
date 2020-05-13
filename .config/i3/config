@@ -70,9 +70,9 @@ bindsym $mod+slash exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/mu
 bindsym $mod+comma exec --no-startup-id BLOCK_BUTTON=3 ~/.local/bin/statusbar/music
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% && notify-send "volume" "+5% ($(getvol)%)"
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% && notify-send "volume" "\-5% ($(getvol)%)"
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle && notify-send "volume" "toggle mute"
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% && notify-send --hint=int:transient:1 -t 500 "volume" "+5% ($(getvol)%)"
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% && notify-send --hint=int:transient:1 -t 500 "volume" "\-5% ($(getvol)%)"
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle && notify-send --hint=int:transient:1 -t 500 "volume" "toggle mute"
 
 
 #                    _ _           _   _                 
@@ -110,8 +110,8 @@ bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor
 bindsym $mod+w exec --no-startup-id $browser
 bindsym $mod+Shift+w exec --no-startup-id $browser --incognito
 # 7aske-scripts
-bindsym $mod+Shift+d exec --no-startup-id dunst_reload && notify-send "dunst" "dunst reloaded"
-bindsym Print --release exec --no-startup-id scrot && notify-send "screenshot" "saved to homedir"
+bindsym $mod+Shift+d exec --no-startup-id dunst_reload && notify-send --hint=int:transient:1 -t 500 "dunst" "dunst reloaded"
+bindsym Print --release exec --no-startup-id scrot && notify-send  "screenshot" "saved to homedir"
 bindsym $mod+Print --release exec --no-startup-id scrot -u && notify-send "screenshot (window)" "saved to homedir"
 bindsym $mod+Shift+Print --release exec --no-startup-id scrot -s -f -l style=dash -o /dev/stdout | xclip -sel c -t image/png && notify-send "screenshot (selection)" "copied to clipboard"
 bindsym $mod+Shift+x --release exec --no-startup-id xkill
@@ -194,22 +194,22 @@ bindsym $mod+u border toggle 1; exec --no-startup-id notify-send "border" "borde
 bindsym $mod+q kill
 
 # split orientation
-bindsym $mod+Ctrl+v split toggle; exec --no-startup-id notify-send 'toggled tiling'
+bindsym $mod+Ctrl+v split toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 'toggled tiling'
 
 # toggle fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle; exec --no-startup-id notify-send "fullscreen" "fullscreen toggled"
+bindsym $mod+f fullscreen toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 "fullscreen" "fullscreen toggled"
 
 # Toggle floating/tiling
-bindsym $mod+t floating toggle; exec --no-startup-id notify-send "floating" "floating toggled"
+bindsym $mod+t floating toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 "floating" "floating toggled"
 
 # toggle tiling / floating
-bindsym $mod+Shift+space floating toggle; exec --no-startup-id notify-send "floating" "floating toggled"
+bindsym $mod+Shift+space floating toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 "floating" "floating toggled"
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
 
 # toggle sticky
-bindsym $mod+s sticky toggle; exec --no-startup-id notify-send "sticky" "sticky toggled"
+bindsym $mod+s sticky toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 "sticky" "sticky toggled"
 
 # switch to workspace with urgent window automatically
 for_window [urgent="latest"] focus
@@ -220,9 +220,9 @@ bindsym $mod+Shift+t mode "$mode_layout"
 set $mode_layout set window layout: (d)efault (t)abbed (s)tacking
 mode "$mode_layout" {
     # set default desktop layout <stacking|tabbed>
-    bindsym t layout tabbed; exec --no-startup-id notify-send "layout" "switched to tabbed layout", mode "default"
-    bindsym s layout stacking; exec --no-startup-id notify-send "layout" "switched to stacking layout", mode "default"
-    bindsym d layout default; exec --no-startup-id notify-send "layout" "switched to default layout", mode "default"
+    bindsym t layout tabbed; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 "layout" "switched to tabbed layout", mode "default"
+    bindsym s layout stacking; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 "layout" "switched to stacking layout", mode "default"
+    bindsym d layout default; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 "layout" "switched to default layout", mode "default"
 
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode "default"
