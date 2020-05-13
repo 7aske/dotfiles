@@ -1,6 +1,6 @@
 # [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
-export CODE="$HOME/Code"
+export CODE="$HOME/.local/src"
 
 export EDITOR=nvim
 export BROWSER=chromium
