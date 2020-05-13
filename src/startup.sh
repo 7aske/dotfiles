@@ -2,7 +2,7 @@
 
 # small script to manage startup programs
 
-XPROFILE="$HOME/Code/sh/dotfiles/.xprofile"
+XPROFILE="$CODE/sh/dotfiles/.xprofile"
 MENU="${MENU:-"dmenu -l 20"}"
 
 prog="$(basename "$0")"
