@@ -6,7 +6,8 @@ hosts="$HOME/.local/etc/hosts"
 
 [ ! -e "$hosts" ] && echo "$prog: $hosts: no such file or directory" && exit 1
 
-mapfile -t options < "$hosts"
+
+mapfile -t options < <(sed -e '/^#.*/d' -e '/^[[:space:]]*$/d' "$hosts")
 
 if [ "$?" -eq 1 ]; then
     echo "$prog: could not read hosts file"
@@ -14,9 +15,9 @@ if [ "$?" -eq 1 ]; then
 fi
 
 for i in "${!options[@]}"; do 
-    host="$(echo "${options[$i]}" | cut -d ' ' -f1)"
-    ip="$(echo "${options[$i]}" | cut -d ' ' -f2)"
-    mac="$(echo "${options[$i]}" | cut -d ' ' -f3)"
+    host="$(echo "${options[$i]}" | awk '{print $1}')"
+    ip="$(echo "${options[$i]}" | awk '{print $2}')"
+    mac="$(echo "${options[$i]}" | awk '{print $3}')"
     printf "%d) %-10s %10s %10s\n" "$((i+1))" "$host" "$ip" "$mac"
 done
 
@@ -32,9 +33,9 @@ fi
 reply=$((reply-1))
 
 if [ "$reply" -lt $(("${#options[@]}"+1)) ]; then
-    host="$(echo "${options[$reply]}" | cut -d ' ' -f1)"
-    ip="$(echo "${options[$reply]}" | cut -d ' ' -f2)"
-    mac="$(echo "${options[$reply]}" | cut -d ' ' -f3)"
+    host="$(echo "${options[$reply]}" | awk '{print $1}')"
+    ip="$(echo "${options[$reply]}" | awk '{print $2}')"
+    mac="$(echo "${options[$reply]}" | awk '{print $3}')"
     wakeonlan "$mac" &> /dev/null
     printf "Waking up %s@%s\n" "$host" "$ip"
 else
