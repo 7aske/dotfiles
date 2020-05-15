@@ -1,5 +1,3 @@
-[ -f "$HOME/.profile" ] && . "$HOME/.profile"
-
 nm-applet &
 xfce4-power-manager &
 pamac-tray &
