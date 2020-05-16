@@ -9,6 +9,9 @@
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
 
+# notification popup duration
+set $notif_duration 1000
+
 # disable help button in most programs
 bindsym F1 nop
                   
@@ -55,8 +58,8 @@ bindsym $mod+Shift+p exec --no-startup-id padefault
 bindsym $mod+Ctrl+Shift+p exec --no-startup-id pafocus
 
 # Screen brightness controls
-# bindsym XF86MonBrightnessUp exec --no-startup-id "xbacklight -inc 10; notify-send 'brightness up'"
-# bindsym XF86MonBrightnessDown exec --no-startup-id "xbacklight -dec 10; notify-send 'brightness down'"
+# bindsym XF86MonBrightnessUp exec --no-startup-id "xbacklight -inc 10; notify-send --hint=int:transient:1 -t $notif_duration 'brightness up'"
+# bindsym XF86MonBrightnessDown exec --no-startup-id "xbacklight -dec 10; notify-send --hint=int:transient:1 -t $notif_duration 'brightness down'"
 
 # Media player controls
 bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
@@ -70,10 +73,9 @@ bindsym $mod+slash exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/mu
 bindsym $mod+comma exec --no-startup-id BLOCK_BUTTON=3 ~/.local/bin/statusbar/music
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% && notify-send --hint=int:transient:1 -t 500 "volume" "+5% ($(getvol)%)"
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% && notify-send --hint=int:transient:1 -t 500 "volume" "\-5% ($(getvol)%)"
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle && notify-send --hint=int:transient:1 -t 500 "volume" "toggle mute"
-
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% && notify-send --hint=int:transient:1 -t $notif_duration "volume" "+5% ($(getvol)%)"
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% && notify-send --hint=int:transient:1 -t $notif_duration "volume" "\-5% ($(getvol)%)"
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle && notify-send --hint=int:transient:1 -t $notif_duration "volume" "toggle mute"
 
 #                    _ _           _   _                 
 #   __ _ _ __  _ __ | (_) ___ __ _| |_(_) ___  _ __  ___ 
@@ -87,33 +89,29 @@ bindsym $mod+Shift+Return exec --no-startup-id $terminal2
 bindsym $mod+a exec --no-startup-id rofi -show run
 bindsym $mod+d exec --no-startup-id dmenu_run -fn 'Fira Code-12'
 bindsym $mod+grave exec --no-startup-id $terminal -e htop
-    #bindsym $mod+Shift+grave exec --no-startup-id $terminal -e vimcfg
-    #bindsym $mod+Ctrl+grave exec --no-startup-id $terminal -e vimcfg --etc
 
 # edit config files
 bindsym $mod+Shift+grave mode "$mode_config"
 set $mode_config list config files to open: (e)tc (h)ome (d)dotfiles
 mode "$mode_config" {
-    bindsym e exec --no-startup-id vimcfg --etc , mode 'default'
-    bindsym h exec --no-startup-id vimcfg --home, mode 'default'
-    bindsym d exec --no-startup-id vimcfg       , mode 'default'
+    bindsym e exec --no-startup-id $terminal -e vimcfg --etc , mode "default"
+    bindsym h exec --no-startup-id $terminal -e vimcfg --home, mode "default"
+    bindsym d exec --no-startup-id $terminal -e vimcfg       , mode "default"
 
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode "default"
     bindsym Escape mode "default"
-
 }
 
 bindsym $mod+e exec --no-startup-id $file
 bindsym $mod+Shift+e exec --no-startup-id $terminal2 bash -i $file2
-bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor
 bindsym $mod+w exec --no-startup-id $browser
 bindsym $mod+Shift+w exec --no-startup-id $browser --incognito
 # 7aske-scripts
-bindsym $mod+Shift+d exec --no-startup-id dunst_reload && notify-send --hint=int:transient:1 -t 500 "dunst" "dunst reloaded"
-bindsym Print --release exec --no-startup-id scrot && notify-send  "screenshot" "saved to homedir"
-bindsym $mod+Print --release exec --no-startup-id scrot -u && notify-send "screenshot (window)" "saved to homedir"
-bindsym $mod+Shift+Print --release exec --no-startup-id scrot -s -f -l style=dash -o /dev/stdout | xclip -sel c -t image/png && notify-send "screenshot (selection)" "copied to clipboard"
+bindsym $mod+Shift+d exec --no-startup-id dunst_reload && notify-send --hint=int:transient:1 -t $notif_duration "dunst" "dunst reloaded"
+bindsym Print --release exec --no-startup-id scrot && notify-send --hint=int:transient:1 -t $notif_duration "screenshot" "saved to homedir"
+bindsym $mod+Print --release exec --no-startup-id scrot -u && notify-send --hint=int:transient:1 -t $notif_duration "screenshot (window)" "saved to homedir"
+bindsym $mod+Shift+Print --release exec --no-startup-id scrot -s -f -l style=dash -o /dev/stdout | xclip -sel c -t image/png && notify-send --hint=int:transient:1 -t $notif_duration "screenshot (selection)" "copied to clipboard"
 bindsym $mod+Shift+x --release exec --no-startup-id xkill
 # 7aske-scripts
 bindsym $mod+i exec --no-startup-id i3btf $player
@@ -188,28 +186,28 @@ floating_modifier $mod
 bindsym $mod+c floating enable; move position center
 
 # change borders
-bindsym $mod+u border toggle 1; exec --no-startup-id notify-send "border" "border toggled"
+bindsym $mod+u border toggle 1; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "border" "border toggled"
 
 # kill focused window
 bindsym $mod+q kill
 
 # split orientation
-bindsym $mod+Ctrl+v split toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 'toggled tiling'
+bindsym $mod+Ctrl+v split toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration 'toggled tiling'
 
 # toggle fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 "fullscreen" "fullscreen toggled"
+bindsym $mod+f fullscreen toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "fullscreen" "fullscreen toggled"
 
 # Toggle floating/tiling
-bindsym $mod+t floating toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 "floating" "floating toggled"
+bindsym $mod+t floating toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "floating" "floating toggled"
 
 # toggle tiling / floating
-bindsym $mod+Shift+space floating toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 "floating" "floating toggled"
+bindsym $mod+Shift+space floating toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "floating" "floating toggled"
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
 
 # toggle sticky
-bindsym $mod+s sticky toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 "sticky" "sticky toggled"
+bindsym $mod+s sticky toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "sticky" "sticky toggled"
 
 # switch to workspace with urgent window automatically
 for_window [urgent="latest"] focus
@@ -220,9 +218,9 @@ bindsym $mod+Shift+t mode "$mode_layout"
 set $mode_layout set window layout: (d)efault (t)abbed (s)tacking
 mode "$mode_layout" {
     # set default desktop layout <stacking|tabbed>
-    bindsym t layout tabbed; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 "layout" "switched to tabbed layout", mode "default"
-    bindsym s layout stacking; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 "layout" "switched to stacking layout", mode "default"
-    bindsym d layout default; exec --no-startup-id notify-send --hint=int:transient:1 -t 500 "layout" "switched to default layout", mode "default"
+    bindsym t layout tabbed; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "layout" "switched to tabbed layout", mode "default"
+    bindsym s layout stacking; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "layout" "switched to stacking layout", mode "default"
+    bindsym d layout default; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "layout" "switched to default layout", mode "default"
 
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode "default"
@@ -355,10 +353,10 @@ for_window [title=".*World of Warcraft.*"] layout tabbed
 # misc commands
 
 # reload the configuration file
-bindsym $mod+Shift+c reload; exec --no-startup-id notify-send "config" "i3 config reloaded"
+bindsym $mod+Shift+c reload; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "config" "i3 config reloaded"
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart; exec --no-startup-id notify-send "restart" "i3 restarted"
+bindsym $mod+Shift+r restart; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "restart" "i3 restarted"
 
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+0 exec --no-startup-id "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
@@ -501,9 +499,9 @@ bar {
 
     colors {
         #background $background
-        background $background
-        statusline $color1
-        separator  $color1
+        background  $background
+        statusline  $color1
+        separator   $color1
 
         #                     border      background        text
         focused_workspace    $color2         $color5 $background
@@ -527,8 +525,8 @@ bindsym $mod+m bar mode toggle
 # Set inner/outer gaps
 gaps inner 10
 gaps outer -6
-bindsym $mod+g gaps inner all set 10; gaps outer all set -6; exec --no-startup-id notify-send "gaps" "gaps reset to default"
-bindsym $mod+Ctrl+g gaps inner all set 1; gaps outer all set 1; exec --no-startup-id notify-send "gaps" "disabled gaps"
+bindsym $mod+g gaps inner all set 10; gaps outer all set -6; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "gaps" "gaps reset to default"
+bindsym $mod+Ctrl+g gaps inner all set 0; gaps outer all set 0; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "gaps" "disabled gaps"
 
 # Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
 # gaps inner|outer current|all set|plus|minus <px>
@@ -553,6 +551,7 @@ mode "$mode_gaps" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
+
 mode "$mode_gaps_inner" {
         bindsym plus  gaps inner current plus 5
         bindsym minus gaps inner current minus 5
