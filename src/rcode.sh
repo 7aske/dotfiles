@@ -15,5 +15,8 @@ else
 	echo "Invalid second argument."
 	exit 1
 fi
-
-rsync --progress -have ssh "$src" "$(dirname "$dest")"
+if [ -z "$PORT" ]; then
+    rsync --progress -have ssh "$src" "$(dirname "$dest")"
+else
+    rsync --progress -have "ssh -p $PORT" "$src" "$(dirname "$dest")"
+fi
