@@ -73,6 +73,9 @@ mklink wal
 # xfce4
 mklink xfce4
 
+#compton
+mklink compton
+
 # .profile
 
 # .xprofile
