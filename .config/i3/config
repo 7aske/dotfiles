@@ -31,12 +31,17 @@ set $reader $READER
 set $player $PLAYER
 
 # set terminal commands
-set $terminal urxvt
-set $terminal2 kitty
+set $terminal2 urxvt
+set $terminal kitty
 
 # alternating split layout 
 # https://github.com/olemartinorg/i3-alternating-layout
 exec_always --no-startup-id python3 ~/.local/bin/alternating_layouts
+
+# compton/picom
+exec_always --no-startup-id picom --experimental-backends --backend glx --config ~/.config/compton/compton.conf
+bindsym $mod+Shift+F5 exec --no-startup-id killall picom
+bindsym $mod+F5 exec --no-startup-id picom --experimental-backends --backend glx --config ~/.config/compton/compton.conf
 
 # set background and theme using wal
 exec --no-startup-id wal --backend wal -i ~/.config/wallpaper
