@@ -416,21 +416,26 @@ mode "resize" {
 #  \__,_|\__,_|\__\___/|___/\__\__,_|_|   \__|
 # autostart                                            
 
-# its better to handle your autostart applications through .xprofile
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec --no-startup-id nm-applet
+exec --no-startup-id xfce4-power-manager
+exec --no-startup-id pamac-tray
+exec --no-startup-id barrier
+exec --no-startup-id clipmenud
+exec --no-startup-id xautolock -time 10 -locker blurlock -corners ++++
+# 7aske-scripts
+exec --no-startup-id dunst_reload
+# 7aske-scripts
+exec_always --no-startup-id fix_xcursor
 
-# exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-# exec --no-startup-id nitrogen --restore; sleep 1; compton -b
-# exec --no-startup-id nm-applet
-# exec --no-startup-id xfce4-power-manager
-# exec --no-startup-id pamac-tray
-# exec --no-startup-id barrier
-# exec --no-startup-id clipmenud
-# exec --no-startup-id xautolock -time 10 -locker blurlock -corners +---
-# exec_always --no-startup-id fix_xcursor
+# pulseaudio
+exec --no-startup-id pulseaudio -D &
+exec --no-startup-id pasystray &
 
 # touchpad and keyboard config
-# exec_always --no-startup-id fix_touchpad
-# exec_always --no-startup-id xset r rate 195 55
+# 7aske-scripts
+exec_always --no-startup-id fix_touchpad
+exec_always --no-startup-id xset r rate 195 55
 
 # alternating split layout 
 # https://github.com/olemartinorg/i3-alternating-layout
@@ -438,7 +443,7 @@ exec_always --no-startup-id python3 ~/.local/bin/alternating_layouts
 
 # compton/picom
 bindsym $mod+Shift+F5 exec --no-startup-id killall picom
-bindsym $mod+F5 exec --no-startup-id picom --experimental-backends --backend glx --config ~/.config/compton/compton.conf
+bindsym $mod+F5 exec --no-startup-id picom -b --experimental-backends --backend glx --config ~/.config/compton/compton.conf
 
 # set background and theme using wal
 exec --no-startup-id wal --backend wal -i ~/.config/wallpaper

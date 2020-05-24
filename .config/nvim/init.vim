@@ -117,6 +117,7 @@ nmap <silent> <C-T>c :tabnew<CR>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 map <A-1> :NERDTreeToggle<CR>
+let NERDTreeShowHidden=1
 
 " Spellchecker -----------------------------------
 map <F6> :setlocal spell! spelllang=en<CR>

@@ -1,15 +1,1 @@
-nm-applet &
-xfce4-power-manager &
-pamac-tray &
-barrier &
-clipmenud &
-xautolock -time 10 -locker blurlock -corners +--- &
-fix_xcursor &
-nitrogen --restore; sleep 1; compton -b &
-dunst_reload &
 
-pulseaudio -D &
-pasystray &
-
-fix_touchpad &
-xset r rate 195 55 &
