@@ -55,6 +55,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " Wal Colors -------------------------------------
 colorscheme wal
+
 " Check file in shellcheck -----------------------
 map <leader>s :!clear && shellcheck %<CR>
 
@@ -70,6 +71,9 @@ inoremap jj <Esc>
 
 " No highlight search ----------------------------
 nnoremap :/<CR> :nohlsearch<CR>
+
+" Replace word under cursor ----------------------
+nnoremap <Leader>r :%s/\<<C-r><C-w>\>/
 
 " Switch windows with Alt + Arrows ---------------
 nmap <silent> <A-Left>  <C-W>h
