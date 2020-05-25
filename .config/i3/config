@@ -298,6 +298,7 @@ assign [class="(?i)caprine"] $ws9
 assign [class="(?i)discord"] $ws9
 assign [class="(?i)viber"] $ws9
 assign [class="(?i)telegram-desktop"] $ws9
+assign [class="(?i)TelegramDesktop"] $ws9
 # for_window [class="(?i)spotify"] move to workspace $ws9
 
 # Open specific applications in floating mode
