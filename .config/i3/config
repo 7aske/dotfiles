@@ -108,7 +108,7 @@ bindsym $mod+Print --release exec --no-startup-id scrot -u && notify-send --hint
 bindsym $mod+Shift+Print --release exec --no-startup-id scrot -s -f -l style=dash -o /dev/stdout | xclip -sel c -t image/png && notify-send --hint=int:transient:1 -t $notif_duration "screenshot (selection)" "copied to clipboard"
 bindsym $mod+Shift+x --release exec --no-startup-id xkill
 # 7aske-scripts
-bindsym $mod+i exec --no-startup-id i3btf $player
+bindsym $mod+m exec --no-startup-id i3btf $player
 # 7aske-scripts
 bindsym $mod+o exec --no-startup-id TYPE=term ROFI=1 codeopen
 # 7aske-scripts
@@ -146,11 +146,19 @@ bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
-# alternatively, you can use the cursor keys:
+## alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
+
+
+ alternatively, you can use the cursor keys:
+bindsym $mod+Ctrl+Shift+Left mark swap; focus left; swap container with mark swap; unmark swap; focus left
+bindsym $mod+Ctrl+Shift+Down mark swap; focus down; swap container with mark swap; unmark swap; focus down
+bindsym $mod+Ctrl+Shift+Up mark swap; focus up; swap container with mark swap; unmark swap; focus up
+bindsym $mod+Ctrl+Shift+Right mark swap; focus right; swap container with mark swap; unmark swap; focus right
+
 
 # workspace back and forth (with/without active container)
 workspace_auto_back_and_forth yes
@@ -524,7 +532,7 @@ bar {
 }
 
 # hide/unhide status bar
-bindsym $mod+m bar mode toggle
+bindsym $mod+Shift+Ctrl+b bar mode toggle
 
 #  _ _____                             
 # (_)___ /        __ _  __ _ _ __  ___ 
