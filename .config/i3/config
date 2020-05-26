@@ -100,6 +100,7 @@ mode "$mode_config" {
 bindsym $mod+e exec --no-startup-id $file
 bindsym $mod+Shift+e exec --no-startup-id $terminal2 bash -i $file2
 bindsym $mod+w exec --no-startup-id $browser
+bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor
 bindsym $mod+Shift+w exec --no-startup-id $browser --incognito
 # 7aske-scripts
 bindsym $mod+Shift+d exec --no-startup-id dunst_reload && notify-send --hint=int:transient:1 -t $notif_duration "dunst" "dunst reloaded"
@@ -307,6 +308,7 @@ assign [class="(?i)discord"] $ws9
 assign [class="(?i)viber"] $ws9
 assign [class="(?i)telegram-desktop"] $ws9
 assign [class="(?i)TelegramDesktop"] $ws9
+assign [class="(?i)skype"] $ws9
 # for_window [class="(?i)spotify"] move to workspace $ws9
 
 # Open specific applications in floating mode
