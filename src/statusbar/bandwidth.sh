@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-iface="$(ip link | grep -e "BROADCAST.*default" | grep -v "vbox" | awk '{print $2}' | cut -d ':' -f1)"
+iface="$(ip link | grep -e "BROADCAST" | sed 1q | awk '{print $2}' | cut -d ':' -f1)"
 
 
 SLP=2
