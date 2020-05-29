@@ -46,6 +46,19 @@ set expandtab
 set hlsearch 
 set path+=**
 set wildmenu
+set clipboard+=unnamedplus
+
+" " Copy to clipboard
+vnoremap  <leader>y   "+y
+nnoremap  <leader>Y   "+yg_
+nnoremap  <leader>y   "+y
+nnoremap  <leader>yy  "+yy
+
+" " Paste from clipboard
+nnoremap <leader>p    "+p
+nnoremap <leader>P    "+P
+vnoremap <leader>p    "+p
+vnoremap <leader>P    "+P
 
 " Enable autocompletion --------------------------
 set wildmode=longest,list,full
@@ -85,9 +98,11 @@ nmap <silent> <A-Down>  <C-W>j
 map <C-\> <Plug>NERDCommenterToggle^j
 
 "GitGutter Plugin --------------------------------
-nmap <leader>gd <Plug>(GitGutterPreviewHunk)
+nmap <leader>gp <Plug>(GitGutterPreviewHunk)
 nmap <leader>ga <Plug>(GitGutterStageHunk)
 nmap <leader>gn <Plug>(GitGutterNextHunk)
+nmap <leader>gb <Plug>(GitGutterPrevHunk)
+nmap <leader>gu <Plug>(GitGutterUndoHunk)
 
 " Paste multiple in visual mode ------------------
 xnoremap p pgvy
