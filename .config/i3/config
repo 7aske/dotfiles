@@ -440,7 +440,7 @@ exec --no-startup-id dunst_reload
 exec_always --no-startup-id fix_xcursor
 
 # pulseaudio
-exec --no-startup-id pulseaudio -D &
+exec --no-startup-id sleep 3 && pulseaudio -D &
 exec --no-startup-id pasystray &
 
 # touchpad and keyboard config
