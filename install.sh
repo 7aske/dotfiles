@@ -6,7 +6,7 @@ prog="$(basename $0 .sh)"
 [ ! -e "$HOME/.config" ] && mkdir "$HOME/.config"
 
 mklink () {
-    echo "$prog: process '$1'"
+    echo "$prog: processing '$1'"
 	if [ -e "$HOME/.config/$1" ] && [ ! -L "$HOME/.config/$1" ]; then
         echo "$prog: backup '$HOME/.config/$1'"
 		mv "$HOME/.config/$1" "$HOME/.config/$1.bak"
@@ -23,9 +23,9 @@ mklink () {
 }
 
 mksource (){
+    echo "$prog: processing '$1'"
     src=". $(pwd)/$1"
     dest="$HOME/${2:-$1}"
-    echo $src $dest  
     if ! grep -q "$src" "$dest"; then
         echo "[ -f \"$src\" ] && . \"$src\"" >> "$dest"  
     fi
