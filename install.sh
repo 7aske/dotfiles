@@ -24,7 +24,7 @@ mklink () {
 
 mksource (){
     echo "$prog: processing '$1'"
-    src=". $(pwd)/$1"
+    src="$(pwd)/$1"
     dest="$HOME/${2:-$1}"
     if ! grep -q "$src" "$dest"; then
         echo "[ -f \"$src\" ] && . \"$src\"" >> "$dest"  
