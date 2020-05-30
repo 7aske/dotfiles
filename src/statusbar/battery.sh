@@ -16,13 +16,13 @@ duration=$(acpi | awk '{print substr($5, 0, length($5) - 3)}')
 status=$(cat /sys/class/power_supply/"$1"/status)
 
 if [ "$capacity" -ge 75 ]; then
-	color="#00ff00"
+    color="#77dd77"
 elif [ "$capacity" -ge 50 ]; then
 	color="#ffffff"
 elif [ "$capacity" -ge 25 ]; then
-	color="#ffff00"
+	color="#ff5252"
 else
-	color="#ff0000"
+	color="#ff8144"
 	warn="❗"
 fi
 
@@ -30,4 +30,4 @@ fi
 
 [ "$status" = "Charging" ] && color="#ffffff"
 
-printf "<span color='%s'>%s%s%s</span>\n" "$color" "$(echo "$status" | sed -e "s/,//;s/Discharging/🔋/;s/Not Charging/🛑/;s/Charging/🔌/;s/Unknown/♻️/;s/Full/⚡/;s/ 0*/ /g;s/ :/ /g")" "$warn" "$(echo "$capacity" | sed -e 's/$/%/') ($duration)"
+printf "<span color='%s'>%s%s%s</span>\n" "$color" "$(echo "$status" | sed -e "s/,//;s/Discharging/🔋/;s/Not Charging/🛑/;s/Charging/🔌/;s/Unknown/♻️/;s/Full/⚡/;s/ 0*/ /g;s/ :/ /g")" "$warn" "$(echo "$capacity" | sed -e 's/$/%/') $([ -n "$duration" ] && echo "($duration)")"
