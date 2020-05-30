@@ -73,7 +73,7 @@ mklink tmux
 ln -sf "$HOME/.config/tmux/.tmux.conf" "$HOME/.tmux.conf"
 
 # VSCodium
-mkdir -p "VSCodium/User/"
+mkdir -p "$HOME/.config/VSCodium/User/"
 mklink "VSCodium/User/settings.json"
 mklink "VSCodium/User/keybindings.json"
 
@@ -91,6 +91,9 @@ mklink zsh
 
 # .profile
 mksource .profile
+
+# .zprofile
+mksource .zprofile
 
 # .xprofile
 mksource .xprofile
