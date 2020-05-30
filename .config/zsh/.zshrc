@@ -1,4 +1,4 @@
-source ~/.local/src/sh/bashrc/.bashrc
+source ~/.local/src/sh/dotfiles/.bashrc
 #Enable colors and change prompt:
 autoload -U colors && colors	# Load colors
 PS1="%B%{$fg[red]%}%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%1~%{$fg[red]%}%{$reset_color%} $%b "
