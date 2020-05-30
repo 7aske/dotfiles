@@ -454,10 +454,10 @@ exec_always --no-startup-id python3 ~/.local/bin/alternating_layouts
 
 # compton/picom
 bindsym $mod+Shift+F5 exec --no-startup-id killall picom
-bindsym $mod+F5 exec --no-startup-id picom -b --experimental-backends --backend glx --config ~/.config/compton/compton.conf
+bindsym $mod+F5 exec --no-startup-id picom -b --experimental-backends --config ~/.config/compton/compton.conf
 
 # set background and theme using wal
-exec --no-startup-id wal --backend wal -i ~/.config/wallpaper
+exec_always --no-startup-id wal --backend wal -i ~/.config/wallpaper
 
 #            _                
 #   ___ ___ | | ___  _ __ ___ 
