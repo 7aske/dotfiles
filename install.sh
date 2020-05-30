@@ -22,6 +22,15 @@ mklink () {
 	fi
 }
 
+mksource (){
+    src=". $(pwd)/$1"
+    dest="$HOME/${2:-$1}"
+    echo $src $dest  
+    if ! grep -q "$src" "$dest"; then
+        echo "[ -f \"$src\" ] && . \"$src\"" >> "$dest"  
+    fi
+}
+
 # albert
 mklink albert
 
@@ -64,6 +73,7 @@ mklink tmux
 ln -sf "$HOME/.config/tmux/.tmux.conf" "$HOME/.tmux.conf"
 
 # VSCodium
+mkdir -p "VSCodium/User/"
 mklink "VSCodium/User/settings.json"
 mklink "VSCodium/User/keybindings.json"
 
@@ -73,11 +83,21 @@ mklink wal
 # xfce4
 mklink xfce4
 
-#compton
+# compton
 mklink compton
 
+# zsh
+mklink zsh
+
 # .profile
+mksource .profile
 
 # .xprofile
+mksource .xprofile
 
-# .Xresources
+# .bashrc
+mksource .bashrc
+
+# Xresources
+mklink Xresources
+

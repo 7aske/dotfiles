@@ -39,7 +39,7 @@ hi TabLineSel ctermbg=4 ctermfg=0
 hi TermCursorNC ctermbg=3 ctermfg=0
 hi VertSplit ctermbg=8 ctermfg=0
 hi Title ctermbg=NONE ctermfg=4
-hi CursorLine term=bold cterm=bold ctermbg=0 ctermfg=7
+hi CursorLine term=bold cterm=bold ctermbg=0 ctermfg=NONE
 hi LineNr ctermbg=NONE ctermfg=8
 hi CursorLineNr ctermbg=NONE ctermfg=8
 hi helpLeadBlank ctermbg=NONE ctermfg=7
@@ -193,6 +193,3 @@ hi ALEWarning ctermbg=NONE ctermfg=3
 let g:limelight_conceal_ctermfg = 8
 
 " }}}
-
-hi Normal ctermbg=0
-hi NonText ctermbg=0
