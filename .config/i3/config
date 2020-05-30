@@ -31,7 +31,7 @@ set $reader $READER
 set $player $PLAYER
 
 # set terminal commands
-set $terminal urxvt
+set $terminal st
 set $terminal2 kitty
 
 

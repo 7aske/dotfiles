@@ -7,10 +7,7 @@ export BROWSER=chromium
 export FILE=nautilus
 export READER=zathura
 export PLAYER=spotify
-export TERMINAL=urxvt
-export COLORTERM=rxvt
-export TERMINAL=urxvt
-export TERM=rxvt-unicode
+export TERMINAL=st
 
 export PATH="$HOME/.local/bin":"$PATH"
 
