@@ -48,6 +48,7 @@ set hlsearch
 set path+=**
 set wildmenu
 set clipboard+=unnamedplus
+set ignorecase
 
 " " Copy to clipboard
 vnoremap  <leader>y   "+y

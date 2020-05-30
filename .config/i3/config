@@ -120,7 +120,7 @@ bindsym $mod+v exec --no-startup-id clipmenu
 # 7aske-scripts
 bindsym $mod+F2 exec --no-startup-id kblang -fn 'Fira Code-12'
 # 7aske-scripts
-bindsym $mod+Shift+s exec --no-startup-id google-search
+bindsym $mod+Shift+s exec --no-startup-id $terminal -e google-search
 bindsym $mod+Tab exec --no-startup-id rofi -show window
 
 #                    _             _   _             
