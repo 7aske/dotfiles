@@ -179,7 +179,7 @@ for_window [class=".*"] title_format " %title"
 for_window [class="floating"] floating enable
 
 # configure border style <normal|1pixel|pixel xx|none|pixel>
-default_border pixel 1
+default_border pixel 0
 #hide_edge_borders smart
 
 # use Mouse+$mod to drag floating windows
@@ -544,9 +544,11 @@ bindsym $mod+Shift+Ctrl+b bar mode toggle
 # i3-gaps        |___/      |_|
 
 # Set inner/outer gaps
-gaps inner 10
-gaps outer -6
-bindsym $mod+g gaps inner all set 10; gaps outer all set -6; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "gaps" "gaps reset to default"
+set $gaps_inner 15
+set $gaps_outer 10
+gaps inner $gaps_inner
+gaps outer $gaps_outer 
+bindsym $mod+g gaps inner all set $gaps_inner; gaps outer all set $gaps_outer; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "gaps" "gaps reset to default"
 bindsym $mod+Ctrl+g gaps inner all set 0; gaps outer all set 0; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "gaps" "disabled gaps"
 
 # Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
@@ -557,8 +559,8 @@ bindsym $mod+Ctrl+g gaps inner all set 0; gaps outer all set 0; exec --no-startu
 # Smart gaps (gaps used if only more than one container on the workspace)
 # smart_gaps on
 
-# Smart borders (draw borders around container only if it is not the only container on this workspace) 
-smart_borders no_gaps #on|no_gaps
+# Smart borders (draw borders around container only if it is not the only container on this workspace) on|no_gaps
+smart_borders no_gaps 
 
 # Press $mod+Shift+g to enter the gap mode. Choose o or i for modifying outer/inner gaps. Press one of + / - (in-/decrement for current workspace) or 0 (remove gaps for current workspace). If you also press Shift with these keys, the change will be global for all workspaces.
 set $mode_gaps Gaps: (o) outer, (i) inner
