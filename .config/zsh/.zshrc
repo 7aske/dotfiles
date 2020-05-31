@@ -1,7 +1,20 @@
 source ~/.local/src/sh/dotfiles/.bashrc
+
 #Enable colors and change prompt:
 autoload -U colors && colors	# Load colors
-PS1="%B%{$fg[red]%}%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%1~%{$fg[red]%}%{$reset_color%} $%b "
+
+autoload -Uz vcs_info
+precmd() { vcs_info }
+
+# Set up the prompt (with git branch name)
+zstyle ':vcs_info:git:*' formats '%b'
+ 
+setopt PROMPT_SUBST
+
+RPROMPT=
+PS1="%B%{$fg[red]%}%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%1~%{$fg[red]%}%{$reset_color%} \$vcs_info_msg_0_$%b "
+
+
 setopt autocd		# Automatically cd into typed directory.
 stty stop undef		# Disable ctrl-s to freeze terminal.
 
