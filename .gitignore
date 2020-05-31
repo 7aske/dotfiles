@@ -1,2 +1,3 @@
-./conky/.conkycolors
-nvim/.netrwhist
+.config/conky/.conkycolors
+.config/nvim/.netrwhist
+.config/zsh/.zcompdump
