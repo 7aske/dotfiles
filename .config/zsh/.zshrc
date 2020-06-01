@@ -7,7 +7,7 @@ autoload -Uz vcs_info
 precmd() { vcs_info }
 
 # Set up the prompt (with git branch name)
-zstyle ':vcs_info:git:*' formats '%b'
+zstyle ':vcs_info:git:*' formats '%b '
  
 setopt PROMPT_SUBST
 
