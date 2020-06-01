@@ -17,7 +17,12 @@ fi
 if [ -n "$PROJ" ]; then
     case "$TYPE" in
     "term")
-        $TERMINAL -cd "$PROJ" && notify-send "codeopen" "opening $PROJ"
+        if [ "$TERMINAL" = "st" ]; then
+            # 7aske 'st' build with '-d' option to chdir at start
+            $TERMINAL -d "$PROJ" && notify-send "codeopen" "opening $PROJ"
+        else
+            $TERMINAL -cd "$PROJ" && notify-send "codeopen" "opening $PROJ"
+        fi
         ;;
 
     "vscode")
