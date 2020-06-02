@@ -106,14 +106,10 @@ nmap <silent> <A-Down>  <C-W>j
 " Toggle comments --------------------------------
 map <C-\> <Plug>NERDCommenterToggle^j
 
-"GitGutter Plugin --------------------------------
-nmap <leader>gp <Plug>(GitGutterPreviewHunk)
-nmap <leader>ga <Plug>(GitGutterStageHunk)
-nmap <leader>gn <Plug>(GitGutterNextHunk)
-nmap <leader>gN <Plug>(GitGutterPrevHunk)
-nmap <leader>gu <Plug>(GitGutterUndoHunk)
-
-" Paste multiple in visual mode ------------------
+" Sweet Sweet FuGITive
+nmap <leader>gq :diffget //3<CR>
+nmap <leader>gp :diffget //2<CR>
+nmap <leader>gs :G<CR>" Paste multiple in visual mode ------------------
 xnoremap p pgvy
 
 " Correct indentation JSON files
@@ -142,6 +138,9 @@ autocmd StdinReadPre * let s:std_in=1
 "autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 map <A-1> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
+
+" Undotree
+map <leader>U :UndotreeToggle<CR>
 
 " Spellchecker -----------------------------------
 map <F6> :setlocal spell! spelllang=en<CR>
@@ -189,9 +188,9 @@ endfunction
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 nmap <leader>gd <Plug>(coc-definition)
-nmap <leader>gy <Plug>(coc-type-definition)
+nmap <leader>gt <Plug>(coc-type-definition)
 nmap <leader>gi <Plug>(coc-implementation)
-nmap <leader>gf <Plug>(coc-references)
+nmap <leader>gr <Plug>(coc-references)
 nmap <leader>gR <Plug>(coc-rename)
 nmap <leader>g[ <Plug>(coc-diagnostic-prev)
 nmap <leader>g] <Plug>(coc-diagnostic-next)
@@ -211,7 +210,7 @@ nmap <leader>qf  <Plug>(coc-fix-current)
 nmap <leader>ac  <Plug>(coc-codeaction)
 
 " Add `:Format` command to format current buffer.
-"command! -nargs=0 Format :call CocAction('format')
+command! -nargs=0 Format :call CocAction('format')
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 " Add `:Fold` command to fold current buffer.
