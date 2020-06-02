@@ -21,7 +21,8 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'preservim/nerdcommenter'
     Plug 'dylanaraps/wal.vim'
     Plug 'preservim/nerdtree'
-    Plug 'git@github.com:Valloric/YouCompleteMe.git'
+    "Plug 'git@github.com:Valloric/YouCompleteMe.git'
+	Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'leafgarland/typescript-vim'
     Plug 'lyuts/vim-rtags'
     Plug 'kien/ctrlp.vim'
@@ -46,9 +47,7 @@ set t_Co=256
 set mouse=a
 set noshowmode
 set smartindent
-set noexpandtab
-set tabstop=4
-set shiftwidth=4
+set noexpandtab tabstop=4 shiftwidth=4
 set hlsearch 
 set wildmenu
 set smartcase
@@ -96,7 +95,7 @@ inoremap jj <Esc>
 nnoremap :/<CR> :nohlsearch<CR>
 
 " Replace word under cursor ----------------------
-nnoremap <Leader>r :%s/\<<C-r><C-w>\>/
+nnoremap <leader>r :%s/\<<C-r><C-w>\>/
 
 " Switch windows with Alt + Arrows ---------------
 nmap <silent> <A-Left>  <C-W>h
@@ -151,8 +150,76 @@ map <F6> :setlocal spell! spelllang=en<CR>
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 nmap <leader><leader> :CtrlP .<CR>
 
-" YouCompleteMe ---------------------------------- 
-map <leader>b :YcmCompleter GoToDefinition<CR>
-map <leader>B :YcmCompleter GoToImplementation<CR>
-map <leader>/ :YcmCompleter GoToReferences<CR>
-map <leader>L :YcmCompleter Format<CR>
+" Coc --------------------------------------------
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+nmap <leader>gd <Plug>(coc-definition)
+nmap <leader>gy <Plug>(coc-type-definition)
+nmap <leader>gi <Plug>(coc-implementation)
+nmap <leader>gf <Plug>(coc-references)
+nmap <leader>gR <Plug>(coc-rename)
+nmap <leader>g[ <Plug>(coc-diagnostic-prev)
+nmap <leader>g] <Plug>(coc-diagnostic-next)
+nnoremap <leader>cr :CocRestartmap <leader>jd <Plug>(coc-definition)
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code.
+xmap <leader><C-l>  <Plug>(coc-format-selected)
+nmap <leader><C-l>  <Plug>(coc-format-selected)
+nmap <leader><C-L>  <Plug>(coc-format)
+
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+" Remap keys for applying codeAction to the current buffer.
+nmap <leader>ac  <Plug>(coc-codeaction)
+
+" Add `:Format` command to format current buffer.
+"command! -nargs=0 Format :call CocAction('format')
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+

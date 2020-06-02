@@ -1,0 +1,5 @@
+{
+	"prettier.useTabs": true,
+	"prettier.trailingComma": true,
+	"prettier.tabWidth": 4
+}
