@@ -21,17 +21,21 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'preservim/nerdcommenter'
     Plug 'dylanaraps/wal.vim'
     Plug 'preservim/nerdtree'
+    Plug 'git@github.com:Valloric/YouCompleteMe.git'
+    Plug 'leafgarland/typescript-vim'
+    Plug 'lyuts/vim-rtags'
     Plug 'kien/ctrlp.vim'
     Plug 'tasn/vim-tsx'
+	Plug 'arcticicestudio/nord-vim'
+	Plug 'mbbill/undotree'
 call plug#end()
 
 " GENERAL ----------------------------------------
 let mapleader = " "
+syntax on
 set nu rnu
 set updatetime=100
-syntax on
 filetype indent plugin on
-syntax enable
 set number
 set cursorline
 set encoding=utf-8
@@ -41,14 +45,15 @@ set showcmd
 set t_Co=256
 set mouse=a
 set noshowmode
+set smartindent
+set noexpandtab
 set tabstop=4
 set shiftwidth=4
-set expandtab
 set hlsearch 
-set path+=**
 set wildmenu
+set smartcase
+set path+=**
 set clipboard+=unnamedplus
-set ignorecase
 
 " " Copy to clipboard
 vnoremap  <leader>y   "+y
@@ -68,8 +73,11 @@ set wildmode=longest,list,full
 " Disables automatic commenting on newline -------
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-" Wal Colors -------------------------------------
-colorscheme wal
+" Colorscheme -------------------------------------
+"colorscheme wal
+set background=dark
+set termguicolors
+colorscheme nord
 
 " Check file in shellcheck -----------------------
 map <leader>s :!clear && shellcheck %<CR>
@@ -103,7 +111,7 @@ map <C-\> <Plug>NERDCommenterToggle^j
 nmap <leader>gp <Plug>(GitGutterPreviewHunk)
 nmap <leader>ga <Plug>(GitGutterStageHunk)
 nmap <leader>gn <Plug>(GitGutterNextHunk)
-nmap <leader>gb <Plug>(GitGutterPrevHunk)
+nmap <leader>gN <Plug>(GitGutterPrevHunk)
 nmap <leader>gu <Plug>(GitGutterUndoHunk)
 
 " Paste multiple in visual mode ------------------
@@ -140,5 +148,11 @@ let NERDTreeShowHidden=1
 map <F6> :setlocal spell! spelllang=en<CR>
 
 " CtrlP ------------------------------------------
-
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 nmap <leader><leader> :CtrlP .<CR>
+
+" YouCompleteMe ---------------------------------- 
+map <leader>b :YcmCompleter GoToDefinition<CR>
+map <leader>B :YcmCompleter GoToImplementation<CR>
+map <leader>/ :YcmCompleter GoToReferences<CR>
+map <leader>L :YcmCompleter Format<CR>
