@@ -292,9 +292,9 @@ bindsym $mod+Shift+minus move scratchpad
 # Show the next scratchpad window or hide the focused scratchpad window.
 bindsym $mod+minus scratchpad show
 
-#navigate workspaces next / previous
-bindsym $mod+Ctrl+Shift+Right workspace next
-bindsym $mod+Ctrl+Shift+Left workspace prev
+# navigate workspaces next / previous
+#bindsym $mod+Ctrl+Shift+Right workspace next
+#bindsym $mod+Ctrl+Shift+Left workspace prev
 
 #                      _  __ _                 _           _                   
 #  ___ _ __   ___  ___(_)/ _(_) ___  __      _(_)_ __   __| | _____      _____ 
@@ -306,21 +306,20 @@ bindsym $mod+Ctrl+Shift+Left workspace prev
 assign [class="(?i)caprine"] $ws9
 assign [class="(?i)discord"] $ws9
 assign [class="(?i)viber"] $ws9
-assign [class="(?i)telegram-desktop"] $ws9
 assign [class="(?i)TelegramDesktop"] $ws9
 assign [class="(?i)skype"] $ws9
-# for_window [class="(?i)spotify"] move to workspace $ws9
 
 # Open specific applications in floating mode
-for_window [title="alsamixer"] floating enable border pixel 1
+for_window [title="alsamixer"] floating enable
 for_window [title="File Transfer*"] floating enable
 for_window [class="fpakman"] floating enable
-for_window [class="(?i)gnome-calculator"] floating enable border pixel 1
-for_window [class="(?i)gnome-disks"] floating enable border pixel 1
-for_window [class="java-lang-Thread"] floating enable border pixel 1 move position center
-for_window [title="Lutris"] floating enable border pixel 1 move position center
-for_window [class="(?i)jetbrains-toolbox"] floating enable border pixel 1
-for_window [title="win0"] floating enable border pixel 1 move position center
+for_window [class="(?i)gnome-calculator"] floating enable
+for_window [class="(?i)gnome-disks"] floating enable
+for_window [class="java-lang-Thread"] floating enable move position center
+for_window [title="Lutris"] floating enable move position center
+for_window [class="(?i)spotify"] floating enable move position center
+for_window [class="(?i)jetbrains-toolbox"] floating enable
+for_window [title="win0"] floating enable move position center
 for_window [class="(?i)GParted"] floating enable border normal
 for_window [title="i3_help"] floating enable sticky enable border normal
 for_window [class="Lightdm-settings"] floating enable
@@ -334,6 +333,7 @@ for_window [class="Oblogout"] fullscreen enable
 for_window [class="octopi"] floating enable
 for_window [title="About Pale Moon"] floating enable
 for_window [class="Pamac-manager"] floating enable
+for_window [class="Deluge"] floating enable move position center
 for_window [class="Pavucontrol"] floating enable sticky enable resize set 640 480
 for_window [class="qt5ct"] floating enable sticky enable border normal
 for_window [class="Qtconfig-qt4"] floating enable sticky enable border normal
@@ -343,7 +343,7 @@ for_window [class="Timeset-gui"] floating enable border normal
 for_window [class="(?i)virtualbox"] floating enable border normal
 for_window [class="(?i)anydesk.bin"] floating enable border normal
 for_window [class="Xfburn"] floating enable
-for_window [class="VirtualBox Machine"] floating disable border pixel 1
+for_window [class="VirtualBox Machine"] floating disable
 for_window [class="VirtualBox Manager"] floating disable
 for_window [class="Baobab"] floating enable resize set 1024 720 move position center
 for_window [title=".*Emulator.*"] floating enable
