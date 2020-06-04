@@ -112,6 +112,8 @@ nmap <leader>gp :diffget //2<CR>
 nmap <leader>gs :G<CR>" Paste multiple in visual mode ------------------
 xnoremap p pgvy
 
+nnoremap <leader>t :silent !env $TERMINAL  &<CR>
+
 " Correct indentation JSON files
 nmap :json<CR> :%!python -m json.tool<CR>
 
@@ -148,6 +150,11 @@ map <F6> :setlocal spell! spelllang=en<CR>
 " CtrlP ------------------------------------------
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 nmap <leader><leader> :CtrlP .<CR>
+
+" compiler
+map <leader>c :w! \| !npile <c-r>%<CR>
+map <leader>m :w! \| silent !make<CR> 
+
 
 " Coc --------------------------------------------
 
