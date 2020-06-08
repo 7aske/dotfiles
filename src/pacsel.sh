@@ -3,7 +3,7 @@
 prog="$(basename $0)"
 
 function usage(){
-	echo "usage: $prog [query]"
+	echo "usage: $prog [query]" 1>&2
 	exit 1
 }
 
@@ -15,3 +15,7 @@ else
 	usage
 fi
 
+
+if [ -n "$package" ]; then
+	yes "" | yay -S "$package"
+fi
