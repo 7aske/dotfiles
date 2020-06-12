@@ -109,19 +109,16 @@ map <C-\> <Plug>NERDCommenterToggle^j
 " Sweet Sweet FuGITive
 nmap <leader>gq :diffget //3<CR>
 nmap <leader>gp :diffget //2<CR>
-nmap <leader>gs :G<CR>" Paste multiple in visual mode ------------------
-xnoremap p pgvy
+nmap <leader>gs :G<CR>
 
 nnoremap <leader>t :silent !env $TERMINAL  &<CR>
 
 " Correct indentation JSON files
 nmap :json<CR> :%!python -m json.tool<CR>
 
-" Abbreviations ----------------------------------
-nmap <C-_> :set hlsearch!<CR>
-
-" Vertical resize abbreviation
+" Vertical/Horizontal resize abbreviation
 ca vr vertical resize
+ca hr vertical resize
 
 " Tabs -------------------------------------------
 nmap <silent> <C-T>1 :tabn 1<CR>
@@ -137,7 +134,6 @@ nmap <silent> <C-T>c :tabnew<CR>
 
 " NERDTree --------------------------------------- 
 autocmd StdinReadPre * let s:std_in=1
-"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 map <A-1> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 
@@ -201,7 +197,7 @@ nmap <leader>gr <Plug>(coc-references)
 nmap <leader>gR <Plug>(coc-rename)
 nmap <leader>g[ <Plug>(coc-diagnostic-prev)
 nmap <leader>g] <Plug>(coc-diagnostic-next)
-nnoremap <leader>cr :CocRestartmap <leader>jd <Plug>(coc-definition)
+nnoremap <leader>cr :CocRestartmap
 
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
@@ -227,5 +223,4 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
 
