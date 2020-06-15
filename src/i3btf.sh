@@ -11,7 +11,7 @@ is_visible() {
 
     for vis in $visible; do
         for win in $(xdotool search --pid "$1"); do
-            [ "$vis" = "$win" ] && echo "$vis" && return 0
+            [ "$vis" = "$win" ] && return 0
         done
     done
     return 1
@@ -25,14 +25,14 @@ processes="$(pgrep "$program")"
 
 if [ -n "$processes" ]; then
     for proc in $processes; do
-        is_visible "$proc" && i3-msg "[class=(?i)$program] move container to scratchpad" && exit 0
+        is_visible "$proc" && i3-msg "[class=(?i)$program] move container to scratchpad" 2>&1 >/dev/null && exit 0 
     done
 
-    i3-msg "[class=(?i)$program] move container to workspace current floating enable focus"
+    i3-msg "[class=(?i)$program] move container to workspace current floating enable focus" 2>&1 >/dev/null
 else
     (
-        i3-msg "exec --no-startup-id $1"
+        i3-msg "exec --no-startup-id $1"  2>&1 >/dev/null
         sleep 1
-        i3-msg "[class=(?i)$program] floating enable focus"
+        i3-msg "[class=(?i)$program] floating enable focus"  2>&1 >/dev/null
     ) &
 fi

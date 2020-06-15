@@ -9,7 +9,7 @@ elif [ -z "$PLAYER" ]; then
     PLAYER="spotify"
 fi
 
-PLAYER_ARG="--player=$PLAYER"
+PLAYER_ARG="--player=$PLAYER,%any,chromium"
 PLAYER_STATUS="$(playerctl "$PLAYER_ARG" status 2>&1)"
 
 if [ "$PLAYER_STATUS" = "No players found" ] && [ -n "$BLOCK_BUTTON" ]; then
