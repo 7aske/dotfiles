@@ -1,3 +1,9 @@
 .config/conky/.conkycolors
 .config/nvim/.netrwhist
 .config/zsh/.zcompdump
+
+.config/mpd/database
+.config/mpd/playlists
+.config/mpd/pid
+.config/mpd/state
+.config/mpd/sticker.sql

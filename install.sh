@@ -56,6 +56,9 @@ mklink kitty
 
 # Microsoft.WindowsTerminal
 
+# mpd
+mklink mpd
+
 # neofetch
 mklink neofetch
 

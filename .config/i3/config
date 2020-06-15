@@ -110,6 +110,7 @@ bindsym $mod+Shift+Print --release exec --no-startup-id scrot -s -f -l style=das
 bindsym $mod+Shift+x --release exec --no-startup-id xkill
 # 7aske-scripts
 bindsym $mod+m exec --no-startup-id i3btf $player
+bindsym $mod+Shift+m exec --no-startup-id i3btf cantata
 # 7aske-scripts
 bindsym $mod+o exec --no-startup-id TYPE=term ROFI=1 codeopen
 # 7aske-scripts
