@@ -155,7 +155,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 
- alternatively, you can use the cursor keys:
+# alternatively, you can use the cursor keys:
 bindsym $mod+Ctrl+Shift+Left mark swap; focus left; swap container with mark swap; unmark swap; focus left
 bindsym $mod+Ctrl+Shift+Down mark swap; focus down; swap container with mark swap; unmark swap; focus down
 bindsym $mod+Ctrl+Shift+Up mark swap; focus up; swap container with mark swap; unmark swap; focus up
@@ -314,6 +314,7 @@ assign [class="(?i)skype"] $ws9
 for_window [title="alsamixer"] floating enable
 for_window [title="File Transfer*"] floating enable
 for_window [class="fpakman"] floating enable
+for_window [class="(?i)sxiv"] floating enable
 for_window [class="(?i)gnome-calculator"] floating enable
 for_window [class="(?i)gnome-disks"] floating enable
 for_window [class="java-lang-Thread"] floating enable move position center
