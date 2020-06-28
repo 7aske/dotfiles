@@ -547,12 +547,10 @@ bindsym $mod+Shift+Ctrl+b bar mode toggle
 # i3-gaps        |___/      |_|
 
 # Set inner/outer gaps
-set $gaps_inner 15
-set $gaps_outer 10
+set $gaps_inner 20
+set $gaps_outer 0
 gaps inner $gaps_inner
 gaps outer $gaps_outer 
-bindsym $mod+g gaps inner all set $gaps_inner; gaps outer all set $gaps_outer; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "gaps" "gaps reset to default"
-bindsym $mod+Ctrl+g gaps inner all set 0; gaps outer all set 0; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "gaps" "disabled gaps"
 
 # Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
 # gaps inner|outer current|all set|plus|minus <px>
@@ -565,15 +563,22 @@ bindsym $mod+Ctrl+g gaps inner all set 0; gaps outer all set 0; exec --no-startu
 # Smart borders (draw borders around container only if it is not the only container on this workspace) on|no_gaps
 smart_borders no_gaps 
 
-# Press $mod+Shift+g to enter the gap mode. Choose o or i for modifying outer/inner gaps. Press one of + / - (in-/decrement for current workspace) or 0 (remove gaps for current workspace). If you also press Shift with these keys, the change will be global for all workspaces.
-set $mode_gaps Gaps: (o) outer, (i) inner
+# Press $mod+g to enter the gap mode. Choose o or i for modifying outer/inner gaps. Press one of + / - (in-/decrement for current workspace) or 0 (remove gaps for current workspace). If you also press Shift with these keys, the change will be global for all workspaces.
+bindsym $mod+Shift+g gaps inner all set $gaps_inner; gaps outer all set $gaps_outer; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "gaps" "gaps reset to default"
+set $mode_gaps Gaps: (o) outer, (i) inner, (0)px (1)0px, (2)0px, (3)0px, (4)0px
 set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
 set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
-bindsym $mod+Shift+g mode "$mode_gaps"
+bindsym $mod+g mode "$mode_gaps"
 
 mode "$mode_gaps" {
-        bindsym o      mode "$mode_gaps_outer"
-        bindsym i      mode "$mode_gaps_inner"
+        bindsym o      mode "$mode_gaps_outer", mode default
+        bindsym i      mode "$mode_gaps_inner", mode default
+		bindsym 0      gaps inner all set 0,    mode default
+		bindsym 1      gaps inner all set 10,   mode default
+		bindsym 2      gaps inner all set 20,   mode default
+		bindsym 3      gaps inner all set 30,   mode default
+		bindsym 4      gaps inner all set 40,   mode default
+
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
