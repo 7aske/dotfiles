@@ -1,5 +1,6 @@
 .config/conky/.conkycolors
 .config/nvim/.netrwhist
+.config/nvim/spell
 .config/zsh/.zcompdump
 
 .config/mpd/database

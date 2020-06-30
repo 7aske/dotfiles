@@ -142,6 +142,7 @@ map <leader>U :UndotreeToggle<CR>
 
 " Spellchecker -----------------------------------
 map <F6> :setlocal spell! spelllang=en<CR>
+map <F7> :setlocal spell! spelllang=sr@latin<CR>
 
 " CtrlP ------------------------------------------
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
