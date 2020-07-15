@@ -436,7 +436,7 @@ exec --no-startup-id xfce4-power-manager
 exec --no-startup-id pamac-tray
 exec --no-startup-id barrier
 exec --no-startup-id clipmenud
-exec --no-startup-id xautolock -time 10 -locker blurlock -corners ---- -pixels 64
+exec --no-startup-id xautolock -time 10 -locker blurlock -cornersize 64 -corners ----
 # 7aske-scripts
 exec --no-startup-id dunst_reload
 # 7aske-scripts
