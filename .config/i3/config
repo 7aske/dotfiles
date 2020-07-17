@@ -568,16 +568,24 @@ bindsym $mod+Shift+g gaps inner all set $gaps_inner; gaps outer all set $gaps_ou
 set $mode_gaps Gaps: (o) outer, (i) inner, (0)px (1)0px, (2)0px, (3)0px, (4)0px
 set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
 set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+
 bindsym $mod+g mode "$mode_gaps"
 
 mode "$mode_gaps" {
-        bindsym o      mode "$mode_gaps_outer", mode default
-        bindsym i      mode "$mode_gaps_inner", mode default
+        bindsym o      mode "$mode_gaps_outer"
+        bindsym i      mode "$mode_gaps_inner"
+
 		bindsym 0      gaps inner all set 0,    mode default
 		bindsym 1      gaps inner all set 10,   mode default
 		bindsym 2      gaps inner all set 20,   mode default
 		bindsym 3      gaps inner all set 30,   mode default
 		bindsym 4      gaps inner all set 40,   mode default
+
+		bindsym Mod1+0      gaps inner current set 0,    mode default
+		bindsym Mod1+1      gaps inner current set 10,   mode default
+		bindsym Mod1+2      gaps inner current set 20,   mode default
+		bindsym Mod1+3      gaps inner current set 30,   mode default
+		bindsym Mod1+4      gaps inner current set 40,   mode default
 
         bindsym Return mode "default"
         bindsym Escape mode "default"
@@ -595,6 +603,7 @@ mode "$mode_gaps_inner" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
+
 mode "$mode_gaps_outer" {
         bindsym plus  gaps outer current plus 5
         bindsym minus gaps outer current minus 5
