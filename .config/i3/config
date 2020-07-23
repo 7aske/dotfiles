@@ -309,6 +309,7 @@ assign [class="(?i)discord"] $ws9
 assign [class="(?i)viber"] $ws9
 assign [class="(?i)TelegramDesktop"] $ws9
 assign [class="(?i)skype"] $ws9
+assign [title="^win10"] wm
 
 # Open specific applications in floating mode
 for_window [title="alsamixer"] floating enable
@@ -343,7 +344,7 @@ for_window [class="Qtconfig-qt4"] floating enable sticky enable border normal
 for_window [class="Simple-scan"] floating enable border normal
 for_window [class="(?i)System-config-printer.py"] floating enable border normal
 for_window [class="Timeset-gui"] floating enable border normal
-for_window [class="(?i)virtualbox"] floating enable border normal
+for_window [class="(?i)virtualbox"] floating enable border none
 for_window [class="(?i)anydesk.bin"] floating enable border normal
 for_window [class="Xfburn"] floating enable
 for_window [class="VirtualBox Machine"] floating disable
@@ -351,7 +352,7 @@ for_window [class="VirtualBox Manager"] floating disable
 for_window [class="Baobab"] floating enable resize set 1024 720 move position center
 for_window [title=".*Emulator.*"] floating enable
 for_window [title=".*World of Warcraft.*"] layout tabbed
-
+for_window [class="VirtualBox Machine"] border none
 
 #            _                                                          _     
 #  _ __ ___ (_)___  ___    ___ ___  _ __ ___  _ __ ___   __ _ _ __   __| |___ 
@@ -370,6 +371,10 @@ bindsym $mod+Shift+r restart; exec --no-startup-id notify-send --hint=int:transi
 bindsym $mod+Shift+0 exec --no-startup-id "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 bindsym $mod+F4 exec --no-startup-id i3-layout-manager
+
+# create and move windows to arbitrarily named workspaces
+bindsym $mod+Insert exec --no-startup-id dmenu -fn 'Fira Code-12' -p 'workspace: ' | xargs i3-msg workspace
+bindsym $mod+Ctrl+Insert exec --no-startup-id dmenu -fn 'Fira Code-12' -p 'workspace: ' | xargs i3-msg move to workspace
 
 # mode to invoke my startup management script
 bindsym $mod+F3 mode "$mode_startup"
@@ -551,6 +556,10 @@ set $gaps_inner 20
 set $gaps_outer 0
 gaps inner $gaps_inner
 gaps outer $gaps_outer 
+workspace win gaps inner 0
+workspace win gaps outer 0
+workspace wm gaps inner 0
+workspace wm gaps outer 0
 
 # Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
 # gaps inner|outer current|all set|plus|minus <px>
