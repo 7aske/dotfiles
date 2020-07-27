@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
-# take screenshot
-import -window root /tmp/screenshot.png
+blurred="$HOME/.config/wallpaper-blur.png" 
+wall="$HOME/.config/wallpaper.png" 
 
-# blur it
-convert /tmp/screenshot.png -blur 0x5 /tmp/screenshotblur.png
-rm /tmp/screenshot.png
+if [ ! -f "$blurred" ]; then
+	convert "$wall" -blur 0x5 "$blurred"
+fi
 
 # lock the screen
-betterlockscreen -u /tmp/screenshotblur.png -l dimblur -t locked "$@" &
-sleep 10
+betterlockscreen -u "$blurred" -r "1920x1080" -l dim -t locked "$@" & 
 
 exit 0
