@@ -437,21 +437,21 @@ mode "resize" {
 #  \__,_|\__,_|\__\___/|___/\__\__,_|_|   \__|
 # autostart                                            
 
-exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec --no-startup-id nm-applet
-exec --no-startup-id xfce4-power-manager
-exec --no-startup-id pamac-tray
-exec --no-startup-id barrier
-exec --no-startup-id clipmenud
-exec --no-startup-id xautolock -time 10 -locker blurlock -cornersize 64 -corners ----
+exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec_always --no-startup-id sleep 5; nm-applet
+exec_always --no-startup-id sleep 5; xfce4-power-manager
+exec_always --no-startup-id sleep 5; pamac-tray
+exec_always --no-startup-id pgrep barrier || barrier
+exec_always --no-startup-id clipmenud
+exec_always --no-startup-id xautolock -time 10 -locker blurlock -cornersize 64 -corners ----
 # 7aske-scripts
-exec --no-startup-id dunst_reload
+exec_always --no-startup-id dunst_reload
 # 7aske-scripts
 exec_always --no-startup-id fix_xcursor
 
 # pulseaudio
-exec --no-startup-id sleep 3 && pulseaudio -D &
-exec --no-startup-id pasystray &
+exec_always --no-startup-id pgrep pulseaudio || pulseaudio -D
+exec_always --no-startup-id sleep 5; pasystray
 
 # touchpad and keyboard config
 # 7aske-scripts
@@ -465,6 +465,8 @@ exec_always --no-startup-id python3 ~/.local/bin/alternating_layouts
 # compton/picom
 bindsym $mod+Shift+F5 exec --no-startup-id killall picom
 bindsym $mod+F5 exec --no-startup-id picom -b --experimental-backends --config ~/.config/compton/compton.conf
+exec_always --no-startup-id picom -b --experimental-backends --config ~/.config/compton/compton.conf
+
 
 # set background and theme using wal
 exec_always --no-startup-id wal --backend wal -i ~/.config/wallpaper
