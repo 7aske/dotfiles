@@ -1,5 +1,6 @@
 {
 	"prettier.useTabs": true,
-	"prettier.trailingComma": true,
-	"prettier.tabWidth": 4
+	"prettier.trailingComma": "all",
+	"prettier.tabWidth": 4,
+	"java.jdt.ls.vmargs": "-javaagent:/home/nik/.m2/repository/org/projectlombok/lombok/1.18.12/lombok-1.18.12.jar -noverify -Xmx1G -XX:+UseG1GC -XX:+UseStringDeduplication"
 }

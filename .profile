@@ -12,7 +12,7 @@ export TERMINAL="st"
 
 # Path setup
 export PATH="$HOME/.local/bin":"$PATH"
-export PATH="$PATH":"$HOME/local/share/cargo/bin"
+export PATH="$PATH":"$HOME/.local/share/cargo/bin"
 export PATH="$PATH":"$HOME/Android/Sdk/emulator"
 
 # Thanks to Luke Smith https://github.com/LukeSmithxyz/voidrice

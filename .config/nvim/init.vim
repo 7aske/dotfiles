@@ -12,55 +12,67 @@ if ! filereadable(expand('~/.config/nvim/autoload/plug.vim'))
     autocmd VimEnter * PlugInstall
 endif
 
+
 call plug#begin('~/.config/nvim/plugged')
-    Plug 'tpope/vim-surround'
-    Plug 'PotatoesMaster/i3-vim-syntax'
-    Plug 'vim-airline/vim-airline'
-    Plug 'tpope/vim-fugitive'
-    Plug 'airblade/vim-gitgutter'
-    Plug 'preservim/nerdcommenter'
-    Plug 'dylanaraps/wal.vim'
-    Plug 'preservim/nerdtree'
-    "Plug 'git@github.com:Valloric/YouCompleteMe.git'
+	Plug 'arcticicestudio/nord-vim'
+	Plug 'jiangmiao/auto-pairs'
+	Plug 'junegunn/fzf.vim'
+	Plug 'junegunn/goyo.vim'
+	Plug 'machakann/vim-highlightedyank'
+	Plug 'mbbill/undotree'
 	Plug 'neoclide/coc.nvim', {'branch': 'release'}
+	Plug 'tasn/vim-tsx'
+    Plug 'PotatoesMaster/i3-vim-syntax'
+    Plug 'airblade/vim-gitgutter'
+    Plug 'dylanaraps/wal.vim'
+    Plug 'kien/ctrlp.vim'
     Plug 'leafgarland/typescript-vim'
     Plug 'lyuts/vim-rtags'
-    Plug 'kien/ctrlp.vim'
-    Plug 'tasn/vim-tsx'
-	Plug 'arcticicestudio/nord-vim'
-	Plug 'mbbill/undotree'
+    Plug 'preservim/nerdcommenter'
+	Plug 'preservim/nerdtree' |
+				\ Plug 'Xuyuanp/nerdtree-git-plugin'
+    Plug 'tpope/vim-fugitive'
+    Plug 'tpope/vim-surround'
+    Plug 'vim-airline/vim-airline'
 call plug#end()
 
+
 " GENERAL ----------------------------------------
-let mapleader = " "
-syntax on
-set nu rnu
-set updatetime=100
+"set clipboard+=unnamedplus
 filetype indent plugin on
-set number
+let mapleader=" "
+set backspace=indent,eol,start
+set colorcolumn=80
 set cursorline
 set encoding=utf-8
-set backspace=indent,eol,start
-set laststatus=2
-set showcmd
-set t_Co=256
-set mouse=a
-set noshowmode
-set smartindent
-set noexpandtab tabstop=4 shiftwidth=4
 set hlsearch 
-set wildmenu
-set smartcase
+set laststatus=2
+set mouse=a
+set nobackup
+set noexpandtab tabstop=4 shiftwidth=4
+set noshowmode
+set noswapfile
+set nowrap
+set nu rnu
+set number
 set path+=**
-set clipboard+=unnamedplus
+set showcmd
+set smartcase
+set smartindent
+set t_Co=256
+set textwidth=80
+set updatetime=50
+set wildmenu
+syntax on
 
-" " Copy to clipboard
+
+" Copy to clipboard
 vnoremap  <leader>y   "+y
 nnoremap  <leader>Y   "+yg_
 nnoremap  <leader>y   "+y
 nnoremap  <leader>yy  "+yy
 
-" " Paste from clipboard
+" Paste from clipboard
 nnoremap <leader>p    "+p
 nnoremap <leader>P    "+P
 vnoremap <leader>p    "+p
@@ -86,22 +98,8 @@ map <leader>s :!clear && shellcheck %<CR>
 
 " BINDINGS ---------------------------------------
 
-" ESC key to jk or kj or jj ----------------------
-inoremap kj <Esc>
-inoremap jk <Esc>
-inoremap jj <Esc>
-
-" No highlight search ----------------------------
-nnoremap :/<CR> :nohlsearch<CR>
-
 " Replace word under cursor ----------------------
 nnoremap <leader>r :%s/\<<C-r><C-w>\>/
-
-" Switch windows with Alt + Arrows ---------------
-nmap <silent> <A-Left>  <C-W>h
-nmap <silent> <A-Right> <C-W>l
-nmap <silent> <A-Up>    <C-W>k
-nmap <silent> <A-Down>  <C-W>j
 
 " Toggle comments --------------------------------
 map <C-\> <Plug>NERDCommenterToggle^j
@@ -111,7 +109,8 @@ nmap <leader>gq :diffget //3<CR>
 nmap <leader>gp :diffget //2<CR>
 nmap <leader>gs :G<CR>
 
-nnoremap <leader>t :silent !env $TERMINAL  &<CR>
+" open terminal in current directory
+nnoremap <leader>t :silent !env $TERMINAL &<CR>
 
 " Correct indentation JSON files
 nmap :json<CR> :%!python -m json.tool<CR>
@@ -120,22 +119,50 @@ nmap :json<CR> :%!python -m json.tool<CR>
 ca vr vertical resize
 ca hr vertical resize
 
+map <leader>gn :GitGutterNextHunk<CR>
+map <leader>gN :GitGutterPrevHunk<CR>
+map <leader>gu :GitGutterUndoHunk<CR>
+map <leader>gh :GitGutterPreviewHunk<CR>
+
+" Coc Bindings -----------------------------------
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+nmap <leader>gd <Plug>(coc-definition)
+nmap <leader>gt <Plug>(coc-type-definition)
+nmap <leader>gi <Plug>(coc-implementation)
+nmap <leader>gr <Plug>(coc-references)
+nmap <leader>g[ <Plug>(coc-diagnostic-prev)
+nmap <leader>g] <Plug>(coc-diagnostic-next)
+nnoremap <leader>cr :CocRestartmap
+nmap <leader>rn <Plug>(coc-rename)
+xmap <leader><C-l>  <Plug>(coc-format-selected)
+nmap <leader><C-l>  <Plug>(coc-format-selected)
+nmap <leader><C-L>  <Plug>(coc-format)
+nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <leader>ac  <Plug>(coc-codeaction)
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
 " Tabs -------------------------------------------
-nmap <silent> <C-T>1 :tabn 1<CR>
-nmap <silent> <C-T>2 :tabn 2<CR>
-nmap <silent> <C-T>3 :tabn 3<CR>
-nmap <silent> <C-T>4 :tabn 4<CR>
-nmap <silent> <C-T>5 :tabn 5<CR>
-nmap <silent> <C-T>6 :tabn 6<CR>
-nmap <silent> <C-T>7 :tabn 7<CR>
-nmap <silent> <C-T>8 :tabn 8<CR>
-nmap <silent> <C-T>9 :tabn 9<CR>
-nmap <silent> <C-T>c :tabnew<CR>
+nmap <silent> <C-T>1       :tabn 1<CR>
+nmap <silent> <C-T>2       :tabn 2<CR>
+nmap <silent> <C-T>3       :tabn 3<CR>
+nmap <silent> <C-T>4       :tabn 4<CR>
+nmap <silent> <C-T>5       :tabn 5<CR>
+nmap <silent> <C-T>6       :tabn 6<CR>
+nmap <silent> <C-T>7       :tabn 7<CR>
+nmap <silent> <C-T>8       :tabn 8<CR>
+nmap <silent> <C-T>9       :tabn 9<CR>
+nmap <silent> <C-T>c       :tabnew<CR>
+nmap <silent> <C-T><Left>  :tabnext<CR>
+nmap <silent> <C-T><Right> :tabprev<CR>
 
 " NERDTree --------------------------------------- 
 autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 map <A-1> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Undotree
 map <leader>U :UndotreeToggle<CR>
@@ -144,9 +171,10 @@ map <leader>U :UndotreeToggle<CR>
 map <F6> :setlocal spell! spelllang=en<CR>
 map <F7> :setlocal spell! spelllang=sr@latin<CR>
 
-" CtrlP ------------------------------------------
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
-nmap <leader><leader> :CtrlP .<CR>
+" fzf --------------------------------------------
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
+let $FZF_DEFAULT_OPTS='--reverse'
+map <leader><leader> :FZF<CR>
 
 " compiler
 map <leader>c :w! \| !npile <c-r>%<CR>
@@ -189,29 +217,6 @@ function! s:show_documentation()
   endif
 endfunction
 
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
-nmap <leader>gd <Plug>(coc-definition)
-nmap <leader>gt <Plug>(coc-type-definition)
-nmap <leader>gi <Plug>(coc-implementation)
-nmap <leader>gr <Plug>(coc-references)
-nmap <leader>gR <Plug>(coc-rename)
-nmap <leader>g[ <Plug>(coc-diagnostic-prev)
-nmap <leader>g] <Plug>(coc-diagnostic-next)
-nnoremap <leader>cr :CocRestartmap
-
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
-
-" Formatting selected code.
-xmap <leader><C-l>  <Plug>(coc-format-selected)
-nmap <leader><C-l>  <Plug>(coc-format-selected)
-nmap <leader><C-L>  <Plug>(coc-format)
-
-" Apply AutoFix to problem on the current line.
-nmap <leader>qf  <Plug>(coc-fix-current)
-" Remap keys for applying codeAction to the current buffer.
-nmap <leader>ac  <Plug>(coc-codeaction)
 
 " Add `:Format` command to format current buffer.
 command! -nargs=0 Format :call CocAction('format')

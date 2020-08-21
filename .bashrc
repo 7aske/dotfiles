@@ -4,6 +4,7 @@ export CODE="$HOME/.local/src"
 export HISTSIZE=
 export HISTFILESIZE=
 export LESSHISTSIZE=0
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
 
 
 function bashrc() {
@@ -52,6 +53,7 @@ alias autoremove='sudo pacman -R $(pacman -Qdtq)'
 alias pacman='sudo pacman'
 alias v='nvim'
 alias n='nano'
+alias o='xdg-open'
 alias ci='code-insiders'
 function c { vscodium $@ || codium $@ || /usr/bin/code $@; }
 function chrome { google-chrome-stable $@ || chromium $@; }
