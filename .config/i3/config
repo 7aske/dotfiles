@@ -450,8 +450,8 @@ exec_always --no-startup-id dunst_reload
 exec_always --no-startup-id fix_xcursor
 
 # pulseaudio
-exec_always --no-startup-id pgrep pulseaudio || pulseaudio -D
-exec_always --no-startup-id sleep 5; pasystray
+exec_always --no-startup-id pgrep pulseaudio || sleep 1; pulseaudio -D
+exec_always --no-startup-id sleep 1; pasystray
 
 # touchpad and keyboard config
 # 7aske-scripts
