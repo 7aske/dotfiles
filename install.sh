@@ -89,6 +89,9 @@ mklink xfce4
 # compton
 mklink compton
 
+# ranger
+mklink ranger
+
 # zsh
 mklink zsh
 

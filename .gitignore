@@ -1,6 +1,10 @@
+__pycache__
+
 .config/conky/.conkycolors
+
 .config/nvim/.netrwhist
 .config/nvim/spell
+
 .config/zsh/.zcompdump
 
 .config/mpd/database
@@ -8,3 +12,6 @@
 .config/mpd/pid
 .config/mpd/state
 .config/mpd/sticker.sql
+
+.config/ranger/plugins/*
+
