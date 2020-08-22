@@ -100,6 +100,7 @@ map <leader>s :!clear && shellcheck %<CR>
 
 " Replace word under cursor ----------------------
 nnoremap <leader>r :%s/\<<C-r><C-w>\>/
+vnoremap <leader>r "ry :%s/<C-R>=substitute(escape(@r, '/\'), "\n", '\\n', 'ge')<CR>/
 
 " Toggle comments --------------------------------
 map <C-\> <Plug>NERDCommenterToggle^j
