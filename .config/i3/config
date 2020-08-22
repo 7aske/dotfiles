@@ -438,9 +438,10 @@ mode "resize" {
 # autostart                                            
 
 exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec_always --no-startup-id sleep 5; nm-applet
-exec_always --no-startup-id sleep 5; xfce4-power-manager
-exec_always --no-startup-id sleep 5; pamac-tray
+exec_always --no-startup-id nm-applet
+exec_always --no-startup-id xfce4-power-manager
+exec_always --no-startup-id pamac-tray
+exec_always --no-startup-id pgrep udiskie || (sleep 1 && udiskie -s -f $file -a --appindicator)
 exec_always --no-startup-id pgrep barrier || barrier
 exec_always --no-startup-id clipmenud
 exec_always --no-startup-id xautolock -time 10 -locker blurlock -cornersize 64 -corners ----
@@ -450,8 +451,8 @@ exec_always --no-startup-id dunst_reload
 exec_always --no-startup-id fix_xcursor
 
 # pulseaudio
-exec_always --no-startup-id pgrep pulseaudio || sleep 1; pulseaudio -D
-exec_always --no-startup-id sleep 1; pasystray
+exec_always --no-startup-id pgrep pulseaudio || pulseaudio -D
+exec_always --no-startup-id pgrep pasystray  || pasystray
 
 # touchpad and keyboard config
 # 7aske-scripts
