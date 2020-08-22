@@ -80,8 +80,9 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle && notif
 bindsym $mod+Return exec --no-startup-id $terminal
 bindsym $mod+BackSpace exec --no-startup-id i3btf $terminal2 --class floating
 bindsym $mod+Shift+Return exec --no-startup-id $terminal2
-bindsym $mod+a exec --no-startup-id rofi -show run
-bindsym $mod+d exec --no-startup-id dmenu_run -fn 'Fira Code-12'
+#bindsym $mod+a exec --no-startup-id rofi -show run
+bindsym $mod+a exec --no-startup-id TERMINAL_CMD="st -e" dmenu_recency -f -i -l 10 -p "run: " -fn 'Fira Code-11'
+bindsym $mod+d exec --no-startup-id dmenu_run -fn 'Fira Code-11'
 bindsym $mod+grave exec --no-startup-id $terminal -e htop
 
 # edit config files
@@ -441,7 +442,7 @@ exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-ag
 exec_always --no-startup-id nm-applet
 exec_always --no-startup-id xfce4-power-manager
 exec_always --no-startup-id pamac-tray
-exec_always --no-startup-id pgrep udiskie || (sleep 1 && udiskie -s -f $file -a --appindicator)
+exec_always --no-startup-id pgrep udiskie || (sleep 1; udiskie -s -f $file -a --appindicator)
 exec_always --no-startup-id pgrep barrier || barrier
 exec_always --no-startup-id clipmenud
 exec_always --no-startup-id xautolock -time 10 -locker blurlock -cornersize 64 -corners ----
@@ -451,7 +452,7 @@ exec_always --no-startup-id dunst_reload
 exec_always --no-startup-id fix_xcursor
 
 # pulseaudio
-exec_always --no-startup-id pgrep pulseaudio || pulseaudio -D
+exec_always --no-startup-id pgrep pulseaudio || (sleep 3; pulseaudio -D)
 exec_always --no-startup-id pgrep pasystray  || pasystray
 
 # touchpad and keyboard config
