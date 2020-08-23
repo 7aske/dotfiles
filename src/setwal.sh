@@ -9,6 +9,7 @@ CMD="$(basename "$0")"
 
 invalid_opt() {
     printf "%s: invalid argument '%s'\nTry '%s -h' for more information.\n" "$CMD" "$1" "$CMD"
+	exit 1
 }
 
 setwal_usage() {
@@ -37,6 +38,17 @@ list_wallpapers() {
 }
 
 set_wallpaper() {
+
+    if echo "$1" | grep '^/' >/dev/null; then
+        PICTURE="$1"
+    else
+        PICTURE="$(pwd)/$1"
+    fi
+    [ ! -L "$PICTURE" ] && ln -sf "$PICTURE" "$DEFAULT_WALLPAPER"
+	feh --bg-fill "$PICTURE"
+}
+
+set_wallpaper_wal() {
     if echo "$1" | grep '^/' >/dev/null; then
         PICTURE="$1"
     else
@@ -57,6 +69,7 @@ case "$1" in
 "-r") reload_wallpaper ;;
 "-R") random_wallpaper ;;
 "-l") list_wallpapers ;;
-"-w") set_wallpaper "$2" ;;
-*) invalid_opt "$1" ;;
-esac && exit 1 || exit 0
+"-w") set_wallpaper_wal "$2" ;;
+*) set_wallpaper "$1" ;;
+esac || invalid_opt "$1"
+exit 0
