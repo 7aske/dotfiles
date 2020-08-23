@@ -95,6 +95,9 @@ mklink ranger
 # zsh
 mklink zsh
 
+# zathura
+mklink zathura
+
 # .profile
 mksource .profile
 
