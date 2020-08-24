@@ -11,7 +11,7 @@
     <property name="logind-handle-lid-switch" type="bool" value="true"/>
     <property name="lid-action-on-ac" type="uint" value="1"/>
     <property name="general-notification" type="bool" value="true"/>
-    <property name="inactivity-on-battery" type="uint" value="350"/>
+    <property name="inactivity-on-battery" type="uint" value="15"/>
     <property name="inactivity-on-ac" type="uint" value="30"/>
     <property name="critical-power-level" type="uint" value="5"/>
     <property name="critical-power-action" type="uint" value="1"/>
