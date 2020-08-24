@@ -337,6 +337,7 @@ for_window [class="Oblogout"] fullscreen enable
 for_window [class="octopi"] floating enable
 for_window [class="Pamac-manager"] floating enable
 for_window [class="Deluge"] floating enable move position center
+for_window [class="(?i)vncviewer"]  move position center
 for_window [class="Pavucontrol"] floating enable sticky enable resize set 640 480
 for_window [class="qt5ct"] floating enable sticky enable border normal
 for_window [class="Qtconfig-qt4"] floating enable sticky enable border normal
