@@ -84,6 +84,9 @@ set wildmode=longest,list,full
 " Disables automatic commenting on newline -------
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
+" trim whitespace on save
+autocmd BufWritePre * %s/\s\+$//e
+
 " Colorscheme -------------------------------------
 "colorscheme wal
 set background=dark
