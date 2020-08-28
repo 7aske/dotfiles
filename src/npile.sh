@@ -5,8 +5,11 @@ dir=$(dirname "$file")
 base="${file%.*}"
 
 case "$file" in
-	*\.[rR]md) Rscript -e "rmarkdown::render('$file', quiet=TRUE)" ;;
-	*\.md) pandoc "$file" --pdf-engine=xelatex -o "$base".pdf ;;
+	*\.kemd)
+		Rscript -e "rmarkdown::render('$file', quiet=TRUE)"
+		wkhtmltopdf "$base.html" "$base.pdf"
+		rm "$base.html"
+		;;
 	*config.h) sudo make install ;;
 	*\.c) cc "$file" -o "$base" && "$base" ;;
 	*\.py) python "$file" ;;
