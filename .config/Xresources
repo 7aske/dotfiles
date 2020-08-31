@@ -12,7 +12,7 @@
 *.reverseVideo:        on
 *.selectToClipboard:   true
 
-xterm.font:	           Fira Code:pixelsize=16:antialias=true:autohint=true;
+*.font:	           Fira Code:pixelsize=16:antialias=true:autohint=true;
 *.fading:              8
 *.fadeColor:           black
 *.cursorColor:         #1ABB9B
