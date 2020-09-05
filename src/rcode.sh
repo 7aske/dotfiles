@@ -1,21 +1,20 @@
 #!/usr/bin/env bash
 
 function show_help (){
-	echo "usage "$(basename $0)" -?hpsv <repo>"
+	echo "usage "$(basename $0)" -?hpsv <-s|-d> <host> <repo>"
 	echo "    -?,h         show this message and exit"
 	echo "    -p <port>    ssh port used by rsync"
-	echo "    -s <host>    source host (default :\`hostname\`)"
-	echo "    -d <host>    destination host (default :\`hostname\`)"
+	echo "    -s <host>    source host"
+	echo "    -d <host>    destination host"
 }
 
-# A POSIX variable
+# A POSIX getopts variable
 OPTIND=1
 
-# Initialize our own variables:
 repo=""
 port=22
-dest=`hostname`
-src=`hostname`
+dest=""
+src=""
 
 while getopts "h?:p:s:d:" opt; do
     case "$opt" in
@@ -37,10 +36,10 @@ shift $((OPTIND-1))
 
 [ "${1:-}" = "--" ] && shift
 
-dest="$dest:"
-src="$src:"
+[ -n "$dest" ] && dest="$dest:"
+[ -n "$src" ] && src="$src:"
 
-if [ "$dest" != "$src" ]; then
+if [ "$dest" != "$src" ] && [ -n "$1" ]; then
 	rsync --progress -have "ssh -p $port" "$src$CODE/$1/" "$dest$CODE/$1/"
 else
 	show_help
