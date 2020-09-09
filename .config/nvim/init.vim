@@ -1,6 +1,6 @@
-"            _           
-" _ ____   _(_)_ __ ___  
-" | '_ \ \ / / | '_ ` _ \ 
+"            _
+" _ ____   _(_)_ __ ___
+" | '_ \ \ / / | '_ ` _ \
 " | | | \ V /| | | | | | |
 " |_| |_|\_/ |_|_| |_| |_|
 
@@ -15,6 +15,8 @@ endif
 
 call plug#begin('~/.config/nvim/plugged')
 	Plug 'arcticicestudio/nord-vim'
+	Plug 'morhetz/gruvbox'
+	Plug 'joshdick/onedark.vim'
 	Plug 'jiangmiao/auto-pairs'
 	Plug 'junegunn/fzf.vim'
 	Plug 'junegunn/goyo.vim'
@@ -33,7 +35,8 @@ call plug#begin('~/.config/nvim/plugged')
 				\ Plug 'Xuyuanp/nerdtree-git-plugin'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-surround'
-    Plug 'vim-airline/vim-airline'
+	"Plug 'itchyny/lightline.vim'
+	Plug 'vim-airline/vim-airline'
 call plug#end()
 
 
@@ -42,10 +45,10 @@ call plug#end()
 filetype indent plugin on
 let mapleader=" "
 set backspace=indent,eol,start
-set colorcolumn=80
+"set colorcolumn=80
 set cursorline
 set encoding=utf-8
-set hlsearch 
+set hlsearch
 set laststatus=2
 set mouse=a
 set nobackup
@@ -63,6 +66,7 @@ set t_Co=256
 set textwidth=80
 set updatetime=50
 set wildmenu
+set signcolumn=yes:2
 syntax on
 
 
@@ -89,15 +93,19 @@ autocmd BufWritePre * %s/\s\+$//e
 
 " Colorscheme -------------------------------------
 "colorscheme wal
+colorscheme nord
 set background=dark
 set termguicolors
-colorscheme nord
-
-" Check file in shellcheck -----------------------
-map <leader>s :!clear && shellcheck %<CR>
+" darker background
+highlight Normal     cterm=NONE ctermbg=17 gui=NONE guibg=#292f3a
+highlight LineNr     cterm=NONE ctermbg=17 gui=NONE guibg=#292f3a
+highlight SignColumn cterm=NONE ctermbg=17 gui=NONE guibg=#292f3a
 
 " STATUS BAR -------------------------------------
-" Handled by airline plugin
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamemod = ':t'        " disable file paths in tabline
+let g:airline#extensions#tabline#show_close_button = 0  " remove 'X' at the end of the tabline
 
 " BINDINGS ---------------------------------------
 
@@ -121,31 +129,43 @@ nmap :json<CR> :%!python -m json.tool<CR>
 
 " Vertical/Horizontal resize abbreviation
 ca vr vertical resize
-ca hr vertical resize
+ca hr resize
 
-map <leader>gn :GitGutterNextHunk<CR>
-map <leader>gN :GitGutterPrevHunk<CR>
+map <leader>g{ :GitGutterNextHunk<CR>
+map <leader>g} :GitGutterPrevHunk<CR>
 map <leader>gu :GitGutterUndoHunk<CR>
 map <leader>gh :GitGutterPreviewHunk<CR>
 
 " Coc Bindings -----------------------------------
 " Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
-nmap <leader>gd <Plug>(coc-definition)
-nmap <leader>gt <Plug>(coc-type-definition)
-nmap <leader>gi <Plug>(coc-implementation)
-nmap <leader>gr <Plug>(coc-references)
-nmap <leader>g[ <Plug>(coc-diagnostic-prev)
-nmap <leader>g] <Plug>(coc-diagnostic-next)
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
 nnoremap <leader>cr :CocRestartmap
-nmap <leader>rn <Plug>(coc-rename)
+inoremap <silent><expr> <c-space> coc#refresh()
+nmap <leader>gd     <Plug>(coc-definition)
+nmap <leader>gD     <Plug>(coc-references)
+nmap <leader>gi     <Plug>(coc-implementation)
+nmap <leader>gt     <Plug>(coc-type-definition)
+nmap <leader>g[     <Plug>(coc-diagnostic-prev)
+nmap <leader>g]     <Plug>(coc-diagnostic-next)
+map <leader>rn     <Plug>(coc-rename)
 xmap <leader><C-l>  <Plug>(coc-format-selected)
+vmap <leader><C-l>  <Plug>(coc-format-selected)
 nmap <leader><C-l>  <Plug>(coc-format-selected)
-nmap <leader><C-L>  <Plug>(coc-format)
-nmap <leader>qf  <Plug>(coc-fix-current)
-nmap <leader>ac  <Plug>(coc-codeaction)
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <C-A-l>        <Plug>(coc-format)
+nmap <leader>qf     <Plug>(coc-fix-current)
+nmap <leader>ac     <Plug>(coc-codeaction)
+xmap <leader>a      <Plug>(coc-codeaction-selected)
+nmap <leader>a      <Plug>(coc-codeaction-selected)
 
 " Tabs -------------------------------------------
 nmap <silent> <C-T>1       :tabn 1<CR>
@@ -158,10 +178,17 @@ nmap <silent> <C-T>7       :tabn 7<CR>
 nmap <silent> <C-T>8       :tabn 8<CR>
 nmap <silent> <C-T>9       :tabn 9<CR>
 nmap <silent> <C-T>c       :tabnew<CR>
-nmap <silent> <C-T><Left>  :tabnext<CR>
+nmap <silent> <C-W>t       :tabnew<CR>
+nmap <silent> <C-T>q       :tabclose<CR>
+nmap <silent> <C-W>w       :Windows<CR>
 nmap <silent> <C-T><Right> :tabprev<CR>
+nmap <silent> <C-T><Left>  :tabnext<CR>
+nmap <silent> <A-Right>    :bnext<CR>
+nmap <silent> <A-Left>     :bprevious<CR>
+" <C-W>T moves window to a new tab
 
-" NERDTree --------------------------------------- 
+
+" NERDTree ---------------------------------------
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 map <A-1> :NERDTreeToggle<CR>
@@ -178,11 +205,14 @@ map <F7> :setlocal spell! spelllang=sr@latin<CR>
 " fzf --------------------------------------------
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
 let $FZF_DEFAULT_OPTS='--reverse'
-map <leader><leader> :FZF<CR>
+map <leader><leader> :Files<CR>
+map <C-F> :Rg<CR>
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', '~/.config/nvim/plugged/fzf.vim/bin/preview.sh {}']}, <bang>0)
 
 " compiler
 map <leader>c :w! \| !npile <c-r>%<CR>
-map <leader>m :w! \| silent !make<CR> 
+map <leader>m :w! \| silent !make<CR>
 
 
 " Coc --------------------------------------------
@@ -220,17 +250,6 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
-
-
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocAction('format')
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
-
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
