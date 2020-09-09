@@ -7,7 +7,7 @@ if [ -z "$CODE" ]; then
 fi
 
 [ -z "$(command -v codels)" ] && echo "codels: not found" && exit 1
- 
+
 if [ -n "$ROFI" ]; then
     PROJ="$(codels | rofi -dmenu)"
 else
@@ -19,9 +19,11 @@ if [ -n "$PROJ" ]; then
     "term")
         if [ "$TERMINAL" = "st" ]; then
             # 7aske 'st' build with '-d' option to chdir at start
-            $TERMINAL -d "$PROJ" && notify-send "codeopen" "opening $PROJ"
+            notify-send "codeopen" "opening $PROJ"
+            $TERMINAL -d "$PROJ"
         else
-            $TERMINAL -cd "$PROJ" && notify-send "codeopen" "opening $PROJ"
+            notify-send "codeopen" "opening $PROJ"
+            $TERMINAL -cd "$PROJ"
         fi
         ;;
 
@@ -39,17 +41,33 @@ if [ -n "$PROJ" ]; then
             [ -x "$(command -v notify-send)" ] && notify-send "codeopen" "vscodium: not found\ncode-insiders: not found\ncode: not found"
             exit 1
         fi
-        $CMD "$PROJ" && notify-send "codeopen" "opening $PROJ"
+        notify-send "codeopen" "opening $PROJ"
+        $CMD "$PROJ"
         ;;
-    "jetbrains") 
-        BIN_DIR="$HOME/.local/bin" 
+    "jetbrains")
+        BIN_DIR="$HOME/.local/bin"
         CMD=$(for file in $(dir -1 "$BIN_DIR"); do grep -q "JetBrains" "$BIN_DIR/$file" && echo "$BIN_DIR/$file"; done | rofi -dmenu)
         [ -z "$CMD" ] && exit 1
-        $CMD "$PROJ" && notify-send "codeopen" "opening $PROJ"
-    ;;
+        notify-send "codeopen" "opening $PROJ"
+        $CMD "$PROJ"
+        ;;
+    "vim")
+        if [ -x "$(command -v nvim)" ]; then
+            CMD=nvim
+        elif [ -x "$(command -v vim)" ]; then
+            CMD=vim
+        else
+            echo "nvim: not found"
+            echo "vim: not found"
+            [ -x "$(command -v notify-send)" ] && notify-send "codeopen" "nvim: not found\nnvim: not found"
+            exit 1
+        fi
+        notify-send "codeopen" "opening $PROJ"
+        $TERMINAL -e $CMD "$PROJ"
+        ;;
         *)
-        echo "'TYPE' env not set"
-        exit 1
+        notify-send "codeopen" "$TYPE opening $PROJ"
+        $TYPE "$PROJ"
         ;;
     esac
 fi
