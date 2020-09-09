@@ -3,6 +3,7 @@
 WALLPAPERS="${WALLPAPERS:-$HOME/Pictures/wallpaper}"
 DEFAULT_WALLPAPER="${DEFAULT_WALLPAPER:-$HOME/.config/wallpaper}"
 DEFAULT_SCREENSAVER="${DEFAULT_SCREENSAVER:-$HOME/.config/screensaver}"
+WAL_BACKEND="${WAL_BACKEND:-colorthief}"
 CMD="$(basename "$0")"
 
 [ -z "$(command -v wal)" ] && echo "wal: command not found" && exit 2
@@ -67,7 +68,7 @@ set_wallpaper_wal() {
     [ ! -L "$PICTURE" ] && ln -sf "$PICTURE" "$DEFAULT_WALLPAPER"
 	echo "$PICTURE"
     wal -c
-    wal --backend wal -i "$PICTURE" &
+    wal --backend "$WAL_BACKEND" -i "$PICTURE" &
 	set_screensaver &
 }
 
