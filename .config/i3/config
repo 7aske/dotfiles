@@ -1,10 +1,10 @@
 # i3 config file (v4)
-#  _____         _        _       _ _____                    __ _       
-# |___  |_ _ ___| | _____( )___  (_)___ /    ___ ___  _ __  / _(_) __ _ 
+#  _____         _        _       _ _____                    __ _
+# |___  |_ _ ___| | _____( )___  (_)___ /    ___ ___  _ __  / _(_) __ _
 #    / / _` / __| |/ / _ \// __| | | |_ \   / __/ _ \| '_ \| |_| |/ _` |
 #   / / (_| \__ \   <  __/ \__ \ | |___) | | (_| (_) | | | |  _| | (_| |
 #  /_/ \__,_|___/_|\_\___| |___/ |_|____/   \___\___/|_| |_|_| |_|\__, |
-# 7aske's i3 config                                               |___/ 
+# 7aske's i3 config                                               |___/
 
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
@@ -14,11 +14,11 @@ set $notif_duration 1000
 
 # disable help button in most programs
 bindsym F1 nop
-                  
+
 #    ___ _ ____   __
 #   / _ \ '_ \ \ / /
-#  |  __/ | | \ V / 
-# (_)___|_| |_|\_/  
+#  |  __/ | | \ V /
+# (_)___|_| |_|\_/
 # env
 # load default apps from environment
 # set these variables in your .profile or .xprofile
@@ -35,17 +35,17 @@ set $terminal st
 set $terminal2 kitty
 
 
-# sound&music                _  ___                       _      
-#  ___  ___  _   _ _ __   __| |( _ )  _ __ ___  _   _ ___(_) ___ 
+# sound&music                _  ___                       _
+#  ___  ___  _   _ _ __   __| |( _ )  _ __ ___  _   _ ___(_) ___
 # / __|/ _ \| | | | '_ \ / _` |/ _ \/\ '_ ` _ \| | | / __| |/ __|
-# \__ \ (_) | |_| | | | | (_| | (_>  < | | | | | |_| \__ \ | (__ 
-# |___/\___/ \__,_|_| |_|\__,_|\___/\/_| |_| |_|\__,_|___/_|\___|                                                               
+# \__ \ (_) | |_| | | | | (_| | (_>  < | | | | | |_| \__ \ | (__
+# |___/\___/ \__,_|_| |_|\__,_|\___/\/_| |_| |_|\__,_|___/_|\___|
 
 # start pulseaudio in xprofile
 # start pasystray in xprofile
 bindsym $mod+p exec --no-startup-id pavucontrol
 # 7aske-scripts
-bindsym $mod+Ctrl+p exec --no-startup-id patoggle 
+bindsym $mod+Ctrl+p exec --no-startup-id patoggle
 # 7aske-scripts
 bindsym $mod+Shift+p exec --no-startup-id padefault
 # 7aske-scripts
@@ -56,27 +56,27 @@ bindsym $mod+Ctrl+Shift+p exec --no-startup-id pafocus
 # bindsym XF86MonBrightnessDown exec --no-startup-id "xbacklight -dec 10; notify-send --hint=int:transient:1 -t $notif_duration 'brightness down'"
 
 # Media player controls
-bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+bindsym XF86AudioPlay  exec --no-startup-id playerctl play-pause
 bindsym XF86AudioPause exec --no-startup-id playerctl play-pause
-bindsym XF86AudioNext exec --no-startup-id playerctl next
-bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+bindsym XF86AudioNext  exec --no-startup-id playerctl next
+bindsym XF86AudioPrev  exec --no-startup-id playerctl previous
 
 # media controls re-using i3blocks script
 bindsym $mod+period exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/music
-bindsym $mod+slash exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/music
-bindsym $mod+comma exec --no-startup-id BLOCK_BUTTON=3 ~/.local/bin/statusbar/music
+bindsym $mod+slash  exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/music
+bindsym $mod+comma  exec --no-startup-id BLOCK_BUTTON=3 ~/.local/bin/statusbar/music
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% && notify-send --hint=int:transient:1 -t $notif_duration "volume" "+5% ($(getvol)%)"
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% && notify-send --hint=int:transient:1 -t $notif_duration "volume" "\-5% ($(getvol)%)"
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle && notify-send --hint=int:transient:1 -t $notif_duration "volume" "toggle mute"
 
-#                    _ _           _   _                 
-#   __ _ _ __  _ __ | (_) ___ __ _| |_(_) ___  _ __  ___ 
+#                    _ _           _   _
+#   __ _ _ __  _ __ | (_) ___ __ _| |_(_) ___  _ __  ___
 #  / _` | '_ \| '_ \| | |/ __/ _` | __| |/ _ \| '_ \/ __|
 # | (_| | |_) | |_) | | | (_| (_| | |_| | (_) | | | \__ \
 #  \__,_| .__/| .__/|_|_|\___\__,_|\__|_|\___/|_| |_|___/
-# applic|_|ati|_|ons                                        
+# applic|_|ati|_|ons
 bindsym $mod+Return exec --no-startup-id $terminal
 bindsym $mod+BackSpace exec --no-startup-id i3btf $terminal2 --class floating
 bindsym $mod+Shift+Return exec --no-startup-id $terminal2
@@ -125,12 +125,12 @@ bindsym $mod+F2 exec --no-startup-id kblang -fn 'Fira Code-12'
 bindsym $mod+Shift+s exec --no-startup-id $terminal -e google-search
 bindsym $mod+Tab exec --no-startup-id rofi -show window
 
-#                    _             _   _             
-#  _ __   __ ___   _(_) __ _  __ _| |_(_) ___  _ __  
-# | '_ \ / _` \ \ / / |/ _` |/ _` | __| |/ _ \| '_ \ 
+#                    _             _   _
+#  _ __   __ ___   _(_) __ _  __ _| |_(_) ___  _ __
+# | '_ \ / _` \ \ / / |/ _` |/ _` | __| |/ _ \| '_ \
 # | | | | (_| |\ V /| | (_| | (_| | |_| | (_) | | | |
 # |_| |_|\__,_| \_/ |_|\__, |\__,_|\__|_|\___/|_| |_|
-# navigation                 |___/                         
+# navigation                 |___/
 # change focus
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -168,8 +168,8 @@ workspace_auto_back_and_forth yes
 bindsym $mod+b workspace back_and_forth
 bindsym $mod+Shift+b move container to workspace back_and_forth; workspace back_and_forth
 
-# windows   _           _                   
-# __      _(_)_ __   __| | _____      _____ 
+# windows   _           _
+# __      _(_)_ __   __| | _____      _____
 # \ \ /\ / / | '_ \ / _` |/ _ \ \ /\ / / __|
 #  \ V  V /| | | | | (_| | (_) \ V  V /\__ \
 #   \_/\_/ |_|_| |_|\__,_|\___/ \_/\_/ |___/
@@ -232,12 +232,12 @@ mode "$mode_layout" {
     bindsym Escape mode "default"
 }
 
-#                     _                                  
-# __      _____  _ __| | _____ _ __   __ _  ___ ___  ___ 
+#                     _
+# __      _____  _ __| | _____ _ __   __ _  ___ ___  ___
 # \ \ /\ / / _ \| '__| |/ / __| '_ \ / _` |/ __/ _ \/ __|
 #  \ V  V / (_) | |  |   <\__ \ |_) | (_| | (_|  __/\__ \
 #   \_/\_/ \___/|_|  |_|\_\___/ .__/ \__,_|\___\___||___/
-# workspaces                  |_|                        
+# workspaces                  |_|
 # workspace names
 set $ws1 1
 set $ws2 2
@@ -298,12 +298,12 @@ bindsym $mod+minus scratchpad show
 #bindsym $mod+Ctrl+Shift+Right workspace next
 #bindsym $mod+Ctrl+Shift+Left workspace prev
 
-#                      _  __ _                 _           _                   
-#  ___ _ __   ___  ___(_)/ _(_) ___  __      _(_)_ __   __| | _____      _____ 
+#                      _  __ _                 _           _
+#  ___ _ __   ___  ___(_)/ _(_) ___  __      _(_)_ __   __| | _____      _____
 # / __| '_ \ / _ \/ __| | |_| |/ __| \ \ /\ / / | '_ \ / _` |/ _ \ \ /\ / / __|
 # \__ \ |_) |  __/ (__| |  _| | (__   \ V  V /| | | | | (_| | (_) \ V  V /\__ \
 # |___/ .__/ \___|\___|_|_| |_|\___|   \_/\_/ |_|_| |_|\__,_|\___/ \_/\_/ |___/
-# spec|_|ific window settings 
+# spec|_|ific window settings
 
 # Open applications on specific workspaces
 assign [class="(?i)caprine"] $ws9
@@ -350,15 +350,15 @@ for_window [class="Xfburn"] floating enable
 for_window [class="Baobab"] floating enable resize set 1024 720 move position center
 for_window [title=".*Emulator.*"] floating enable
 for_window [title=".*World of Warcraft.*"] layout tabbed
-for_window [class="VirtualBox Machine"] floating disable border none 
+for_window [class="VirtualBox Machine"] floating disable border none
 for_window [class="VirtualBox Manager"] floating disable
 
 # virtual machines
 for_window [class="VirtualBox Machine"] move container to workspace wm
 for_window [class="VirtualBox Machine" title="(?i)^win"] move container to workspace win
 
-#            _                                                          _     
-#  _ __ ___ (_)___  ___    ___ ___  _ __ ___  _ __ ___   __ _ _ __   __| |___ 
+#            _                                                          _
+#  _ __ ___ (_)___  ___    ___ ___  _ __ ___  _ __ ___   __ _ _ __   __| |___
 # | '_ ` _ \| / __|/ __|  / __/ _ \| '_ ` _ \| '_ ` _ \ / _` | '_ \ / _` / __|
 # | | | | | | \__ \ (__  | (_| (_) | | | | | | | | | | | (_| | | | | (_| \__ \
 # |_| |_| |_|_|___/\___|  \___\___/|_| |_| |_|_| |_| |_|\__,_|_| |_|\__,_|___/
@@ -371,17 +371,17 @@ bindsym $mod+Shift+c reload; exec --no-startup-id notify-send --hint=int:transie
 bindsym $mod+Shift+r restart; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "restart" "i3 restarted"
 
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+0 exec --no-startup-id "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+0 exec --no-startup-id "i3-nagbar -t warning -m 'Do you really want to exit i3?' -b 'Yes, exit i3' 'i3-msg exit'"
 
 bindsym $mod+F4 exec --no-startup-id i3-layout-manager
 
 # create and move windows to arbitrarily named workspaces
 # 7aske-scripts
-bindsym $mod+Insert exec --no-startup-id       i3wss 
-bindsym $mod+Ctrl+Insert exec --no-startup-id  i3wss move
-bindsym $mod+Shift+Insert exec --no-startup-id i3wss move-swtich
+bindsym $mod+Insert       exec --no-startup-id i3wss
+bindsym $mod+Ctrl+Insert  exec --no-startup-id i3wss move
+bindsym $mod+Shift+Insert exec --no-startup-id i3wss move-switch
 
-# mode to invoke my startup management script
+# mode to invoke 7aske/startup management script
 bindsym $mod+F3 mode "$mode_startup"
 set $mode_startup startup (r)estart (s)top s(t)art (a)dd re(m)ove
 mode "$mode_startup" {
@@ -400,12 +400,12 @@ mode "$mode_startup" {
 bindsym $mod+0 mode "$mode_system"
 set $mode_system (l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown
 mode "$mode_system" {
-    bindsym l exec --no-startup-id i3exit lock, mode "default"
-    bindsym s exec --no-startup-id i3exit suspend, mode "default"
-    bindsym u exec --no-startup-id i3exit switch_user, mode "default"
-    bindsym e exec --no-startup-id i3exit logout, mode "default"
-    bindsym h exec --no-startup-id i3exit hibernate, mode "default"
-    bindsym r exec --no-startup-id i3exit reboot, mode "default"
+    bindsym l       exec --no-startup-id i3exit lock, mode "default"
+    bindsym s       exec --no-startup-id i3exit suspend, mode "default"
+    bindsym u       exec --no-startup-id i3exit switch_user, mode "default"
+    bindsym e       exec --no-startup-id i3exit logout, mode "default"
+    bindsym h       exec --no-startup-id i3exit hibernate, mode "default"
+    bindsym r       exec --no-startup-id i3exit reboot, mode "default"
     bindsym Shift+s exec --no-startup-id i3exit shutdown, mode "default"
 
     # exit system mode: "Enter" or "Escape"
@@ -417,28 +417,28 @@ mode "$mode_system" {
 bindsym $mod+r mode "resize"
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
-        bindsym h resize shrink width 5 px or 5 ppt
-        bindsym j resize grow height 5 px or 5 ppt
-        bindsym k resize shrink height 5 px or 5 ppt
-        bindsym l resize grow width 5 px or 5 ppt
+        bindsym h     resize shrink width 5 px or 5 ppt
+        bindsym j     resize grow height 5 px or 5 ppt
+        bindsym k     resize shrink height 5 px or 5 ppt
+        bindsym l     resize grow width 5 px or 5 ppt
 
         # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+        bindsym Left  resize shrink width 10 px or 10 ppt
+        bindsym Down  resize grow   height 10 px or 10 ppt
+        bindsym Up    resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow   width 10 px or 10 ppt
 
         # exit resize mode: Enter or Escape
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
 
-#              _            _             _   
-#   __ _ _   _| |_ ___  ___| |_ __ _ _ __| |_ 
+#              _            _             _
+#   __ _ _   _| |_ ___  ___| |_ __ _ _ __| |_
 #  / _` | | | | __/ _ \/ __| __/ _` | '__| __|
-# | (_| | |_| | || (_) \__ \ || (_| | |  | |_ 
+# | (_| | |_| | || (_) \__ \ || (_| | |  | |_
 #  \__,_|\__,_|\__\___/|___/\__\__,_|_|   \__|
-# autostart                                            
+# autostart
 
 exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec_always --no-startup-id nm-applet
@@ -447,7 +447,9 @@ exec_always --no-startup-id pamac-tray
 exec_always --no-startup-id pgrep udiskie || (sleep 1; udiskie -s -f $file -a --appindicator)
 exec_always --no-startup-id pgrep barrier || barrier
 exec_always --no-startup-id clipmenud
-exec_always --no-startup-id xautolock -time 10 -locker blurlock -cornersize 64 -corners ----
+#exec_always --no-startup-id xautolock -time 10 -locker blurlock -cornersize 64 -corners ----
+exec_always --no-startup-id gnome-screensaver
+exec_always --no-startup-id gsettings set org.gnome.desktop.screensaver picture-uri 'file:///home/nik/.config/screensaver'
 # 7aske-scripts
 exec_always --no-startup-id dunst_reload
 # 7aske-scripts
@@ -462,21 +464,20 @@ exec_always --no-startup-id pgrep pasystray  || pasystray
 exec_always --no-startup-id fix_touchpad
 exec_always --no-startup-id xset r rate 195 55
 
-# alternating split layout 
+# alternating split layout
 # https://github.com/olemartinorg/i3-alternating-layout
 exec_always --no-startup-id python3 ~/.local/bin/alternating_layouts
 
 # compton/picom
 bindsym $mod+Shift+F5 exec --no-startup-id killall picom
 bindsym $mod+F5 exec --no-startup-id picom -b --experimental-backends --config ~/.config/compton/compton.conf
-exec_always --no-startup-id picom -b --experimental-backends --config ~/.config/compton/compton.conf
-
+exec_always --no-startup-id sleep 1 && picom -b --experimental-backends --config ~/.config/compton/compton.conf
 
 # set background and theme using wal
 exec_always --no-startup-id wal --backend wal -i ~/.config/wallpaper
 
-#            _                
-#   ___ ___ | | ___  _ __ ___ 
+#            _
+#   ___ ___ | | ___  _ __ ___
 #  / __/ _ \| |/ _ \| '__/ __|
 # | (_| (_) | | (_) | |  \__ \
 #  \___\___/|_|\___/|_|  |___/
@@ -513,11 +514,11 @@ client.urgent               $bg         $bg        $fg       $bg       $bg
 client.placeholder          $bg         $bg        $fg       $bg       $bg
 client.background           $bg
 
-#      _        _               _                
-#  ___| |_ __ _| |_ _   _ ___  | |__   __ _ _ __ 
+#      _        _               _
+#  ___| |_ __ _| |_ _   _ ___  | |__   __ _ _ __
 # / __| __/ _` | __| | | / __| | '_ \ / _` | '__|
-# \__ \ || (_| | |_| |_| \__ \ | |_) | (_| | |   
-# |___/\__\__,_|\__|\__,_|___/ |_.__/ \__,_|_|   
+# \__ \ || (_| | |_| |_| \__ \ | |_) | (_| | |
+# |___/\__\__,_|\__|\__,_|___/ |_.__/ \__,_|_|
 # status bar
 
 # Start i3bar to display a workspace bar (plus the system information i3status if available)
@@ -552,8 +553,8 @@ bar {
 # hide/unhide status bar
 bindsym $mod+Shift+Ctrl+b bar mode toggle
 
-#  _ _____                             
-# (_)___ /        __ _  __ _ _ __  ___ 
+#  _ _____
+# (_)___ /        __ _  __ _ _ __  ___
 # | | |_ \ _____ / _` |/ _` | '_ \/ __|
 # | |___) |_____| (_| | (_| | |_) \__ \
 # |_|____/       \__, |\__,_| .__/|___/
@@ -563,7 +564,7 @@ bindsym $mod+Shift+Ctrl+b bar mode toggle
 set $gaps_inner 20
 set $gaps_outer 0
 gaps inner $gaps_inner
-gaps outer $gaps_outer 
+gaps outer $gaps_outer
 
 workspace win gaps inner 0
 workspace win gaps outer 0
@@ -579,7 +580,7 @@ workspace wm gaps outer 0
 # smart_gaps on
 
 # Smart borders (draw borders around container only if it is not the only container on this workspace) on|no_gaps
-smart_borders no_gaps 
+smart_borders no_gaps
 
 # Press $mod+g to enter the gap mode. Choose o or i for modifying outer/inner gaps. Press one of + / - (in-/decrement for current workspace) or 0 (remove gaps for current workspace). If you also press Shift with these keys, the change will be global for all workspaces.
 bindsym $mod+Shift+g gaps inner all set $gaps_inner; gaps outer all set $gaps_outer; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "gaps" "gaps reset to default"
