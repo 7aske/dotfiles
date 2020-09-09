@@ -12,34 +12,34 @@ if ! filereadable(expand('~/.config/nvim/autoload/plug.vim'))
     autocmd VimEnter * PlugInstall
 endif
 
-
 call plug#begin('~/.config/nvim/plugged')
-	Plug 'arcticicestudio/nord-vim'
-	Plug 'morhetz/gruvbox'
-	Plug 'joshdick/onedark.vim'
+	Plug 'HerringtonDarkholme/yats.vim'
 	Plug 'jiangmiao/auto-pairs'
 	Plug 'junegunn/fzf.vim'
 	Plug 'junegunn/goyo.vim'
 	Plug 'machakann/vim-highlightedyank'
+	Plug 'maxmellon/vim-jsx-pretty'
 	Plug 'mbbill/undotree'
 	Plug 'neoclide/coc.nvim', {'branch': 'release'}
+	Plug 'pangloss/vim-javascript'
+	Plug 'sheerun/vim-polyglot'
 	Plug 'tasn/vim-tsx'
     Plug 'PotatoesMaster/i3-vim-syntax'
     Plug 'airblade/vim-gitgutter'
     Plug 'dylanaraps/wal.vim'
     Plug 'kien/ctrlp.vim'
-	Plug 'HerringtonDarkholme/yats.vim'
-	" or Plug 'leafgarland/typescript-vim'
-	Plug 'maxmellon/vim-jsx-pretty'
-	Plug 'pangloss/vim-javascript'
     Plug 'lyuts/vim-rtags'
     Plug 'preservim/nerdcommenter'
 	Plug 'preservim/nerdtree' |
 				\ Plug 'Xuyuanp/nerdtree-git-plugin'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-surround'
-	"Plug 'itchyny/lightline.vim'
 	Plug 'vim-airline/vim-airline'
+
+	" colorschemes
+	Plug 'arcticicestudio/nord-vim'
+	Plug 'joshdick/onedark.vim'
+	Plug 'morhetz/gruvbox'
 call plug#end()
 
 
@@ -48,7 +48,7 @@ call plug#end()
 filetype indent plugin on
 let mapleader=" "
 set backspace=indent,eol,start
-"set colorcolumn=80
+set colorcolumn=80
 set cursorline
 set encoding=utf-8
 set hlsearch
@@ -63,13 +63,13 @@ set nu rnu
 set number
 set path+=**
 set showcmd
+set signcolumn=yes:2
 set smartcase
 set smartindent
 set t_Co=256
 set textwidth=80
 set updatetime=50
 set wildmenu
-set signcolumn=yes:2
 syntax on
 
 
@@ -95,20 +95,22 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 autocmd BufWritePre * %s/\s\+$//e
 
 " Colorscheme -------------------------------------
-"colorscheme wal
 colorscheme nord
 set background=dark
 set termguicolors
 " darker background
-highlight Normal     cterm=NONE ctermbg=17 gui=NONE guibg=#292f3a
-highlight LineNr     cterm=NONE ctermbg=17 gui=NONE guibg=#292f3a
-highlight SignColumn cterm=NONE ctermbg=17 gui=NONE guibg=#292f3a
+highlight Normal      cterm=NONE ctermbg=17 gui=NONE guibg=#292f3a
+highlight LineNr      cterm=NONE ctermbg=17 gui=NONE guibg=#292f3a
+highlight SignColumn  cterm=NONE ctermbg=17 gui=NONE guibg=#292f3a
+highlight ColorColumn cterm=NONE ctermbg=16 gui=NONE guibg=#2E3440
+
 
 " STATUS BAR -------------------------------------
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'        " disable file paths in tabline
 let g:airline#extensions#tabline#show_close_button = 0  " remove 'X' at the end of the tabline
+let g:airline#extensions#tabline#tab_nr_type = 1        " tab number
 
 " BINDINGS ---------------------------------------
 
@@ -154,13 +156,14 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 nnoremap <leader>cr :CocRestartmap
 inoremap <silent><expr> <c-space> coc#refresh()
-nmap <leader>gd     <Plug>(coc-definition)
+nmap <leader>gd     :call CocActionAsync('jumpDefinition', 'tabe')<CR>
 nmap <leader>gD     <Plug>(coc-references)
-nmap <leader>gi     <Plug>(coc-implementation)
+nmap <leader>gi     :call CocActionAsync('jumpImplementation', 'tabe')<CR>
 nmap <leader>gt     <Plug>(coc-type-definition)
 nmap <leader>g[     <Plug>(coc-diagnostic-prev)
 nmap <leader>g]     <Plug>(coc-diagnostic-next)
-map <leader>rn     <Plug>(coc-rename)
+nmap <leader>rn     <Plug>(coc-rename)
+nmap <leader>rs     <Plug>(coc-search)
 xmap <leader><C-l>  <Plug>(coc-format-selected)
 vmap <leader><C-l>  <Plug>(coc-format-selected)
 nmap <leader><C-l>  <Plug>(coc-format-selected)
@@ -170,7 +173,7 @@ nmap <leader>ac     <Plug>(coc-codeaction)
 xmap <leader>a      <Plug>(coc-codeaction-selected)
 nmap <leader>a      <Plug>(coc-codeaction-selected)
 
-" Tabs -------------------------------------------
+" Tabs and Windows -------------------------------
 nmap <silent> <C-T>1       :tabn 1<CR>
 nmap <silent> <C-T>2       :tabn 2<CR>
 nmap <silent> <C-T>3       :tabn 3<CR>
@@ -181,13 +184,14 @@ nmap <silent> <C-T>7       :tabn 7<CR>
 nmap <silent> <C-T>8       :tabn 8<CR>
 nmap <silent> <C-T>9       :tabn 9<CR>
 nmap <silent> <C-T>c       :tabnew<CR>
+nmap <silent> <C-W>c       :tabnew<CR>
 nmap <silent> <C-W>t       :tabnew<CR>
 nmap <silent> <C-T>q       :tabclose<CR>
 nmap <silent> <C-W>w       :Windows<CR>
-nmap <silent> <C-T><Right> :tabprev<CR>
-nmap <silent> <C-T><Left>  :tabnext<CR>
-nmap <silent> <A-Right>    :bnext<CR>
-nmap <silent> <A-Left>     :bprevious<CR>
+nmap <silent> <A-Left>     :tabprev<CR>
+nmap <silent> <A-Right>    :tabnext<CR>
+nmap <silent> <C-A-Right>  :bnext<CR>
+nmap <silent> <C-A-Left>   :bprevious<CR>
 " <C-W>T moves window to a new tab
 
 
@@ -255,4 +259,3 @@ function! s:show_documentation()
 endfunction
 
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
