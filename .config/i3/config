@@ -26,7 +26,7 @@ bindsym F1 nop
 set $editor $EDITOR
 set $browser $BROWSER
 set $file $FILE
-set $file2 ranger
+set $term_file ranger
 set $reader $READER
 set $player $PLAYER
 
@@ -81,8 +81,8 @@ bindsym $mod+Return exec --no-startup-id $terminal
 bindsym $mod+BackSpace exec --no-startup-id i3btf $terminal2 --class floating
 bindsym $mod+Shift+Return exec --no-startup-id $terminal2
 #bindsym $mod+a exec --no-startup-id rofi -show run
-bindsym $mod+a exec --no-startup-id TERMINAL_CMD="st -e" dmenu_recency -f -i -l 10 -p "run: " -fn 'Fira Code-11'
-bindsym $mod+d exec --no-startup-id dmenu_run -fn 'Fira Code-11'
+bindsym $mod+a exec --no-startup-id TERMINAL_CMD="st -e" dmenu_recency -f -i -l 10 -p "run: " -fn 'Fira Code-10'
+bindsym $mod+d exec --no-startup-id dmenu_run -fn 'Fira Code-10'
 bindsym $mod+grave exec --no-startup-id $terminal -e htop
 
 # edit config files
@@ -98,8 +98,8 @@ mode "$mode_config" {
     bindsym Escape mode "default"
 }
 
-bindsym $mod+e exec --no-startup-id $file
-bindsym $mod+Shift+e exec --no-startup-id $terminal2 bash -i $file2
+bindsym $mod+e exec --no-startup-id $terminal -e $term_file
+bindsym $mod+Shift+e exec --no-startup-id $file
 bindsym $mod+w exec --no-startup-id $browser
 bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor
 bindsym $mod+Shift+w exec --no-startup-id $browser --incognito
@@ -115,7 +115,7 @@ bindsym $mod+Shift+m exec --no-startup-id i3btf cantata
 # 7aske-scripts
 bindsym $mod+o exec --no-startup-id TYPE=term ROFI=1 codeopen
 # 7aske-scripts
-bindsym $mod+Shift+o exec --no-startup-id TYPE=vscode ROFI=1 codeopen
+bindsym $mod+Shift+o exec --no-startup-id TYPE=vim ROFI=1 codeopen
 # 7aske-scripts
 bindsym $mod+Ctrl+o exec --no-startup-id TYPE=jetbrains ROFI=1 codeopen
 bindsym $mod+v exec --no-startup-id clipmenu
@@ -388,7 +388,7 @@ mode "$mode_startup" {
     bindsym r exec --no-startup-id startup restart, mode "default"
     bindsym t exec --no-startup-id startup start, mode "default"
     bindsym s exec --no-startup-id startup stop, mode "default"
-    bindsym a exec --no-startup-id echo | dmenu -fn 'Fira Code-12' | xargs -d'\n' startup add, mode "default"
+    bindsym a exec --no-startup-id echo | dmenu -fn 'Fira Code-10' | xargs -d'\n' startup add, mode "default"
     bindsym m exec --no-startup-id startup remove, mode "default"
 
     # exit system mode: "Enter" or "Escape"
