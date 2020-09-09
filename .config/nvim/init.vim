@@ -28,7 +28,10 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'airblade/vim-gitgutter'
     Plug 'dylanaraps/wal.vim'
     Plug 'kien/ctrlp.vim'
-    Plug 'leafgarland/typescript-vim'
+	Plug 'HerringtonDarkholme/yats.vim'
+	" or Plug 'leafgarland/typescript-vim'
+	Plug 'maxmellon/vim-jsx-pretty'
+	Plug 'pangloss/vim-javascript'
     Plug 'lyuts/vim-rtags'
     Plug 'preservim/nerdcommenter'
 	Plug 'preservim/nerdtree' |
