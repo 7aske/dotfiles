@@ -96,9 +96,9 @@ bindsym $mod+grave exec --no-startup-id $terminal -e htop
 bindsym $mod+Shift+grave mode "$mode_config"
 set $mode_config list config files to open: (e)tc (h)ome (d)dotfiles
 mode "$mode_config" {
-    bindsym e exec --no-startup-id $terminal -e vimcfg --etc , mode "default"
-    bindsym h exec --no-startup-id $terminal -e vimcfg --home, mode "default"
-    bindsym d exec --no-startup-id $terminal -e vimcfg       , mode "default"
+    bindsym e exec --no-startup-id $terminal -e vimcfg --etc ; mode default
+    bindsym h exec --no-startup-id $terminal -e vimcfg --home; mode default
+    bindsym d exec --no-startup-id $terminal -e vimcfg;        mode default
 
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode default
@@ -232,9 +232,9 @@ bindsym $mod+Shift+t mode "$mode_layout"
 set $mode_layout set window layout: (d)efault (t)abbed (s)tacking
 mode "$mode_layout" {
     # set default desktop layout <stacking|tabbed>
-    bindsym t layout tabbed;   exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "layout" "switched to tabbed layout", mode "default"
-    bindsym s layout stacking; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "layout" "switched to stacking layout", mode "default"
-    bindsym d layout default;  exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "layout" "switched to default layout", mode "default"
+    bindsym t layout tabbed;   exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "layout" "switched to tabbed layout";   mode default
+    bindsym s layout stacking; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "layout" "switched to stacking layout"; mode default
+    bindsym d layout default;  exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "layout" "switched to default layout";  mode default
 
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode default
@@ -395,7 +395,7 @@ mode "$mode_startup" {
     bindsym t exec --no-startup-id startup start;    mode default
     bindsym s exec --no-startup-id startup stop;     mode default
     bindsym m exec --no-startup-id startup remove;   mode default
-    bindsym a exec --no-startup-id echo | dmenu -fn '$dmenu_font' | xargs -d'\n' startup add, mode "default"
+    bindsym a exec --no-startup-id echo | dmenu -fn '$dmenu_font' | xargs -d'\n'; mode default
 
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode default
@@ -483,7 +483,7 @@ bindsym $mod+F5 exec --no-startup-id picom -b --experimental-backends --config ~
 exec_always --no-startup-id sleep 1 && pgrep picom || picom -b --experimental-backends --config ~/.config/compton/compton.conf
 
 # set background and theme using wal
-exec --no-startup-id wal --backend wal -i ~/.config/wallpaper
+exec_always --no-startup-id setwal -r
 
 #            _
 #   ___ ___ | | ___  _ __ ___
@@ -600,17 +600,17 @@ mode "$mode_gaps" {
         bindsym o           mode "$mode_gaps_outer"
         bindsym i           mode "$mode_gaps_inner"
 
-		bindsym 0           gaps inner all set 0,        mode default
-		bindsym 1           gaps inner all set 10,       mode default
-		bindsym 2           gaps inner all set 20,       mode default
-		bindsym 3           gaps inner all set 30,       mode default
-		bindsym 4           gaps inner all set 40,       mode default
+		bindsym 0           gaps inner all set 0;        mode default
+		bindsym 1           gaps inner all set 10;       mode default
+		bindsym 2           gaps inner all set 20;       mode default
+		bindsym 3           gaps inner all set 30;       mode default
+		bindsym 4           gaps inner all set 40;       mode default
 
-		bindsym Mod1+0      gaps inner current set 0,    mode default
-		bindsym Mod1+1      gaps inner current set 10,   mode default
-		bindsym Mod1+2      gaps inner current set 20,   mode default
-		bindsym Mod1+3      gaps inner current set 30,   mode default
-		bindsym Mod1+4      gaps inner current set 40,   mode default
+		bindsym Mod1+0      gaps inner current set 0;    mode default
+		bindsym Mod1+1      gaps inner current set 10;   mode default
+		bindsym Mod1+2      gaps inner current set 20;   mode default
+		bindsym Mod1+3      gaps inner current set 30;   mode default
+		bindsym Mod1+4      gaps inner current set 40;   mode default
 
         bindsym Return mode default
         bindsym Escape mode default
