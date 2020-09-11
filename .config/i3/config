@@ -23,16 +23,21 @@ bindsym F1 nop
 # load default apps from environment
 # set these variables in your .profile or .xprofile
 # eg. EDITOR=nvim
-set $editor $EDITOR
-set $browser $BROWSER
-set $file $FILE
-set $term_file ranger
-set $reader $READER
-set $player $PLAYER
+set $editor      $EDITOR
+set $browser     $BROWSER
+set $file        $FILE
+set $term_file   ranger
+set $reader      $READER
+set $player      $PLAYER
+set $dmenu_font  Fira Code Medium-10
+set $font        xft:Fira Code Medium 12
+set $status_font xft:Fira Code Medium 10
+set $gaps_inner  20
+set $gaps_outer  0
 
 # set terminal commands
-set $terminal st
-set $terminal2 kitty
+set $terminal   st
+set $terminal2  kitty
 
 
 # sound&music                _  ___                       _
@@ -43,11 +48,11 @@ set $terminal2 kitty
 
 # start pulseaudio in xprofile
 # start pasystray in xprofile
-bindsym $mod+p exec --no-startup-id pavucontrol
+bindsym $mod+p            exec --no-startup-id pavucontrol
 # 7aske-scripts
-bindsym $mod+Ctrl+p exec --no-startup-id patoggle
+bindsym $mod+Ctrl+p       exec --no-startup-id patoggle
 # 7aske-scripts
-bindsym $mod+Shift+p exec --no-startup-id padefault
+bindsym $mod+Shift+p      exec --no-startup-id padefault
 # 7aske-scripts
 bindsym $mod+Ctrl+Shift+p exec --no-startup-id pafocus
 
@@ -65,11 +70,13 @@ bindsym XF86AudioPrev  exec --no-startup-id playerctl previous
 bindsym $mod+period exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/music
 bindsym $mod+slash  exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/music
 bindsym $mod+comma  exec --no-startup-id BLOCK_BUTTON=3 ~/.local/bin/statusbar/music
+bindsym $mod+Shift+period exec --no-startup-id BLOCK_BUTTON=4 ~/.local/bin/statusbar/music
+bindsym $mod+Shift+comma  exec --no-startup-id BLOCK_BUTTON=5 ~/.local/bin/statusbar/music
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% && notify-send --hint=int:transient:1 -t $notif_duration "volume" "+5% ($(getvol)%)"
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% && notify-send --hint=int:transient:1 -t $notif_duration "volume" "\-5% ($(getvol)%)"
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle && notify-send --hint=int:transient:1 -t $notif_duration "volume" "toggle mute"
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%    && notify-send --hint=int:transient:1 -t $notif_duration "volume" "+5% ($(getvol)%)"
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%    && notify-send --hint=int:transient:1 -t $notif_duration "volume" "\-5% ($(getvol)%)"
+bindsym XF86AudioMute        exec --no-startup-id pactl0set-sink-mute   0 toggle && notify-send --hint=int:transient:1 -t $notif_duration "volume" "toggle mute"
 
 #                    _ _           _   _
 #   __ _ _ __  _ __ | (_) ___ __ _| |_(_) ___  _ __  ___
@@ -77,12 +84,12 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle && notif
 # | (_| | |_) | |_) | | | (_| (_| | |_| | (_) | | | \__ \
 #  \__,_| .__/| .__/|_|_|\___\__,_|\__|_|\___/|_| |_|___/
 # applic|_|ati|_|ons
-bindsym $mod+Return exec --no-startup-id $terminal
-bindsym $mod+BackSpace exec --no-startup-id i3btf $terminal2 --class floating
+bindsym $mod+Return       exec --no-startup-id $terminal
+bindsym $mod+BackSpace    exec --no-startup-id i3btf $terminal2 --class floating
 bindsym $mod+Shift+Return exec --no-startup-id $terminal2
 #bindsym $mod+a exec --no-startup-id rofi -show run
-bindsym $mod+a exec --no-startup-id TERMINAL_CMD="st -e" dmenu_recency -f -i -l 10 -p "run: " -fn 'Fira Code-10'
-bindsym $mod+d exec --no-startup-id dmenu_run -fn 'Fira Code-10'
+bindsym $mod+a     exec --no-startup-id TERMINAL_CMD="st -e" dmenu_recency -f -i -l 10 -p "run: " -fn '$dmenu_font'
+bindsym $mod+d     exec --no-startup-id dmenu_run -fn '$dmenu_font'
 bindsym $mod+grave exec --no-startup-id $terminal -e htop
 
 # edit config files
@@ -94,36 +101,38 @@ mode "$mode_config" {
     bindsym d exec --no-startup-id $terminal -e vimcfg       , mode "default"
 
     # exit system mode: "Enter" or "Escape"
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
+    bindsym Return mode default
+    bindsym Escape mode default
 }
 
-bindsym $mod+e exec --no-startup-id $terminal -e $term_file
+bindsym $mod+e       exec --no-startup-id $terminal -e $term_file
 bindsym $mod+Shift+e exec --no-startup-id $file
-bindsym $mod+w exec --no-startup-id $browser
+bindsym $mod+w       exec --no-startup-id $browser
 bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor
 bindsym $mod+Shift+w exec --no-startup-id $browser --incognito
 # 7aske-scripts
 bindsym $mod+Shift+d exec --no-startup-id dunst_reload && notify-send --hint=int:transient:1 -t $notif_duration "dunst" "dunst reloaded"
-bindsym Print --release exec --no-startup-id scrot && notify-send --hint=int:transient:1 -t $notif_duration "screenshot" "saved to homedir"
-bindsym $mod+Print --release exec --no-startup-id scrot -u && notify-send --hint=int:transient:1 -t $notif_duration "screenshot (window)" "saved to homedir"
+
+bindsym Print            --release exec --no-startup-id scrot && notify-send --hint=int:transient:1 -t $notif_duration "screenshot" "saved to homedir"
+bindsym $mod+Print       --release exec --no-startup-id scrot -u && notify-send --hint=int:transient:1 -t $notif_duration "screenshot (window)" "saved to homedir"
 bindsym $mod+Shift+Print --release exec --no-startup-id scrot -s -f -l style=dash -o /dev/stdout | xclip -sel c -t image/png && notify-send --hint=int:transient:1 -t $notif_duration "screenshot (selection)" "copied to clipboard"
-bindsym $mod+Shift+x --release exec --no-startup-id xkill
+
+bindsym $mod+Shift+x     --release exec --no-startup-id xkill
 # 7aske-scripts
-bindsym $mod+m exec --no-startup-id i3btf $player
-bindsym $mod+Shift+m exec --no-startup-id i3btf cantata
+bindsym $mod+m        exec --no-startup-id i3btf $player
+bindsym $mod+Shift+m  exec --no-startup-id i3btf cantata
 # 7aske-scripts
-bindsym $mod+o exec --no-startup-id TYPE=term ROFI=1 codeopen
+bindsym $mod+o        exec --no-startup-id TYPE=term ROFI=1 codeopen
 # 7aske-scripts
-bindsym $mod+Shift+o exec --no-startup-id TYPE=vim ROFI=1 codeopen
+bindsym $mod+Shift+o  exec --no-startup-id TYPE=vim ROFI=1 codeopen
 # 7aske-scripts
-bindsym $mod+Ctrl+o exec --no-startup-id TYPE=jetbrains ROFI=1 codeopen
-bindsym $mod+v exec --no-startup-id clipmenu
+bindsym $mod+Ctrl+o   exec --no-startup-id TYPE=jetbrains ROFI=1 codeopen
+bindsym $mod+v        exec --no-startup-id clipmenu
 # 7aske-scripts
-bindsym $mod+F2 exec --no-startup-id kblang -fn 'Fira Code-12'
+bindsym $mod+F2       exec --no-startup-id kblang -fn 'Fira Code-12'
 # 7aske-scripts
-bindsym $mod+Shift+s exec --no-startup-id $terminal -e google-search
-bindsym $mod+Tab exec --no-startup-id rofi -show window
+bindsym $mod+Shift+s  exec --no-startup-id google-search
+bindsym $mod+Tab      exec --no-startup-id rofi -show window
 
 #                    _             _   _
 #  _ __   __ ___   _(_) __ _  __ _| |_(_) ___  _ __
@@ -138,9 +147,9 @@ bindsym $mod+k focus up
 bindsym $mod+l focus right
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
+bindsym $mod+Left  focus left
+bindsym $mod+Down  focus down
+bindsym $mod+Up    focus up
 bindsym $mod+Right focus right
 
 # move focused window
@@ -150,16 +159,16 @@ bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
 ## alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Left  move left
+bindsym $mod+Shift+Down  move down
+bindsym $mod+Shift+Up    move up
 bindsym $mod+Shift+Right move right
 
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Ctrl+Shift+Left mark swap; focus left; swap container with mark swap; unmark swap; focus left
-bindsym $mod+Ctrl+Shift+Down mark swap; focus down; swap container with mark swap; unmark swap; focus down
-bindsym $mod+Ctrl+Shift+Up mark swap; focus up; swap container with mark swap; unmark swap; focus up
+bindsym $mod+Ctrl+Shift+Left  mark swap; focus left;  swap container with mark swap; unmark swap; focus left
+bindsym $mod+Ctrl+Shift+Down  mark swap; focus down;  swap container with mark swap; unmark swap; focus down
+bindsym $mod+Ctrl+Shift+Up    mark swap; focus up;    swap container with mark swap; unmark swap; focus up
 bindsym $mod+Ctrl+Shift+Right mark swap; focus right; swap container with mark swap; unmark swap; focus right
 
 
@@ -174,7 +183,7 @@ bindsym $mod+Shift+b move container to workspace back_and_forth; workspace back_
 #  \ V  V /| | | | | (_| | (_) \ V  V /\__ \
 #   \_/\_/ |_|_| |_|\__,_|\___/ \_/\_/ |___/
 # set title format
-font xft:Fira Code Medium 12
+font $font
 for_window [class=".*"] title_format " %title"
 
 # some role configuration
@@ -223,13 +232,13 @@ bindsym $mod+Shift+t mode "$mode_layout"
 set $mode_layout set window layout: (d)efault (t)abbed (s)tacking
 mode "$mode_layout" {
     # set default desktop layout <stacking|tabbed>
-    bindsym t layout tabbed; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "layout" "switched to tabbed layout", mode "default"
+    bindsym t layout tabbed;   exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "layout" "switched to tabbed layout", mode "default"
     bindsym s layout stacking; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "layout" "switched to stacking layout", mode "default"
-    bindsym d layout default; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "layout" "switched to default layout", mode "default"
+    bindsym d layout default;  exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "layout" "switched to default layout", mode "default"
 
     # exit system mode: "Enter" or "Escape"
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
+    bindsym Return mode default
+    bindsym Escape mode default
 }
 
 #                     _
@@ -283,10 +292,10 @@ bindsym $mod+Shift+8 move container to workspace $ws8; workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9; workspace $ws9
 
 # Move workspaces to other windows
-bindsym $mod+Ctrl+Left move workspace to output left
-bindsym $mod+Ctrl+Up move workspace to output up
+bindsym $mod+Ctrl+Left  move workspace to output left
+bindsym $mod+Ctrl+Up    move workspace to output up
 bindsym $mod+Ctrl+Right move workspace to output right
-bindsym $mod+Ctrl+Down move workspace to output down
+bindsym $mod+Ctrl+Down  move workspace to output down
 
 # move the currently focused window to the scratchpad
 bindsym $mod+Shift+minus move scratchpad
@@ -370,9 +379,6 @@ bindsym $mod+Shift+c reload; exec --no-startup-id notify-send --hint=int:transie
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "restart" "i3 restarted"
 
-# exit i3 (logs you out of your X session)
-bindsym $mod+Shift+0 exec --no-startup-id "i3-nagbar -t warning -m 'Do you really want to exit i3?' -b 'Yes, exit i3' 'i3-msg exit'"
-
 bindsym $mod+F4 exec --no-startup-id i3-layout-manager
 
 # create and move windows to arbitrarily named workspaces
@@ -385,32 +391,35 @@ bindsym $mod+Shift+Insert exec --no-startup-id i3wss move-switch
 bindsym $mod+F3 mode "$mode_startup"
 set $mode_startup startup (r)estart (s)top s(t)art (a)dd re(m)ove
 mode "$mode_startup" {
-    bindsym r exec --no-startup-id startup restart, mode "default"
-    bindsym t exec --no-startup-id startup start, mode "default"
-    bindsym s exec --no-startup-id startup stop, mode "default"
-    bindsym a exec --no-startup-id echo | dmenu -fn 'Fira Code-10' | xargs -d'\n' startup add, mode "default"
-    bindsym m exec --no-startup-id startup remove, mode "default"
+    bindsym r exec --no-startup-id startup restart;  mode default
+    bindsym t exec --no-startup-id startup start;    mode default
+    bindsym s exec --no-startup-id startup stop;     mode default
+    bindsym m exec --no-startup-id startup remove;   mode default
+    bindsym a exec --no-startup-id echo | dmenu -fn '$dmenu_font' | xargs -d'\n' startup add, mode "default"
 
     # exit system mode: "Enter" or "Escape"
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
+    bindsym Return mode default
+    bindsym Escape mode default
 }
 
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+0 exec --no-startup-id "i3-nagbar -t warning -m 'Do you really want to exit i3?' -b 'Yes, exit i3' 'i3-msg exit'"
 # Set shut down, restart and locking features
-bindsym $mod+0 mode "$mode_system"
+bindsym $mod+0      mode "$mode_system"
+bindsym $mod+Escape mode "$mode_system"
 set $mode_system (l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown
 mode "$mode_system" {
-    bindsym l       exec --no-startup-id i3exit lock, mode "default"
-    bindsym s       exec --no-startup-id i3exit suspend, mode "default"
-    bindsym u       exec --no-startup-id i3exit switch_user, mode "default"
-    bindsym e       exec --no-startup-id i3exit logout, mode "default"
-    bindsym h       exec --no-startup-id i3exit hibernate, mode "default"
-    bindsym r       exec --no-startup-id i3exit reboot, mode "default"
-    bindsym Shift+s exec --no-startup-id i3exit shutdown, mode "default"
+    bindsym l       exec --no-startup-id i3exit lock;        mode default
+    bindsym s       exec --no-startup-id i3exit suspend;     mode default
+    bindsym u       exec --no-startup-id i3exit switch_user; mode default
+    bindsym e       exec --no-startup-id i3exit logout;      mode default
+    bindsym h       exec --no-startup-id i3exit hibernate;   mode default
+    bindsym r       exec --no-startup-id i3exit reboot;      mode default
+    bindsym Shift+s exec --no-startup-id i3exit shutdown;    mode default
 
     # exit system mode: "Enter" or "Escape"
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
+    bindsym Return mode default
+    bindsym Escape mode default
 }
 
 # Resize window (you can also use the mouse for that)
@@ -429,8 +438,8 @@ mode "resize" {
         bindsym Right resize grow   width 10 px or 10 ppt
 
         # exit resize mode: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+        bindsym Return mode default
+        bindsym Escape mode default
 }
 
 #              _            _             _
@@ -447,7 +456,7 @@ exec_always --no-startup-id pamac-tray
 exec_always --no-startup-id pgrep udiskie || (sleep 1; udiskie -s -f $file -a --appindicator)
 exec_always --no-startup-id pgrep barrier || barrier
 exec_always --no-startup-id clipmenud
-#exec_always --no-startup-id xautolock -time 10 -locker blurlock -cornersize 64 -corners ----
+# exec_always --no-startup-id xautolock -time 10 -locker blurlock -cornersize 64 -corners ----
 exec_always --no-startup-id gnome-screensaver
 exec_always --no-startup-id gsettings set org.gnome.desktop.screensaver picture-uri 'file:///home/nik/.config/screensaver'
 # 7aske-scripts
@@ -471,10 +480,10 @@ exec_always --no-startup-id python3 ~/.local/bin/alternating_layouts
 # compton/picom
 bindsym $mod+Shift+F5 exec --no-startup-id killall picom
 bindsym $mod+F5 exec --no-startup-id picom -b --experimental-backends --config ~/.config/compton/compton.conf
-exec_always --no-startup-id sleep 1 && picom -b --experimental-backends --config ~/.config/compton/compton.conf
+exec_always --no-startup-id sleep 1 && pgrep picom || picom -b --experimental-backends --config ~/.config/compton/compton.conf
 
 # set background and theme using wal
-exec_always --no-startup-id wal --backend wal -i ~/.config/wallpaper
+# exec_always --no-startup-id wal --backend wal -i ~/.config/wallpaper
 
 #            _
 #   ___ ___ | | ___  _ __ ___
@@ -501,13 +510,11 @@ set_from_resource $color12    i3wm.color12
 set_from_resource $color13    i3wm.color13
 set_from_resource $color14    i3wm.color14
 set_from_resource $color15    i3wm.color15
-
-# Theme colors
-set_from_resource $fg i3wm.color7 #f0f0f0
-set_from_resource $bg i3wm.color2 #f0f0f0
+set_from_resource $fg         i3wm.color7
+set_from_resource $bg         i3wm.color2
 
 # class                  border  background    texture indicator   cborder
-client.focused          $color3         $fg    $color3   $color3       $color3
+client.focused          $color3         $fg    $color3   $color3   $color3
 client.focused_inactive     $bg         $bg        $fg       $bg       $bg
 client.unfocused            $bg         $bg        $fg       $bg       $bg
 client.urgent               $bg         $bg        $fg       $bg       $bg
@@ -532,7 +539,7 @@ bar {
 	#bindsym button4 nop
 	#bindsym button5 nop
 
-    font xft:Fira Code Medium 10
+    font $status_font
 	strip_workspace_numbers yes
 
     colors {
@@ -545,7 +552,7 @@ bar {
         focused_workspace    $color2         $color5 $background
         active_workspace     $color2         $color9     $color0
         inactive_workspace   $color2     $background $foreground
-        binding_mode        $color13        $color13     $color0
+        binding_mode         $color13       $color13     $color0
         urgent_workspace     $color2         $color5 $background
     }
 }
@@ -561,15 +568,14 @@ bindsym $mod+Shift+Ctrl+b bar mode toggle
 # i3-gaps        |___/      |_|
 
 # Set inner/outer gaps
-set $gaps_inner 20
-set $gaps_outer 0
 gaps inner $gaps_inner
 gaps outer $gaps_outer
 
+# workspace specific gaps
 workspace win gaps inner 0
 workspace win gaps outer 0
-workspace wm gaps inner 0
-workspace wm gaps outer 0
+workspace wm  gaps inner 0
+workspace wm  gaps outer 0
 
 # Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
 # gaps inner|outer current|all set|plus|minus <px>
@@ -584,21 +590,21 @@ smart_borders no_gaps
 
 # Press $mod+g to enter the gap mode. Choose o or i for modifying outer/inner gaps. Press one of + / - (in-/decrement for current workspace) or 0 (remove gaps for current workspace). If you also press Shift with these keys, the change will be global for all workspaces.
 bindsym $mod+Shift+g gaps inner all set $gaps_inner; gaps outer all set $gaps_outer; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "gaps" "gaps reset to default"
-set $mode_gaps Gaps: (o) outer, (i) inner, (0)px (1)0px, (2)0px, (3)0px, (4)0px
+set $mode_gaps       Gaps: (o) outer, (i) inner, (0)px (1)0px, (2)0px, (3)0px, (4)0px
 set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
 set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
 
 bindsym $mod+g mode "$mode_gaps"
 
 mode "$mode_gaps" {
-        bindsym o      mode "$mode_gaps_outer"
-        bindsym i      mode "$mode_gaps_inner"
+        bindsym o           mode "$mode_gaps_outer"
+        bindsym i           mode "$mode_gaps_inner"
 
-		bindsym 0      gaps inner all set 0,    mode default
-		bindsym 1      gaps inner all set 10,   mode default
-		bindsym 2      gaps inner all set 20,   mode default
-		bindsym 3      gaps inner all set 30,   mode default
-		bindsym 4      gaps inner all set 40,   mode default
+		bindsym 0           gaps inner all set 0,        mode default
+		bindsym 1           gaps inner all set 10,       mode default
+		bindsym 2           gaps inner all set 20,       mode default
+		bindsym 3           gaps inner all set 30,       mode default
+		bindsym 4           gaps inner all set 40,       mode default
 
 		bindsym Mod1+0      gaps inner current set 0,    mode default
 		bindsym Mod1+1      gaps inner current set 10,   mode default
@@ -606,32 +612,32 @@ mode "$mode_gaps" {
 		bindsym Mod1+3      gaps inner current set 30,   mode default
 		bindsym Mod1+4      gaps inner current set 40,   mode default
 
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+        bindsym Return mode default
+        bindsym Escape mode default
 }
 
 mode "$mode_gaps_inner" {
-        bindsym plus  gaps inner current plus 5
+        bindsym plus  gaps inner current plus  5
         bindsym minus gaps inner current minus 5
-        bindsym 0     gaps inner current set 0
+        bindsym 0     gaps inner current set   0
 
-        bindsym Shift+plus  gaps inner all plus 5
+        bindsym Shift+plus  gaps inner all plus  5
         bindsym Shift+minus gaps inner all minus 5
-        bindsym Shift+0     gaps inner all set 0
+        bindsym Shift+0     gaps inner all set   0
 
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+        bindsym Return mode default
+        bindsym Escape mode default
 }
 
 mode "$mode_gaps_outer" {
-        bindsym plus  gaps outer current plus 5
+        bindsym plus  gaps outer current plus  5
         bindsym minus gaps outer current minus 5
-        bindsym 0     gaps outer current set 0
+        bindsym 0     gaps outer current set   0
 
-        bindsym Shift+plus  gaps outer all plus 5
+        bindsym Shift+plus  gaps outer all plus  5
         bindsym Shift+minus gaps outer all minus 5
-        bindsym Shift+0     gaps outer all set 0
+        bindsym Shift+0     gaps outer all set   0
 
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+        bindsym Return mode default
+        bindsym Escape mode default
 }
