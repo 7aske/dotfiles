@@ -1,5 +1,5 @@
 #!/bin/sh
-search=$(rofi -dmenu -p Search:)
+search=$(xclip -sel p -o | dmenu -p "google search:")
 if [ -n "$search" ]; then
-    exo-open --launch WebBrowser "https://www.google.com/search?q=$search"
+    xdg-open "https://www.google.com/search?q=$search"
 fi

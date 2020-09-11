@@ -25,7 +25,7 @@ processes="$(pgrep "$program")"
 
 if [ -n "$processes" ]; then
     for proc in $processes; do
-        is_visible "$proc" && i3-msg "[class=(?i)$program] move container to scratchpad" 2>&1 >/dev/null && exit 0 
+        is_visible "$proc" && i3-msg "[class=(?i)$program] move container to scratchpad" 2>&1 >/dev/null && exit 0
     done
 
     i3-msg "[class=(?i)$program] move container to workspace current floating enable focus" 2>&1 >/dev/null
