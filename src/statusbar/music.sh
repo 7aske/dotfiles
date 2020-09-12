@@ -17,25 +17,27 @@ if [ "$PLAYER_STATUS" = "No players found" ] && [ -n "$BLOCK_BUTTON" ]; then
     i3-msg "exec --no-startup-id $PLAYER" >/dev/null 2>&1
 fi
 
-notify-send "$BLOCK_BUTTON"
 
 case $BLOCK_BUTTON in
 1)
     playerctl next "$PLAYER_ARG"
-    notify-send "$PLAYER" "next song"
+    notify-send "playerctl" "next song"
     ;;
 2)
-    playerctl play-pause "$PLAYER_ARG" && notify-send "$PLAYER" "$(playerctl "$PLAYER_ARG" status 2>&1)"
+    playerctl play-pause "$PLAYER_ARG"
+    notify-send "playerctl" "$(playerctl "$PLAYER_ARG" status 2>&1)"
     ;;
 3)
     playerctl previous "$PLAYER_ARG"
-    notify-send "$PLAYER" "prev song"
+    notify-send "playerctl" "prev song"
     ;;
 4)
     playerctl "$PLAYER_ARG" volume "0.05+"
+    notify-send "playerctl" "volume +5%"
     ;;
 5)
     playerctl "$PLAYER_ARG" volume "0.05-"
+    notify-send "playerctl" "volume -5%"
     ;;
 esac
 
