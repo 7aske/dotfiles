@@ -26,17 +26,17 @@ bindsym F1 nop
 set $editor      $EDITOR
 set $browser     $BROWSER
 set $file        $FILE
-set $term_file   ranger
+set $termfile    $TERMFILE
 set $reader      $READER
 set $player      $PLAYER
 set $dmenu_font  Fira Code Medium-10
-set $font        xft:Fira Code Medium 12
-set $status_font xft:Fira Code Medium 10
+set $font        xft:Fira Code Medium 10
+set $status_font pango:FiraCode Nerd Font Medium 10
 set $gaps_inner  20
 set $gaps_outer  0
 
 # set terminal commands
-set $terminal   st
+set $terminal   $TERMINAL
 set $terminal2  kitty
 
 
@@ -105,7 +105,7 @@ mode "$mode_config" {
     bindsym Escape mode default
 }
 
-bindsym $mod+e       exec --no-startup-id $terminal -e $term_file
+bindsym $mod+e       exec --no-startup-id $terminal -e $termfile
 bindsym $mod+Shift+e exec --no-startup-id $file
 bindsym $mod+w       exec --no-startup-id $browser
 bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor
@@ -535,25 +535,26 @@ bar {
 
 	tray_output primary
 	tray_padding 5
+
     # disable scroll wheel
 	#bindsym button4 nop
 	#bindsym button5 nop
 
     font $status_font
-	font pango:FiraCode Nerd Font Medium 10
-	strip_workspace_numbers no
+	# strip_workspace_numbers no
+	separator_symbol |
 
     colors {
         #background $background
         background  $background
-        statusline  $color1
-        separator   $color1
+        statusline  $foreground
+        separator       $color1
 
         #                     border      background        text
-        focused_workspace    $color2         $color5 $background
+        focused_workspace    $color2         $color6 $background
         active_workspace     $color2         $color9     $color0
         inactive_workspace   $color2     $background $foreground
-        binding_mode         $color13       $color13     $color0
+        binding_mode        $color13        $color13     $color0
         urgent_workspace     $color2         $color5 $background
     }
 }

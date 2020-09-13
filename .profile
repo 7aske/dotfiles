@@ -6,6 +6,7 @@ export CODE="$HOME/.local/src"
 export EDITOR="nvim"
 export BROWSER="chromium"
 export FILE="nautilus"
+export TERMFILE="ranger"
 export READER="zathura"
 export PLAYER="spotify"
 export TERMINAL="st"
@@ -14,6 +15,8 @@ export TERMINAL="st"
 export PATH="$HOME/.local/bin":"$PATH"
 export PATH="$PATH":"$HOME/.local/share/cargo/bin"
 export PATH="$PATH":"$HOME/Android/Sdk/emulator"
+
+export QT_QPA_PLATFORMTHEME="qt5ct"
 
 # Thanks to Luke Smith https://github.com/LukeSmithxyz/voidrice
 # ~/ Clean-up:
