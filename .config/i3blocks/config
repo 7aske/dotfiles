@@ -2,60 +2,62 @@ command=~/.local/bin/statusbar/$BLOCK_NAME
 separator_block_width=15
 markup=pango
 
+
 [title]
 label=
-interval=1 
+interval=1
 
 [music]
+align=left
 label=
 interval=5
 
 [cgs]
-label=💾 
+label= 
 interval=60
 
 [cpu]
-label=🐹 
+label= 
 interval=5
 
-[temp]
-label=🔥 
-interval=5
+#[temp]
+#label= 
+#interval=5
 
 [memory]
-label=🐏 
+label= 
 interval=10
 
-[ipaddr]
-label=💻 
-interval=60
+#[ipaddr]
+#label= 
+#interval=60
 
 [bandwidth]
 label=
 interval=2
 
 [disk]
-label=💽
+label= 
 interval=60
 command=~/.local/bin/statusbar/disk /
 
 [disk]
-label=💽
+label= 
 interval=60
 command=~/.local/bin/statusbar/disk /home
 
+[weather]
+interval=60
+#command=~/.local/bin/statusbar/weather
+
 [battery]
-interval=5
+interval=60
 command=~/.local/bin/statusbar/battery BAT1
 
-[weather]
-label=
-interval=60
-
 [clock]
-label=⌚
+label=
 interval=1
 
 [layout]
-label=📖 
+label= 
 interval=60
