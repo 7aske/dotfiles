@@ -2,12 +2,12 @@
 # Give a battery name (e.g. BAT0) as an argument.
 
 case $BLOCK_BUTTON in
-    3) pgrep -x dunst >/dev/null && notify-send "🔋 Battery module" "🔋: discharging
-🛑: not charging
-♻: stagnant charge
-🔌: charging
-⚡: charged
-❗: battery very low!
+    3) pgrep -x dunst >/dev/null && notify-send "🔋 Battery module" " : discharging
+ : not charging
+ : stagnant charge
+ : charging
+ : charged
+ : battery very low!
 - Text color reflects charge left" ;;
 esac
 
@@ -30,4 +30,4 @@ fi
 
 [ "$status" = "Charging" ] && color="#ffffff"
 
-printf "<span color='%s'>%s%s%s</span>\n" "$color" "$(echo "$status" | sed -e "s/,//;s/Discharging/🔋/;s/Not Charging/🛑/;s/Charging/🔌/;s/Unknown/♻️/;s/Full/⚡/;s/ 0*/ /g;s/ :/ /g")" "$warn" "$(echo "$capacity" | sed -e 's/$/%/') $([ -n "$duration" ] && echo "($duration)")"
+printf "<span color='%s'>%s%s%s</span>\n" "$color" "$(echo "$status" | sed -e "s/,//;s/Discharging//;s/Not Charging//;s/Charging//;s/Unknown//;s/Full//;s/ 0*/ /g;s/ :/ /g")" "$warn" "$(echo "$capacity" | sed -e 's/$/%/') $([ -n "$duration" ] && echo "($duration)")"

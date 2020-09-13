@@ -43,15 +43,15 @@ esac
 
 case "$PLAYER_STATUS" in
 "Playing")
-    printf "🎵 %s\n" "$(playerctl "$PLAYER_ARG" metadata title | cut -c -30)"
+    printf "喇 %s\n" "$(playerctl "$PLAYER_ARG" metadata title | cut -c -30)"
     ;;
 "No players found")
-    echo "🎵 "
+    echo ""
     ;;
 "Stopped")
-    echo "🎵 "
+    echo ""
     ;;
 "Paused")
-    printf "🔲 %s\n" "$(playerctl "$PLAYER_ARG" metadata title | cut -c -30)"
+    printf " %s\n" "$(playerctl "$PLAYER_ARG" metadata title | cut -c -30)"
     ;;
 esac
