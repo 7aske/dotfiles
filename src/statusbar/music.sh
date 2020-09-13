@@ -46,10 +46,10 @@ case "$PLAYER_STATUS" in
     printf "喇 %s\n" "$(playerctl "$PLAYER_ARG" metadata title | cut -c -30)"
     ;;
 "No players found")
-    echo ""
+    echo " "
     ;;
 "Stopped")
-    echo ""
+    echo " "
     ;;
 "Paused")
     printf " %s\n" "$(playerctl "$PLAYER_ARG" metadata title | cut -c -30)"
