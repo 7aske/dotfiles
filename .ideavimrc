@@ -1,0 +1,47 @@
+" source ~/.local/src/sh/dotfiles/.config/nvim/init.vim
+
+let mapleader=" "
+set backspace=indent,eol,start
+set colorcolumn=80
+set cursorline
+set encoding=utf-8
+set hlsearch
+set noexpandtab tabstop=4 shiftwidth=4
+set noshowmode
+set nowrap
+set nu rnu
+set showcmd
+set smartcase
+set smartindent
+
+" Copy to clipboard
+vnoremap  <leader>y   "+y
+nnoremap  <leader>Y   "+yg_
+nnoremap  <leader>y   "+y
+nnoremap  <leader>yy  "+yy
+
+" Paste from clipboard
+nnoremap <leader>p    "+p
+nnoremap <leader>P    "+P
+vnoremap <leader>p    "+p
+vnoremap <leader>P    "+P
+
+
+nmap gD             :action GotoImplementation<CR>
+nmap gd             :action GotoDeclaration<CR>
+nmap gf             :action GotoFile<CR>
+nmap g[             :action GotoPreviousError<CR>
+nmap g]             :action GotoNextError<CR>
+
+nmap <space>r viw   :action Replace<CR>
+vmap <space>r       :action Replace<CR>
+
+vmap <c-n>          :action SelectNextOccurrence<CR>
+nmap <c-w>q         :action CloseEditor<CR>
+nmap <c-w>w         :action Switcher<CR>
+map  <space><space> :action SearchEverywhere<CR>
+
+command Goya         action ToggleDistractionFreeMode
+command W            action Switcher
+command Diff         action LocalHistory.ShowHistory
+command Gdiffb       action Vcs.ShowHistoryForBlock

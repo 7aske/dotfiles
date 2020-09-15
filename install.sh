@@ -11,7 +11,7 @@ mklink () {
         echo "$prog: backup '$HOME/.config/$1'"
 		mv "$HOME/.config/$1" "$HOME/.config/$1.bak"
 	fi
-        
+
     if [ ! -e "$(dirname $HOME/.config/$1)" ]; then
         mkdir -p "$(dirname $HOME/.config/$1)"
     fi
@@ -27,7 +27,7 @@ mksource (){
     src="$(pwd)/$1"
     dest="$HOME/${2:-$1}"
     if ! grep -q "$src" "$dest"; then
-        echo "[ -f \"$src\" ] && . \"$src\"" >> "$dest"  
+        echo "[ -f \"$src\" ] && . \"$src\"" >> "$dest"
     fi
 }
 
@@ -109,6 +109,9 @@ mksource .xprofile
 
 # .bashrc
 mksource .bashrc
+
+# .ideavimrc
+mksource .ideavimrc
 
 # Xresources
 mklink Xresources
