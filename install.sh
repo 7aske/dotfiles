@@ -22,7 +22,7 @@ mklink () {
 	fi
 }
 
-mksource (){
+mksource () {
     echo "$prog: processing '$1'"
     src="$(pwd)/$1"
     dest="$HOME/${2:-$1}"
@@ -111,7 +111,7 @@ mksource .xprofile
 mksource .bashrc
 
 # .ideavimrc
-mksource .ideavimrc
+ln -sf "$(pwd)/.config/ideavimrc" "$HOME/.ideavimrc"
 
 # Xresources
 mklink Xresources
