@@ -483,7 +483,7 @@ bindsym $mod+F5 exec --no-startup-id picom -b --experimental-backends --config ~
 exec_always --no-startup-id sleep 1 && pgrep picom || picom -b --experimental-backends --config ~/.config/compton/compton.conf
 
 # set background and theme using wal
-exec_always --no-startup-id setwal -r
+exec_always --no-startup-id wal ~/.config/wallpaper
 
 #            _
 #   ___ ___ | | ___  _ __ ___
