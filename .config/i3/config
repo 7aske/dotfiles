@@ -133,6 +133,8 @@ bindsym $mod+F2       exec --no-startup-id kblang -fn 'Fira Code-12'
 # 7aske-scripts
 bindsym $mod+Shift+s  exec --no-startup-id google-search
 bindsym $mod+Tab      exec --no-startup-id rofi -show window
+bindsym $mod+Shift+semicolon    exec --no-startup-id dmenu -b -p ":" -fn '$dmenu_font' | (xargs i3-msg) 2>&1 | xargs notify-send
+
 
 #                    _             _   _
 #  _ __   __ ___   _(_) __ _  __ _| |_(_) ___  _ __
@@ -185,13 +187,12 @@ bindsym $mod+Shift+b move container to workspace back_and_forth; workspace back_
 # set title format
 font $font
 for_window [class=".*"] title_format " %title"
+# configure border style <normal|1pixel|pixel xx|none|pixel>
+# hide_edge_borders smart
+for_window [class=".*"] border pixel 2
 
 # some role configuration
 for_window [class="floating"] floating enable
-
-# configure border style <normal|1pixel|pixel xx|none|pixel>
-default_border pixel 0
-#hide_edge_borders smart
 
 # use Mouse+$mod to drag floating windows
 floating_modifier $mod
@@ -588,7 +589,7 @@ workspace wm  gaps outer 0
 # smart_gaps on
 
 # Smart borders (draw borders around container only if it is not the only container on this workspace) on|no_gaps
-smart_borders no_gaps
+# smart_borders no_gaps
 
 # Press $mod+g to enter the gap mode. Choose o or i for modifying outer/inner gaps. Press one of + / - (in-/decrement for current workspace) or 0 (remove gaps for current workspace). If you also press Shift with these keys, the change will be global for all workspaces.
 bindsym $mod+Shift+g gaps inner all set $gaps_inner; gaps outer all set $gaps_outer; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "gaps" "gaps reset to default"
