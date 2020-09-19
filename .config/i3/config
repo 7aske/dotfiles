@@ -560,7 +560,7 @@ bar {
         separator       $color8
 
         #                     border      background        text
-        focused_workspace        $bg         $color3         $bg
+        focused_workspace    $color3         $color3         $bg
         active_workspace     $color8         $color8     $color0
         inactive_workspace   $color8             $bg         $fg
         binding_mode        $color13        $color13     $color0
