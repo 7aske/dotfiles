@@ -34,6 +34,7 @@ set $font        xft:Fira Code Medium 10
 set $status_font pango:FiraCode Nerd Font Medium 10
 set $gaps_inner  20
 set $gaps_outer  0
+set $border_size 2
 
 # set terminal commands
 set $terminal   $TERMINAL
@@ -189,7 +190,7 @@ font $font
 for_window [class=".*"] title_format " %title"
 # configure border style <normal|1pixel|pixel xx|none|pixel>
 # hide_edge_borders smart
-for_window [class=".*"] border pixel 2
+for_window [class=".*"] border pixel $border_size
 
 # some role configuration
 for_window [class="floating"] floating enable
@@ -201,7 +202,7 @@ floating_modifier $mod
 bindsym $mod+c floating enable; move position center
 
 # change borders
-bindsym $mod+u border toggle 1; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "border" "border toggled"
+bindsym $mod+u border toggle $border_size; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "border" "border toggled"
 
 # kill focused window
 bindsym $mod+q kill
@@ -225,8 +226,10 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+s sticky toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "sticky" "sticky toggled"
 
 # switch to workspace with urgent window automatically
-for_window [urgent="latest"] focus
+# for_window [urgent="latest"] focus
 focus_on_window_activation focus
+focus_wrapping no
+
 
 # layout toggling mode
 bindsym $mod+Shift+t mode "$mode_layout"
@@ -297,6 +300,12 @@ bindsym $mod+Ctrl+Left  move workspace to output left
 bindsym $mod+Ctrl+Up    move workspace to output up
 bindsym $mod+Ctrl+Right move workspace to output right
 bindsym $mod+Ctrl+Down  move workspace to output down
+
+# read 1 character and mark the current window with this character
+bindsym $mod+Ctrl+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
+
+# read 1 character and go to the window with the character
+bindsym $mod+apostrophe exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Goto: '
 
 # move the currently focused window to the scratchpad
 bindsym $mod+Shift+minus move scratchpad
@@ -484,7 +493,7 @@ bindsym $mod+F5 exec --no-startup-id picom -b --experimental-backends --config ~
 exec_always --no-startup-id sleep 1 && pgrep picom || picom -b --experimental-backends --config ~/.config/compton/compton.conf
 
 # set background and theme using wal
-exec_always --no-startup-id wal ~/.config/wallpaper
+exec_always --no-startup-id wal -i ~/.config/wallpaper
 
 #            _
 #   ___ ___ | | ___  _ __ ___
@@ -493,8 +502,6 @@ exec_always --no-startup-id wal ~/.config/wallpaper
 #  \___\___/|_|\___/|_|  |___/
 # Color palette used for the terminal ( ~/.Xresources file )
 # Colors are parsed from wal (python-pywal)
-set_from_resource $background background
-set_from_resource $foreground foreground
 set_from_resource $color0     i3wm.color0
 set_from_resource $color1     i3wm.color1
 set_from_resource $color2     i3wm.color2
@@ -511,16 +518,17 @@ set_from_resource $color12    i3wm.color12
 set_from_resource $color13    i3wm.color13
 set_from_resource $color14    i3wm.color14
 set_from_resource $color15    i3wm.color15
-set_from_resource $fg         i3wm.color7
-set_from_resource $bg         i3wm.color2
+set_from_resource $fg         foreground
+set_from_resource $bg         background
 
-# class                  border  background    texture indicator   cborder
-client.focused          $color3         $fg    $color3   $color3   $color3
-client.focused_inactive     $bg         $bg        $fg       $bg       $bg
-client.unfocused            $bg         $bg        $fg       $bg       $bg
-client.urgent               $bg         $bg        $fg       $bg       $bg
-client.placeholder          $bg         $bg        $fg       $bg       $bg
-client.background           $bg
+
+# class                    border  background       text indicator   cborder
+client.focused            $color3     $color3   $color15   $color3   $color3
+client.focused_inactive   $color8     $color8    $color0   $color8   $color8
+client.unfocused          $color8     $color8    $color0   $color8   $color8
+client.urgent                 $bg         $bg        $fg       $bg       $bg
+client.placeholder            $bg         $bg        $fg       $bg       $bg
+client.background             $bg
 
 #      _        _               _
 #  ___| |_ __ _| |_ _   _ ___  | |__   __ _ _ __
@@ -547,16 +555,16 @@ bar {
 
     colors {
         #background $background
-        background  $background
-        statusline  $foreground
-        separator       $color1
+        background          $bg
+        statusline     $color15
+        separator       $color8
 
         #                     border      background        text
-        focused_workspace    $color2         $color6 $background
-        active_workspace     $color2         $color9     $color0
-        inactive_workspace   $color2     $background $foreground
+        focused_workspace        $bg         $color3         $bg
+        active_workspace     $color8         $color8     $color0
+        inactive_workspace   $color8             $bg         $fg
         binding_mode        $color13        $color13     $color0
-        urgent_workspace     $color2         $color5 $background
+        urgent_workspace     $color2         $color5         $bg
     }
 }
 
