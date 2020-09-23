@@ -1,9 +1,12 @@
 #!/usr/bin/env sh
 
-mode=${2:-"same-as"}
+MODE=${2:-"same-as"}
+
+PRIMARY="$(xrandr | grep primary | cut -d' ' -f1)"
+DISPL="${DISPL:-"HDMI-1"}"
 
 if [ "$1" = "on" ]; then
-    xrandr --output eDP --auto --output HDMI-A-0 --auto --"$mode" eDP
+    xrandr --output "$PRIMARY" --auto --output "$DISPL" --auto "--$MODE" "$PRIMARY"
 elif [ "$1" = "off" ]; then
-    xrandr --output HDMI-A-0 --off
+    xrandr --output "$DISPL" --off
 fi
