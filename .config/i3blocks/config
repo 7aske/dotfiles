@@ -61,3 +61,7 @@ interval=1
 [layout]
 label= 
 interval=60
+
+[packages]
+interval=60
+

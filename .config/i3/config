@@ -462,7 +462,7 @@ mode "resize" {
 exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec_always --no-startup-id nm-applet
 exec_always --no-startup-id xfce4-power-manager
-exec_always --no-startup-id pamac-tray
+# exec_always --no-startup-id pamac-tray
 exec_always --no-startup-id pgrep udiskie || (sleep 1; udiskie -s -f $file -a --appindicator)
 exec_always --no-startup-id pgrep barrier || barrier
 exec_always --no-startup-id clipmenud
