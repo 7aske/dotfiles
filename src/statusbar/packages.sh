@@ -1,6 +1,14 @@
 #!/usr/bin/env sh
 
+tempfile="/tmp/pacup_prev"
 count="$(pacup -c)"
+
+prev_count="$(cat "$tempfile")"
+
+if (( $prev_count < $count )); then
+	notify-send "updates available" "$(pacup -l)"
+fi
+echo "$count" > "$tempfile"
 
 case "$BLOCK_BUTTON" in
 	1) notify-send "updates available" "$(pacup -l)" ;; 
@@ -16,5 +24,5 @@ else
 	color="#ff8144"
 fi
 
-echo "<span color=\"$color\">$count</span>"
+echo " <span color=\"$color\">$count</span>"
 

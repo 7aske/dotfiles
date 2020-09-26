@@ -4,7 +4,7 @@ tempfile="/tmp/pacup"
 
 function pacup_count(){
 	if [ -f "$tempfile" ]; then
-		wc -l "$tempfile" sed -n '1!p' | cut -d' ' -f1
+		cat "$tempfile" | sed -e '1!p' | wc -l
 	else
 		echo 0
 	fi
@@ -18,6 +18,7 @@ function pacup_update(){
 
 	yay -Syy
 	yay -Qu > "$tempfile"
+	chmod 775 "$tempfile"
 }
 
 function pacup_list(){
