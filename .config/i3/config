@@ -90,7 +90,7 @@ bindsym $mod+BackSpace    exec --no-startup-id i3btf $terminal2 --class floating
 bindsym $mod+Shift+Return exec --no-startup-id $terminal2
 #bindsym $mod+a exec --no-startup-id rofi -show run
 bindsym $mod+a     exec --no-startup-id TERMINAL_CMD="st -e" dmenu_recency -f -i -l 10 -p "run: " -fn '$dmenu_font'
-bindsym $mod+d     exec --no-startup-id dmenu_run -fn '$dmenu_font'
+bindsym $mod+Shift+semicolon     exec --no-startup-id dmenu_run -p ":" -f -b -fn '$dmenu_font'
 bindsym $mod+grave exec --no-startup-id $terminal -e htop
 
 # edit config files
@@ -130,11 +130,13 @@ bindsym $mod+Shift+o  exec --no-startup-id TYPE=vim ROFI=1 codeopen
 bindsym $mod+Ctrl+o   exec --no-startup-id TYPE=jetbrains ROFI=1 codeopen
 bindsym $mod+v        exec --no-startup-id clipmenu
 # 7aske-scripts
-bindsym $mod+F2       exec --no-startup-id kblang -fn 'Fira Code-12'
+bindsym $mod+F2       exec --no-startup-id kblang -fn $dmenu_font
 # 7aske-scripts
-bindsym $mod+Shift+s  exec --no-startup-id google-search
+bindsym $mod+Home     exec --no-startup-id google-search
+
 bindsym $mod+Tab      exec --no-startup-id rofi -show window
-bindsym $mod+Shift+semicolon    exec --no-startup-id dmenu -b -p ":" -fn '$dmenu_font' | (xargs i3-msg) 2>&1 | xargs notify-send
+
+bindsym $mod+Ctrl+Shift+semicolon    exec --no-startup-id dmenu -b -p ":" -fn '$dmenu_font' | (xargs i3-msg) 2>&1 | xargs notify-send
 
 
 #                    _             _   _
@@ -223,7 +225,7 @@ bindsym $mod+Shift+space floating toggle; exec --no-startup-id notify-send --hin
 bindsym $mod+space focus mode_toggle
 
 # toggle sticky
-bindsym $mod+s sticky toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "sticky" "sticky toggled"
+bindsym $mod+Mod1+s sticky toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "sticky" "sticky toggled"
 
 # switch to workspace with urgent window automatically
 # for_window [urgent="latest"] focus
@@ -301,11 +303,14 @@ bindsym $mod+Ctrl+Up    move workspace to output up
 bindsym $mod+Ctrl+Right move workspace to output right
 bindsym $mod+Ctrl+Down  move workspace to output down
 
-# read 1 character and mark the current window with this character
-bindsym $mod+Ctrl+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
+# mark navigation
+bindsym $mod+Ctrl+m exec i3-input -F 'mark %s' -l 1 -P 'mark: '
+bindsym $mod+apostrophe exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'goto: '
 
-# read 1 character and go to the window with the character
-bindsym $mod+apostrophe exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Goto: '
+# arbitrary letter workspace switching
+bindsym $mod+s       exec --no-startup-id "i3-input -l 1 -P 'workspace: ' -F 'workspace \\"%s\\"'"
+bindsym $mod+Ctrl+s  exec --no-startup-id "i3-input -l 1 -P 'workspace: ' -F 'move container to workspace \\"%s\\"'"
+bindsym $mod+Shift+s exec --no-startup-id "i3-input -l 1 -P 'workspace: ' -F 'move container to workspace \\"%s\\"; workspace \\"%s\\"'"
 
 # move the currently focused window to the scratchpad
 bindsym $mod+Shift+minus move scratchpad
