@@ -308,9 +308,9 @@ bindsym $mod+Ctrl+m exec i3-input -F 'mark %s' -l 1 -P 'mark: '
 bindsym $mod+apostrophe exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'goto: '
 
 # arbitrary letter workspace switching
-bindsym $mod+s       exec --no-startup-id "i3-input -l 1 -P 'workspace: ' -F 'workspace \\"%s\\"'"
-bindsym $mod+Ctrl+s  exec --no-startup-id "i3-input -l 1 -P 'workspace: ' -F 'move container to workspace \\"%s\\"'"
-bindsym $mod+Shift+s exec --no-startup-id "i3-input -l 1 -P 'workspace: ' -F 'move container to workspace \\"%s\\"; workspace \\"%s\\"'"
+bindsym $mod+s       exec --no-startup-id "xinp -f $dmenu_font -l 1 -p 'workspace: ' -F 'workspace \\"%s\\"' --i3"
+bindsym $mod+Ctrl+s  exec --no-startup-id "xinp -f $dmenu_font -l 1 -p 'workspace: ' -F 'move container to workspace \\"%s\\"' --i3"
+bindsym $mod+Shift+s exec --no-startup-id "xinp -f $dmenu_font -l 1 -p 'workspace: ' -F 'move container to workspace \\"%s\\", workspace \\"%s\\"' --i3"
 
 # move the currently focused window to the scratchpad
 bindsym $mod+Shift+minus move scratchpad
