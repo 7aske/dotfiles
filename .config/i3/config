@@ -376,6 +376,8 @@ for_window [title=".*Emulator.*"] floating enable
 for_window [title=".*World of Warcraft.*"] layout tabbed
 for_window [class="VirtualBox Machine"] floating disable border none
 for_window [class="VirtualBox Manager"] floating disable
+for_window [class="weather_floating"] floating enable, resize set 1280 820, move position center
+for_window [class="floating_popup"] floating enable, resize set 1280 768, move position center
 
 # virtual machines
 for_window [class="VirtualBox Machine"] move container to workspace wm
