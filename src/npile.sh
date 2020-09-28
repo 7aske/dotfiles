@@ -5,10 +5,11 @@ dir=$(dirname "$file")
 base="${file%.*}"
 
 case "$file" in
-	*\.kemd)
+	*\.md)
 		Rscript -e "rmarkdown::render('$file', quiet=TRUE)"
 		wkhtmltopdf "$base.html" "$base.pdf"
 		rm "$base.html"
+		zathura "$base.pdf" &
 		;;
 	*config.h) sudo make install ;;
 	*\.c) cc "$file" -o "$base" && "$base" ;;
