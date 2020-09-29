@@ -176,6 +176,10 @@ bindsym $mod+Ctrl+Shift+Down  mark swap; focus down;  swap container with mark s
 bindsym $mod+Ctrl+Shift+Up    mark swap; focus up;    swap container with mark swap; unmark swap; focus up
 bindsym $mod+Ctrl+Shift+Right mark swap; focus right; swap container with mark swap; unmark swap; focus right
 
+bindsym $mod+Ctrl+Shift+h mark swap; focus left;  swap container with mark swap; unmark swap; focus left
+bindsym $mod+Ctrl+Shift+j mark swap; focus down;  swap container with mark swap; unmark swap; focus down
+bindsym $mod+Ctrl+Shift+k mark swap; focus up;    swap container with mark swap; unmark swap; focus up
+bindsym $mod+Ctrl+Shift+l mark swap; focus right; swap container with mark swap; unmark swap; focus right
 
 # workspace back and forth (with/without active container)
 workspace_auto_back_and_forth yes
