@@ -12,31 +12,28 @@ if ! filereadable(expand('~/.config/nvim/autoload/plug.vim'))
     autocmd VimEnter * PlugInstall
 endif
 
+set packpath=/usr/local/share/nvim/runtime,~/.local/share/nvim/site
+
 call plug#begin('~/.config/nvim/plugged')
-	Plug 'HerringtonDarkholme/yats.vim'
 	Plug 'jiangmiao/auto-pairs'
+	Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 	Plug 'junegunn/fzf.vim'
 	Plug 'junegunn/goyo.vim'
 	Plug 'machakann/vim-highlightedyank'
-	Plug 'maxmellon/vim-jsx-pretty'
-	Plug 'mbbill/undotree'
 	Plug 'neoclide/coc.nvim', {'branch': 'release'}
-	Plug 'pangloss/vim-javascript'
 	Plug 'sheerun/vim-polyglot'
-	Plug 'tasn/vim-tsx'
+	Plug 'vim-airline/vim-airline'
+    Plug 'tpope/vim-surround'
     Plug 'PotatoesMaster/i3-vim-syntax'
     Plug 'airblade/vim-gitgutter'
-    Plug 'dylanaraps/wal.vim'
     Plug 'kien/ctrlp.vim'
-    Plug 'lyuts/vim-rtags'
     Plug 'preservim/nerdcommenter'
+    Plug 'tpope/vim-fugitive'
 	Plug 'preservim/nerdtree' |
 				\ Plug 'Xuyuanp/nerdtree-git-plugin'
-    Plug 'tpope/vim-fugitive'
-    Plug 'tpope/vim-surround'
-	Plug 'vim-airline/vim-airline'
 
 	" colorschemes
+    Plug 'dylanaraps/wal.vim'
 	Plug 'arcticicestudio/nord-vim'
 	Plug 'joshdick/onedark.vim'
 	Plug 'morhetz/gruvbox'
@@ -201,9 +198,6 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 map <A-1> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" Undotree
-map <leader>U :UndotreeToggle<CR>
 
 " Spellchecker -----------------------------------
 map <F6> :setlocal spell! spelllang=en<CR>
