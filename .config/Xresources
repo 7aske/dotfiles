@@ -17,4 +17,4 @@
 *.fadeColor:           black
 *.cursorColor:         #1ABB9B
 *.alpha:               0.9
-Xcursor.theme:         breeze-white
+Xcursor.theme:         capitaine-cursors-light
