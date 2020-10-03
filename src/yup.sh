@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 
-tempfile="/tmp/pacup"
+tempfile="/tmp/yup"
 
-PACUP_UID="${SUDO_UID:-"$(id -u)"}"
-PACUP_GID="${SUDO_GID:-"$(id -g)"}"
-PACUP_USER="${SUDO_USER:-"$(whoami)"}"
+YUP_UID="${SUDO_UID:-"$(id -u)"}"
+YUP_GID="${SUDO_GID:-"$(id -g)"}"
+YUP_USER="${SUDO_USER:-"$(whoami)"}"
+
+function _pacup_write(){
+	yay -Qu | sudo -u "$YUP_USER" tee "$tempfile"
+}
 
 function pacup_count(){
 	if [ -f "$tempfile" ]; then
@@ -15,14 +19,9 @@ function pacup_count(){
 }
 
 function pacup_update(){
-	sudo yay -Syy
+	yay -Syy
 	_pacup_write
-	chmod 775 "$tempfile"
-	chown "$PACUP_UID:$PACUP_GID" "$tempfile"
-}
-
-function _pacup_write(){
-	yay -Qu | sudo -u "$PACUP_USER" tee "$tempfile"
+	sudo -u "$YUP_USER" chown "$YUP_UID:$YUP_GID" "$tempfile"
 }
 
 function pacup_list(){
@@ -30,12 +29,12 @@ function pacup_list(){
 }
 
 function pacup_reset(){
-	echo "" | sudo -u "$PACUP_USER" tee "$tempfile"
+	echo "" | sudo -u "$YUP_USER" tee "$tempfile"
 }
 
 case "$1" in
 	"-u") pacup_update ;;
-	"-r") pacup_reset ;;
+	"-r") _pacup_write ;;
 	"-c") pacup_count ;;
 	"-l") pacup_list ;;
 	   *) yay && _pacup_write ;;

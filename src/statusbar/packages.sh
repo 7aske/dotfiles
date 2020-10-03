@@ -1,17 +1,17 @@
 #!/usr/bin/env sh
 
-tempfile="/tmp/pacup_prev"
-count="$(pacup -c)"
+tempfile="/tmp/yup_prev"
+count="$(yup -c)"
 
 prev_count="$(cat "$tempfile")"
 
 if (( $prev_count < $count )); then
-	notify-send "updates available" "$(pacup -l)"
+	notify-send "updates available" "$(yup -l)"
 fi
 echo "$count" > "$tempfile"
 
 case "$BLOCK_BUTTON" in
-	1) notify-send "updates available" "$(pacup -l)" ;; 
+	1) notify-send "updates available" "$(yup -l)" ;; 
 esac
 
 if [ "$count" -le 15 ]; then
