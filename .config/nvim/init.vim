@@ -68,7 +68,7 @@ set textwidth=80
 set updatetime=50
 set wildmenu
 syntax on
-
+let &scrolloff = &lines / 5
 
 " Copy to clipboard
 vnoremap  <leader>y   "+y

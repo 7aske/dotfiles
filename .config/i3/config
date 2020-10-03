@@ -336,6 +336,7 @@ bindsym $mod+minus scratchpad show
 # Open applications on specific workspaces
 assign [class="(?i)caprine"] $ws9
 assign [class="(?i)discord"] $ws9
+assign [class="(?i)lightcord"] $ws9
 assign [class="(?i)viber"] $ws9
 assign [class="(?i)TelegramDesktop"] $ws9
 assign [class="(?i)skype"] $ws9
