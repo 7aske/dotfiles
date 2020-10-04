@@ -89,7 +89,7 @@ bindsym $mod+Return       exec --no-startup-id $terminal
 bindsym $mod+BackSpace    exec --no-startup-id i3btf $terminal2 --class floating
 bindsym $mod+Shift+Return exec --no-startup-id $terminal2
 #bindsym $mod+a exec --no-startup-id rofi -show run
-bindsym $mod+a     exec --no-startup-id TERMINAL_CMD="st -e" dmenu_recency -f -i -l 10 -p "run: " -fn '$dmenu_font'
+bindsym $mod+a     exec --no-startup-id TERMINAL_CMD="st -e" dmenu-recent -f -i -l 10 -p "run: " -fn '$dmenu_font'
 bindsym $mod+Shift+semicolon     exec --no-startup-id dmenu_run -p ":" -f -b -fn '$dmenu_font'
 bindsym $mod+grave exec --no-startup-id $terminal -e htop
 
