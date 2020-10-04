@@ -1,1 +1,23 @@
+#!/usr/bin/env sh
 
+profile="$HOME/.profile"
+xresources="$HOME/.Xresources"
+configxresources="$HOME/.config/Xresources"
+cachexresources="$HOME/.cache/wal/colors.Xresources"
+
+
+if [ -f "$profile" ];then
+    . "$profile"
+fi
+
+if [ -f "$xresources" ];then
+    xrdb -merge "$xresources"
+fi
+
+if [ -f "$configxresources" ];then
+    xrdb -merge "$configxresources"
+fi
+
+if [ -f "$cachexresources" ];then
+    xrdb -merge "$cachexresources"
+fi
