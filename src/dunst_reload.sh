@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-. "${HOME}/.cache/wal/colors.sh"
+[ -f  "${HOME}/.cache/wal/colors.sh" ] && . "${HOME}/.cache/wal/colors.sh"
 
 killall dunst
 dunst \
