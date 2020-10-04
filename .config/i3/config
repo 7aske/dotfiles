@@ -427,8 +427,9 @@ mode "$mode_startup" {
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+0 exec --no-startup-id "i3-nagbar -t warning -m 'Do you really want to exit i3?' -b 'Yes, exit i3' 'i3-msg exit'"
 # Set shut down, restart and locking features
-bindsym $mod+0      mode "$mode_system"
-bindsym $mod+Escape mode "$mode_system"
+bindsym $mod+0           mode "$mode_system"
+bindsym $mod+Escape      mode "$mode_system"
+bindsym Ctrl+Mod1+Delete mode "$mode_system"
 set $mode_system (l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown
 mode "$mode_system" {
     bindsym l       exec --no-startup-id i3exit lock;        mode default
@@ -437,6 +438,7 @@ mode "$mode_system" {
     bindsym e       exec --no-startup-id i3exit logout;      mode default
     bindsym h       exec --no-startup-id i3exit hibernate;   mode default
     bindsym r       exec --no-startup-id i3exit reboot;      mode default
+    bindsym Delete  exec --no-startup-id i3exit reboot;      mode default
     bindsym Shift+s exec --no-startup-id i3exit shutdown;    mode default
 
     # exit system mode: "Enter" or "Escape"
@@ -497,7 +499,7 @@ exec_always --no-startup-id xset r rate 195 55
 
 # alternating split layout
 # https://github.com/olemartinorg/i3-alternating-layout
-exec_always --no-startup-id python3 ~/.local/bin/alternating_layouts
+exec_always --no-startup-id python3 alternating_layouts
 
 # compton/picom
 bindsym $mod+Shift+F5 exec --no-startup-id killall picom
