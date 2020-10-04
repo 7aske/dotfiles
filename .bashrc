@@ -5,23 +5,33 @@ export HISTSIZE=
 export HISTFILESIZE=
 export LESSHISTSIZE=0
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
-
-
-function bashrc() {
-    $EDITOR "$CODE/sh/bashrc/.bashrc" && $EDITOR "$HOME/.bashrc" && source "$HOME/.bashrc"
-}
+[ -f "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
 
 # git utils
-function gr() {
-    echo "Password:"
+function grepo() {
+    [ -z "$1" ] && echo "usage: gr <repo-name>" && return 1
+    echo "Create GitHub repository '$1'"
+    echo -n "Username: "
+    read -r username
+    echo -n "Password: "
     read -r -s password
     echo
-    curl -u 7aske:"$password" https://api.github.com/user/repos -d "{\"name\":\"$1\"}"
-    git init
-    git remote add origin https://github.com/7aske/"$1".git
+    out="$(curl -v -u "$username":"$password" https://api.github.com/user/repos -d "{\"name\":\"$1\"}" 2>&1)"
+
+    if echo $out | grep -q -e "< HTTP/1.1 20[01]"; then
+        git init
+        git remote add origin https://github.com/$username/"$1".git
+        echo
+        echo -n "Clone URL: "
+        echo "$out" | grep "clone_url" | cut -d ' ' -f4 | sed -n 's/[",]//gp'
+        echo -n "SSH URL: "
+        echo "$out" | grep "ssh_url" | cut -d ' ' -f4 | sed -n 's/[",]//gp'
+    else
+        echo "$out" | grep "message" | cut -d ':' -f2 | sed -n 's/"\(.*\)"/\1/;s/^ //g;s/[,]//gp'
+    fi
 }
 
-function clone() {
+function gclone() {
     if [ "$#" -eq 2 ]; then
         git clone https://github.com/"$1"/"$2"
     else
@@ -29,39 +39,36 @@ function clone() {
     fi
 }
 
-function gitreset() { git reset --hard HEAD; }
-
-function commit() { git add . && git commit -m "$@"; }
-
-function drycommit() { git commit --branch --dry-run; }
-
-function push() { git push origin "$(git branch | grep -e "^[\*]" | awk '{print $2}')"; }
-
-function pull() { git pull origin "$(git branch | grep -e "^[\*]" | awk '{print $2}')"; }
-
-function dpi() {
-    val=$([ ! -z "$1" ] && echo "$1" || echo 96)
-    if [ "$DESKTOP_SESSION" == "gnome" ]; then
-        dconf write /org/gnome/desktop/interface/text-scaling-factor $(echo "scale=1; $val/96" | bc) 2> /dev/null
-    elif [ "$DESKTOP_SESSION" == "xfce" ]; then
-        xfconf-query -c xsettings -p /Xft/DPI -s "$val" 2> /dev/null
+function gcommit() {
+    git add .
+    if [ -z "$1" ]; then
+        git commit
+    else
+    git commit -m "$@"
     fi
 }
+function   gadd(){ git add "$@";                  }
+function greset(){ git reset --hard HEAD;         }
+function   gdry(){ git commit --branch --dry-run; }
+function  gpush(){ git push "$@";                 }
+function  gpull(){ git pull "$@";                 }
+function    gsl(){ git status --long "$@";        }
+function    gss(){ git status -s "$@";            }
+function gstash(){ git stash "$@";                }
+function   gfet(){ git fetch "$@";                }
+function   glog(){ git log --graph "$@";          }
 
 alias cls='clear -x'
 alias autoremove='sudo pacman -R $(pacman -Qdtq)'
-alias pacman='sudo pacman'
 alias v='nvim'
 alias n='nano'
 alias o='xdg-open'
-alias ci='code-insiders'
-function c { vscodium $@ || codium $@ || /usr/bin/code $@; }
-function chrome { google-chrome-stable $@ || chromium $@; }
+function c { vscodium "$@" || codium "$@" || code-insiders "$@" || /usr/bin/code "$@"; }
+function chrome { chromium "$@" || google-chrome-stable "$@"; }
 alias bat='bat -p --paging never --theme=base16'
 alias myip='curl -s api.ipify.org'
 alias grep='grep --color=auto'
 alias wget='wget --hsts-file=~/.config/wget/.wget-hsts'
-alias cpwd='pwd | xclip -sel c'
 alias diff="diff --color=auto"
 # navigation
 alias conf='builtin cd $HOME/.config/&& ls'
@@ -78,7 +85,6 @@ alias chc='cd "$(chcode)"'
 alias chgs='cd "$(codegs)" && echo -e "\ngit status -s\n"; git status -s'
 alias tmux='tmux -f "$HOME/.config/tmux/.tmux.conf"'
 # misc
-alias rsrc='source ~/.bashrc'
 alias ascii='man ascii'
 # ls
 alias ls='ls --color=auto -lph --group-directories-first'
@@ -98,13 +104,13 @@ alias bell='xset -b'
 function cd() {
     case $1 in
     ..)
-        builtin cd .. && ls
+        builtin cd ../ && ls
         ;;
     ...)
-        builtin cd ../.. && ls
+        builtin cd ../../ && ls
         ;;
     ....)
-        builtin cd ../../.. && ls
+        builtin cd ../../../ && ls
         ;;
     .....)
         builtin cd ../../../../ && ls
@@ -114,16 +120,15 @@ function cd() {
         ;;
     esac
 }
-alias cdb="cd $OLDPWD"
 
 function open() {
     unameOut="$(uname -s)"
     case "${unameOut}" in
-    Linux*) machine=Linux ;;
-    Darwin*) machine=Mac ;;
-    CYGWIN*) machine=Cygwin ;;
-    MINGW*) machine=MinGw ;;
-    *) machine="UNKNOWN:${unameOut}" ;;
+        Linux*) machine=Linux ;;
+        Darwin*) machine=Mac ;;
+        CYGWIN*) machine=Cygwin ;;
+        MINGW*) machine=MinGw ;;
+        *) machine="UNKNOWN:${unameOut}" ;;
     esac
     if test "${machine}" = 'Linux'; then
         (xdg-open "$@" >/dev/null 2>&1 &)
@@ -140,42 +145,45 @@ function code() {
     builtin cd "$CODE"/"$1"/"$2" && ls
 }
 
-compl_code() {
-    COMPREPLY=()
-    local word="${COMP_WORDS[COMP_CWORD]}"
-    if [ "$COMP_CWORD" -eq 1 ]; then
-        COMPREPLY=($(compgen -W "$(dir $CODE)" -- "$word"))
-    else
-        local words=("${COMP_WORDS[@]}")
-        unset "words[0]"
-        unset "words[$COMP_CWORD]"
-        local completions=$(dir -F "$CODE"/"${words[*]}")
-        COMPREPLY=($(compgen -W "$completions" -- "$word"))
-    fi
-}
-if [[ "$SHELL" = "bash" ]]; then
+# bash specific setup
+if [ -n "$BASH" ]; then
+    compl_code() {
+        COMPREPLY=()
+        local word="${COMP_WORDS[COMP_CWORD]}"
+        if [ "$COMP_CWORD" -eq 1 ]; then
+            COMPREPLY=($(compgen -W "$(dir $CODE)" -- "$word"))
+        else
+            local words=("${COMP_WORDS[@]}")
+            unset "words[0]"
+            unset "words[$COMP_CWORD]"
+            local completions=$(dir -F "$CODE"/"${words[*]}")
+            COMPREPLY=($(compgen -W "$completions" -- "$word"))
+        fi
+    }
+
     complete -F compl_code code
-fi
 
-# PS1 setup
-if [[ "$(id -u)" == "0" ]]; then
-    export PS1='\[\033[01;31m\]\u\[\033[01;37m\] \W \[\033[01;32m\]\[\033[01;33m\]$(git branch 2>/dev/null | sed -n "s/* \(.*\)/\1 /p")\[\033[01;31m\]\$\[\033[00m\] '
-else
-    export PS1='\[\033[01;34m\]\u\[\033[01;37m\] \W \[\033[01;32m\]\[\033[01;33m\]$(git branch 2>/dev/null | sed -n "s/* \(.*\)/\1 /p")\[\033[01;34m\]\$\[\033[00m\] '
-fi
-
-if grep SSH_CLIENT <(env) &>/dev/null; then
-    #clear -x
-    #neofetch --config ~/.config/neofetch/config_ssh.conf 2>/dev/null
+    # PS1 setup
     if [[ "$(id -u)" == "0" ]]; then
-        export PS1='\[\033[01;31m\]\u@\h\[\033[01;37m\] \W \[\033[01;32m\]\[\033[01;33m\]$(git branch 2>/dev/null | sed -n "s/* \(.*\)/\1 /p")\[\033[01;31m\]\$\[\033[00m\] '
+        export PS1='\[\033[01;31m\]\u\[\033[01;37m\] \W \[\033[01;32m\]\[\033[01;33m\]$(git branch 2>/dev/null | sed -n "s/* \(.*\)/\1 /p")\[\033[01;31m\]\$\[\033[00m\] '
     else
-        export PS1='\[\033[01;35m\]\u@\h\[\033[01;37m\] \W \[\033[01;32m\]\[\033[01;33m\]$(git branch 2>/dev/null | sed -n "s/* \(.*\)/\1 /p")\[\033[01;35m\]\$\[\033[00m\] '
+        export PS1='\[\033[01;34m\]\u\[\033[01;37m\] \W \[\033[01;32m\]\[\033[01;33m\]$(git branch 2>/dev/null | sed -n "s/* \(.*\)/\1 /p")\[\033[01;34m\]\$\[\033[00m\] '
     fi
-fi
-# bind 'set editing-mode vi'
-# bind 'set show-mode-in-prompt on'
-# bind 'set vi-ins-mode-string "+"'
-# bind 'set vi-cmd-mode-string ":"'
-# bind 'set keymap vi-insert'
 
+    if grep SSH_CLIENT <(env) &>/dev/null; then
+        #clear -x
+        #neofetch --config ~/.config/neofetch/config_ssh.conf 2>/dev/null
+        if [[ "$(id -u)" == "0" ]]; then
+            export PS1='\[\033[01;31m\]\u@\h\[\033[01;37m\] \W \[\033[01;32m\]\[\033[01;33m\]$(git branch 2>/dev/null | sed -n "s/* \(.*\)/\1 /p")\[\033[01;31m\]\$\[\033[00m\] '
+        else
+            export PS1='\[\033[01;35m\]\u@\h\[\033[01;37m\] \W \[\033[01;32m\]\[\033[01;33m\]$(git branch 2>/dev/null | sed -n "s/* \(.*\)/\1 /p")\[\033[01;35m\]\$\[\033[00m\] '
+        fi
+    fi
+
+    # bind 'set editing-mode vi'
+    # bind 'set show-mode-in-prompt on'
+    # bind 'set vi-ins-mode-string "+"'
+    # bind 'set vi-cmd-mode-string ":"'
+    # bind 'set keymap vi-insert'
+
+fi
