@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+export QT_STYLE_OVERRIDE="GTK+"
+export QT_QPA_PLATFORMTHEME="qt5ct"
+
 profile="$HOME/.profile"
 xresources="$HOME/.Xresources"
 configxresources="$HOME/.config/Xresources"
