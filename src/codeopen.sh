@@ -8,8 +8,8 @@ fi
 
 [ -z "$(command -v codels)" ] && echo "codels: not found" && exit 1
 
-if [ -n "$ROFI" ]; then
-    PROJ="$(codels | rofi -dmenu)"
+if [ -n "$DMENU" ]; then
+    PROJ="$(codels | dmenu -l 10 -f -i -p 'repo:')"
 else
     PROJ="$(codels | fzf)"
 fi
@@ -46,7 +46,7 @@ if [ -n "$PROJ" ]; then
         ;;
     "jetbrains")
         BIN_DIR="$HOME/.local/bin"
-        CMD=$(for file in $(dir -1 "$BIN_DIR"); do grep -q "JetBrains" "$BIN_DIR/$file" && echo "$BIN_DIR/$file"; done | rofi -dmenu)
+        CMD=$(for file in $(dir -1 "$BIN_DIR"); do grep -q "JetBrains" "$BIN_DIR/$file" && echo "$BIN_DIR/$file"; done | dmenu -l 10 -f -i -p 'repo:')
         [ -z "$CMD" ] && exit 1
         notify-send "codeopen" "opening $PROJ"
         $CMD "$PROJ"
