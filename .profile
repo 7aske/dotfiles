@@ -4,7 +4,7 @@ export CODE="$HOME/.local/src"
 
 # Default programs
 export EDITOR="nvim"
-export BROWSER="chromium"
+export BROWSER="brave"
 export FILE="nautilus"
 export TERMFILE="ranger"
 export READER="zathura"
