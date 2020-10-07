@@ -199,6 +199,7 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 map <A-1> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+let NERDTreeIgnore = ['\.git$', 'node_modules$', '__pycache__']
 
 " Spellchecker -----------------------------------
 map <F6> :setlocal spell! spelllang=en<CR>
