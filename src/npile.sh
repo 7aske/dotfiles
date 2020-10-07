@@ -7,9 +7,11 @@ base="${file%.*}"
 case "$file" in
 	*\.md)
 		Rscript -e "rmarkdown::render('$file', quiet=TRUE)"
-		wkhtmltopdf "$base.html" "$base.pdf"
-		rm "$base.html"
-		zathura "$base.pdf" &
+		pdf_filename="$base.pdf"
+		html_filename="$base.html"
+		wkhtmltopdf "$html_filename" "$pdf_filename"
+		rm "$html_filename"
+		(pgrep -fi  "$pdf_filename" 2>&1>/dev/null) || (zathura "$pdf_filename" &)
 		;;
 	*config.h) sudo make install ;;
 	*\.c) cc "$file" -o "$base" && "$base" ;;
