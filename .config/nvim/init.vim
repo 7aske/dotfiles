@@ -212,7 +212,7 @@ command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', '~/.config/nvim/plugged/fzf.vim/bin/preview.sh {}']}, <bang>0)
 
 " compiler
-map <leader>c :w! \| !npile <c-r>%<CR>
+map <leader>c :w! \| silent !npile <c-r>%<CR>
 map <leader>m :w! \| silent !make<CR>
 
 
