@@ -29,6 +29,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'kien/ctrlp.vim'
     Plug 'preservim/nerdcommenter'
     Plug 'tpope/vim-fugitive'
+	Plug 'ryanoasis/vim-devicons'
 	Plug 'preservim/nerdtree' |
 				\ Plug 'Xuyuanp/nerdtree-git-plugin'
 
