@@ -33,9 +33,9 @@ function grepo() {
 
 function gclone() {
     if [ "$#" -eq 2 ]; then
-        git clone https://github.com/"$1"/"$2"
+        git clone "git@github.com:/$1/$2"
     else
-        git clone https://github.com/7aske/"$1"
+        git clone "git@github.com:/7aske/$1"
     fi
 }
 
