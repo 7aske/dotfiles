@@ -142,7 +142,9 @@ function open() {
 }
 
 function code() {
-    if [ $# -eq 1 ]; then
+    if [ $# -eq 0 ]; then
+            builtin cd "$CODE" && ls
+    elif [ $# -eq 1 ]; then
         if [ -d "$CODE/$1" ]; then
             builtin cd "$CODE/$1" && ls
         else
