@@ -3,7 +3,7 @@
 [ ! -x "$(command -v git)" ] && echo -e "\e[1;31mgit: command not found\e[0m" && exit 2
 [ -z "$CODE" ] && echo -e "\e[1;31m'CODE' env variable not set\e[0m" && exit 2
 
-REPOS=("sh/utils-sh" "sh/dotfiles" "sh/bashrc" "sh/autosetup" "uni" "sh/scripts")
+REPOS=("sh/dotfiles" "sh/autosetup" "uni" "sh/scripts")
 
 usage() {
     echo "pullall.sh [options]"
@@ -17,7 +17,7 @@ git_pull() {
     [ ! -d "$CODE/$1/.git" ] && echo "$1: not a git repository" && return
     git -C "$CODE/$1" pull 2>/dev/null | while read -r OUTPUT; do
         if command -v "notify-send" 1>/dev/null; then
-            notify-send "$1" "$OUTPUT"
+            notify-send -u low -i git "$1" "$OUTPUT"
         else
             echo "$1" "$OUTPUT"
         fi
