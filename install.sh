@@ -91,6 +91,7 @@ mklink xfce4
 
 # compton
 mklink compton
+mklink picom
 
 # ranger
 mklink ranger
