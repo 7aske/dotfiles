@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+[ -f  "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
+[ -f  "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
+
 tempfile="/tmp/yup_prev"
 count="$(yup -c)"
 
@@ -15,13 +18,13 @@ case "$BLOCK_BUTTON" in
 esac
 
 if [ "$count" -le 15 ]; then
-	color="#ffffff"
+	color="${color7:-"#ffffff"}"
 elif [ "$count" -le 40 ]; then
-    color="#fef44e"
+    color="${color3:-"#fef44e"}"
 elif [ "$count" -le 75 ]; then
-	color="#ff5252"
+	color="${color5:-"#ff5252"}"
 else
-	color="#ff8144"
+	color="${color1:-"#ff8144"}"
 fi
 
 echo " <span color=\"$color\">$count</span>"
