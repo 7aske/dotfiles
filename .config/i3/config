@@ -481,7 +481,7 @@ exec_always --no-startup-id xfce4-power-manager
 exec_always --no-startup-id pgrep udiskie || (sleep 1; udiskie -s -f $file -a --appindicator)
 exec_always --no-startup-id pgrep barrier || barrier
 exec_always --no-startup-id clipmenud
-exec_always --no-startup-id pgrep unclutter || unclutter --fork --timeout 2 --jitter 10 --ignore-scrolling
+exec_always --no-startup-id pgrep unclutter || unclutter --fork --timeout 5 --jitter 10 --ignore-scrolling
 # exec_always --no-startup-id xautolock -time 10 -locker blurlock -cornersize 64 -corners ----
 exec_always --no-startup-id gnome-screensaver
 exec_always --no-startup-id gsettings set org.gnome.desktop.screensaver picture-uri 'file:///home/nik/.config/screensaver'
