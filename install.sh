@@ -39,6 +39,9 @@ mklink albert
 # conky
 mklink conky
 
+# theme
+mklink colors.sh
+
 # dunst
 mklink dunst
 

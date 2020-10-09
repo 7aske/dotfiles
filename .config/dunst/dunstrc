@@ -137,13 +137,17 @@
     # Print a notification on startup.
     # This is mainly for error detection, since dbus (re-)starts dunst
     # automatically after a crash.
-    startup_notification = true
+    startup_notification = false
     
     # dmenu path.
-    dmenu = /usr/bin/dmenu -p dunst:
+	if [ -x "$HOME/.local/bin/dmenu" ]; then
+		dmenu = "$HOME/.local/bin/dmenu" -p "dunst:"
+	else
+		dmenu = /usr/bin/dmenu -p dunst:
+	fi
     
     # Browser for opening urls in context menu.
-    browser = chromium
+    browser = "${BROWSER:-"chromium"}"
 
     # Align icons left/right/off
     icon_position = left
@@ -180,12 +184,12 @@
     # Otherwise the "#" and following would be interpreted as a comment.
     background = "#263238"
     foreground = "#556064"
-    timeout = 10
+    timeout = 7
 
 [urgency_normal]
     background = "#263238"
     foreground = "#F9FAF9"
-    timeout = 10
+    timeout = 7
 
 [urgency_critical]
     background = "#D62929"

@@ -112,7 +112,7 @@ bindsym $mod+w       exec --no-startup-id $browser
 bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor
 bindsym $mod+Shift+w exec --no-startup-id $browser --incognito
 # 7aske-scripts
-bindsym $mod+Shift+d exec --no-startup-id dunst_reload && notify-send --hint=int:transient:1 -t $notif_duration "dunst" "dunst reloaded"
+bindsym $mod+Shift+d exec --no-startup-id dunst_reload
 
 bindsym Print            --release exec --no-startup-id scrot && notify-send --hint=int:transient:1 -t $notif_duration "screenshot" "saved to homedir"
 bindsym $mod+Print       --release exec --no-startup-id scrot -u && notify-send --hint=int:transient:1 -t $notif_duration "screenshot (window)" "saved to homedir"
@@ -214,19 +214,13 @@ bindsym $mod+u border toggle $border_size; exec --no-startup-id notify-send --hi
 bindsym $mod+q kill
 
 # split orientation
-bindsym $mod+Ctrl+v split toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration 'toggled tiling'
+bindsym $mod+space split toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration 'toggled tiling'
 
 # toggle fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "fullscreen" "fullscreen toggled"
 
 # Toggle floating/tiling
 bindsym $mod+t floating toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "floating" "floating toggled"
-
-# toggle tiling / floating
-bindsym $mod+Shift+space floating toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "floating" "floating toggled"
-
-# change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
 
 # toggle sticky
 bindsym $mod+Mod1+s sticky toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "sticky" "sticky toggled"
@@ -541,10 +535,10 @@ set_from_resource $bg         background
 
 
 # class                    border  background       text indicator   cborder
-client.focused            $color3     $color3   $color15   $color3   $color3
-client.focused_inactive   $color8     $color8    $color0   $color8   $color8
-client.unfocused          $color8     $color8    $color0   $color8   $color8
-client.urgent                 $bg         $bg        $fg       $bg       $bg
+client.focused            $color3     $color3    $color0  $color13   $color3
+client.focused_inactive   $color4     $color4    $color0  $color13   $color4
+client.unfocused          $color4     $color4    $color0  $color13   $color4
+client.urgent             $color1     $color1    $color0   $color9   $color1
 client.placeholder            $bg         $bg        $fg       $bg       $bg
 client.background             $bg
 
@@ -570,19 +564,21 @@ bar {
     font $status_font
 	# strip_workspace_numbers no
 	separator_symbol |
-
+	workspace_min_width 32
     colors {
         #background $background
-        background          $bg
-        statusline     $color15
-        separator       $color8
+        background                 $bg
+        focused_background         $bg
+        statusline            $color15
+        focused_statusline    $color15
+        separator              $color8
 
         #                     border      background        text
-        focused_workspace    $color3         $color3         $bg
-        active_workspace     $color8         $color8     $color0
-        inactive_workspace   $color8             $bg         $fg
+        focused_workspace    $color3         $color3     $color0
+        active_workspace     $color8         $color8     $color3
+        inactive_workspace   $color8         $color0     $color7
         binding_mode        $color13        $color13     $color0
-        urgent_workspace     $color2         $color5         $bg
+        urgent_workspace     $color1         $color1     $color0
     }
 }
 
