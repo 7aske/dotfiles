@@ -66,7 +66,7 @@
     # the top and down respectevly.
     # The width can be negative.  In this case the actual width is the
     # screen width minus the width defined in within the geometry option.
-    geometry = "1024x4-4+27"
+    geometry = "1024x4-8+32"
     
     # Shrink window if it's smaller than the width.  Will be ignored if
     # width is 0.
@@ -75,7 +75,7 @@
     # The transparency of the window.  Range: [0; 100].
     # This option will only work if a compositing windowmanager is
     # present (e.g. xcompmgr, compiz, etc.).
-    transparency = 20
+    transparency = 30
     
     # Don't remove messages, if the user is idle (no mouse or keyboard input)
     # for longer than idle_threshold seconds.
@@ -132,7 +132,7 @@
     #  * foreground: use the same color as the foreground;
     #  * frame: use the same color as the frame;
     #  * anything else will be interpreted as a X color.
-    # separator_color = "#263238"
+    # separator_color = "#263"chromium"238"
     
     # Print a notification on startup.
     # This is mainly for error detection, since dbus (re-)starts dunst
@@ -140,20 +140,18 @@
     startup_notification = false
     
     # dmenu path.
-	if [ -x "$HOME/.local/bin/dmenu" ]; then
-		dmenu = "$HOME/.local/bin/dmenu" -p "dunst:"
-	else
-		dmenu = /usr/bin/dmenu -p dunst:
-	fi
+	dmenu = dmenu -p "dunst:"
     
     # Browser for opening urls in context menu.
-    browser = "${BROWSER:-"chromium"}"
+    browser = "chromium"
 
     # Align icons left/right/off
     icon_position = left
 
+	corner_radius=0
+
     # Paths to default icons.
-    icon_path = /usr/share/icons/Adwaita/16x16/status/:/usr/share/icons/Adwaita/16x16/devices/
+    icon_path = /usr/share/icons/ePapirus/32x32/status/:/usr/share/icons/ePapirus/64x64/devices/:/usr/share/icons/ePapirus/64x64/apps/
 
     # Limit icons size.
     max_icon_size=128
@@ -178,6 +176,11 @@
     
     # Context menu.
     context = mod4+n
+
+	mouse_left=do_action
+	mouse_middle=close_all
+	mouse_right=close_current
+
 
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.

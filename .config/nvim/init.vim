@@ -65,7 +65,6 @@ set signcolumn=yes:2
 set smartcase
 set smartindent
 set t_Co=256
-set textwidth=80
 set updatetime=50
 set wildmenu
 syntax on
