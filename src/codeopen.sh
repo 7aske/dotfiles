@@ -2,6 +2,8 @@
 
 . "$HOME/.profile"
 
+TYPE="${TYPE:-"term"}"
+
 if [ -z "$CODE" ]; then
     echo "'CODE' env not set" && exit 1
 fi
@@ -65,7 +67,7 @@ if [ -n "$PROJ" ]; then
         notify-send "codeopen" "opening $PROJ"
         $TERMINAL -e $CMD "$PROJ"
         ;;
-        *)
+    *)
         notify-send "codeopen" "$TYPE opening $PROJ"
         $TYPE "$PROJ"
         ;;

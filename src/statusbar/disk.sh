@@ -10,7 +10,8 @@ icon="$2"
 [ -z "$2" ] && icon="$1"
 
 case $BLOCK_BUTTON in
-	1) pgrep -x dunst >/dev/null && notify-send "🖥 Disk space" "$(df -h --output=source,avail,size,target | grep -e "^/" -e "Filesystem" | grep -ve "boot" -e "efi")" ;;
+	1) pgrep -x dunst >/dev/null && \
+		notify-send -i drive-harddisk " Disk space" "$(df -h --output=source,avail,size,target | grep -e "^/" -e "Filesystem" | grep -ve "boot" -e "efi")" ;;
 esac
 
 #printf "%s: %s\n" "$icon" "$(df -h "$1" | awk ' /[0-9]/ {print $4 "/" $2}')"

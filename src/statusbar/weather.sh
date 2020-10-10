@@ -7,7 +7,7 @@ function show_weather(){
 }
 
 case $BLOCK_BUTTON in
-	1) notify-send "Weather" "$(curl wttr.in/ | perl -pe 's/\e\[[0-9;]*m(?:\e\[K)?//g' | head -7)" ;;
+	1) notify-send -i none "Weather" "$(curl wttr.in/ | perl -pe 's/\e\[[0-9;]*m(?:\e\[K)?//g' | head -7)" ;;
 	3) show_weather ;;
 esac
 

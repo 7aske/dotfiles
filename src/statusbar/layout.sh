@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 case $BLOCK_BUTTON in
-	1) notify-send "Keyboard Layout" "$(setxkbmap -query)" ;;
+	1) notify-send -i keyboard "Keyboard Layout" "$(setxkbmap -query)" ;;
 esac
 
 

@@ -9,12 +9,12 @@ count="$(yup -c)"
 prev_count="$(cat "$tempfile")"
 
 if (( $prev_count < $count )); then
-	notify-send "updates available" "$(yup -l)"
+	notify-send -i package -u low "updates available" "$(yup -l)"
 fi
 echo "$count" > "$tempfile"
 
 case "$BLOCK_BUTTON" in
-	1) notify-send "updates available" "$(yup -l)" ;; 
+	1) notify-send -i package -u low "updates available" "$(yup -l)" ;; 
 esac
 
 if [ "$count" -le 15 ]; then
