@@ -21,10 +21,10 @@ if [ -n "$PROJ" ]; then
     "term")
         if [ "$TERMINAL" = "st" ]; then
             # 7aske 'st' build with '-d' option to chdir at start
-            notify-send "codeopen" "opening $PROJ"
+            notify-send -i terminal "codeopen" "opening $PROJ"
             $TERMINAL -d "$PROJ"
         else
-            notify-send "codeopen" "opening $PROJ"
+            notify-send -i terminal "codeopen" "opening $PROJ"
             $TERMINAL -cd "$PROJ"
         fi
         ;;
@@ -43,14 +43,14 @@ if [ -n "$PROJ" ]; then
             [ -x "$(command -v notify-send)" ] && notify-send "codeopen" "vscodium: not found\ncode-insiders: not found\ncode: not found"
             exit 1
         fi
-        notify-send "codeopen" "opening $PROJ"
+        notify-send -i code "codeopen" "opening $PROJ"
         $CMD "$PROJ"
         ;;
     "jetbrains")
         BIN_DIR="$HOME/.local/bin"
         CMD=$(for file in $(dir -1 "$BIN_DIR"); do grep -q "JetBrains" "$BIN_DIR/$file" && echo "$BIN_DIR/$file"; done | dmenu -l 10 -f -i -p 'repo:')
         [ -z "$CMD" ] && exit 1
-        notify-send "codeopen" "opening $PROJ"
+        notify-send -i "$(basename "$CMD")" "codeopen" "opening $PROJ"
         $CMD "$PROJ"
         ;;
     "vim")
@@ -64,7 +64,7 @@ if [ -n "$PROJ" ]; then
             [ -x "$(command -v notify-send)" ] && notify-send "codeopen" "nvim: not found\nnvim: not found"
             exit 1
         fi
-        notify-send "codeopen" "opening $PROJ"
+        notify-send -i "$CMD" "codeopen" "opening $PROJ"
         $TERMINAL -e $CMD "$PROJ"
         ;;
     *)
