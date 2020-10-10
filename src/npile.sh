@@ -9,7 +9,7 @@ case "$file" in
 		Rscript -e "rmarkdown::render('$file', quiet=TRUE)"
 		pdf_filename="$base.pdf"
 		html_filename="$base.html"
-		wkhtmltopdf "$html_filename" "$pdf_filename"
+		QT_STYLE_OVERRIDE='Windows' wkhtmltopdf "$html_filename" "$pdf_filename"
 		rm "$html_filename"
 		(pgrep -fi  "$pdf_filename" 2>&1>/dev/null) || (zathura "$pdf_filename" &)
 		;;
