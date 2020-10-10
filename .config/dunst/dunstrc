@@ -140,7 +140,7 @@
     startup_notification = false
     
     # dmenu path.
-	dmenu = dmenu -p "dunst:"
+	dmenu = dmenu -p notif:
     
     # Browser for opening urls in context menu.
     browser = "chromium"
@@ -161,9 +161,6 @@
     # Available modifiers are "ctrl", "mod1" (the alt-key), "mod2",
     # "mod3" and "mod4" (windows-key).
     # Xev might be helpful to find names for keys.
-    
-    # Close notification.
-    close = mod1+space
     
     # Close all notifications.
     # close_all = ctrl+shift+space
