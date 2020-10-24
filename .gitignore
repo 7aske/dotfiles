@@ -5,6 +5,7 @@ __pycache__
 .config/nvim/.netrwhist
 .config/nvim/spell
 
+.config/zsh/.zshrc.zwc
 .config/zsh/.zcompdump
 
 .config/mpd/database

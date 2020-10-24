@@ -101,6 +101,7 @@ mklink ranger
 
 # zsh
 mklink zsh
+ln -sf "$HOME/.config/zsh/.zshrc" "$HOME/.zshrc"
 
 # zathura
 mklink zathura

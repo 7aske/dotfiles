@@ -1,3 +1,13 @@
+source ~/.config/zsh/antigen.zsh
+
+antigen use oh-my-zsh
+antigen bundle command-not-found
+antigen bundle MichaelAquilina/zsh-you-should-use
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-autosuggestions
+
+antigen apply
+
 source ~/.local/src/sh/dotfiles/.bashrc
 
 #Enable colors and change prompt:
@@ -7,12 +17,12 @@ autoload -Uz vcs_info
 precmd() { vcs_info }
 
 # Set up the prompt (with git branch name)
-zstyle ':vcs_info:git:*' formats '%b '
+zstyle ':vcs_info:git:*' formats '%b %u'
  
 setopt PROMPT_SUBST
 
-RPROMPT=
-PS1="%B%{$fg[red]%}%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%1~%{$fg[red]%}%{$reset_color%} \$vcs_info_msg_0_$%b "
+RPROMPT="%B%(?.%F{green}%?.%F{red}%?)%f%b"
+PROMPT="%B%{$fg[red]%}%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%1~%{$fg[red]%}%{$reset_color%} \$vcs_info_msg_0_%(!.#.λ)%b "
 
 
 setopt autocd		# Automatically cd into typed directory.
@@ -62,18 +72,7 @@ zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
-# Use lf to switch directories and bind it to ctrl-o
-lfcd () {
-    tmp="$(mktemp)"
-    lf -last-dir-path="$tmp" "$@"
-    if [ -f "$tmp" ]; then
-        dir="$(cat "$tmp")"
-        rm -f "$tmp" >/dev/null
-        [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
-    fi
-}
-bindkey -s '^o' 'lfcd\n'
-
+# change dir using FZF
 bindkey -s '^f' 'cd "$(dirname "$(fzf)")"\n'
 
 bindkey '^[[P' delete-char
@@ -82,5 +81,4 @@ bindkey '^[[P' delete-char
 autoload edit-command-line; zle -N edit-command-line
 bindkey '^e' edit-command-line
 
-# Load syntax highlighting; should be last.
-source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh 2>/dev/null
+bindkey '^ ' autosuggest-accept
