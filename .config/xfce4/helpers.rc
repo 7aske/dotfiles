@@ -1,5 +1,5 @@
-FileManager=Thunar
-MailReader=thunderbird
-WebBrowser=google-chrome
+FileManager=custom-FileManager
+MailReader=custom-MailReader
+WebBrowser=brave
 TerminalEmulator=custom-TerminalEmulator
 

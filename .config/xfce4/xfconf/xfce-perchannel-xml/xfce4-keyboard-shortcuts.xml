@@ -26,35 +26,10 @@
       <property name="&lt;Alt&gt;F3" type="empty">
         <property name="startup-notify" type="bool" value="true"/>
       </property>
-      <property name="&lt;Alt&gt;F2" type="string" value="xfce4-appfinder --collapsed">
+      <property name="&lt;Alt&gt;F2" type="empty">
         <property name="startup-notify" type="bool" value="true"/>
       </property>
-      <property name="&lt;Primary&gt;&lt;Alt&gt;p" type="string" value="xfce4-display-settings --minimal"/>
-      <property name="&lt;Primary&gt;Escape" type="string" value="xfdesktop --menu"/>
       <property name="override" type="bool" value="true"/>
-      <property name="&lt;Primary&gt;&lt;Alt&gt;x" type="string" value="xkill"/>
-      <property name="Print" type="string" value="xfce4-screenshooter -fd 1"/>
-      <property name="&lt;Shift&gt;Print" type="string" value="xfce4-screenshooter -wd 1"/>
-      <property name="&lt;Primary&gt;&lt;Shift&gt;Print" type="string" value="xfce4-screenshooter -r"/>
-      <property name="&lt;Super&gt;w" type="string" value="exo-open --launch WebBrowser"/>
-      <property name="&lt;Super&gt;e" type="string" value="exo-open --launch FileManager"/>
-      <property name="F12" type="string" value="xfce4-terminal --drop-down"/>
-      <property name="&lt;Primary&gt;&lt;Shift&gt;Escape" type="string" value="xfce4-taskmanager"/>
-      <property name="&lt;Super&gt;n" type="string" value="google-chrome-stable --incognito"/>
-      <property name="&lt;Super&gt;l" type="string" value="xflock4"/>
-      <property name="&lt;Super&gt;p" type="string" value="pavucontrol --tab=1"/>
-      <property name="&lt;Super&gt;h" type="string" value="systemctl suspend"/>
-      <property name="&lt;Primary&gt;&lt;Alt&gt;Delete" type="string" value="gnome-system-monitor"/>
-      <property name="&lt;Super&gt;q" type="string" value="xfce4-appfinder"/>
-      <property name="&lt;Primary&gt;&lt;Alt&gt;t" type="string" value="xfce4-terminal"/>
-      <property name="&lt;Super&gt;t" type="string" value="exo-open --launch TerminalEmulator"/>
-      <property name="&lt;Shift&gt;&lt;Super&gt;w" type="string" value="/home/nik/.scripts/url-open.sh"/>
-      <property name="&lt;Primary&gt;&lt;Super&gt;p" type="string" value="/home/nik/Code/sh/utils-sh/patoggle.sh"/>
-      <property name="&lt;Super&gt;s" type="string" value="xfce4-popup-whiskermenu"/>
-      <property name="&lt;Shift&gt;&lt;Super&gt;p" type="string" value="/home/nik/Code/sh/utils-sh/padefsink.sh"/>
-      <property name="&lt;Primary&gt;&lt;Shift&gt;&lt;Super&gt;p" type="string" value="/home/nik/Code/sh/utils-sh/painputsink.sh"/>
-      <property name="&lt;Primary&gt;&lt;Super&gt;Left" type="string" value="/home/nik/.scripts/move-to-next-monitor.sh left"/>
-      <property name="&lt;Primary&gt;&lt;Super&gt;Right" type="string" value="/home/nik/.scripts/move-to-next-monitor.sh right"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
