@@ -62,6 +62,9 @@ mklink kitty
 # mpd
 mklink mpd
 
+# nano - eh why not
+mklink nano
+
 # neofetch
 mklink neofetch
 
