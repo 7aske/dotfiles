@@ -34,11 +34,13 @@ SAVEHIST=10000
 HISTFILE=~/.cache/zsh/history
 
 # Basic auto/tab complete:
+setopt correct
 autoload -U compinit
 zstyle ':completion:*' menu select
 zmodload zsh/complist
 compinit
 _comp_options+=(globdots)		# Include hidden files.
+COMPLETION_WAITING_DOTS="true"
 
 # vi mode
 bindkey -v

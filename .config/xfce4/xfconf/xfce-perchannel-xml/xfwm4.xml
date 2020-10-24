@@ -65,7 +65,7 @@
     <property name="unredirect_overlays" type="bool" value="true"/>
     <property name="urgent_blink" type="bool" value="true"/>
     <property name="use_compositing" type="bool" value="true"/>
-    <property name="workspace_count" type="int" value="7"/>
+    <property name="workspace_count" type="int" value="8"/>
     <property name="wrap_cycle" type="bool" value="false"/>
     <property name="wrap_layout" type="bool" value="false"/>
     <property name="wrap_resistance" type="int" value="10"/>
@@ -79,6 +79,7 @@
       <value type="string" value="Workspace 5"/>
       <value type="string" value="3"/>
       <value type="string" value="4"/>
+      <value type="string" value="5"/>
       <value type="string" value="5"/>
     </property>
     <property name="tile_on_move" type="bool" value="true"/>
