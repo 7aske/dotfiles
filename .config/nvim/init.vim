@@ -20,6 +20,7 @@ call plug#begin('~/.config/nvim/plugged')
 	Plug 'junegunn/fzf.vim'
 	Plug 'junegunn/goyo.vim'
 	Plug 'machakann/vim-highlightedyank'
+	Plug 'andymass/vim-matchup'
 	Plug 'neoclide/coc.nvim', {'branch': 'release'}
 	Plug 'sheerun/vim-polyglot'
 	Plug 'vim-airline/vim-airline'
@@ -111,6 +112,8 @@ let g:airline#extensions#tabline#tab_nr_type = 1        " tab number
 
 " BINDINGS ---------------------------------------
 
+let g:loaded_matchit = 1
+
 nmap <CR> o<C-[>
 " Edit vimr configuration file
 nnoremap <leader>Ve :e $MYVIMRC<CR>
@@ -191,6 +194,7 @@ nmap <silent> <C-W>c       :tabnew<CR>
 nmap <silent> <C-W>t       :tabnew<CR>
 nmap <silent> <C-T>q       :tabclose<CR>
 nmap <silent> <C-W>w       :Windows<CR>
+nmap <silent> <C-W>Q       :q!<CR>
 nmap <silent> <A-Left>     :tabprev<CR>
 nmap <silent> <A-Right>    :tabnext<CR>
 nmap <silent> <C-A-Right>  :bnext<CR>
