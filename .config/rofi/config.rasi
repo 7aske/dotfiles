@@ -1,11 +1,9 @@
 configuration {
-    /*theme: "~/.cache/wal/colors-rofi-dark.rasi";*/
-	font: "FiraCode 10";
-    sidebar-mode: true;
+	theme: "nord";
+	font: "Fira Code 12";
     fake-transparency: true;
     combi-hide-mode-prefix: true;
     kb-mode-next: "Alt+Right,Control+Tab";
     kb-mode-previous: "Alt+Left,Control+ISO_Left_Tab";
 }
 
-@import "/usr/share/rofi/themes/onedark.rasi"
