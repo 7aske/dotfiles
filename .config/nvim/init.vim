@@ -111,6 +111,12 @@ let g:airline#extensions#tabline#tab_nr_type = 1        " tab number
 
 " BINDINGS ---------------------------------------
 
+nmap <CR> o<C-[>
+" Edit vimr configuration file
+nnoremap <leader>Ve :e $MYVIMRC<CR>
+" Reload vimr configuration file
+nnoremap <leader>Vr :source $MYVIMRC<CR>
+
 " Replace word under cursor ----------------------
 nnoremap <leader>r :%s/\<<C-r><C-w>\>/
 vnoremap <leader>r "ry :%s/<C-R>=substitute(escape(@r, '/\'), "\n", '\\n', 'ge')<CR>/
