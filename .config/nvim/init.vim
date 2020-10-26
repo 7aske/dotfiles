@@ -21,6 +21,8 @@ call plug#begin('~/.config/nvim/plugged')
 	Plug 'junegunn/goyo.vim'
 	Plug 'machakann/vim-highlightedyank'
 	Plug 'andymass/vim-matchup'
+	Plug 'godlygeek/tabular'
+	Plug 'plasticboy/vim-markdown'
 	Plug 'neoclide/coc.nvim', {'branch': 'release'}
 	Plug 'sheerun/vim-polyglot'
 	Plug 'vim-airline/vim-airline'
