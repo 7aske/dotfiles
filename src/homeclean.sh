@@ -12,4 +12,8 @@ rm ~/.lesshst
 rm ~/.yarnrc
 rm ~/.dir_colors
 rm ~/.dbshell
+rm ~/.NERDTreeBookmarks
+rm ~/.angular-config.json
+rm ~/.install4j
+rm ~/.wget-hsts
 
