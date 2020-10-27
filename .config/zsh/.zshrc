@@ -1,4 +1,5 @@
 source ~/.config/zsh/antigen.zsh
+source ~/.config/zsh/agnoster-custom.zsh-theme
 
 antigen use oh-my-zsh
 antigen bundle command-not-found
@@ -11,18 +12,18 @@ antigen apply
 source ~/.local/src/sh/dotfiles/.bashrc
 
 #Enable colors and change prompt:
-autoload -U colors && colors	# Load colors
+#autoload -U colors && colors	# Load colors
 
-autoload -Uz vcs_info
-precmd() { vcs_info }
+#autoload -Uz vcs_info
+#precmd() { vcs_info }
 
 # Set up the prompt (with git branch name)
-zstyle ':vcs_info:git:*' formats '%b %u'
+#zstyle ':vcs_info:git:*' formats '%b %u'
  
 setopt PROMPT_SUBST
 
-RPROMPT="%B%(?.%F{green}%?.%F{red}%?)%f%b"
-PROMPT="%B%{$fg[red]%}%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%1~%{$fg[red]%}%{$reset_color%} \$vcs_info_msg_0_%(!.#.λ)%b "
+#RPROMPT="%B%(?.%F{green}%?.%F{red}%?)%f%b"
+#PROMPT="%B%{$fg[red]%}%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%1~%{$fg[red]%}%{$reset_color%} \$vcs_info_msg_0_%(!.#.λ)%b "
 
 
 setopt autocd		# Automatically cd into typed directory.
