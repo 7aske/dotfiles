@@ -70,6 +70,12 @@ alias myip='curl -s api.ipify.org'
 alias grep='grep --color=auto'
 alias wget='wget --hsts-file=~/.config/wget/.wget-hsts'
 alias diff="diff --color=auto"
+alias cp='cp -v'
+alias mv='mv -v'
+alias rm='rm -v'
+alias mkdir='mkdir -v'
+alias rmdir='rmdir -v'
+alias rsync='rsync -vh --progress'
 # navigation
 alias conf='builtin cd $HOME/.config/&& ls'
 alias dow='builtin cd $HOME/Downloads&& ls'
