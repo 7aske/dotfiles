@@ -1,5 +1,11 @@
-source ~/.config/zsh/antigen.zsh
-source ~/.config/zsh/agnoster-custom.zsh-theme
+_src() {
+	[ -e "$1" ] && source "$1"
+}
+
+_src ~/.local/src/sh/dotfiles/.bashrc
+_src ~/.config/rc
+_src ~/.config/zsh/antigen.zsh
+_src ~/.config/zsh/agnoster-custom.zsh-theme
 
 antigen use oh-my-zsh
 antigen bundle command-not-found
@@ -9,7 +15,6 @@ antigen bundle zsh-users/zsh-autosuggestions
 
 antigen apply
 
-source ~/.local/src/sh/dotfiles/.bashrc
 
 #Enable colors and change prompt:
 #autoload -U colors && colors	# Load colors
@@ -84,4 +89,5 @@ bindkey '^[[P' delete-char
 autoload edit-command-line; zle -N edit-command-line
 bindkey '^e' edit-command-line
 
+# ctrl+space
 bindkey '^ ' autosuggest-accept
