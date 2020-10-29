@@ -3,6 +3,7 @@ while read file
 do
     case "$1" in
     "w") setwal -w "$file" && notify-send "setwal" "setting wallpaper" & ;;
+    "b") feh --bg-fill "$file" && notify-send "setwal" "setting wallpaper" & ;;
     "r") convert -rotate 90 "$file" "$file" ;;
 	"R") convert -rotate -90 "$file" "$file" ;;
     "d")
