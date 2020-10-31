@@ -91,8 +91,9 @@ alias etc='builtin cd /etc&& ls'
 alias lcl='builtin cd $HOME/.local&& ls'
 alias chc='cd "$(chcode)"'
 alias chgs='cd "$(codegs)" && echo -e "\ngit status -s\n"; git status -s'
-alias tmux='tmux -f "$HOME/.config/tmux/.tmux.conf"'
+alias vicfg='vimcfg'
 # misc
+alias tmux='tmux -f "$HOME/.config/tmux/.tmux.conf"'
 alias ascii='man ascii'
 # ls
 alias ls='ls --color=auto -lph --group-directories-first'

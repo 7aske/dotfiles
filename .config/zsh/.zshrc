@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 
 HISTFILE=~/.cache/zsh/history
+ADOTDIR=~/.config/antigen
 
 [ -e ~/.config/zsh/antigen.zsh ] && \
 	source ~/.config/zsh/antigen.zsh
