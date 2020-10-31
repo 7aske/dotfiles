@@ -106,6 +106,9 @@ ln -sf "$HOME/.config/zsh/.zshrc" "$HOME/.zshrc"
 # zathura
 mklink zathura
 
+# .Xmodmap
+ln -sf "$(pwd)/.Xmodmap" "$HOME/.Xmodmap"
+
 # .profile
 mksource .profile
 
