@@ -33,6 +33,7 @@
 ### Segment drawing
 # A few utility functions to make it easy and re-usable to draw segmented prompts
 
+autoload -U colors && colors	# Load colors
 CURRENT_BG='NONE'
 
 case ${SOLARIZED_THEME:-dark} in
@@ -124,6 +125,7 @@ prompt_git() {
 
     setopt promptsubst
     autoload -Uz vcs_info
+		precmd() { vcs_info }
 
     zstyle ':vcs_info:*' enable git
     zstyle ':vcs_info:*' get-revision true

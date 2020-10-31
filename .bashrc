@@ -1,9 +1,10 @@
 #!/bin/bash
 
 export CODE="$HOME/.local/src"
-export HISTSIZE=
-export HISTFILESIZE=
+export HISTFILESIZE=10000
+export HISTSIZE=10000
 export LESSHISTSIZE=0
+export SAVEHIST=10000
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
 [ -f "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
 
@@ -47,16 +48,17 @@ function gcommit() {
     git commit -m "$@"
     fi
 }
-function   gadd(){ git add "$@";                  }
-function greset(){ git reset --hard HEAD;         }
-function   gdry(){ git commit --branch --dry-run; }
-function  gpush(){ git push "$@";                 }
-function  gpull(){ git pull "$@";                 }
-function    gsl(){ git status --long "$@";        }
-function    gss(){ git status -s "$@";            }
-function gstash(){ git stash "$@";                }
-function   gfet(){ git fetch "$@";                }
-function   glog(){ git log --graph "$@";          }
+gadd()  { git add "$@";                  }
+gdiff() { git diff "$@";                 }
+greset(){ git reset --hard HEAD;         }
+gdry()  { git commit --branch --dry-run; }
+gpush() { git push "$@";                 }
+gpull() { git pull "$@";                 }
+gsl()   { git status --long "$@";        }
+gss()   { git status -s "$@";            }
+gstash(){ git stash "$@";                }
+gfet()  { git fetch "$@";                }
+glog()  { git log --graph "$@";          }
 
 alias cls='clear -x'
 alias autoremove='sudo pacman -R $(pacman -Qdtq)'
@@ -95,13 +97,8 @@ alias ascii='man ascii'
 # ls
 alias ls='ls --color=auto -lph --group-directories-first'
 alias la='ls --color=auto -lAph --group-directories-first'
-
 # personal utils
 alias gs='/usr/bin/cgs'
-function hist () {
-    cmd="$(history | sort -r | fzf | sed -e 's/[0-9 ]\+//')"
-    eval "$cmd" 
-}
 # laptop misc
 alias backl='xbacklight -set'
 alias bell='xset -b'
