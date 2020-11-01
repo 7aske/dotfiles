@@ -27,7 +27,7 @@ mksource () {
     src="$(pwd)/$1"
     dest="$HOME/${2:-$1}"
     if ! grep -q "$src" "$dest"; then
-        echo "[ -f \"$src\" ] && . \"$src\"" >> "$dest"
+        echo "[ -e \"$src\" ] && . \"$src\"" >> "$dest"
     fi
 }
 
@@ -120,6 +120,9 @@ mksource .xprofile
 
 # .bashrc
 mksource .bashrc
+
+# shell rc
+mklink rc
 
 # .ideavimrc
 ln -sf "$(pwd)/.config/ideavimrc" "$HOME/.ideavimrc"

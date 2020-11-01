@@ -3,11 +3,14 @@
 HISTFILE=~/.cache/zsh/history
 ADOTDIR=~/.config/antigen
 
-[ -e ~/.config/zsh/antigen.zsh ] && \
-	source ~/.config/zsh/antigen.zsh
+istty() {
+	case $(tty) in 
+		(/dev/tty[1-9]) return 0;; 
+		(*) return 1;;
+	esac
+}
 
-[ -e ~/.config/zsh/agnoster-custom.zsh-theme ] && \
-	source ~/.config/zsh/agnoster-custom.zsh-theme
+[ -e ~/.config/zsh/antigen.zsh ] && source ~/.config/zsh/antigen.zsh
 
 antigen use oh-my-zsh
 antigen bundle command-not-found
@@ -16,13 +19,15 @@ antigen bundle ael-code/zsh-colored-man-pages
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
 
+if ! [ $(istty) ]; then
+	[ -e ~/.config/zsh/agnoster-custom.zsh-theme ] && source ~/.config/zsh/agnoster-custom.zsh-theme
+else
+	antigen theme risto
+fi
+
 antigen apply
 
-[ -e ~/.local/src/sh/dotfiles/.bashrc ] && \
-	source ~/.local/src/sh/dotfiles/.bashrc
-
-[ -e ~/.config/rc ] && \
-	source ~/.config/rc
+[ -e ~/.config/rc ] && source ~/.config/rc
 
 #RPROMPT="%B%(?.%F{green}%?.%F{red}%?)%f%b"
 #PROMPT="%B%{$fg[red]%}%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%1~%{$fg[red]%}%{$reset_color%} \$vcs_info_msg_0_%(!.#.λ)%b "

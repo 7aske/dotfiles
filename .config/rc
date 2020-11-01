@@ -1,0 +1,209 @@
+#!/bin/bash
+
+export CODE="$HOME/.local/src"
+export HISTFILESIZE=10000
+export HISTSIZE=10000
+export LESSHISTSIZE=0
+export SAVEHIST=10000
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+[ -f "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
+
+# git utils
+function grepo() {
+    [ -z "$1" ] && echo "usage: gr <repo-name>" && return 1
+    echo "Create GitHub repository '$1'"
+    echo -n "Username: "
+    read -r username
+    echo -n "Password: "
+    read -r -s password
+    echo
+    out="$(curl -v -u "$username":"$password" https://api.github.com/user/repos -d "{\"name\":\"$1\"}" 2>&1)"
+
+    if echo $out | grep -q -e "< HTTP/1.1 20[01]"; then
+        git init
+        git remote add origin https://github.com/$username/"$1".git
+        echo
+        echo -n "Clone URL: "
+        echo "$out" | grep "clone_url" | cut -d ' ' -f4 | sed -n 's/[",]//gp'
+        echo -n "SSH URL: "
+        echo "$out" | grep "ssh_url" | cut -d ' ' -f4 | sed -n 's/[",]//gp'
+    else
+        echo "$out" | grep "message" | cut -d ':' -f2 | sed -n 's/"\(.*\)"/\1/;s/^ //g;s/[,]//gp'
+    fi
+}
+
+function gclone() {
+    if [ "$#" -eq 2 ]; then
+        git clone "git@github.com:/$1/$2"
+    else
+        git clone "git@github.com:/7aske/$1"
+    fi
+}
+
+function gcommit() {
+    git add .
+    if [ -z "$1" ]; then
+        git commit
+    else
+    git commit -m "$@"
+    fi
+}
+gadd()  { git add "$@";                  }
+gdiff() { git diff "$@";                 }
+greset(){ git reset --hard HEAD;         }
+gdry()  { git commit --branch --dry-run; }
+gpush() { git push "$@";                 }
+gpull() { git pull "$@";                 }
+gsl()   { git status --long "$@";        }
+gss()   { git status -s "$@";            }
+gstash(){ git stash "$@";                }
+gfet()  { git fetch "$@";                }
+glog()  { git log --graph "$@";          }
+
+alias cls='clear -x'
+alias autoremove='sudo pacman -R $(pacman -Qdtq)'
+alias v='nvim'
+alias n='nano'
+alias o='xdg-open'
+function c { vscodium "$@" || codium "$@" || code-insiders "$@" || /usr/bin/code "$@"; }
+function chrome { chromium "$@" || google-chrome-stable "$@"; }
+alias bat='bat -p --paging never --theme=base16'
+alias myip='curl -s api.ipify.org'
+alias grep='grep --color=auto'
+alias wget='wget --hsts-file=~/.config/wget/.wget-hsts'
+alias diff="diff --color=auto"
+alias cp='cp -v'
+alias mv='mv -v'
+alias rm='rm -v'
+alias mkdir='mkdir -v'
+alias rmdir='rmdir -v'
+alias rsync='rsync -vh --progress'
+# navigation
+alias conf='builtin cd $HOME/.config/&& ls'
+alias dow='builtin cd $HOME/Downloads&& ls'
+alias sha='builtin cd $HOME/Share&& ls'
+alias doc='builtin cd $HOME/Documents&& ls'
+alias pic='builtin cd $HOME/Pictures&& ls'
+alias dro='builtin cd $HOME/Dropbox&& ls'
+alias pub='builtin cd $HOME/Public&& ls'
+alias shr='builtin cd /usr/share&& ls'
+alias etc='builtin cd /etc&& ls'
+alias lcl='builtin cd $HOME/.local&& ls'
+alias chc='cd "$(chcode)"'
+alias chgs='cd "$(codegs)" && echo -e "\ngit status -s\n"; git status -s'
+alias vicfg='vimcfg'
+# misc
+alias tmux='tmux -f "$HOME/.config/tmux/.tmux.conf"'
+alias ascii='man ascii'
+# ls
+alias ls='ls --color=auto -lph --group-directories-first'
+alias la='ls --color=auto -lAph --group-directories-first'
+# personal utils
+alias gs='/usr/bin/cgs'
+# laptop misc
+alias backl='xbacklight -set'
+alias bell='xset -b'
+
+# eg. cd ... to jump back two directories
+function cd() {
+    case $1 in
+    ..)
+        builtin cd ../ && ls
+        ;;
+    ...)
+        builtin cd ../../ && ls
+        ;;
+    ....)
+        builtin cd ../../../ && ls
+        ;;
+    .....)
+        builtin cd ../../../../ && ls
+        ;;
+    *)
+        builtin cd "$@" && ls
+        ;;
+    esac
+}
+
+function open() {
+    unameOut="$(uname -s)"
+    case "${unameOut}" in
+        Linux*) machine=Linux ;;
+        Darwin*) machine=Mac ;;
+        CYGWIN*) machine=Cygwin ;;
+        MINGW*) machine=MinGw ;;
+        *) machine="UNKNOWN:${unameOut}" ;;
+    esac
+    if test "${machine}" = 'Linux'; then
+        (xdg-open "$@" >/dev/null 2>&1 &)
+    elif test "${machine}" = 'Cygwin' || test "${machine}" = 'MinGw'; then
+        explorer "$@" &
+    elif test "${machine}" = 'Mac'; then
+        open "$@"
+    else
+        echo 'Unsupported OS'
+    fi
+}
+
+function code() {
+    if [ $# -eq 0 ]; then
+            builtin cd "$CODE" && ls
+    elif [ $# -eq 1 ]; then
+        if [ -d "$CODE/$1" ]; then
+            builtin cd "$CODE/$1" && ls
+        else
+            cdir="$(find "$CODE" -maxdepth 2 -name "$1*" | sed -n '1p')"
+            [ -d "$cdir" ] && builtin cd "$cdir" && ls
+        fi
+    elif [ $# -eq 2 ]; then
+        if [ -d "$CODE/$1/$2" ]; then
+            builtin cd "$CODE/$1/$2" && ls
+        else
+            cdir="$(find "$CODE/$1" -maxdepth 1 -name "$2*" | sed -n '1p')"
+            [ -d "$cdir" ] && builtin cd "$cdir" && ls
+        fi
+    fi
+}
+
+# bash specific setup
+if [ -n "$BASH" ]; then
+    compl_code() {
+        COMPREPLY=()
+        local word="${COMP_WORDS[COMP_CWORD]}"
+        if [ "$COMP_CWORD" -eq 1 ]; then
+            COMPREPLY=($(compgen -W "$(dir $CODE)" -- "$word"))
+        else
+            local words=("${COMP_WORDS[@]}")
+            unset "words[0]"
+            unset "words[$COMP_CWORD]"
+            local completions=$(dir -F "$CODE"/"${words[*]}")
+            COMPREPLY=($(compgen -W "$completions" -- "$word"))
+        fi
+    }
+
+    complete -F compl_code code
+
+    # PS1 setup
+    if [[ "$(id -u)" == "0" ]]; then
+        export PS1='\[\033[01;31m\]\u\[\033[01;37m\] \W \[\033[01;32m\]\[\033[01;33m\]$(git branch 2>/dev/null | sed -n "s/* \(.*\)/\1 /p")\[\033[01;31m\]\$\[\033[00m\] '
+    else
+        export PS1='\[\033[01;34m\]\u\[\033[01;37m\] \W \[\033[01;32m\]\[\033[01;33m\]$(git branch 2>/dev/null | sed -n "s/* \(.*\)/\1 /p")\[\033[01;34m\]\$\[\033[00m\] '
+    fi
+
+    if grep SSH_CLIENT <(env) &>/dev/null; then
+        #clear -x
+        #neofetch --config ~/.config/neofetch/config_ssh.conf 2>/dev/null
+        if [[ "$(id -u)" == "0" ]]; then
+            export PS1='\[\033[01;31m\]\u@\h\[\033[01;37m\] \W \[\033[01;32m\]\[\033[01;33m\]$(git branch 2>/dev/null | sed -n "s/* \(.*\)/\1 /p")\[\033[01;31m\]\$\[\033[00m\] '
+        else
+            export PS1='\[\033[01;35m\]\u@\h\[\033[01;37m\] \W \[\033[01;32m\]\[\033[01;33m\]$(git branch 2>/dev/null | sed -n "s/* \(.*\)/\1 /p")\[\033[01;35m\]\$\[\033[00m\] '
+        fi
+    fi
+
+    # bind 'set editing-mode vi'
+    # bind 'set show-mode-in-prompt on'
+    # bind 'set vi-ins-mode-string "+"'
+    # bind 'set vi-cmd-mode-string ":"'
+    # bind 'set keymap vi-insert'
+
+fi
