@@ -79,11 +79,11 @@ prompt_segment() {
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
 	local background foreground prompt
-	prompt="%(!.%{%F{yellow}%}.)%n@%m"
+	prompt="%n@%m"
 	background=black
 	foreground=default
 
-	if [[ "$UID" == "1" ]]; then
+	if [[ "$UID" == "0" ]]; then
 		foreground=red
 	fi
 
