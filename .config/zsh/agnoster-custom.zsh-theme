@@ -76,12 +76,22 @@ prompt_segment() {
 
 ### Prompt components
 # Each component will draw itself, and hide itself if no information needs to be shown
-
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
-  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{yellow}%}.)%n@%m"
+	local background foreground prompt
+	prompt="%(!.%{%F{yellow}%}.)%n@%m"
+	background=black
+	foreground=default
+
+	if [[ "$UID" == "1" ]]; then
+		foreground=red
+	fi
+
+  if [[ -n "$SSH_CLIENT" ]]; then
+		background=magenta
   fi
+
+	prompt_segment $background $foreground $prompt
 }
 
 evil_git_num_untracked_files() {
