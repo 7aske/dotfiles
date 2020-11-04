@@ -9,7 +9,7 @@ case "$1" in
 esac
 
 
-WORKSPACES=$(i3-msg -t get_workspaces | jq | grep name | sed 's/.*:\ \"\(.*\)\".*/\1/g' | sort)
+WORKSPACES=$(i3-msg -t get_workspaces | jq | grep name | sed 's/.*:\ \"\(.*\)\".*/\1/g' | sort -r)
 
 WS="$(echo $WORKSPACES | tr ' ' '\n' | dmenu -fn 'Fira Code-10' -p "$prompt: ")"
 
