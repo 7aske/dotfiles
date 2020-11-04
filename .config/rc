@@ -73,6 +73,7 @@ alias grep='grep --color=auto'
 alias wget='wget --hsts-file=~/.config/wget/.wget-hsts'
 alias diff="diff --color=auto"
 alias cp='cp -v'
+alias dd='dd status="progress"'
 alias mv='mv -v'
 alias rm='rm -v'
 alias mkdir='mkdir -v'
