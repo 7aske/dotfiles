@@ -7,8 +7,8 @@ MD_COMPLIER="${MD_COMPILER:-"pandoc"}"
 
 function _compile_md_pandoc(){
 	pandoc \
-		--pdf-engine=xelatex \
-        -V 'mainfont:NotoSerif-Regular' \
+		--pdf-engine=pdflatex \
+        -V 'mainfont:NotoSans-Regular' \
         -V 'sansfont:NotoSans-Regular' \
         -V 'monofont:FiraCode-Regular' \
 		-o "$base.pdf" \
@@ -25,7 +25,13 @@ function _compile_md_r(){
 	(pgrep -fi  "$pdf_filename" 2>&1>/dev/null) || (zathura "$pdf_filename" &)
 }
 
+function _compile_tex(){
+	pdflatex "$file"
+	(pgrep -fi  "$base.pdf" 2>&1>/dev/null) || (zathura "$base.pdf" &)
+}
+
 case "$file" in
+	*\.tex) _compile_tex ;;
 	*\.md)
 		case "$MD_COMPLIER" in
 			"pandoc")  _compile_md_pandoc ;;
