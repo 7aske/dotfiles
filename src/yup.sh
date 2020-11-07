@@ -2,17 +2,21 @@
 
 tempfile="/tmp/yup"
 
-YUP_UID="${SUDO_UID:-"$(id -u)"}"
-YUP_GID="${SUDO_GID:-"$(id -g)"}"
-YUP_USER="${SUDO_USER:-"$(whoami)"}"
+function _root_check(){
+	if [ "$EUID" != 0 ]; then
+		sudo "$0" "$@"
+		exit $?
+	fi
+}
 
 function _pacup_write(){
-	yay -Qu | sudo -u "$YUP_USER" tee "$tempfile"
+	_root_check
+	yay -Qu | grep -v "Avoid running yay as root/sudo" | tee "$tempfile"
 }
 
 function pacup_count(){
 	if [ -f "$tempfile" ]; then
-		cat "$tempfile" | sed -n '1!p' | wc -l
+		cat "$tempfile" | wc -l
 	else
 		echo 0
 	fi
@@ -21,15 +25,14 @@ function pacup_count(){
 function pacup_update(){
 	yay -Syy
 	_pacup_write
-	sudo -u "$YUP_USER" chown "$YUP_UID:$YUP_GID" "$tempfile"
 }
 
 function pacup_list(){
-	cat "$tempfile" | sed -n '1!p' | cut -d' ' -f1,4 | column -o ' | ' -t
+	cat "$tempfile" | cut -d' ' -f1,4 | column -o ' | ' -t
 }
 
 function pacup_reset(){
-	echo "" | sudo -u "$YUP_USER" tee "$tempfile"
+	echo "" | tee "$tempfile"
 }
 
 case "$1" in
