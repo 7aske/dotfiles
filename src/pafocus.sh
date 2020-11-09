@@ -10,10 +10,11 @@ sinks=($(pactl list sinks | grep Name: | cut -d ' ' -f2 | grep -n ''))
 names=($(pacmd list-sinks | grep alsa.name | cut -d '=' -f2 | tr -d ' "'))
 
 wname="$(xdotool getwindowfocus getwindowname)"
-
+echo $wname
 case "$wname" in
     "Cantata") pid="$(pgrep mpd)" ;;
     *"Chromium") pid="$(pgrep chromium)" ;;
+    *"Brave") pid="$(pgrep brave)" ;;
     *) pid=$(xdotool getwindowfocus getwindowpid);;
 esac
 
