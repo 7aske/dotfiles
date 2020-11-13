@@ -24,7 +24,7 @@ elif [ "$capacity" -ge 25 ]; then
 	color="${color3:-"#ff5252"}"
 else
 	color="${color1:-"#ff8144"}"
-	warn=""
+	warn="  "
 fi
 
 [ -z $warn ] && warn=" "
