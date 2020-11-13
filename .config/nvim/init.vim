@@ -54,7 +54,7 @@ set cursorline
 set encoding=utf-8
 set hlsearch
 set laststatus=2
-set mouse=a
+set mouse=
 set nobackup
 set noexpandtab tabstop=4 shiftwidth=4
 set noshowmode
