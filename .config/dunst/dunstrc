@@ -1,6 +1,6 @@
 [global]
-    frame_width = 1
-    frame_color = "#788388"
+    #frame_width = 1
+    #frame_color = "#788388"
     
     font = Fira Code 10
     
@@ -30,7 +30,7 @@
     sort = yes
     
     # Show how many messages are currently hidden (because of geometry).
-    indicate_hidden = yes
+    indicate_hidden = no
     
     # Alignment of message text.
     # Possible values are "left", "center" and "right".
@@ -143,7 +143,7 @@
 	dmenu = dmenu -p notif:
     
     # Browser for opening urls in context menu.
-    browser = "chromium"
+    browser = "brave"
 
     # Align icons left/right/off
     icon_position = left
@@ -161,23 +161,23 @@
     # Available modifiers are "ctrl", "mod1" (the alt-key), "mod2",
     # "mod3" and "mod4" (windows-key).
     # Xev might be helpful to find names for keys.
+	# Preffer to handle these from the window manager
     
     # Close all notifications.
     # close_all = ctrl+shift+space
-    close_all = ctrl+mod4+n
+    #close_all = ctrl+mod4+n
 
     # Redisplay last message(s).
     # On the US keyboard layout "grave" is normally above TAB and left
     # of "1".
-    history = ctrl+mod4+h 
+    #history = ctrl+mod4+h 
     
     # Context menu.
-    context = mod4+n
+    #context = mod4+n
 
 	mouse_left=do_action
 	mouse_middle=close_all
 	mouse_right=close_current
-
 
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.

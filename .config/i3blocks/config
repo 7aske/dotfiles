@@ -65,3 +65,5 @@ interval=60
 [packages]
 interval=60
 
+[notify-status]
+interval=5

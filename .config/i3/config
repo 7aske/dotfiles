@@ -114,7 +114,12 @@ bindsym $mod+w       exec --no-startup-id $browser
 bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor
 bindsym $mod+Shift+w exec --no-startup-id $browser --incognito
 # 7aske-scripts
-bindsym $mod+Shift+d exec --no-startup-id dunst_reload
+bindsym $mod+Mod1+n        exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/notify-status
+bindsym $mod+Shift+Mod1+n  exec --no-startup-id dunst_reload
+bindsym $mod+n             exec --no-startup-id dunstctl context
+bindsym $mod+Ctrl+n        exec --no-startup-id dunstctl close
+bindsym $mod+Shift+n       exec --no-startup-id dunstctl history-pop
+
 
 bindsym Print            --release exec --no-startup-id scrot && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot" "saved to homedir"
 bindsym $mod+Print       --release exec --no-startup-id scrot -u && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot (window)" "saved to homedir"
@@ -408,9 +413,9 @@ bindsym $mod+F4 exec --no-startup-id i3-layout-manager
 
 # create and move windows to arbitrarily named workspaces
 # 7aske-scripts
-bindsym $mod+Insert       exec --no-startup-id i3wss
-bindsym $mod+Ctrl+Insert  exec --no-startup-id i3wss move
-bindsym $mod+Shift+Insert exec --no-startup-id i3wss move-switch
+bindsym $mod+i       exec --no-startup-id i3wss
+bindsym $mod+Ctrl+i  exec --no-startup-id i3wss move
+bindsym $mod+Shift+i exec --no-startup-id i3wss move-switch
 
 # mode to invoke 7aske/startup management script
 bindsym $mod+F3 mode "$mode_startup"
