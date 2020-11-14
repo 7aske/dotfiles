@@ -79,7 +79,7 @@ bindsym $mod+Shift+comma  exec --no-startup-id BLOCK_BUTTON=5 ~/.local/bin/statu
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%    && notify-send --hint=int:transient:1 -t $notif_duration "volume" "+5% ($(getvol)%)"
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%    && notify-send --hint=int:transient:1 -t $notif_duration "volume" "\-5% ($(getvol)%)"
-bindsym XF86AudioMute        exec --no-startup-id pactl0set-sink-mute   0 toggle && notify-send --hint=int:transient:1 -t $notif_duration "volume" "toggle mute"
+bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute   0 toggle && notify-send --hint=int:transient:1 -t $notif_duration "volume" "toggle mute"
 
 #                    _ _           _   _
 #   __ _ _ __  _ __ | (_) ___ __ _| |_(_) ___  _ __  ___
