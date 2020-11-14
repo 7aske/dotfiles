@@ -1,0 +1,238 @@
+# ____        _       _         _   _    _      _                __ _
+#|__  |_ _ __| |_____( )___  __| |_| |_ | |____| |  __ ___ _ _  / _(_)__ _
+#  / / _` (_-< / / -_)/(_-< (_-< / / ' \| / / _` | / _/ _ \ ' \|  _| / _` |
+# /_/\__,_/__/_\_\___| /__/ /__/_\_\_||_|_\_\__,_| \__\___/_||_|_| |_\__, |
+#                                                                    |___/
+
+# _ __  _ __ ___   __ _ _ __ __ _ _ __ ___  ___
+#| '_ \| '__/ _ \ / _` | '__/ _` | '_ ` _ \/ __|
+#| |_) | | | (_) | (_| | | | (_| | | | | | \__ \
+#| .__/|_|  \___/ \__, |_|  \__,_|_| |_| |_|___/
+#|_|programs      |___/
+
+# terminal emulator
+super + Return
+	$TERMINAL
+
+# web browser
+super + {_, shift + } w
+	$BROWSER {_,--incognito}
+
+# program launcher
+super + a
+	TERMINAL_CMD="st -e" dmenu-recent -f -i -l 10 -p "run: " -fn 'Fira Code Medium-10'
+
+# command runner
+super + shift + semicolon
+	dmenu_run -p ":" -f -b -fn 'Fira Code Medium-10'
+
+# task manager
+super + grave
+	$TERMINAL -e htop
+
+super + shift + x
+	xkill
+
+# file explorer
+super + {_,shift +}e
+	{$TERMINAL -e $TERMFILE, $FILE}
+
+# text editor
+super + shift + v
+	$TERMINAL -e $EDITOR
+
+# open vimcfg
+super + shift + grave ; {e,h,d}
+	$TERMINAL -e vimcfg {--etc,--home,_}
+
+# print screen
+@Print
+	scrot && notify-send \
+				-i screengrab \
+				--hint=int:transient:1 \
+				-t 1000 \ 
+				"screenshot" "saved to homedir"
+super + @Print
+	scrot -u && notify-send \
+					-i screengrab \
+					--hint=int:transient:1 \
+					-t 1000 \
+					"screenshot (window)" "saved to homedir"
+super + shift + @Print 
+	scrot -s -f -l style=dash -o /dev/stdout  | \
+	xclip -sel c -t image/png && notify-send \
+										-i screengrab \
+										--hint=int:transient:1 \
+										-t 1000 \
+										"screenshot (selection)" "copied to clipboard"
+# music player
+super + {_,shift+} m
+	i3btf {$PLAYER,cantata}
+
+# open project
+super + o ; {t,v,j,c}
+	TYPE={term,vim,jetbrains,vscode} DMENU=1 codeopen
+
+super + v
+	clipmenu
+
+super + Home
+	google-search
+
+
+#notificaiton _    __ _           _   _
+# _ __   ___ | |_ / _(_) ___ __ _| |_(_) ___  _ __
+#| '_ \ / _ \| __| |_| |/ __/ _` | __| |/ _ \| '_ \
+#| | | | (_) | |_|  _| | (_| (_| | |_| | (_) | | | |
+#|_| |_|\___/ \__|_| |_|\___\__,_|\__|_|\___/|_| |_|
+
+super + alt + shift n
+	dunst_reload
+
+super + alt + n
+	BLOCK_BUTTON=1 ~/.local/bin/statusbar/notify-status
+	
+super + {_,ctrl+,shift+}n
+	dunstctl {context,close,history-pop}
+
+
+# _
+#| |__  ___ _ ____      ___ __ ___
+#| '_ \/ __| '_ \ \ /\ / / '_ ` _ \
+#| |_) \__ \ |_) \ V  V /| | | | | |
+#|_.__/|___/ .__/ \_/\_/ |_| |_| |_|
+#bspwm     |_|
+
+# make sxhkd reload its configuration files:
+# quit/restart bspwm
+super + shift + r
+	pkill -USR1 -x sxhkd; bspc wm -r; notify-send "bspwm" "bspwm restarted"
+
+# exit
+super + 0 ; e
+	bspc quit
+
+# close/kill
+super + {_,shift + }q
+	bspc node -{c,k}
+
+# monocle layout
+super + m
+	bspc desktop -l next
+
+super + Tab
+	rofi -show window
+
+# set the window state
+super + {t,shift+t,f}
+	bspc node -t \~{tiled,floating,fullscreen}
+
+super + ctrl + shift + semicolon
+	dmenu -b -p ":" -fn '$dmenu_font' | (xargs bspc) 2>&1 | xargs notify-send
+
+# set the node flags
+#super + ctrl + {m,x,y,z}
+#	bspc node -g {marked,locked,sticky,private}
+
+
+#sound                      _
+# ___  ___  _   _ _ __   __| |
+#/ __|/ _ \| | | | '_ \ / _` |
+#\__ \ (_) | |_| | | | | (_| |
+#|___/\___/ \__,_|_| |_|\__,_|
+
+# pulseaudio
+super + {_,ctrl +, shift +, ctrl + shift +}p
+	{pavucontrol, patoggle, padefault, pafocus}
+
+# media controls
+XF86AudioPlay
+	playerctl play-pause
+XF86AudioPause
+	playerctl play-pause
+XF86AudioNext
+	playerctl next
+XF86AudioPrev
+	playerctl previous
+XF86AudioRaiseVolume
+	pactl set-sink-volume 0 +5%
+XF86AudioLowerVolume
+	pactl set-sink-volume 0 -5%
+XF86AudioMute
+	pactl set-sink-mute   0 toggle
+
+# 7aske/scripts
+super + {period,slash,comma,shift + period,shift + comma}
+	BLOCK_BUTTON={1,2,3,4,5} ~/.local/bin/statusbar/music
+
+#navigation         _             _   _
+# _ __   __ ___   _(_) __ _  __ _| |_(_) ___  _ __
+#| '_ \ / _` \ \ / / |/ _` |/ _` | __| |/ _ \| '_ \
+#| | | | (_| |\ V /| | (_| | (_| | |_| | (_) | | | |
+#|_| |_|\__,_| \_/ |_|\__, |\__,_|\__|_|\___/|_| |_|
+#                     |___/
+
+# focus the node in the given direction
+super + {Left,Down,Up,Right}
+	bspc node -f {west,south,north,east}
+
+super + shift + {Left,Down,Up,Right}
+	bspc node -s {west,south,north,east}
+
+# focus the next/previous desktop in the current monitor
+super + bracket{left,right}
+	bspc desktop -f {prev,next}.local
+
+# focus the last desktop/send to last desktop
+super + {_,ctrl + }b
+	bspc {desktop -f,node -d} last
+
+super + shift + b
+	bspc node -d last --follow
+
+# focus or send to the given desktop
+super + {_,ctrl + }{1-9}
+	bspc {desktop -f,node -d} '^{1-9}'
+
+# send to and move to desktop
+super + shift + {1-9}
+	bspc node -d '^{1-9}' --follow
+
+super + alt + {comma,period}
+	bspc node @/ -C {backward, forward}
+
+super + alt + {Left,Down,Up,Right}
+  n=10; \
+  { d1=left;   d2=right;  dx=-$n; dy=0;   \
+  , d1=bottom; d2=top;    dx=0;   dy=$n;  \
+  , d1=top;    d2=bottom; dx=0;   dy=-$n; \
+  , d1=right;  d2=left;   dx=$n;  dy=0;   \
+  } \
+  bspc node --resize $d1 $dx $dy || bspc node --resize $d2 $dx $dy
+
+alt + {_,shift+}Tab
+	bspc desktop -f {next,prev}
+
+# send desktop to monitor
+super + ctrl + {Left,Right}
+	bspc desktop -m {west,east} --follow
+
+#
+# preselect
+#
+
+# preselect the direction
+super + ctrl + {Left,Down,Up,Right}
+	bspc node -p {west,south,north,east}
+
+# preselect the ratio
+super + ctrl + {1-9}
+	bspc node -o 0.{1-9}
+
+# cancel the preselection for the focused node
+super + ctrl + space
+	bspc node -p cancel
+
+# cancel the preselection for the focused desktop
+super + ctrl + shift + space
+	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel

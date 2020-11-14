@@ -1,0 +1,33 @@
+#!/bin/sh
+
+function oneshot(){
+	pgrep -x $1 >/dev/null || $1 &
+}
+
+oneshot sxhkd
+oneshot barrier
+
+fix_touchpad
+xsetroot -cursor_name left_ptr
+xset r rate 195 55
+
+bspc monitor -d I II III IV V VI VII VIII IX
+
+bspc config border_width         2
+bspc config window_gap          12
+bspc config -d wm window_gap     0
+
+bspc config split_ratio          0.50
+#bspc config borderless_monocle   true
+#bspc config gapless_monocle      true
+bspc config pointer_modifier     mod4
+bspc config pointer_action3      resize_corner
+bspc config focus_follows_pointer true
+
+bspc rule -a Gimp desktop='^8' state=floating follow=on
+bspc rule -a Chromium desktop='^2'
+bspc rule -a mplayer2 state=floating
+bspc rule -a Kupfer.py focus=on
+bspc rule -a Screenkey manage=off
+
+bspc rule -a Pavucontrol state=floating center=on follow=on

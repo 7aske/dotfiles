@@ -36,6 +36,12 @@ mklink albert
 
 # bug.n
 
+# bspwm
+mklink bspwm
+
+# sxhkd
+mklink sxhkd
+
 # conky
 mklink conky
 
