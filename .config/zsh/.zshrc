@@ -87,3 +87,7 @@ bindkey '^e' edit-command-line
 
 # ctrl+space
 bindkey '^ ' autosuggest-accept
+
+# pidswallow
+[ -n "$DISPLAY" ]  && command -v xdo >/dev/null 2>&1 && xdo id > /tmp/term-wid-"$$"
+trap "( rm -f /tmp/term-wid-"$$" )" EXIT HUP
