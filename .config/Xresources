@@ -48,7 +48,7 @@
 
 *.pointerColor:        #1ABB9B
 *.reverseVideo:        on
-*.selectToClipboard:   true
+*.selectToClipboard:   false
 
 *.font:	               Fira Code:pixelsize=16:antialias=true:autohint=true;
 *.alpha:               0.9
