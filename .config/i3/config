@@ -90,18 +90,17 @@ bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute   0 toggle
 bindsym $mod+Return       exec --no-startup-id $terminal
 bindsym $mod+BackSpace    exec --no-startup-id i3btf $terminal2 --class floating
 bindsym $mod+Shift+Return exec --no-startup-id $terminal2
-#bindsym $mod+a exec --no-startup-id rofi -show run
 bindsym $mod+a     exec --no-startup-id TERMINAL_CMD="st -e" dmenu-recent -f -i -l 10 -p "run: " -fn '$dmenu_font'
 bindsym $mod+Shift+semicolon     exec --no-startup-id dmenu_run -p ":" -f -b -fn '$dmenu_font'
 bindsym $mod+grave exec --no-startup-id $terminal -e htop
 
 # edit config files
-bindsym $mod+Shift+grave mode "$mode_config"
+bindsym $mod+Ctrl+c mode "$mode_config"
 set $mode_config list config files to open: (e)tc (h)ome (d)dotfiles
 mode "$mode_config" {
-    bindsym e exec --no-startup-id $terminal -e vimcfg --etc ; mode default
-    bindsym h exec --no-startup-id $terminal -e vimcfg --home; mode default
-    bindsym d exec --no-startup-id $terminal -e vimcfg;        mode default
+    bindsym e exec --no-startup-id vimcfg --etc ; mode default
+    bindsym h exec --no-startup-id vimcfg --home; mode default
+    bindsym d exec --no-startup-id vimcfg;        mode default
 
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode default
@@ -187,6 +186,12 @@ bindsym $mod+Ctrl+Shift+h mark swap; focus left;  swap container with mark swap;
 bindsym $mod+Ctrl+Shift+j mark swap; focus down;  swap container with mark swap; unmark swap; focus down
 bindsym $mod+Ctrl+Shift+k mark swap; focus up;    swap container with mark swap; unmark swap; focus up
 bindsym $mod+Ctrl+Shift+l mark swap; focus right; swap container with mark swap; unmark swap; focus right
+
+# resizing
+bindsym $mod+Mod1+Left  resize shrink width 1 px or 1 ppt
+bindsym $mod+Mod1+Down  resize grow   height 1 px or 1 ppt
+bindsym $mod+Mod1+Up    resize shrink height 1 px or 1 ppt
+bindsym $mod+Mod1+Right resize grow   width 1 px or 1 ppt
 
 # workspace back and forth (with/without active container)
 bindsym Mod1+Tab workspace next
@@ -436,7 +441,6 @@ mode "$mode_startup" {
 bindsym $mod+Shift+0 exec --no-startup-id "i3-nagbar -t warning -m 'Do you really want to exit i3?' -b 'Yes, exit i3' 'i3-msg exit'"
 # Set shut down, restart and locking features
 bindsym $mod+0           mode "$mode_system"
-bindsym $mod+Escape      mode "$mode_system"
 bindsym Ctrl+Mod1+Delete mode "$mode_system"
 set $mode_system (l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown
 mode "$mode_system" {
@@ -454,25 +458,6 @@ mode "$mode_system" {
     bindsym Escape mode default
 }
 
-# Resize window (you can also use the mouse for that)
-bindsym $mod+r mode "resize"
-mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-        bindsym h     resize shrink width 5 px or 5 ppt
-        bindsym j     resize grow height 5 px or 5 ppt
-        bindsym k     resize shrink height 5 px or 5 ppt
-        bindsym l     resize grow width 5 px or 5 ppt
-
-        # same bindings, but for the arrow keys
-        bindsym Left  resize shrink width 10 px or 10 ppt
-        bindsym Down  resize grow   height 10 px or 10 ppt
-        bindsym Up    resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow   width 10 px or 10 ppt
-
-        # exit resize mode: Enter or Escape
-        bindsym Return mode default
-        bindsym Escape mode default
-}
 
 #              _            _             _
 #   __ _ _   _| |_ ___  ___| |_ __ _ _ __| |_
@@ -498,9 +483,10 @@ exec_always --no-startup-id gsettings set org.gnome.desktop.screensaver picture-
 exec_always --no-startup-id dunst_reload
 # 7aske-scripts
 exec_always --no-startup-id fix_xcursor
+exec_always --no-startup-id pgrep -x $terminal || $terminal -e neofetch
 
 # pulseaudio
-exec_always --no-startup-id pgrep pulseaudio || (sleep 3; pulseaudio -D)
+exec_always --no-startup-id pgrep pulseaudio || (sleep 5; pulseaudio -D)
 exec_always --no-startup-id pgrep pasystray  || pasystray
 
 # touchpad and keyboard config
