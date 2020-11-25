@@ -11,9 +11,14 @@ esac
 
 [ -z "$EDITOR" ] &&  echo "$prog: EDITOR env variable not set" && exit 1
 [ ! -d "$cfg_dir" ] && echo "$prog: $cfg_dir: no such file or directory" && exit 1
-files="$($find_cmd $cfg_dir $find_flags | sort)"
+files="$($find_cmd $cfg_dir $find_flags)"
 
-config_file="$(echo $files | sed 's/\ /\n/g' | grep -v ".git" | dmenu -fn 'Fira Code Medium-10' -f -i -l 10 )"
+
+if [ ! -t 1 ]; then
+	config_file="$(echo $files | sed 's/\ /\n/g' | grep -v ".git" | dmenu -fn 'Fira Code Medium-10' -f -i -l 10 )"
+else
+	config_file="$(echo $files | sed 's/\ /\n/g' | grep -v ".git" | fzf --cycle --reverse )"
+fi
 
 cmd="$EDITOR $config_file"
 [ ! -w "$config_file" ] && cmd="sudo $EDITOR $config_file"
