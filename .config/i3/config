@@ -49,8 +49,6 @@ set $terminal2  kitty
 # \__ \ (_) | |_| | | | | (_| | (_>  < | | | | | |_| \__ \ | (__
 # |___/\___/ \__,_|_| |_|\__,_|\___/\/_| |_| |_|\__,_|___/_|\___|
 
-# start pulseaudio in xprofile
-# start pasystray in xprofile
 bindsym $mod+p            exec --no-startup-id pavucontrol
 # 7aske-scripts
 bindsym $mod+Ctrl+p       exec --no-startup-id patoggle
@@ -360,7 +358,7 @@ for_window [class="(?i)feh"] fullscreen enable
 for_window [class="(?i)gnome-calculator"] floating enable
 for_window [class="(?i)gnome-disks"] floating enable
 for_window [class="(?i)jetbrains-toolbox"] floating enable
-for_window [class="Kvantum Manager"] floating enable, move position center
+for_window [class="(?i)lutris"] floating enable, move position center
 for_window [class="(?i)nm-connection-editor"] floating enable, border normal
 for_window [class="(?i)spotify"] floating enable, resize set 1280 768, move position center
 for_window [class="(?i)sxiv"] fullscreen enable
@@ -368,6 +366,7 @@ for_window [class="(?i)virtualbox"] floating enable, border none
 for_window [class="(?i)vncviewer"] move position center
 for_window [class="Baobab"] floating enable resize set 1024 720, move position center
 for_window [class="Deluge"] floating enable move position center
+for_window [class="Kvantum Manager"] floating enable, move position center
 for_window [class="Lightdm-settings"] floating enable
 for_window [class="Lxappearance"] floating enable, move position center, sticky enable, border normal
 for_window [class="Mailspring"] floating enable, resize set 1333 768, move position center
@@ -389,16 +388,18 @@ for_window [class="java-lang-Thread"] floating enable, move position center
 for_window [class="octopi"] floating enable
 for_window [class="qt5ct"] floating enable, sticky enable, border normal
 for_window [class="weather_floating"] floating enable, resize set 1280 820, move position center
+for_window [title=".*Bitwarden.*"] floating enable, resize set 1280 768, move position center
 for_window [title=".*Emulator.*"] floating enable
-for_window [title=".*World of Warcraft.*"] layout tabbed
+for_window [title=".*Steam.*"] floating enable, resize set 1280 768, move position center
+for_window [title=".*World of Warcraft.*"] layout tabbed, border none
 for_window [title="File Transfer*"] floating enable
 for_window [title="Lutris"] floating enable, move position center
 for_window [title="alsamixer"] floating enable
 for_window [title="i3_help"] floating enable, sticky enable, border normal
-for_window [title="win0"] floating enabled, move position center
+for_window [title="win0"] floating enable, move position center
 
 # virtual machines
-for_window [class="VirtualBox Machine"] move container to workspace wm
+for_window [class="VirtualBox Machine"] move container to workspace vm
 for_window [class="VirtualBox Machine" title="(?i)^win"] move container to workspace win
 
 #            _                                                          _
@@ -471,8 +472,8 @@ exec_always --no-startup-id nm-applet
 exec_always --no-startup-id xfce4-power-manager
 exec_always --no-startup-id xmodmap .Xmodmap
 # exec_always --no-startup-id pamac-tray
-exec_always --no-startup-id pgrep udiskie || (sleep 1; udiskie -s -f $file -a --appindicator)
-exec_always --no-startup-id pgrep barrier || barrier
+exec_always --no-startup-id pgrep udiskie || udiskie -s -f $file -a --appindicator
+exec_always --no-startup-id killall barrier; barrier
 exec_always --no-startup-id pgrep pidswallow || pidswallow -gl
 exec_always --no-startup-id clipmenud
 exec_always --no-startup-id pgrep unclutter || unclutter --fork --timeout 5 --jitter 10 --ignore-scrolling
@@ -486,7 +487,7 @@ exec_always --no-startup-id fix_xcursor
 exec_always --no-startup-id pgrep -x $terminal || $terminal
 
 # pulseaudio
-exec_always --no-startup-id pgrep pulseaudio || (sleep 5; pulseaudio -D)
+exec_always --no-startup-id pgrep pulseaudio || pulseaudio -D
 exec_always --no-startup-id pgrep pasystray  || pasystray
 
 # touchpad and keyboard config
@@ -600,8 +601,10 @@ gaps outer $gaps_outer
 # workspace specific gaps
 workspace win gaps inner 0
 workspace win gaps outer 0
-workspace wm  gaps inner 0
-workspace wm  gaps outer 0
+workspace wow gaps inner 0
+workspace wow gaps outer 0
+workspace vm  gaps inner 0
+workspace vm  gaps outer 0
 
 # Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
 # gaps inner|outer current|all set|plus|minus <px>
