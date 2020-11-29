@@ -27,6 +27,7 @@ call plug#begin('~/.config/nvim/plugged')
 	Plug 'sheerun/vim-polyglot'
 	Plug 'vim-airline/vim-airline'
     Plug 'tpope/vim-surround'
+    Plug 'tpope/vim-repeat'
     Plug 'PotatoesMaster/i3-vim-syntax'
     Plug 'airblade/vim-gitgutter'
     Plug 'kien/ctrlp.vim'
