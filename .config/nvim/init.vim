@@ -23,6 +23,7 @@ call plug#begin('~/.config/nvim/plugged')
 	Plug 'andymass/vim-matchup'
 	Plug 'godlygeek/tabular'
 	Plug 'plasticboy/vim-markdown'
+	Plug 'ap/vim-css-color'
 	Plug 'neoclide/coc.nvim', {'branch': 'release'}
 	Plug 'sheerun/vim-polyglot'
 	Plug 'vim-airline/vim-airline'
