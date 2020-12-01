@@ -348,6 +348,7 @@ assign [class="(?i)skype"] $ws9
 assign [class="(?i)viber"] $ws9
 assign [class="zoom"] zoom
 assign [title="WhatsApp"] $ws9
+assign [title=".*World of Warcraft.*"] wow
 
 # Open specific applications in floating mode
 for_window [class="(?i)GParted"] floating enable, border normal
