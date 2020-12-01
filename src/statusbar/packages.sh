@@ -13,9 +13,15 @@ if (( $prev_count < $count )); then
 fi
 echo "$count" > "$tempfile"
 
+do_update(){
+	i3-msg "exec --no-startup-id setsid -f $TERMINAL -c floating -e yup" 2>/dev/null 1>/dev/null
+}
+
 case "$BLOCK_BUTTON" in
 	1) notify-send -i package -u low "updates available" "$(yup -l)" ;; 
-esac
+	2) yup -u && notify-send -i package -u low "syncing completed" ;; 
+	3) do_update ;;
+esac 2>/dev/null 1>/dev/null
 
 if [ "$count" -le 15 ]; then
 	color="${color7:-"#ffffff"}"

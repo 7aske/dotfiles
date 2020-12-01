@@ -4,7 +4,12 @@ tempfile="/tmp/yup"
 
 function _root_check(){
 	if [ "$EUID" != 0 ]; then
-		sudo "$0" "$@"
+		if [ -t 1 ]; then 
+			sudo "$0" "$@"
+		else
+			pkexec "$0" "$@"
+		fi
+
 		exit $?
 	fi
 }
