@@ -21,7 +21,7 @@ is_visible() {
 
 visible="$(xdotool search --all --onlyvisible --desktop "$(xprop -notype -root _NET_CURRENT_DESKTOP | cut -c 24-)" "" 2>/dev/null)"
 program="$(basename $1)"
-processes="$(pgrep "$program")"
+processes="$(pgrep -x "$program")"
 
 if [ -n "$processes" ]; then
     for proc in $processes; do
