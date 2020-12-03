@@ -118,7 +118,7 @@ bindsym $mod+Ctrl+n        exec --no-startup-id dunstctl close
 bindsym $mod+Shift+n       exec --no-startup-id dunstctl history-pop
 
 # 7aske-scripts
-bindsym $mod+F10           exec --no-startup-id screencam -n 0
+bindsym $mod+F10           exec --no-startup-id echo 0 | dmenu -p 'screen: ' | xargs screencam -n
 bindsym $mod+Shift+F10     exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/rec-status
 
 bindsym Print            --release exec --no-startup-id scrot && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot" "saved to homedir"
