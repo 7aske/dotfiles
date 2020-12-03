@@ -8,7 +8,7 @@ esac
 PAUSED="$(dunstctl is-paused)"
 
 if [ "$PAUSED" = "true" ]; then
-	echo '<span color="#ff8144"> </span>'
+	echo '<span color="#BF616A"> </span>'
 else
 	echo '<span color="#ffffff"> </span>'
 fi
