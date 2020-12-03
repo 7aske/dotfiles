@@ -3,9 +3,9 @@ separator_block_width=15
 markup=pango
 
 
-[title]
-label=
-interval=1
+#[title]
+#label=
+#interval=1
 
 [music]
 align=left
@@ -66,4 +66,7 @@ interval=60
 interval=60
 
 [notify-status]
+interval=5
+
+[rec-status]
 interval=5
