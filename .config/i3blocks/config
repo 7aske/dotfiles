@@ -70,3 +70,6 @@ interval=5
 
 [rec-status]
 interval=5
+
+[mic-status]
+interval=5
