@@ -8,12 +8,12 @@ if [ -z "$CODE" ]; then
     echo "'CODE' env not set" && exit 1
 fi
 
-[ -z "$(command -v codels)" ] && echo "codels: not found" && exit 1
+[ -z "$(command -v cgs)" ] && echo "cgs: not found" && exit 1
 
 if [ -n "$DMENU" ]; then
-    PROJ="$(codels | dmenu -l 10 -f -i -p 'repo:')"
+    PROJ="$(cgs -a | dmenu -l 10 -f -i -p 'repo:')"
 else
-    PROJ="$(codels | fzf)"
+    PROJ="$(cgs -a | fzf)"
 fi
 
 if [ -n "$PROJ" ]; then
