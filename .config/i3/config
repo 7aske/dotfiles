@@ -354,6 +354,7 @@ assign [title="WhatsApp"] $ws9
 assign [title=".*World of Warcraft.*"] wow
 
 # Open specific applications in floating mode
+for_window [class="Arandr"] floating enable,resize set 800 600, move position center
 for_window [class="(?i)GParted"] floating enable, border normal
 for_window [class="(?i)System-config-printer.py"] floating enable, border normal
 for_window [class="(?i)anydesk.bin"] floating enable, border normal
