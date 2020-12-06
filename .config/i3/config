@@ -558,6 +558,7 @@ client.background             $bg
 
 # Start i3blocks to display status bar
 bar {
+	i3bar_command i3bar
 	status_command i3blocks
     position top
 

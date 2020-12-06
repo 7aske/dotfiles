@@ -101,10 +101,10 @@ colorscheme nord
 set background=dark
 set termguicolors
 " darker background
-highlight Normal      cterm=NONE ctermbg=17 gui=NONE guibg=#292f3a
-highlight LineNr      cterm=NONE ctermbg=17 gui=NONE guibg=#292f3a
-highlight SignColumn  cterm=NONE ctermbg=17 gui=NONE guibg=#292f3a
-highlight ColorColumn cterm=NONE ctermbg=16 gui=NONE guibg=#2E3440
+highlight Normal      cterm=NONE ctermbg=17 gui=NONE guibg=NONE
+highlight LineNr      cterm=NONE ctermbg=17 gui=NONE guibg=NONE
+highlight SignColumn  cterm=NONE ctermbg=17 gui=NONE guibg=NONE
+highlight ColorColumn cterm=NONE ctermbg=16 gui=NONE guibg=NONE
 
 
 " STATUS BAR -------------------------------------
