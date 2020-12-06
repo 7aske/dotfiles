@@ -51,9 +51,9 @@ set $terminal2  kitty
 
 bindsym $mod+p            exec --no-startup-id pavucontrol
 # 7aske-scripts
-bindsym $mod+Ctrl+p       exec --no-startup-id patoggle
+bindsym $mod+Ctrl+p       exec --no-startup-id patoggle && notify-send -i audio-speakers --hint=int:transient:1 -t $notif_duration "toggle output"
 # 7aske-scripts
-bindsym $mod+Mod1+p       exec --no-startup-id patoggle sources
+bindsym $mod+Mod1+p       exec --no-startup-id patoggle sources && notify-send -i audio-recorder --hint=int:transient:1 -t $notif_duration "toggle input"
 # 7aske-scripts
 bindsym $mod+Shift+p      exec --no-startup-id padefault
 # 7aske-scripts
