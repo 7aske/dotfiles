@@ -11,9 +11,9 @@ fi
 [ -z "$(command -v cgs)" ] && echo "cgs: not found" && exit 1
 
 if [ -n "$DMENU" ]; then
-    PROJ="$(cgs -a | dmenu -l 10 -f -i -p 'repo:')"
+    PROJ="$(cgs -a -i | dmenu -l 10 -f -i -p 'repo:')"
 else
-    PROJ="$(cgs -a | fzf)"
+    PROJ="$(cgs -a -i | fzf)"
 fi
 
 if [ -n "$PROJ" ]; then

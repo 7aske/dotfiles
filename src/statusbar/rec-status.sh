@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 case $BLOCK_BUTTON in
-	2) killall ffmpeg ;;
+	1) killall ffmpeg ;;
 esac
 
 color="${color2:-"#A3BE8C"}"

@@ -6,8 +6,8 @@ inputs="$(pactl list source-outputs | grep application.process.binary)"
 
 color="${color2:-"#A3BE8C"}"
 muted_color="${color1:-"#BF616A"}"
-icon=""
-muted_icon=""
+icon=" "
+muted_icon=" "
 
 sources="$(pactl list sources short | wc -l)"
 muted="$(pactl list sources | grep "Mute: yes" | wc -l)"
