@@ -34,7 +34,7 @@ interval=10
 
 [bandwidth]
 label=
-interval=2
+interval=1
 
 [disk]
 label= 
