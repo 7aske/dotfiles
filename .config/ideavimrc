@@ -45,3 +45,7 @@ command Goya         action ToggleDistractionFreeMode
 command W            action Switcher
 command Diff         action LocalHistory.ShowHistory
 command Gdiffb       action Vcs.ShowHistoryForBlock
+
+nnoremap <leader>" ea"<Esc>Bi"<Esc>
+nnoremap <leader>' ea'<Esc>Bi'<Esc>
+nnoremap <leader>` ea`<Esc>Bi`<Esc>
