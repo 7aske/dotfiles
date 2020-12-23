@@ -123,6 +123,11 @@ bindsym $mod+Shift+n       exec --no-startup-id dunstctl history-pop
 bindsym $mod+F10           exec --no-startup-id echo 0 | dmenu -p 'screen: ' | xargs screencam -n
 bindsym $mod+Shift+F10     exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/rec-status
 
+bindsym $mod+Mod1+t      exec --no-startup-id transmission-gtk
+bindsym $mod+Mod1+l      exec --no-startup-id lutris
+bindsym $mod+Mod1+d      exec --no-startup-id gnome-disks
+bindsym $mod+Mod1+b      exec --no-startup-id baobab
+
 bindsym Print            --release exec --no-startup-id scrot && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot" "saved to homedir"
 bindsym $mod+Print       --release exec --no-startup-id scrot -u && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot (window)" "saved to homedir"
 bindsym $mod+Shift+Print --release exec --no-startup-id scrot -s -f -l style=dash -o /dev/stdout | xclip -sel c -t image/png && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot (selection)" "copied to clipboard"
@@ -399,6 +404,7 @@ for_window [title="Lutris"] floating enable, move position center
 for_window [title="alsamixer"] floating enable
 for_window [title="i3_help"] floating enable, sticky enable, border normal
 for_window [title="win0"] floating enable, move position center
+for_window [class="Transmission"] floating enable, move position center
 
 # virtual machines
 for_window [class="VirtualBox Manager"] floating disable, border 2
