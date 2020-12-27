@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 
+
+if [ ! -t 1 ]; then
+	$TERMINAL -e "$@"
+fi
+
 prog="$(basename $0)"
 find_flags="-maxdepth 3 -type f"
 find_cmd="find"
 case "$1" in
     "--etc")  find_cmd="sudo find "; cfg_dir="/etc" ;;
     "--home") find_flags=" -maxdepth 1 -type f"; cfg_dir="$HOME" ;;
+    "--config") find_flags=" -maxdepth 2 -type f"; cfg_dir="$HOME/.config" ;;
     *) cfg_dir="$CODE/sh/dotfiles" ;;
 esac
 
