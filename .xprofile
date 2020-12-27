@@ -7,6 +7,7 @@ profile="$HOME/.profile"
 xresources="$HOME/.Xresources"
 configxresources="$HOME/.config/Xresources"
 cachexresources="$HOME/.cache/wal/colors.Xresources"
+xmodmap="$HOME/.Xmodmap"
 
 
 if [ -f "$profile" ];then
@@ -23,4 +24,8 @@ fi
 
 if [ -f "$cachexresources" ];then
     xrdb -merge "$cachexresources"
+fi
+
+if [ -f "$xmodmap" ];then
+    xmodmap "$xmodmap"
 fi

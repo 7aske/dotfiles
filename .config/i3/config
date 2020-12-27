@@ -96,11 +96,12 @@ bindsym $mod+grave exec --no-startup-id $terminal -e htop
 
 # edit config files
 bindsym $mod+Ctrl+c mode "$mode_config"
-set $mode_config list config files to open: (e)tc (h)ome (d)dotfiles
+set $mode_config list config files to open: (e)tc (h)ome (c)onfig (d)dotfiles
 mode "$mode_config" {
-    bindsym e exec --no-startup-id vimcfg --etc ; mode default
-    bindsym h exec --no-startup-id vimcfg --home; mode default
-    bindsym d exec --no-startup-id vimcfg;        mode default
+    bindsym e exec --no-startup-id vimcfg --etc ;   mode default
+    bindsym h exec --no-startup-id vimcfg --home;   mode default
+    bindsym c exec --no-startup-id vimcfg --config; mode default
+    bindsym d exec --no-startup-id vimcfg;          mode default
 
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode default
@@ -370,7 +371,7 @@ for_window [class="(?i)cantata"] floating enable, resize set 1024 768, move posi
 for_window [class="(?i)feh"] fullscreen enable
 for_window [class="(?i)gnome-calculator"] floating enable
 for_window [class="(?i)gnome-disks"] floating enable
-for_window [class="(?i)jetbrains-toolbox"] floating enable
+for_window [class="(?i)jetbrains-toolbox"] floating enable, sticky enable
 for_window [class="(?i)lutris"] floating enable, move position center
 for_window [class="(?i)nm-connection-editor"] floating enable, border normal
 for_window [class="(?i)spotify"] floating enable, resize set 1280 768, move position center
@@ -397,12 +398,11 @@ for_window [class="fpakman"] floating enable
 for_window [class="java-lang-Thread"] floating enable, move position center
 for_window [class="octopi"] floating enable
 for_window [class="qt5ct"] floating enable, sticky enable, border normal
-for_window [class="weather_floating"] floating enable, resize set 1280 820, move position center
-for_window [class="fullscreen"] fullscreen enable
 for_window [title=".*Bitwarden.*"] floating enable, resize set 1280 768, move position center
 for_window [title=".*Emulator.*"] floating enable
-for_window [title=".*Steam.*"] floating enable, resize set 1280 768, move position center
-for_window [title=".*World of Warcraft.*"] layout tabbed, border none
+for_window [title="Steam"] floating enable, resize set 1280 768, move position center
+for_window [class="Steam"] floating enable, resize set 1280 768, move position center
+for_window [title="wow.exe"] layout tabbed, border none
 for_window [title="File Transfer*"] floating enable
 for_window [title="Lutris"] floating enable, move position center
 for_window [title="alsamixer"] floating enable
@@ -411,6 +411,10 @@ for_window [title="win0"] floating enable, move position center
 for_window [class="Transmission"] floating enable, move position center
 for_window [class="Xfce4-settings-manager"] floating enable, move position center
 for_window [class="Xfce4-power-manager-settings"] floating enable, move position center
+for_window [title="calc"] floating enable, move position center, sticky enable
+
+for_window [class="weather_floating"] floating enable, resize set 1280 820, move position center
+for_window [class="fullscreen"] fullscreen enable
 
 # virtual machines
 for_window [class="VirtualBox Manager"] floating disable, border 2
