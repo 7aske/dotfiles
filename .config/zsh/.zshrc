@@ -14,6 +14,8 @@ istty() {
 
 antigen use oh-my-zsh
 antigen bundle command-not-found
+antigen bundle virtualenv
+antigen bundle gitignore
 antigen bundle MichaelAquilina/zsh-you-should-use
 antigen bundle ael-code/zsh-colored-man-pages
 antigen bundle zsh-users/zsh-autosuggestions
