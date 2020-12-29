@@ -5,5 +5,8 @@ configuration {
     combi-hide-mode-prefix: true;
     kb-mode-next: "Alt+Right,Control+Tab";
     kb-mode-previous: "Alt+Left,Control+ISO_Left_Tab";
+	show-icons: true;
+	matching: "fuzzy";
+	tokenize: true;
 }
 

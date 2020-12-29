@@ -27,11 +27,7 @@
 }
 
 #window {
-	transparency: "real";
-	fullscreen: true;
     width: 33%;
-	padding: 30% 30%;
-    background-color: @theme0-transparent;
 }
 
 #mainbox {

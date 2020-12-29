@@ -31,7 +31,7 @@ set $file        $FILE
 set $termfile    $TERMFILE
 set $reader      $READER
 set $player      $PLAYER
-set $dmenu_font  Fira Code Medium-10
+set $dmenu_font  Fira Code Medium-12
 set $font        xft:Fira Code Medium 10
 set $status_font pango:FiraCode Nerd Font Medium 10
 set $gaps_inner  20
@@ -66,8 +66,12 @@ bindsym $mod+Ctrl+Shift+p exec --no-startup-id pafocus
 # Media player controls
 bindsym XF86AudioPlay  exec --no-startup-id playerctl play-pause
 bindsym XF86AudioPause exec --no-startup-id playerctl play-pause
+bindsym XF86AudioStop  exec --no-startup-id playerctl stop
 bindsym XF86AudioNext  exec --no-startup-id playerctl next
 bindsym XF86AudioPrev  exec --no-startup-id playerctl previous
+bindsym XF86Tools      exec --no-startup-id i3btf $player
+
+bindsym XF86Calculator exec --no-startup-id $terminal -e calc
 
 # media controls re-using i3blocks script
 bindsym $mod+period exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/music
@@ -90,9 +94,10 @@ bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute   0 toggle
 bindsym $mod+Return       exec --no-startup-id $terminal
 bindsym $mod+BackSpace    exec --no-startup-id i3btf $terminal2 --class floating
 bindsym $mod+Shift+Return exec --no-startup-id $terminal2
-bindsym $mod+a     exec --no-startup-id TERMINAL_CMD="st -e" dmenu-recent -f -i -l 10 -p "run: " -fn '$dmenu_font'
+#bindsym $mod+a            exec --no-startup-id TERMINAL_CMD="st -e" dmenu-recent -f -i -l 10 -p "run: " -fn '$dmenu_font'
+bindsym $mod+a            exec --no-startup-id rofi -show run
 bindsym $mod+Shift+semicolon     exec --no-startup-id dmenu_run -p ":" -f -b -fn '$dmenu_font'
-bindsym $mod+grave exec --no-startup-id $terminal -e htop
+bindsym $mod+grave        exec --no-startup-id $terminal -e htop
 
 # edit config files
 bindsym $mod+Ctrl+c mode "$mode_config"
@@ -121,7 +126,7 @@ bindsym $mod+Ctrl+n        exec --no-startup-id dunstctl close
 bindsym $mod+Shift+n       exec --no-startup-id dunstctl history-pop
 
 # 7aske-scripts
-bindsym $mod+F10           exec --no-startup-id echo 0 | dmenu -p 'screen: ' | xargs screencam -n
+bindsym $mod+F10           exec --no-startup-id echo 0 | dmenu -p 'screen: ' -fn '$dmenu_font' | xargs screencam -n
 bindsym $mod+Shift+F10     exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/rec-status
 
 bindsym $mod+Mod1+t            exec --no-startup-id transmission-gtk
@@ -140,18 +145,20 @@ bindsym $mod+Shift+Print --release exec --no-startup-id scrot -s -f -l style=das
 bindsym $mod+Shift+x     --release exec --no-startup-id xkill
 bindsym $mod+Mod1+x      --release exec --no-startup-id xpick
 bindsym $mod+Ctrl+x      --release exec --no-startup-id $terminal -c floating -e zsh -c "xprop -id $(xdotool getwindowfocus) | less"
+
 # 7aske-scripts
 bindsym $mod+m        exec --no-startup-id i3btf $player
 bindsym $mod+Shift+m  exec --no-startup-id i3btf cantata
+
 # 7aske-scripts
-bindsym $mod+o        exec --no-startup-id TYPE=term DMENU=1 codeopen
-# 7aske-scripts
-bindsym $mod+Shift+o  exec --no-startup-id TYPE=vim DMENU=1 codeopen
-# 7aske-scripts
-bindsym $mod+Ctrl+o   exec --no-startup-id TYPE=jetbrains DMENU=1 codeopen
+bindsym $mod+o        exec --no-startup-id TYPE=term MENU=rofi codeopen
+bindsym $mod+Shift+o  exec --no-startup-id TYPE=vim MENU=rofi codeopen
+bindsym $mod+Ctrl+o   exec --no-startup-id TYPE=jetbrains MENU=rofi codeopen
+
 bindsym $mod+v        exec --no-startup-id clipmenu
+bindsym Menu          exec --no-startup-id clipmenu
 # 7aske-scripts
-bindsym $mod+F2       exec --no-startup-id kblang -fn $dmenu_font
+bindsym $mod+F2       exec --no-startup-id kblang -fn '$dmenu_font'
 # 7aske-scripts
 bindsym $mod+Home     exec --no-startup-id google-search
 
