@@ -4,14 +4,13 @@
 
 TYPE="${TYPE:-"term"}"
 
-if [ -z "$CODE" ]; then
-    echo "'CODE' env not set" && exit 1
-fi
-
+[ -z "$CODE" ] && echo "'CODE' env not set" && exit 1
 [ -z "$(command -v cgs)" ] && echo "cgs: not found" && exit 1
 
-if [ -n "$DMENU" ]; then
+if [ "$MENU" = "dmenu" ]; then
     PROJ="$(cgs -a -i | dmenu -l 10 -f -i -p 'repo:')"
+elif [ "$MENU" = "rofi" ]; then
+    PROJ="$(cgs -a -i | rofi -dmenu -p "repo")"
 else
     PROJ="$(cgs -a -i | fzf)"
 fi
@@ -48,7 +47,11 @@ if [ -n "$PROJ" ]; then
         ;;
     "jetbrains")
         BIN_DIR="$HOME/.local/bin"
-        CMD=$(for file in $(dir -1 "$BIN_DIR"); do grep -q "JetBrains" "$BIN_DIR/$file" && echo "$BIN_DIR/$file"; done | dmenu -l 10 -f -i -p 'repo:')
+		IDEMENU="dmenu -l 10 -f -i -p 'ide:'"
+		if [ "$MENU" = "rofi" ]; then
+			IDEMENU="rofi -dmenu -p 'ide'"
+		fi
+        CMD=$(for file in $(dir -1 "$BIN_DIR"); do grep -q "JetBrains" "$BIN_DIR/$file" && echo "$BIN_DIR/$file"; done | $IDEMENU)
         [ -z "$CMD" ] && exit 1
         notify-send -i "$(basename "$CMD")" "codeopen" "opening $PROJ"
         $CMD "$PROJ"
