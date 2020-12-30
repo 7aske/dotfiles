@@ -587,7 +587,7 @@ bar {
     position top
 
 	tray_output primary
-	tray_padding 5
+	#tray_padding 5
 
     # disable scroll wheel
 	#bindsym button4 nop
