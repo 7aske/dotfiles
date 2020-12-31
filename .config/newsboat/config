@@ -11,6 +11,9 @@ color listfocus_unread  cyan 	black 	standout bold
 articlelist-title-format "'%T' (%u unread, %t total)%?F? matching filter `%F'&? - %U"
 itemview-title-format "Article '%T' (%u unread, %t total)"
 
+download-path "~/Videos/podcasts"
+player mpv
+
 highlight feedlist ".*(0/0))" black
 highlight article "(^Feed:.*|^Title:.*|^Author:.*)" cyan default bold
 highlight article "^(Title):.*$" yellow default bold
