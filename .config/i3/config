@@ -400,7 +400,6 @@ for_window [class="Qtconfig-qt4"] floating enable, sticky enable, border normal
 for_window [class="Simple-scan"] floating enable, border normal
 for_window [class="Timeset-gui"] floating enable, border normal
 for_window [class="Xfburn"] floating enable
-for_window [class="floating_popup"] floating enable, resize set 1280 768, move position center
 for_window [class="fpakman"] floating enable
 for_window [class="java-lang-Thread"] floating enable, move position center
 for_window [class="octopi"] floating enable
@@ -421,7 +420,9 @@ for_window [class="Xfce4-power-manager-settings"] floating enable, move position
 for_window [title="calc"] floating enable, move position center, sticky enable
 
 for_window [class="weather_floating"] floating enable, resize set 1280 820, move position center
+for_window [class="floating_popup"] floating enable, resize set 1280 768, move position center
 for_window [class="fullscreen"] fullscreen enable
+for_window [class="newsboat_float"] floating enable, resize set 1280 768, move position center
 
 # virtual machines
 for_window [class="VirtualBox Manager"] floating disable, border 2

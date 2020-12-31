@@ -1,0 +1,31 @@
+auto-reload yes
+
+color background        white  	default
+color listnormal        white  	default 
+color info              black   blue 	bold
+color listnormal_unread yellow  default bold
+
+color listfocus         cyan 	black 	standout
+color listfocus_unread  cyan 	black 	standout bold
+
+articlelist-title-format "'%T' (%u unread, %t total)%?F? matching filter `%F'&? - %U"
+itemview-title-format "Article '%T' (%u unread, %t total)"
+
+highlight feedlist ".*(0/0))" black
+highlight article "(^Feed:.*|^Title:.*|^Author:.*)" cyan default bold
+highlight article "^(Title):.*$" yellow default bold
+highlight article "(^Link:.*|^Date:.*)" color240 default
+highlight article "https?://[^ ]+" green default
+highlight article "\\[[0-9][0-9]*\\]" magenta default bold
+highlight article "\\[image\\ [0-9]+\\]" green default bold
+highlight article "\\[embedded flash: [0-9][0-9]*\\]" green default bold
+highlight article ":.*\\(link\\)$" cyan default
+highlight article ":.*\\(image\\)$" blue default
+highlight article ":.*\\(embedded flash\\)$" magenta default
+
+max-downloads 4
+notify-always yes
+notify-format "newsboat: %n unread articles, %f unread feeds"
+notify-program notify-send
+notify-xterm yes
+notify-screen yes

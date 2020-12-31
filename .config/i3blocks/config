@@ -12,10 +12,6 @@ align=left
 label=
 interval=5
 
-[cgs]
-label= 
-interval=60
-
 [cpu]
 label= 
 interval=5
@@ -48,7 +44,6 @@ command=~/.local/bin/statusbar/disk /home
 
 [weather]
 interval=60
-#command=~/.local/bin/statusbar/weather
 
 [battery]
 interval=60
@@ -61,6 +56,13 @@ interval=1
 [layout]
 label= 
 interval=60
+
+[cgs]
+label= 
+interval=60
+
+[newsboat]
+interval=3600
 
 [packages]
 interval=60

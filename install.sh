@@ -74,6 +74,9 @@ mklink nano
 # neofetch
 mklink neofetch
 
+# newsboat
+mklink newsboat
+
 # nvim
 mklink nvim
 
