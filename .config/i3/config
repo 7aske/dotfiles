@@ -368,7 +368,7 @@ assign [class="(?i)skype"] $ws9
 assign [class="(?i)viber"] $ws9
 assign [class="zoom"] zoom
 assign [title="WhatsApp"] $ws9
-assign [title=".*World of Warcraft.*"] wow
+assign [title="World of Warcraft"] wow
 
 # Open specific applications in floating mode
 for_window [class="Arandr"] floating enable,resize set 800 600, move position center
@@ -409,7 +409,6 @@ for_window [title=".*Bitwarden.*"] floating enable, resize set 1280 768, move po
 for_window [title=".*Emulator.*"] floating enable
 for_window [title="Steam"] floating enable, resize set 1280 768, move position center
 for_window [class="Steam"] floating enable, resize set 1280 768, move position center
-for_window [title="wow.exe"] layout tabbed, border none
 for_window [title="File Transfer*"] floating enable
 for_window [title="Lutris"] floating enable, move position center
 for_window [title="alsamixer"] floating enable
@@ -424,6 +423,7 @@ for_window [class="weather_floating"] floating enable, resize set 1280 820, move
 for_window [class="floating_popup"] floating enable, resize set 1280 768, move position center
 for_window [class="fullscreen"] fullscreen enable
 for_window [class="newsboat_float"] floating enable, resize set 1280 768, move position center
+for_window [title="World of Warcraft"] layout tabbed
 
 # virtual machines
 for_window [class="VirtualBox Manager"] floating disable, border 2
