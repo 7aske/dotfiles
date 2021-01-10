@@ -15,8 +15,8 @@ function _root_check(){
 }
 
 function _pacup_write(){
-	_root_check
-	yay -Qu | grep -v "Avoid running yay as root/sudo" | tee "$tempfile"
+	_root_check -r
+	yay -Qu | grep -v "Avoid running yay as root/sudo" | sudo tee "$tempfile"
 }
 
 function pacup_count(){
@@ -40,11 +40,12 @@ function pacup_reset(){
 	echo "" | tee "$tempfile"
 }
 
-case "$1" in
-	"-u") pacup_update ;;
-	"-r") _pacup_write ;;
-	"-c") pacup_count ;;
-	"-l") pacup_list ;;
-	   *) yay && _pacup_write ;;
-esac
-
+while getopts "urcl" arg; do
+	case "$arg" in
+		u) pacup_update ;;
+		r) _pacup_write ;;
+		c) pacup_count  ;;
+		l) pacup_list   ;;
+		*) yay && _pacup_write && exit 0 ;;
+	esac
+done
