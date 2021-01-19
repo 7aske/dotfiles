@@ -138,6 +138,7 @@ bindsym $mod+Mod1+v            exec --no-startup-id vncviewer
 bindsym $mod+Mod1+Shift+b      exec --no-startup-id virtualbox
 bindsym $mod+Mod1+d            exec --no-startup-id discord
 bindsym $mod+Mod1+r            exec --no-startup-id $terminal -c newsboat_float -e newsboat
+bindsym $mod+Mod1+Ctrl+r      exec --no-startup-id $terminal -c newsboat_float -e podboat
 
 bindsym Print            --release exec --no-startup-id scrot && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot" "saved to homedir"
 bindsym $mod+Print       --release exec --no-startup-id scrot -u && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot (window)" "saved to homedir"
@@ -501,7 +502,7 @@ mode "$mode_system" {
 exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec_always --no-startup-id nm-applet
 exec_always --no-startup-id xfce4-power-manager
-exec_always --no-startup-id xmodmap .Xmodmap
+exec_always --no-startup-id xmodmap ~/.Xmodmap
 # exec_always --no-startup-id pamac-tray
 exec_always --no-startup-id pgrep udiskie || udiskie -s -f $file -a --appindicator
 exec_always --no-startup-id killall barrier; barrier
