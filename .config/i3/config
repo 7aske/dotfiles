@@ -418,6 +418,7 @@ for_window [title="win0"] floating enable, move position center
 for_window [class="Transmission"] floating enable, move position center
 for_window [class="Xfce4-settings-manager"] floating enable, move position center
 for_window [class="Xfce4-power-manager-settings"] floating enable, move position center
+for_window [class="Gnome-font-viewer"] floating enable, move position center
 for_window [title="calc"] floating enable, move position center, sticky enable
 
 for_window [class="weather_floating"] floating enable, resize set 1280 820, move position center

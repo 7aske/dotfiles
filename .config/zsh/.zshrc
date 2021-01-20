@@ -86,6 +86,7 @@ bindkey '^[[P' delete-char
 # Edit line in vim with ctrl-e:
 autoload edit-command-line; zle -N edit-command-line
 bindkey '^e' edit-command-line
+bindkey -s '^o' 'cd "$(codels | fzf)"\n'
 
 # ctrl+space
 bindkey '^ ' autosuggest-accept
