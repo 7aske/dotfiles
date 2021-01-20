@@ -7,10 +7,19 @@ MD_COMPLIER="${MD_COMPILER:-"pandoc"}"
 
 function _compile_md_pandoc(){
 	pandoc \
-		--pdf-engine=pdflatex \
-        -V 'mainfont:NotoSans-Regular' \
-        -V 'sansfont:NotoSans-Regular' \
-        -V 'monofont:FiraCode-Regular' \
+		--pdf-engine=xelatex \
+		-V "mainfont=DejaVuSans" \
+		-V "sansfont=OpenSans-Regular" \
+		-V "monofont=FiraCode-Regular" \
+		-V "documentclass=book" \
+		-V "margin-left=20mm" \
+		-V "margin-right=20mm" \
+		-V "margin-top=20mm" \
+		-V "margin-bottom=20mm" \
+		-V "pagestyle=empty" \
+		-f gfm \
+		--highlight-style=tango \
+		--strip-comments \
 		-o "$base.pdf" \
 		"$base.md"
 	(pgrep -fi  "$base.pdf" 2>&1>/dev/null) || (zathura "$base.pdf" &)
