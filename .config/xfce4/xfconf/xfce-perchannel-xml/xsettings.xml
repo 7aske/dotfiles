@@ -32,7 +32,7 @@
     <property name="MenuImages" type="bool" value="true"/>
     <property name="ButtonImages" type="bool" value="true"/>
     <property name="MenuBarAccel" type="string" value="F10"/>
-    <property name="CursorThemeName" type="string" value="xcursor-breeze-snow"/>
+    <property name="CursorThemeName" type="string" value="capitaine-cursors-light"/>
     <property name="CursorThemeSize" type="int" value="16"/>
     <property name="DecorationLayout" type="empty"/>
     <property name="DialogsUseHeader" type="empty"/>
