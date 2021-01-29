@@ -518,7 +518,7 @@ exec_always --no-startup-id gsettings set org.gnome.desktop.screensaver picture-
 exec_always --no-startup-id dunst_reload
 # 7aske-scripts
 exec_always --no-startup-id fix_xcursor
-exec_always --no-startup-id pgrep -x $terminal || $terminal
+# exec_always --no-startup-id pgrep -x $terminal || $terminal
 
 # pulseaudio
 exec_always --no-startup-id pgrep pulseaudio || pulseaudio -D
