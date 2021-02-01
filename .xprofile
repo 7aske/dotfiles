@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-export QT_STYLE_OVERRIDE="GTK+"
+export QT_STYLE_OVERRIDE="qt5ct-style"
 export QT_QPA_PLATFORMTHEME="qt5ct"
 
 profile="$HOME/.profile"
