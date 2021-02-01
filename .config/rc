@@ -48,17 +48,19 @@ function gcommit() {
     git commit -m "$@"
     fi
 }
-gadd()  { git add "$@";                  }
-gdiff() { git diff "$@";                 }
-greset(){ git reset --hard HEAD;         }
-gdry()  { git commit --branch --dry-run; }
-gpush() { git push "$@";                 }
-gpull() { git pull "$@";                 }
-gsl()   { git status --long "$@";        }
-gss()   { git status -s "$@";            }
-gstash(){ git stash "$@";                }
-gfet()  { git fetch "$@";                }
-glog()  { git log --graph "$@";          }
+gadd()    { git add "$@";                  }
+gdiff()   { git diff "$@";                 }
+greset()  { git reset --hard HEAD;         }
+gdry()    { git commit --branch --dry-run; }
+gpush()   { git push "$@";                 }
+gpull()   { git pull "$@";                 }
+gsl()     { git status --long "$@";        }
+gss()     { git status -s "$@";            }
+gstash()  { git stash "$@";                }
+gfet()    { git fetch "$@";                }
+glog()    { git log --graph "$@";          }
+gremote() { git remote -v "$@";            }
+gco()     { git checkout "$@";             }
 
 alias cls='clear -x'
 alias autoremove='sudo pacman -R $(pacman -Qdtq)'
