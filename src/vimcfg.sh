@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 
 
-if [ ! -t 1 ]; then
-	$TERMINAL -e "$@"
-fi
-
 prog="$(basename $0)"
 find_flags="-maxdepth 3 -type f"
 find_cmd="find"
@@ -21,7 +17,7 @@ files="$($find_cmd $cfg_dir $find_flags)"
 
 
 if [ ! -t 1 ]; then
-	config_file="$(echo $files | sed 's/\ /\n/g' | grep -v ".git" | dmenu -fn 'Fira Code Medium-10' -f -i -l 10 )"
+	config_file="$(echo $files | sed 's/\ /\n/g' | grep -v ".git" | rofi -dmenu )"
 else
 	config_file="$(echo $files | sed 's/\ /\n/g' | grep -v ".git" | fzf --cycle --reverse )"
 fi
