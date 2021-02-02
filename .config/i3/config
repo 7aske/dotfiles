@@ -369,7 +369,7 @@ assign [class="(?i)skype"] $ws9
 assign [class="(?i)viber"] $ws9
 assign [class="zoom"] zoom
 assign [title="WhatsApp"] $ws9
-assign [title="World of Warcraft"] wow
+assign [title="World of Warcraft"] w
 
 # Open specific applications in floating mode
 for_window [class="Arandr"] floating enable,resize set 800 600, move position center
@@ -430,8 +430,8 @@ for_window [title="World of Warcraft"] layout tabbed
 
 # virtual machines
 for_window [class="VirtualBox Manager"] floating disable, border 2
-for_window [class="VirtualBox Machine"] floating disable, border none, move container to workspace vm
-for_window [class="VirtualBox Machine" title="(?i)^win"] move container to workspace win
+for_window [class="VirtualBox Machine"] floating disable, border none, move container to workspace v
+for_window [class="VirtualBox Machine" title="(?i)^win"] move container to workspace w
 
 #            _                                                          _
 #  _ __ ___ (_)___  ___    ___ ___  _ __ ___  _ __ ___   __ _ _ __   __| |___
@@ -634,12 +634,10 @@ gaps inner $gaps_inner
 gaps outer $gaps_outer
 
 # workspace specific gaps
-workspace win gaps inner 0
-workspace win gaps outer 0
-workspace wow gaps inner 0
-workspace wow gaps outer 0
-workspace vm  gaps inner 0
-workspace vm  gaps outer 0
+workspace w   gaps inner 0
+workspace w   gaps outer 0
+workspace v   gaps inner 0
+workspace v   gaps outer 0
 
 # Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
 # gaps inner|outer current|all set|plus|minus <px>
