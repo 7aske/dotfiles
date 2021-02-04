@@ -340,8 +340,8 @@ bindsym $mod+Ctrl+Right move workspace to output right
 bindsym $mod+Ctrl+Down  move workspace to output down
 
 # mark navigation
-bindsym $mod+Ctrl+m exec i3-input -F 'mark %s' -l 1 -P 'mark: '
-bindsym $mod+apostrophe exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'goto: '
+bindsym $mod+Ctrl+m exec xinp --i3 -f $dmenu_font -F 'mark %s' -l 1 -p 'mark: '
+bindsym $mod+apostrophe exec xinp --i3 -f $dmenu_font -F '[con_mark="%s"] focus' -l 1 -p 'goto: '
 
 # move the currently focused window to the scratchpad
 bindsym $mod+Shift+minus move scratchpad
@@ -453,9 +453,9 @@ bindsym $mod+F4 exec --no-startup-id i3-layout-manager
 bindsym $mod+i       exec --no-startup-id i3wss
 bindsym $mod+Ctrl+i  exec --no-startup-id i3wss move
 bindsym $mod+Shift+i exec --no-startup-id i3wss move-switch
-bindsym $mod+s       exec --no-startup-id "xinp -f $dmenu_font -l 1 -p 'workspace: ' -F 'workspace \\"%s\\"' | xargs i3-msg"
-bindsym $mod+Ctrl+s  exec --no-startup-id "xinp -f $dmenu_font -l 1 -p 'workspace: ' -F 'move container to workspace \\"%s\\"' | xargs i3-msg"
-bindsym $mod+Shift+s exec --no-startup-id "xinp -f $dmenu_font -l 1 -p 'workspace: ' -F 'move container to workspace \\"%s\\", workspace \\"%s\\"' | xargs i3-msg"
+bindsym $mod+s       exec --no-startup-id "xinp -f $dmenu_font -l 1 -p 'workspace: ' -F 'workspace %s' --i3"
+bindsym $mod+Ctrl+s  exec --no-startup-id "xinp -f $dmenu_font -l 1 -p 'workspace: ' -F 'move container to workspace %s' --i3"
+bindsym $mod+Shift+s exec --no-startup-id "xinp -f $dmenu_font -l 1 -p 'workspace: ' -F 'move container to workspace %s, workspace %s' --i3"
 
 # mode to invoke 7aske/startup management script
 bindsym $mod+F3 mode "$mode_startup"
