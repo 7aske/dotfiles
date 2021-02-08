@@ -62,6 +62,13 @@ glog()    { git log --graph "$@";          }
 gremote() { git remote -v "$@";            }
 gco()     { git checkout "$@";             }
 
+# intellij 
+webstorm() {  setsid webstorm "$@" 2>/dev/null 1>/dev/null; }
+idea()     {  setsid idea     "$@" 2>/dev/null 1>/dev/null; }
+goland()   {  setsid goland   "$@" 2>/dev/null 1>/dev/null; }
+pycharm()  {  setsid pycharm  "$@" 2>/dev/null 1>/dev/null; }
+clion()    {  setsid clion    "$@" 2>/dev/null 1>/dev/null; }
+
 alias cls='clear -x'
 alias autoremove='sudo pacman -R $(pacman -Qdtq)'
 alias v='nvim'
