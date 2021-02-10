@@ -45,29 +45,29 @@ function gcommit() {
     if [ -z "$1" ]; then
         git commit
     else
-    git commit -m "$@"
+    git commit -m $@
     fi
 }
-gadd()    { git add "$@";                  }
-gdiff()   { git diff "$@";                 }
+gadd()    { git add $@;                  }
+gdiff()   { git diff $@;                 }
 greset()  { git reset --hard HEAD;         }
 gdry()    { git commit --branch --dry-run; }
-gpush()   { git push "$@";                 }
-gpull()   { git pull "$@";                 }
-gsl()     { git status --long "$@";        }
-gss()     { git status -s "$@";            }
-gstash()  { git stash "$@";                }
-gfet()    { git fetch "$@";                }
-glog()    { git log --graph "$@";          }
-gremote() { git remote -v "$@";            }
-gco()     { git checkout "$@";             }
+gpush()   { git push $@;                 }
+gpull()   { git pull $@;                 }
+gsl()     { git status --long $@;        }
+gss()     { git status -s $@;            }
+gstash()  { git stash $@;                }
+gfet()    { git fetch $@;                }
+glog()    { git log --graph $@;          }
+gremote() { git remote -v $@;            }
+gco()     { git checkout $@;             }
 
 # intellij 
-webstorm() {  setsid webstorm "$@" 2>/dev/null 1>/dev/null; }
-idea()     {  setsid idea     "$@" 2>/dev/null 1>/dev/null; }
-goland()   {  setsid goland   "$@" 2>/dev/null 1>/dev/null; }
-pycharm()  {  setsid pycharm  "$@" 2>/dev/null 1>/dev/null; }
-clion()    {  setsid clion    "$@" 2>/dev/null 1>/dev/null; }
+webstorm() {  setsid $0 $@ 2>/dev/null 1>/dev/null; }
+idea()     {  setsid $0 $@ 2>/dev/null 1>/dev/null; }
+goland()   {  setsid $0 $@ 2>/dev/null 1>/dev/null; }
+pycharm()  {  setsid $0 $@ 2>/dev/null 1>/dev/null; }
+clion()    {  setsid $0 $@ 2>/dev/null 1>/dev/null; }
 
 alias cls='clear -x'
 alias autoremove='sudo pacman -R $(pacman -Qdtq)'
@@ -75,8 +75,8 @@ alias v='nvim'
 alias n='nano'
 alias o='xdg-open'
 alias e="$TERMFILE"
-function c { vscodium "$@" || codium "$@" || code-insiders "$@" || /usr/bin/code "$@"; }
-function chrome { chromium "$@" || google-chrome-stable "$@"; }
+function c { vscodium $@ || codium $@ || code-insiders $@ || /usr/bin/code $@; }
+function chrome { chromium $@ || google-chrome-stable $@; }
 alias bat='bat -p --paging never --theme=base16'
 alias myip='curl -s api.ipify.org'
 alias grep='grep --color=auto'
