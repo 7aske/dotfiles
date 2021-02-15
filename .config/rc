@@ -1,6 +1,5 @@
 #!/bin/bash
 
-export CODE="$HOME/.local/src"
 export HISTFILESIZE=10000
 export HISTSIZE=10000
 export LESSHISTSIZE=0
@@ -8,66 +7,50 @@ export SAVEHIST=10000
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
 [ -f "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
 
-# git utils
-function grepo() {
-    [ -z "$1" ] && echo "usage: gr <repo-name>" && return 1
-    echo "Create GitHub repository '$1'"
-    echo -n "Username: "
-    read -r username
-    echo -n "Password: "
-    read -r -s password
-    echo
-    out="$(curl -v -u "$username":"$password" https://api.github.com/user/repos -d "{\"name\":\"$1\"}" 2>&1)"
-
-    if echo $out | grep -q -e "< HTTP/1.1 20[01]"; then
-        git init
-        git remote add origin https://github.com/$username/"$1".git
-        echo
-        echo -n "Clone URL: "
-        echo "$out" | grep "clone_url" | cut -d ' ' -f4 | sed -n 's/[",]//gp'
-        echo -n "SSH URL: "
-        echo "$out" | grep "ssh_url" | cut -d ' ' -f4 | sed -n 's/[",]//gp'
-    else
-        echo "$out" | grep "message" | cut -d ':' -f2 | sed -n 's/"\(.*\)"/\1/;s/^ //g;s/[,]//gp'
-    fi
-}
-
-function gclone() {
-    if [ "$#" -eq 2 ]; then
-        git clone "git@github.com:/$1/$2"
-    else
-        git clone "git@github.com:/7aske/$1"
-    fi
-}
-
-function gcommit() {
-    git add .
-    if [ -z "$1" ]; then
-        git commit
-    else
-    git commit -m $@
-    fi
-}
-gadd()    { git add $@;                  }
-gdiff()   { git diff $@;                 }
+#        _ _   
+#   __ _(_) |_ 
+#  / _` | | __|
+# | (_| | | |_ 
+#  \__, |_|\__|
+#  |___/       
+GIT_USER="7aske"
+GIT_URL="git@github.com:/$GIT_USER"
+gclone()  { git clone "$GIT_URL/$1"        }
+gcommit() { git commit -am "$1"            }
+gadd()    { git add $@;                    }
+gdiff()   { git diff $@;                   }
 greset()  { git reset --hard HEAD;         }
 gdry()    { git commit --branch --dry-run; }
-gpush()   { git push $@;                 }
-gpull()   { git pull $@;                 }
-gsl()     { git status --long $@;        }
-gss()     { git status -s $@;            }
-gstash()  { git stash $@;                }
-gfet()    { git fetch $@;                }
-glog()    { git log --graph $@;          }
-gremote() { git remote -v $@;            }
-gco()     { git checkout $@;             }
+gpush()   { git push $@;                   }
+gpull()   { git pull $@;                   }
+gsl()     { git status --long $@;          }
+gss()     { git status -s $@;              }
+gstash()  { git stash $@;                  }
+gfet()    { git fetch $@;                  }
+glog()    { git log --graph $@;            }
+gremote() { git remote -v $@;              }
+gco()     { git checkout $@;               }
 
-# intellij 
-webstorm() {  setsid $0 $@ 2>/dev/null 1>/dev/null; }
-idea()     {  setsid $0 $@ 2>/dev/null 1>/dev/null; }
-goland()   {  setsid $0 $@ 2>/dev/null 1>/dev/null; }
-pycharm()  {  setsid $0 $@ 2>/dev/null 1>/dev/null; }
-clion()    {  setsid $0 $@ 2>/dev/null 1>/dev/null; }
+#       _ _                     
+#  __ _| (_) __ _ ___  ___  ___ 
+# / _` | | |/ _` / __|/ _ \/ __|
+#| (_| | | | (_| \__ \  __/\__ \
+# \__,_|_|_|\__,_|___/\___||___/
+#                               
+_setsid() { shift 0; setsid $@ 2>/dev/null 1>/dev/null; }
+
+# setsid aliases
+alias webstorm='_setsid webstorm'
+alias idea='_setsid idea'
+alias goland='_setsid goland'
+alias pycharm='_setsid pycharm'
+alias clion='_setsid clion'
+alias datagrip='_setsid datagrip'
+alias zathura='_setsid zathura'
+alias brave='_setsid brave'
+alias et='_setsid et'
+alias wps='_setsid wps'
+alias wpp='_setsid wpp'
 
 alias cls='clear -x'
 alias autoremove='sudo pacman -R $(pacman -Qdtq)'
@@ -78,7 +61,6 @@ alias z='zathura'
 alias s='systemctl'
 alias e="$TERMFILE"
 function c { vscodium $@ || codium $@ || code-insiders $@ || /usr/bin/code $@; }
-function chrome { chromium $@ || google-chrome-stable $@; }
 alias bat='bat -p --paging never --theme=base16'
 alias myip='curl -s api.ipify.org'
 alias grep='grep --color=auto'
@@ -91,6 +73,8 @@ alias conf='builtin cd $HOME/.config/&& ls'
 alias dow='builtin cd $HOME/Downloads&& ls'
 alias sha='builtin cd $HOME/Share&& ls'
 alias doc='builtin cd $HOME/Documents&& ls'
+alias bks='builtin cd $HOME/Documents/books&& ls'
+alias uni='builtin cd $HOME/Documents/uni&& ls'
 alias pic='builtin cd $HOME/Pictures&& ls'
 alias dro='builtin cd $HOME/Dropbox&& ls'
 alias pub='builtin cd $HOME/Public&& ls'
@@ -103,15 +87,11 @@ alias chgs='cd "$(codegs)" && echo -e "\ngit status -s\n"; git status -s'
 alias vicfg='vimcfg'
 # misc
 alias tmux='tmux -f "$HOME/.config/tmux/.tmux.conf"'
-alias ascii='man ascii'
 # ls
 alias ls='ls --color=auto -lph --group-directories-first'
 alias la='ls --color=auto -lAph --group-directories-first'
 # personal utils
 alias gs='/usr/bin/cgs'
-# laptop misc
-alias backl='xbacklight -set'
-alias bell='xset -b'
 
 # eg. cd ... to jump back two directories
 function cd() {
