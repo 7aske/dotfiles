@@ -74,6 +74,8 @@ alias autoremove='sudo pacman -R $(pacman -Qdtq)'
 alias v='nvim'
 alias n='nano'
 alias o='xdg-open'
+alias z='zathura'
+alias s='systemctl'
 alias e="$TERMFILE"
 function c { vscodium $@ || codium $@ || code-insiders $@ || /usr/bin/code $@; }
 function chrome { chromium $@ || google-chrome-stable $@; }
