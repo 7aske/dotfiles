@@ -88,8 +88,8 @@ alias vicfg='vimcfg'
 # misc
 alias tmux='tmux -f "$HOME/.config/tmux/.tmux.conf"'
 # ls
-alias ls='ls --color=auto -lph --group-directories-first'
-alias la='ls --color=auto -lAph --group-directories-first'
+alias ls='ls --color=auto -lpvh  --group-directories-first'
+alias la='ls --color=auto -lpvhA --group-directories-first'
 # personal utils
 alias gs='/usr/bin/cgs'
 
