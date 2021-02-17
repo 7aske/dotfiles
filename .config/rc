@@ -15,8 +15,8 @@ export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
 #  |___/       
 GIT_USER="7aske"
 GIT_URL="git@github.com:/$GIT_USER"
-gclone()  { git clone "$GIT_URL/$1"        }
-gcommit() { git commit -am "$1"            }
+gclone()  { git clone "$GIT_URL/$1";       }
+gcommit() { git add .; git commit -m "$1"; }
 gadd()    { git add $@;                    }
 gdiff()   { git diff $@;                   }
 greset()  { git reset --hard HEAD;         }
