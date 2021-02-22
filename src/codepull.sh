@@ -3,7 +3,9 @@
 [ ! -x "$(command -v git)" ] && echo -e "\e[1;31mgit: command not found\e[0m" && exit 2
 [ -z "$CODE" ] && echo -e "\e[1;31m'CODE' env variable not set\e[0m" && exit 2
 
-REPOS=("sh/dotfiles" "sh/autosetup" "uni" "sh/scripts")
+CODEPULL_REPOS="${CODEPULL_REPOS:-"sh/dotfiles;sh/autosetup;uni;sh/scripts"}"
+
+IFS=';' read -ra REPOS <<< "$CODEPULL_REPOS"
 
 usage() {
     echo "pullall.sh [options]"

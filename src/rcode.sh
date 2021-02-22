@@ -40,7 +40,7 @@ shift $((OPTIND-1))
 [ -n "$src" ] && src="$src:"
 
 if [ "$dest" != "$src" ] && [ -n "$1" ]; then
-	rsync --progress -have "ssh -p $port" "$src$CODE/$1/" "$dest$CODE/$1/"
+	/usr/bin/env rsync --progress -have "ssh -p $port" "$src$CODE/$1/" "$dest$CODE/$1/"
 else
 	show_help
 	exit 1
