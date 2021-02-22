@@ -67,7 +67,7 @@ alias grep='grep --color=auto'
 alias wget='wget --hsts-file=~/.config/wget/.wget-hsts'
 alias diff="diff --color=auto"
 alias dd='dd status="progress"'
-alias rsync='rsync -vh --progress'
+alias rsync='rsync --progress'
 # navigation
 alias conf='builtin cd $HOME/.config/&& ls'
 alias dow='builtin cd $HOME/Downloads&& ls'
