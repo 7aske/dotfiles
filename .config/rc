@@ -141,14 +141,14 @@ function code() {
         if [ -d "$CODE/$1" ]; then
             builtin cd "$CODE/$1" && ls
         else
-            cdir="$(find "$CODE" -maxdepth 2 -name "$1*" | sed -n '1p')"
+            cdir="$(find "$CODE" -maxdepth 2 -name "*$1*" | sed -n '1p')"
             [ -d "$cdir" ] && builtin cd "$cdir" && ls
         fi
     elif [ $# -eq 2 ]; then
         if [ -d "$CODE/$1/$2" ]; then
             builtin cd "$CODE/$1/$2" && ls
         else
-            cdir="$(find "$CODE/$1" -maxdepth 1 -name "$2*" | sed -n '1p')"
+            cdir="$(find "$CODE/$1" -maxdepth 1 -name "*$2*" | sed -n '1p')"
             [ -d "$cdir" ] && builtin cd "$cdir" && ls
         fi
     fi
