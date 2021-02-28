@@ -25,7 +25,8 @@ gpush()   { git push $@;                   }
 gpull()   { git pull $@;                   }
 gsl()     { git status --long $@;          }
 gss()     { git status -s $@;              }
-gstash()  { git stash $@;                  }
+gst()     { git stash $@;                  }
+gsta()    { git stash apply $@;            }
 gfet()    { git fetch $@;                  }
 glog()    { git log --graph $@;            }
 gremote() { git remote -v $@;              }
