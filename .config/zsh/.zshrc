@@ -87,6 +87,8 @@ bindkey '^[[P' delete-char
 autoload edit-command-line; zle -N edit-command-line
 bindkey '^e' edit-command-line
 bindkey -s '^o' 'cd "$(codels | fzf)"\n'
+bindkey -s '^g' 'chgs\n'
+bindkey -s '^v' 'vicfg\n'
 
 # ctrl+space
 bindkey '^ ' autosuggest-accept
