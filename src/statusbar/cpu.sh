@@ -5,4 +5,4 @@ case $BLOCK_BUTTON in
 	3) i3-msg "exec --no-startup-id setsid -f st -c floating_popup -e htop" 2>/dev/null 1>/dev/null ;;
 esac
 
-mpstat 1 1 | grep 'Average:' | awk '{printf "%d%\n", $3}'
+mpstat 1 1 | grep 'Average:' | awk '{printf "%d%\n", ((100 - $12))}'
