@@ -10,8 +10,6 @@ function is_repo() { git -C "$1" rev-parse --is-inside-work-tree 2>/dev/null 1>/
 
 REPO="$CODE/$1"
 
-pgrep -f "$0 $"
-
 if [ ! -d "$REPO" ]; then echo "$prog: '$REPO' is not a directory" 1>&2 && exit 1; fi
 if ! is_repo "$REPO"; then echo "$prog: '$REPO' is not a valid git repository" 1>&2 && exit 1; fi
 procs="$(pgrep -fi "$0 $@" | wc -w)"
