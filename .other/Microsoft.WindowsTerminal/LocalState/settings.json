@@ -6,13 +6,17 @@
 // For documentation on these settings, see: https://aka.ms/terminal-documentation
 {
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "defaultProfile": "{05494d0e-8ec2-11ea-bd26-43a3699bcdd6}",
+    "defaultProfile": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
     // You can add more global application settings here.
     // To learn more about global settings, visit https://aka.ms/terminal-global-settings
     // If enabled, selections are automatically copied to your clipboard.
     "copyOnSelect": false,
     // If enabled, formatted data is also copied to your clipboard
     "copyFormatting": false,
+    "initialRows": 24,
+    "initialCols": 80,
+    "startOnUserLogin": true,
+    "theme": "system",
     // A profile specifies a command to execute paired with information about how it should look and feel.
     // Each one of them will appear in the 'New Tab' dropdown,
     //   and can be invoked from the commandline with `wt.exe -p xxx`
@@ -20,12 +24,12 @@
     "profiles": {
         "defaults": {
             // Put settings here that you want to apply to all profiles.
-            // "useAcrylic": true,
-            // "acrylicOpacity": 0.1,
+            "colorScheme": "nord",
+            "useAcrylic": true,
+            "acrylicOpacity": 0.95,
             "fontFace": "Fira Code",
-            "background": "#0c0c0c",
-            "backgroundImageOpacity": 0.6,
-            "cursorShape": "emptyBox"
+            "cursorShape": "filledBox",
+            "closeOnExit": "graceful"
         },
         "list": [
             {
@@ -50,22 +54,44 @@
                 "hidden": false
             },
             {
-                "guid": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
-                "hidden": false,
-                "name": "Debian",
-                "source": "Windows.Terminal.Wsl"
-            },
-            {
                 "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
                 "hidden": true,
                 "name": "Azure Cloud Shell",
                 "source": "Windows.Terminal.Azure"
+            },
+            {
+                "guid": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
+                "hidden": false,
+                "name": "WSL",
+                "source": "Windows.Terminal.Wsl"
             }
         ]
     },
     // Add custom color schemes to this array.
     // To learn more about color schemes, visit https://aka.ms/terminal-color-schemes
-    "schemes": [],
+    "schemes": [
+        {
+            "name" : "nord",
+            "background" : "#2e3440",
+            "foreground" : "#d8dee9",
+            "black": "#3b4252",
+            "blue": "#81a1c1",
+            "brightBlack": "#4c566a",
+            "brightBlue": "#81a1c1",
+            "brightCyan": "#8fbcbb",
+            "brightGreen": "#a3be8c",
+            "brightPurple": "#b48ead",
+            "brightRed": "#bf616a",
+            "brightWhite": "#eceff4",
+            "brightYellow": "#ebcb8b",
+            "cyan": "#88c0d0",
+            "green": "#a3be8c",
+            "purple": "#b48ead",
+            "red": "#bf616a",
+            "white": "#e5e9f0",
+            "yellow": "#ebcb8b"
+        }
+    ],
     // Add custom keybindings to this array.
     // To unbind a key combination from your defaults.json, set the command to "unbound".
     // To learn more about keybindings, visit https://aka.ms/terminal-keybindings
