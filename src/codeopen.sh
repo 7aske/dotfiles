@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 . "$HOME/.profile"
 
@@ -6,73 +6,116 @@ TYPE="${TYPE:-"term"}"
 
 [ -z "$CODE" ] && echo "'CODE' env not set" && exit 1
 [ -z "$(command -v cgs)" ] && echo "cgs: not found" && exit 1
+[ -z "$(command -v fzf)" ] && echo "fzf: not found" && exit 1
 
-if [ "$MENU" = "dmenu" ]; then
-    PROJ="$(cgs -a -i | dmenu -l 10 -f -i -p 'repo:')"
-elif [ "$MENU" = "rofi" ]; then
-    PROJ="$(cgs -a -i | rofi -dmenu -p "repo")"
-else
-    PROJ="$(cgs -a -i | fzf)"
+available_types=("term" "vscode" "vim" "jetbrains" "idea" "pycharm" "clion" "studio" "goland" "webstorm")
+available_menus=("dmenu", "rofi")
+
+_usage() {
+	echo -e "usage: codeopen -[tm]"
+	echo -e "\t-t <type>   available types: ${available_types[*]}"
+	echo -e "\t-m <menu>   available menus: ${available_menus[*]}"
+}
+
+# list of arguments expected in the input
+optstring="hm:t:"
+
+while getopts ${optstring} arg; do
+	case ${arg} in
+		h)
+			_usage
+			exit 0 ;;
+		t)
+			TYPE="$OPTARG" ;;
+		m)
+			MENU="$OPTARG" ;;
+		?)
+			echo "Invalid option: -${OPTARG}."
+			exit 2 ;;
+	esac
+done
+
+if [[ ! " ${available_types[@]} " =~ " ${TYPE} " ]]; then
+	_usage
+	exit 2
 fi
 
-if [ -n "$PROJ" ]; then
-    case "$TYPE" in
-    "term")
-        if [ "$TERMINAL" = "st" ]; then
-            # 7aske 'st' build with '-d' option to chdir at start
-            notify-send -i terminal "codeopen" "opening $PROJ"
-            $TERMINAL -d "$PROJ"
-        else
-            notify-send -i terminal "codeopen" "opening $PROJ"
-            $TERMINAL -cd "$PROJ"
-        fi
-        ;;
+menu_command="fzf"
+if [ "$MENU" = "dmenu" ]; then
+	menu_command="dmenu -l 10 -f -i -p 'open:'"
+elif [ "$MENU" = "rofi" ]; then
+    menu_command="rofi -dmenu -p 'open:'"
+fi
 
-    "vscode")
+PROJ="$(eval "cgs -a -i | $menu_command")"
+
+_open_term() {
+	if [ "$TERMINAL" = "st" ]; then
+		# 7aske 'st' build with '-d' option to chdir at start
+		notify-send -i terminal "codeopen" "opening $PROJ"
+		$TERMINAL -d "$PROJ"
+	else
+		notify-send -i terminal "codeopen" "opening $PROJ"
+		$TERMINAL -cd "$PROJ"
+	fi
+}
+
+_open_vscode() {
         if [ -x "$(command -v vscodium)" ]; then
-            CMD=vscodium
+            CMD="vscodium"
         elif [ -x "$(command -v code-insiders)" ]; then
-            CMD=code-insiders
+            CMD="code-insiders"
         elif [ -x "$(command -v code)" ]; then
-            CMD=code
+            CMD="code"
         else
-            echo "vscodium: not found"
-            echo "code-insiders: not found"
-            echo "code: not found"
-            [ -x "$(command -v notify-send)" ] && notify-send "codeopen" "vscodium: not found\ncode-insiders: not found\ncode: not found"
+			errmsg="vscodium: command not found\ncode-insiders: command not found\ncode: command not found"
+			echo -e "$errmsg"
+            notify-send "codeopen" "$errmsg"
             exit 1
         fi
         notify-send -i code "codeopen" "opening $PROJ"
         $CMD "$PROJ"
-        ;;
-    "jetbrains")
-        BIN_DIR="$HOME/.local/bin"
-		IDEMENU="dmenu -l 10 -f -i -p 'ide:'"
-		if [ "$MENU" = "rofi" ]; then
-			IDEMENU="rofi -dmenu -p 'ide'"
-		fi
-        CMD=$(for file in $(dir -1 "$BIN_DIR"); do grep -q "JetBrains" "$BIN_DIR/$file" && echo "$BIN_DIR/$file"; done | $IDEMENU)
-        [ -z "$CMD" ] && exit 1
-        notify-send -i "$(basename "$CMD")" "codeopen" "opening $PROJ"
-        $CMD "$PROJ"
-        ;;
-    "vim")
+}
+
+_open_vim() {
         if [ -x "$(command -v nvim)" ]; then
             CMD=nvim
         elif [ -x "$(command -v vim)" ]; then
             CMD=vim
         else
-            echo "nvim: not found"
-            echo "vim: not found"
-            [ -x "$(command -v notify-send)" ] && notify-send "codeopen" "nvim: not found\nnvim: not found"
+            errmsg="nvim: command not found\nnvim: command not found"
+			echo -e "$errmsg"
+            notify-send "codeopen" "$errmsg"
             exit 1
         fi
         notify-send -i "$CMD" "codeopen" "opening $PROJ"
         $TERMINAL -e $CMD "$PROJ"
-        ;;
-    *)
-        notify-send "codeopen" "$TYPE opening $PROJ"
-        $TYPE "$PROJ"
-        ;;
-    esac
+}
+
+_open_jetbrains() {
+	BIN_DIR="$HOME/.local/bin"
+
+	if [ -z "$1" ]; then
+		CMD=$(for file in $(dir -1 "$BIN_DIR"); do grep -q "JetBrains" "$BIN_DIR/$file" && echo "$BIN_DIR/$file"; done | $menu_command)
+		[ -z "$CMD" ] && exit 1
+		notify-send -i "$(basename "$CMD")" "codeopen" "opening $PROJ"
+		setsid $(basename $CMD) "$PROJ" 2> /dev/null > /dev/null &
+	else
+		setsid "$1" "$PROJ" 2> /dev/null > /dev/null &
+	fi
+}
+
+
+if [ -n "$PROJ" ]; then
+	case "$TYPE" in
+		"term") _open_term ;;
+		"vscode") _open_vscode ;;
+		"vim") _open_vim ;;
+		"jetbrains") _open_jetbrains ;;
+		"idea") _open_jetbrains idea ;;
+		"clion") _open_jetbrains clion ;;
+		"pycharm") _open_jetbrains pycharm ;;
+		"webstorm") _open_jetbrains webstorm ;;
+		"studio"|"android") _open_jetbrains studio ;;
+	esac
 fi
