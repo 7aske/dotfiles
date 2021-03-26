@@ -31,6 +31,7 @@ gfet()    { git fetch $@;                  }
 glog()    { git log --graph $@;            }
 gremote() { git remote -v $@;              }
 gco()     { git checkout $@;               }
+gammend() { git commit --amend $@;        }
 
 #       _ _                     
 #  __ _| (_) __ _ ___  ___  ___ 
