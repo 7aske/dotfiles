@@ -1,24 +1,37 @@
 #!/usr/bin/env bash
 
-[ ! -x "$(command -v git)" ] && echo -e "\e[1;31mgit: command not found\e[0m" && exit 2
-[ -z "$CODE" ] && echo -e "\e[1;31m'CODE' env variable not set\e[0m" && exit 2
+PROG="$(basename $0)"
+[ ! -x "$(command -v git)" ] && echo -e "\e[1;31m$PROG: git: command not found\e[0m" && exit 2
+[ -z "$CODE" ] && echo -e "\e[1;31m$PROG: CODE env variable not set\e[0m" && exit 2
 
 CODEPULL_REPOS="${CODEPULL_REPOS:-"sh/dotfiles;sh/autosetup;uni;sh/scripts"}"
 
 IFS=';' read -ra REPOS <<< "$CODEPULL_REPOS"
 
 usage() {
-    echo "pullall.sh [options]"
+    echo "usage: $PROG [options]"
+	echo
     echo "options:"
-    echo "  -A      pull all repos from 'CODE'"
+	echo "  -A      pull all repos from CODE($CODE)"
     exit 1
+}
+
+_is_git_repo(){
+	[ ! -d "$1" ] && return 1
+	git -C "$1" rev-parse --is-inside-work-tree 2>/dev/null 1>/dev/null
 }
 
 git_pull() {
     echo -e "\e[32m$1\e[0m"
-    [ ! -d "$CODE/$1/.git" ] && echo "$1: not a git repository" && return
-    git -C "$CODE/$1" pull 2>/dev/null | while read -r OUTPUT; do
-        if command -v "notify-send" 1>/dev/null; then
+	DIR="$1"
+
+	if ! _is_git_repo "$DIR"; then
+		echo "$1: not a git repository"
+		return 1
+	fi
+
+    git -C "$DIR" pull 2>/dev/null | while read -r OUTPUT; do
+        if [ -n "$DISPLAY" ]; then
             notify-send -u low -i git "$1" "$OUTPUT"
         else
             echo "$1" "$OUTPUT"
@@ -26,20 +39,19 @@ git_pull() {
     done &
 }
 
-if [ "$1" == "-A" ]; then
-    for LANG in $(dir "$CODE"); do
-        if grep -q "$LANG" "$CODE/.codeignore"; then continue; fi
-        d="$CODE/$LANG"
-        [ -d "$d/.git" ] && continue
-        for REPO in $(dir "$d"); do
-            git_pull "$LANG/$REPO"
-        done
-    done
+if [ "$1" == "-h" ]; then
+	usage
+elif [ "$1" == "-A" ]; then
+	for REPO in $(cgs -d); do
+		git_pull "$REPO"
+	done
 elif [ -z "$1" ]; then
     for REPO in "${REPOS[@]}"; do
-        if [ -d "$CODE/$REPO" ]; then
-            git_pull "$REPO"
-        fi
+		if [[ $REPO =~ ^/.* ]]; then
+			git_pull "$REPO"
+		else
+			git_pull "$CODE/$REPO"
+		fi
     done
 else
     usage
