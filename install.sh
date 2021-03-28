@@ -1,25 +1,40 @@
 #!/usr/bin/env bash
 
 prog="$(basename $0 .sh)"
-[ "$(basename $(pwd))" != "dotfiles" ] && echo "$prog: must be run in dotfiles repo root"
+if [ ! -e ".git" ] || [ ! -e "$(basename $0)" ]; then
+	echo "$prog: must be run in dotfiles repo root"
+	exit 1
+fi
 
 [ ! -e "$HOME/.config" ] && mkdir "$HOME/.config"
 
 mklink () {
-    echo "$prog: processing '$1'"
-	if [ -e "$HOME/.config/$1" ] && [ ! -L "$HOME/.config/$1" ]; then
-        echo "$prog: backup '$HOME/.config/$1'"
-		mv "$HOME/.config/$1" "$HOME/.config/$1.bak"
+	src="$(pwd)/.config/$1"
+	dest="$HOME/.config/$1"
+
+	if [ ! -e "$(dirname $dest)" ]; then
+		mkdir -p "$(dirname $dest)"
 	fi
 
-    if [ ! -e "$(dirname $HOME/.config/$1)" ]; then
-        mkdir -p "$(dirname $HOME/.config/$1)"
-    fi
-
-	if [ ! -e "$HOME/.config/$1" ]; then
-        echo "$prog: configure '$1'"
-		ln -s "$(pwd)/.config/$1" "$HOME/.config/$1"
+	echo "$prog: processing '$1'"
+	if [ -e "$dest" ] && [ ! -L "$dest" ]; then
+		echo "$prog: backup '$dest'"
+		mv "$dest" "$dest.bak"
 	fi
+
+	if [ -L "$dest" ] && [ ! -e "$dest" ]; then
+		echo "$prog: configure '$1'"
+		unlink "$dest"
+		ln -s "$src" "$dest"
+	elif [ -L "$dest" ]; then
+		if [ "$(readlink -f $dest)" != "$src" ]; then
+			echo "$prog: unlink '$dest'"
+			unlink "$dest"
+			echo "$prog: configure '$1'"
+			ln -s "$src" "$dest"
+		fi
+	fi
+
 }
 
 mksource () {
