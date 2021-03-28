@@ -22,19 +22,25 @@ mklink () {
 		mv "$dest" "$dest.bak"
 	fi
 
-	if [ -L "$dest" ] && [ ! -e "$dest" ]; then
-		echo "$prog: configure '$1'"
-		unlink "$dest"
-		ln -s "$src" "$dest"
-	elif [ -L "$dest" ]; then
-		if [ "$(readlink -f $dest)" != "$src" ]; then
-			echo "$prog: unlink '$dest'"
+	if [ ! -e "$dest" ]; then
+		if [ -L "$dest" ]; then
 			unlink "$dest"
-			echo "$prog: configure '$1'"
-			ln -s "$src" "$dest"
 		fi
-	fi
 
+		echo "$prog: configure '$1'"
+		ln -s "$src" "$dest"
+	else
+		if [ -L "$dest" ]; then
+			if [ "$(readlink -f $dest)" != "$src" ]; then
+				echo "$prog: unlink '$dest'"
+				unlink "$dest"
+				echo "$prog: configure '$1'"
+				ln -s "$src" "$dest"
+			fi
+
+		fi
+
+	fi
 }
 
 mksource () {
