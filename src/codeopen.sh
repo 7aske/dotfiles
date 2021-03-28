@@ -47,7 +47,7 @@ elif [ "$MENU" = "rofi" ]; then
     menu_command="rofi -dmenu -p 'open:'"
 fi
 
-PROJ="$(eval "cgs -a -i | $menu_command")"
+PROJ="$(eval "cgs -adi | $menu_command")"
 
 _open_term() {
 	if [ "$TERMINAL" = "st" ]; then
