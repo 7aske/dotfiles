@@ -10,6 +10,7 @@ export TERMFILE="ranger"
 export READER="zathura"
 export PLAYER="spotify"
 export TERMINAL="st"
+export MAIL="evolution"
 
 # Path setup
 export PATH="$HOME/.local/bin":"$PATH"
