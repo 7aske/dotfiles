@@ -96,6 +96,13 @@ alias la='ls --color=auto -lpvhA --group-directories-first'
 # personal utils
 alias gs='/usr/bin/cgs'
 
+ALIAS_DIR="$HOME/.config/aliases"
+if [ -e "$ALIAS_DIR" ]; then
+	for _F in $(/usr/bin/ls "$ALIAS_DIR"); do
+		source "$ALIAS_DIR/$_F"
+	done
+fi
+
 # eg. cd ... to jump back two directories
 function cd() {
     case $1 in
