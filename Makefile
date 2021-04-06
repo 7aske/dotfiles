@@ -138,7 +138,7 @@ xresources:
 	./mklink Xresources
 
 ideavim:
-	ln -sf "$(shell pwd)/.config/ideavimrc" "${HOME}/.ideavimrc"
+	ln -sf "$(shell pwd)/.ideavimrc" "${HOME}/.ideavimrc"
 
 imwheel:
-	ln -sf "$(shell pwd)/.config/imwheelrc" "${HOME}/.ideavimrc"
+	ln -sf "$(shell pwd)/.imwheelrc" "${HOME}/.imwheelrc"
