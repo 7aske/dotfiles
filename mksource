@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+prog="$(basename $0 .sh)"
+if [ ! -e ".git" ] || [ ! -e "$(basename $0)" ]; then
+	exit 1
+fi
+
+[ ! -e "$HOME/.config" ] && mkdir "$HOME/.config"
+
+src="$(pwd)/$1"
+dest="$HOME/${2:-$1}"
+if ! grep -q "$src" "$dest" 2>/dev/null; then
+	echo "[ -e \"$src\" ] && . \"$src\"" >> "$dest"
+fi

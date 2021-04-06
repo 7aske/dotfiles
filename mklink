@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+prog="$(basename $0 .sh)"
+
+[ ! -e "$HOME/.config" ] && mkdir "$HOME/.config"
+
+src="$(pwd)/.config/$1"
+dest="$HOME/.config/$1"
+
+if [ ! -e "$(dirname $dest)" ]; then
+	mkdir -p "$(dirname $dest)"
+fi
+
+if [ -e "$dest" ] && [ ! -L "$dest" ]; then
+	mv "$dest" "$dest.bak"
+fi
+
+if [ ! -e "$dest" ]; then
+	if [ -L "$dest" ]; then
+		unlink "$dest"
+	fi
+
+	ln -s "$src" "$dest"
+else
+	if [ -L "$dest" ]; then
+		if [ "$(readlink -f $dest)" != "$src" ]; then
+			unlink "$dest"
+			ln -s "$src" "$dest"
+		fi
+
+	fi
+fi
