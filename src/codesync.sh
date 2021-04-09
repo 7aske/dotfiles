@@ -16,7 +16,7 @@ if [ -z "$HOST" ]; then
 	exit 2
 fi
 
-HOST_CODE="$(ssh $HOST 'source .profile; echo $CODE')"
+HOST_CODE="$($SSH_OPT $HOST 'source .profile; echo $CODE')"
 
 if [ -z "$HOST_CODE" ]; then
 	echo "codesync: HOST_CODE is not valid or empty"
