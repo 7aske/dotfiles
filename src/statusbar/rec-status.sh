@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 case $BLOCK_BUTTON in
-	1) killall ffmpeg ;;
+	1) killall ffmpeg && notify-send "Screencam" "Recording stopped" ;;
 esac
 
 color="${color2:-"#A3BE8C"}"
