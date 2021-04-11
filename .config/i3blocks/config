@@ -3,9 +3,10 @@ separator_block_width=15
 markup=pango
 
 
-#[title]
-#label=
-#interval=1
+[window]
+command=xtitle -s
+interval=persist
+align=left
 
 [music]
 align=left
@@ -16,17 +17,13 @@ interval=5
 label= 
 interval=5
 
-#[temp]
-#label= 
-#interval=5
+[temp]
+label= 
+interval=5
 
 [memory]
 label= 
 interval=10
-
-#[ipaddr]
-#label= 
-#interval=60
 
 [bandwidth]
 label=
@@ -49,10 +46,6 @@ interval=60
 interval=60
 command=~/.local/bin/statusbar/battery BAT1
 
-[clock]
-label=
-interval=1
-
 [layout]
 label= 
 interval=60
@@ -67,6 +60,9 @@ interval=3600
 [packages]
 interval=60
 
+[services]
+interval=10
+
 [notify-status]
 interval=5
 
@@ -75,3 +71,7 @@ interval=5
 
 [mic-status]
 interval=5
+
+[clock]
+label=
+interval=1
