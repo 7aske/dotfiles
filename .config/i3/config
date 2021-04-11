@@ -613,7 +613,7 @@ bar {
 	tray_output primary
 
     font $status_font
-	separator_symbol |
+	separator_symbol 
 	workspace_min_width 32
     colors {
         #background $background
@@ -621,7 +621,7 @@ bar {
         focused_background         $bg
         statusline                 $fg
         focused_statusline    $color15
-        separator              $color8
+        separator             $color12
 
         #                     border      background        text
         focused_workspace    $color3         $color3     $color0
@@ -642,13 +642,13 @@ bar {
 
     font $status_font
 	workspace_buttons no
-	separator_symbol |
+	separator_symbol 
 	binding_mode_indicator no
     colors {
         #background $background
         background                 $bg
         statusline                 $fg
-        separator              $color8
+        separator             $color12
     }
 }
 
