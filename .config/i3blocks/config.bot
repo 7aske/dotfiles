@@ -1,0 +1,37 @@
+command=~/.local/bin/statusbar/$BLOCK_NAME
+separator_block_width=15
+markup=pango
+
+[music]
+align=left
+label=
+interval=5
+
+[cpu]
+label= 
+interval=5
+
+[temp]
+label= 
+interval=5
+
+[memory]
+label= 
+interval=10
+
+[bandwidth]
+label=
+interval=1
+
+[disk]
+label= 
+interval=60
+command=~/.local/bin/statusbar/disk /
+
+[disk]
+label= 
+interval=60
+command=~/.local/bin/statusbar/disk /home
+
+[services]
+interval=10

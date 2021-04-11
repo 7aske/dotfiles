@@ -607,26 +607,19 @@ client.background             $bg
 
 # Start i3blocks to display status bar
 bar {
-	i3bar_command i3bar
 	status_command i3blocks
     position top
 
 	tray_output primary
-	#tray_padding 5
-
-    # disable scroll wheel
-	#bindsym button4 nop
-	#bindsym button5 nop
 
     font $status_font
-	# strip_workspace_numbers no
 	separator_symbol |
 	workspace_min_width 32
     colors {
         #background $background
         background                 $bg
         focused_background         $bg
-        statusline            $color15
+        statusline                 $fg
         focused_statusline    $color15
         separator              $color8
 
@@ -636,6 +629,25 @@ bar {
         inactive_workspace   $color8         $color0     $color7
         binding_mode        $color13        $color13     $color0
         urgent_workspace     $color1         $color1     $color0
+    }
+}
+
+bar {
+	status_command i3blocks -c ~/.config/i3blocks/config.bot
+    position bottom
+
+    # disable scroll wheel
+	bindsym button4 nop
+	bindsym button5 nop
+
+    font $status_font
+	workspace_buttons no
+	separator_symbol |
+    colors {
+        #background $background
+        background                 $bg
+        statusline                 $fg
+        separator              $color8
     }
 }
 
