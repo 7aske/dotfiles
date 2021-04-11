@@ -643,6 +643,7 @@ bar {
     font $status_font
 	workspace_buttons no
 	separator_symbol |
+	binding_mode_indicator no
     colors {
         #background $background
         background                 $bg
