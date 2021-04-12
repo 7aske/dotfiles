@@ -8,6 +8,35 @@ command=xtitle -s
 interval=persist
 align=left
 
+[music]
+align=left
+label=
+interval=5
+
+[cpu]
+label= 
+interval=5
+
+[temp]
+label= 
+interval=5
+
+[memory]
+label= 
+interval=10
+
+[bandwidth]
+label=
+interval=1
+
+[disk]
+interval=60
+command=~/.local/bin/statusbar/disk / 
+
+[disk]
+interval=60
+command=~/.local/bin/statusbar/disk /home 
+
 [weather]
 interval=60
 
@@ -15,19 +44,18 @@ interval=60
 interval=60
 command=~/.local/bin/statusbar/battery BAT1
 
-[layout]
-label= 
-interval=60
-
 [cgs]
 label= 
 interval=60
 
-[newsboat]
-interval=3600
+#[newsboat]
+#interval=3600
 
 [packages]
 interval=60
+
+[services]
+interval=10
 
 [notify-status]
 interval=5
@@ -37,6 +65,10 @@ interval=5
 
 [mic-status]
 interval=5
+
+[layout]
+label= 
+interval=60
 
 [clock]
 label=

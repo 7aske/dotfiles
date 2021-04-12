@@ -632,26 +632,6 @@ bar {
     }
 }
 
-bar {
-	status_command i3blocks -c ~/.config/i3blocks/config.bot
-    position bottom
-
-    # disable scroll wheel
-	bindsym button4 nop
-	bindsym button5 nop
-
-    font $status_font
-	workspace_buttons no
-	separator_symbol 
-	binding_mode_indicator no
-    colors {
-        #background $background
-        background                 $bg
-        statusline                 $fg
-        separator             $color12
-    }
-}
-
 # hide/unhide status bar
 bindsym $mod+Shift+Ctrl+b bar mode toggle
 
