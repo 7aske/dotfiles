@@ -7,7 +7,6 @@
 [ -z "$1" ] && exit
 
 icon="$2"
-[ -z "$2" ] && icon="$1"
 
 case $BLOCK_BUTTON in
 	1) pgrep -x dunst >/dev/null && \
@@ -16,5 +15,16 @@ case $BLOCK_BUTTON in
 	3) baobab ;;
 esac
 
-#printf "%s: %s\n" "$icon" "$(df -h "$1" | awk ' /[0-9]/ {print $4 "/" $2}')"
-printf "%s: %s\n" "$icon" "$(df -h "$1" | awk ' /[0-9]/ {print $4}')"
+color="#ffffff"
+usage="$(df "$1" | awk 'NR==2 {print $4}')"
+
+if [ -n "$usage" ]; then
+	if [ $usage -lt 10485760 ]; then
+		color="#D08770"
+	elif [ $usage -lt 5242880 ]; then
+		color="#BF616A"
+	fi
+fi
+
+
+printf "%s <span color='$color'>%s</span>\n" "$icon" "$(numfmt --to iec --from-unit=1024 --format "%f" $usage)"
