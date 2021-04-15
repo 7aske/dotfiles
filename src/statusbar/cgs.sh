@@ -7,5 +7,12 @@ case $BLOCK_BUTTON in
     3) notify-send -i git "Repositories" "$(cgs -v)" ;;
 esac
 
-/usr/bin/cgs | wc -l
+repos="$(/usr/bin/cgs | wc -l)"
+
+if [ $repos -eq 0 ]; then
+	exit 0
+fi
+
+echo "$repos"
+
 

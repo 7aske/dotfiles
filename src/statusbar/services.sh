@@ -15,4 +15,8 @@ if [ "$(systemctl is-active nginx)" = "active" ]; then
 	SERVICES="$SERVICES "
 fi
 
+if [ -z "$SERVICES" ]; then
+	exit 0
+fi
+
 echo "<span>$SERVICES</span>"

@@ -33,5 +33,9 @@ else
 	color="${color1:-"#ff8144"}"
 fi
 
+if [ $count -eq 0 ]; then
+	exit 0
+fi
+
 echo " <span color=\"$color\">$count</span>"
 
