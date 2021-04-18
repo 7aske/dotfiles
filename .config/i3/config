@@ -158,7 +158,8 @@ bindsym $mod+Shift+m  exec --no-startup-id i3btf cantata
 bindsym $mod+v        exec --no-startup-id clipmenu
 bindsym Menu          exec --no-startup-id clipmenu
 # 7aske-scripts
-bindsym $mod+F2       exec --no-startup-id kblang -fn '$dmenu_font'
+bindsym $mod+F2       exec --no-startup-id kblang -t && notify-send "Keyboard Layout" "Toggle"
+bindsym $mod+Shift+F2 exec --no-startup-id kblang -fn '$dmenu_font'
 # 7aske-scripts
 bindsym $mod+Home     exec --no-startup-id google-search
 
