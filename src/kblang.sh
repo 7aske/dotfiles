@@ -44,3 +44,5 @@ else
 fi
 
 [ -f "$HOME/.Xmodmap" ] && xmodmap "$HOME/.Xmodmap"
+
+exit 0
