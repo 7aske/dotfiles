@@ -1,7 +1,9 @@
 #!/usr/bin/env sh
 
 case "$BLOCK_BUTTON" in
-	1) dunstctl set-paused toggle ;;
+	1) dunstctl history-pop ;;
+	2) dunstctl set-paused toggle ;;
+	3) dunstctl close-all ;;
 esac
 
 
