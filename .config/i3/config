@@ -169,7 +169,7 @@ bindsym $mod+Ctrl+Shift+semicolon    exec --no-startup-id dmenu -b -p ":" -fn '$
 
 
 # layout toggling mode
-set $mode_codeopen codeopen: (t)erm (n)vim (v)scode (i)dea (c)lion (p)ycharm (w)ebstorm (s)studio (j)etbrains
+set $mode_codeopen codeopen: (t)erm (n)vim (v)scode (i)dea (c)lion (g)oland (p)ycharm (w)ebstorm (s)studio (j)etbrains
 bindsym $mod+o mode "$mode_codeopen"
 set $codeopen_menu rofi
 mode "$mode_codeopen" {
@@ -179,10 +179,28 @@ mode "$mode_codeopen" {
     bindsym n exec --no-startup-id codeopen -m $codeopen_menu -t vim; mode default
     bindsym i exec --no-startup-id codeopen -m $codeopen_menu -t idea; mode default
     bindsym c exec --no-startup-id codeopen -m $codeopen_menu -t clion; mode default
+    bindsym g exec --no-startup-id codeopen -m $codeopen_menu -t goland; mode default
     bindsym p exec --no-startup-id codeopen -m $codeopen_menu -t pycharm; mode default
     bindsym w exec --no-startup-id codeopen -m $codeopen_menu -t webstorm; mode default
     bindsym s exec --no-startup-id codeopen -m $codeopen_menu -t studio; mode default
     bindsym j exec --no-startup-id codeopen -m $codeopen_menu -t jetbrains; mode default
+
+    # exit system mode: "Enter" or "Escape"
+    bindsym Return mode default
+    bindsym Escape mode default
+}
+
+set $mode_ide open: (i)dea (c)lion (g)oland (p)ycharm (w)ebstorm (s)studio (d)atagrip
+bindsym $mod+Shift+o mode "$mode_ide"
+mode "$mode_ide" {
+    # set default desktop layout <stacking|tabbed>
+    bindsym v exec --no-startup-id vscodium; mode default
+    bindsym i exec --no-startup-id idea; mode default
+    bindsym c exec --no-startup-id clion; mode default
+    bindsym p exec --no-startup-id pycharm; mode default
+    bindsym w exec --no-startup-id webstorm; mode default
+    bindsym s exec --no-startup-id studio; mode default
+    bindsym d exec --no-startup-id datagrip; mode default
 
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode default
