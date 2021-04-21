@@ -121,7 +121,7 @@ bindsym $mod+w       exec --no-startup-id $browser
 bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor
 bindsym $mod+Shift+w exec --no-startup-id $browser --incognito
 # 7aske-scripts
-bindsym $mod+Mod1+n        exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/notify-status
+bindsym $mod+Mod1+n        exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/notify-status
 bindsym $mod+Shift+Mod1+n  exec --no-startup-id dunst_reload
 bindsym $mod+n             exec --no-startup-id dunstctl context
 bindsym $mod+Ctrl+n        exec --no-startup-id dunstctl close
