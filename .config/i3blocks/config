@@ -3,10 +3,10 @@ separator_block_width=15
 markup=pango
 
 
-[window]
-command=xtitle -s
-interval=persist
-align=left
+#[window]
+#command=xtitle -s
+#interval=persist
+#align=left
 
 [music]
 align=left
