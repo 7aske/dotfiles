@@ -15,8 +15,8 @@ muted_color="${color1:-"#BF616A"}"
 icon=""
 muted_icon=""
 
-sources="$(pactl list sources short | wc -l)"
-muted="$(pactl list sources | grep "Mute: yes" | wc -l)"
+sources="$(pactl list sources short | grep -vc "monitor")"
+muted="$(pactl list sources | grep -B6 "Mute: yes" | grep "Name:" | grep -vc "monitor")"
 
 if [ $sources -eq $muted ] && [ $muted -gt 0 ]; then
 	color="$muted_color"
