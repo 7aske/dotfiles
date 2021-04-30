@@ -13,38 +13,44 @@ IFACE="$(ip link | grep -e "BROADCAST" | sed 1q | awk '{print $2}' | cut -d ':' 
 
 SLEEP=1
 
-TIME_START=$(echo '('`date +"%s.%N"` ' * 1000000)/1' | bc)
+OUT_FORMAT=" %5s 祝%5s"
+
+while getopts ":f:" ARG; do
+	case $ARG in
+		f) OUT_FORMAT="$OPTARG" ;;
+		:) echo "bandwidth: -$OPTARG requires an argument"
+			exit 2 ;;
+	esac
+done
+
+shift $((OPTIND - 1))
+
 
 RX_OLD="$(cat /sys/class/net/"$IFACE"/statistics/rx_bytes)"
 TX_OLD="$(cat /sys/class/net/"$IFACE"/statistics/tx_bytes)"
+
+TIME_START=$(echo '('`date +"%s.%N"` ' * 1000000)/1' | bc)
 
 sleep $SLEEP
 
 RX_NEW="$(cat /sys/class/net/"$IFACE"/statistics/rx_bytes)"
 TX_NEW="$(cat /sys/class/net/"$IFACE"/statistics/tx_bytes)"
 
+TIME_END=$(echo '('`date +"%s.%N"` ' * 1000000)/1' | bc)
+
 RX_DELTA=$((RX_NEW - RX_OLD))
 TX_DELTA=$((TX_NEW - TX_OLD))
 
-TIME_END=$(echo '('`date +"%s.%N"` ' * 1000000)/1' | bc)
 
 TIME_DELTA="$(_bc "$((TIME_END - TIME_START)) / 1000000")"
 
-if [ $RX_DELTA -gt 1048576 ]; then
-	RX_OUT="$(_bc "$RX_DELTA / 1048576 / $TIME_DELTA")M"
-elif [ $RX_DELTA -gt 1024 ]; then
-	RX_OUT="$(_bc "$RX_DELTA / 1024 / $TIME_DELTA" 0)k"
-else
-	RX_OUT="$(_bc "$RX_DELTA / $TIME_DELTA" 0)"
-fi
+FORMAT="%4f"
+RX_OUT="$(_bc "$RX_DELTA / $TIME_DELTA" 0)"
+RX_OUT="$(numfmt --to iec --format "$FORMAT" $RX_OUT)"
 
-if [ $TX_DELTA -gt 1048576 ]; then
-	TX_OUT="$(_bc "$TX_DELTA / 1048576 / $TIME_DELTA")M"
-elif [ $TX_DELTA -gt 1024 ]; then
-	TX_OUT="$(_bc "$TX_DELTA / 1024 / $TIME_DELTA" 0)k"
-else
-	TX_OUT="$(_bc "$TX_DELTA / $TIME_DELTA" 0)"
+TX_OUT="$(_bc "$TX_DELTA / $TIME_DELTA" 0)"
+TX_OUT="$(numfmt --to iec --format "$FORMAT" $TX_OUT)"
 
-fi
 
-echo " $(printf '%5s' $RX_OUT)" "祝$(printf '%5s' $TX_OUT)"
+printf "$OUT_FORMAT" "$RX_OUT" "$TX_OUT"
+echo
