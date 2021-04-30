@@ -22,7 +22,9 @@ antigen bundle command-not-found
 antigen bundle virtualenv
 antigen bundle gitignore
 antigen bundle MichaelAquilina/zsh-you-should-use
-antigen bundle MichaelAquilina/zsh-auto-notify
+if [ -x "$(command -v notify-send 2>/dev/null)" ]; then
+	antigen bundle MichaelAquilina/zsh-auto-notify
+fi
 antigen bundle ael-code/zsh-colored-man-pages
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
