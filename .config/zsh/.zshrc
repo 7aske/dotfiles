@@ -13,13 +13,20 @@ istty() {
 [ -e ~/.config/zsh/antigen.zsh ] && source ~/.config/zsh/antigen.zsh
 
 antigen use oh-my-zsh
+antigen bundle mvn
+antigen bundle npm
+antigen bundle pip
+antigen bundle rust
+antigen bundle rustup
 antigen bundle command-not-found
 antigen bundle virtualenv
 antigen bundle gitignore
 antigen bundle MichaelAquilina/zsh-you-should-use
+antigen bundle MichaelAquilina/zsh-auto-notify
 antigen bundle ael-code/zsh-colored-man-pages
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
+
 
 if ! [ $(istty) ]; then
 	[ -e ~/.config/zsh/agnoster-custom.zsh-theme ] && source ~/.config/zsh/agnoster-custom.zsh-theme
@@ -28,6 +35,8 @@ else
 fi
 
 antigen apply
+
+export AUTO_NOTIFY_THRESHOLD=20
 
 [ -e ~/.config/rc ] && source ~/.config/rc
 
