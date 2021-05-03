@@ -135,7 +135,7 @@ bindsym $mod+Mod1+t            exec --no-startup-id transmission-gtk
 bindsym $mod+Mod1+l            exec --no-startup-id lutris
 bindsym $mod+Mod1+Shift+d      exec --no-startup-id gnome-disks
 bindsym $mod+Mod1+b            exec --no-startup-id baobab
-bindsym $mod+Mod1+m            exec --no-startup-id $mail -c mail
+bindsym $mod+Mod1+m            exec --no-startup-id i3btf $mail
 bindsym $mod+Mod1+v            exec --no-startup-id vncviewer
 bindsym $mod+Mod1+Shift+b      exec --no-startup-id virtualbox
 bindsym $mod+Mod1+d            exec --no-startup-id discord
