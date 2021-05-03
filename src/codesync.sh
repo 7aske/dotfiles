@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
-SSH_OPT="ssh"
+SSH_OPT="${SSH_OPT:-"ssh"}"
+
+RSYNC_OPTS="${RSYNC_OPTS:-"--progress"}"
 
 while getopts ":hH:e:" arg; do
 	case $arg in
 		e) SSH_OPT="$OPTARG";;
+		D) RSYNC_OPTS="${RSYNC_OPTS} --delete";;
 		H) HOST="$OPTARG";;
 		:) echo "codesync: -$arg requires and argument"
 			exit 2;;
@@ -28,4 +31,4 @@ if [ -z "$CODE" ] || [ ! -d "$CODE" ]; then
 	exit 2
 fi
 
-rsync -havz --delete -e "$SSH_OPT" --progress "$HOST:$HOST_CODE/" "$CODE/"
+rsync -havz "$RSYNC_OPTS" -e "$SSH_OPT" "$HOST:$HOST_CODE/" "$CODE/"
