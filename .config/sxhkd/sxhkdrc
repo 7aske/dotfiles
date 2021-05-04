@@ -19,8 +19,8 @@ super + {_, shift + } w
 	$BROWSER {_,--incognito}
 
 # program launcher
-super + a
-	TERMINAL_CMD="st -e" dmenu-recent -f -i -l 10 -p "run: " -fn 'Fira Code Medium-10'
+super + {a,d}
+	rofi -show {run,drun}
 
 # command runner
 super + shift + semicolon
@@ -30,8 +30,8 @@ super + shift + semicolon
 super + grave
 	$TERMINAL -e htop
 
-super + shift + x
-	xkill
+super + {shift,ctrl} + x
+	{xkill, xprop}
 
 # file explorer
 super + {_,shift +}e
@@ -42,8 +42,28 @@ super + shift + v
 	$TERMINAL -e $EDITOR
 
 # open vimcfg
-super + shift + grave ; {e,h,d}
+super + ctrl + c ; {e,h,d}
 	$TERMINAL -e vimcfg {--etc,--home,_}
+
+super + alt + t
+	transmission-gtk
+super + alt + l
+	i3btf lutris
+super + alt + shift + d
+	gnome-disks
+super + alt + b
+	baobab
+super + alt + m
+	$MAIL
+super + alt + v
+	vncviewer
+super + alt + shift + v
+	VirtualBox
+super + alt + d
+	discord
+super + alt + Scroll_Lock
+	bitwarden
+
 
 # print screen
 @Print
@@ -66,12 +86,12 @@ super + shift + @Print
 										-t 1000 \
 										"screenshot (selection)" "copied to clipboard"
 # music player
-super + {_,shift+} m
+super + {_,shift + } m
 	i3btf {$PLAYER,cantata}
 
 # open project
-super + o ; {t,v,j,c}
-	TYPE={term,vim,jetbrains,vscode} DMENU=1 codeopen
+super + o ; {t,v,n,j,i,p,c,s,g,w}
+	codeopen -t {term,vscode,vim,jetbrains,idea,pycharm,clion,studio,goland,webstorm} -m rofi
 
 super + v
 	clipmenu
@@ -103,10 +123,14 @@ super + {_,ctrl+,shift+}n
 #|_.__/|___/ .__/ \_/\_/ |_| |_| |_|
 #bspwm     |_|
 
+
+F1
+	echo > /dev/null
+
 # make sxhkd reload its configuration files:
 # quit/restart bspwm
 super + shift + r
-	pkill -USR1 -x sxhkd; bspc wm -r; notify-send "bspwm" "bspwm restarted"
+	killall sxhkd; bspc wm -r;  notify-send "bspwm" "bspwm restarted"
 
 # exit
 super + 0 ; e
@@ -117,8 +141,8 @@ super + {_,shift + }q
 	bspc node -{c,k}
 
 # monocle layout
-super + m
-	bspc desktop -l next
+#super + m
+	#bspc desktop -l next
 
 super + Tab
 	rofi -show window
@@ -217,22 +241,23 @@ alt + {_,shift+}Tab
 super + ctrl + {Left,Right}
 	bspc desktop -m {west,east} --follow
 
+
+super + ctrl + {1-9}
+	bspc node -o 0.{1-9}
+
 #
 # preselect
 #
 
-# preselect the direction
-super + ctrl + {Left,Down,Up,Right}
-	bspc node -p {west,south,north,east}
 
-# preselect the ratio
-super + ctrl + {1-9}
-	bspc node -o 0.{1-9}
+# preselect the direction
+#super + ctrl + {Left,Down,Up,Right}
+	#bspc node -p {west,south,north,east}
 
 # cancel the preselection for the focused node
-super + ctrl + space
-	bspc node -p cancel
+#super + ctrl + space
+	#bspc node -p cancel
 
 # cancel the preselection for the focused desktop
-super + ctrl + shift + space
-	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+#super + ctrl + shift + space
+	#bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel

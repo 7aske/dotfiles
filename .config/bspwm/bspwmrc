@@ -1,14 +1,25 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-function oneshot(){
-	pgrep -x $1 >/dev/null || $1 &
+oneshot() {
+	if ! pgrep -x $1 >/dev/null; then
+		($1 &)
+	fi
 }
+
+if [ -e "$HOME/.config/colors.sh" ]; then
+	source "$HOME/.config/colors.sh"
+	bspc config active_border_color "$color4"
+	bspc config focused_border_color "$color3"
+	bspc config normal_border_color "$color4"
+fi
 
 oneshot sxhkd
 oneshot barrier
 
 fix_touchpad
+dunst_reload
 xsetroot -cursor_name left_ptr
+feh --bg-fill "$HOME/.config/wallpaper"
 xset r rate 195 55
 
 bspc monitor -d I II III IV V VI VII VIII IX
