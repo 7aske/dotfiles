@@ -11,15 +11,15 @@ program="$(basename $1)"
 processes="$(pgrep -x "$program")"
 
 if [ -n "$processes" ]; then
-	visible="$(xdotool search --onlyvisible --name $program | xargs -I% xprop -id % | grep -c "window state: Normal")"
+	visible="$(xdotool search --onlyvisible --class $program | xargs -I% xprop -id % | grep -c "window state: Normal")"
 	if [ "$visible" -gt 0 ]; then
-		for win in $(xdotool search --onlyvisible --name $program); do 
+		for win in $(xdotool search --onlyvisible --class $program); do 
 			if grep -q "window state: Normal" <(xprop -id $win); then
 				xdotool windowunmap $win
 			fi
 		done
 	else
-		for win in $(xdotool search --name $program); do
+		for win in $(xdotool search --class $program); do
 			if grep -q "window state: Withdrawn" <(xprop -id $win); then
 				xdotool windowmap $win
 			fi
