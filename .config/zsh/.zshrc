@@ -30,7 +30,7 @@ antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
 
 
-if ! [ $(istty) ]; then
+if [ ! $(istty) ]; then
 	[ -e ~/.config/zsh/agnoster-custom.zsh-theme ] && source ~/.config/zsh/agnoster-custom.zsh-theme
 else
 	antigen theme risto
