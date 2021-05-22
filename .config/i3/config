@@ -56,7 +56,7 @@ bindsym $mod+Ctrl+p       exec --no-startup-id patoggle && notify-send -i audio-
 # 7aske-scripts
 bindsym $mod+Mod1+p       exec --no-startup-id patoggle sources && notify-send -i audio-recorder --hint=int:transient:1 -t $notif_duration "toggle input"
 # 7aske-scripts
-bindsym $mod+Shift+p      exec --no-startup-id padefault
+bindsym $mod+Shift+p      exec --no-startup-id padefault toggle
 # 7aske-scripts
 bindsym $mod+Ctrl+Shift+p exec --no-startup-id pafocus
 
@@ -82,9 +82,9 @@ bindsym $mod+Shift+period exec --no-startup-id BLOCK_BUTTON=4 ~/.local/bin/statu
 bindsym $mod+Shift+comma  exec --no-startup-id BLOCK_BUTTON=5 ~/.local/bin/statusbar/music
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%    && notify-send --hint=int:transient:1 -t $notif_duration "volume" "+5% ($(getvol)%)"
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%    && notify-send --hint=int:transient:1 -t $notif_duration "volume" "\-5% ($(getvol)%)"
-bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute   0 toggle && notify-send --hint=int:transient:1 -t $notif_duration "volume" "toggle mute"
+bindsym XF86AudioRaiseVolume exec --no-startup-id padefault vol +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id padefault vol -5%
+bindsym XF86AudioMute        exec --no-startup-id padefault mute
 
 #                    _ _           _   _
 #   __ _ _ __  _ __ | (_) ___ __ _| |_(_) ___  _ __  ___
