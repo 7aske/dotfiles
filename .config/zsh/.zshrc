@@ -101,6 +101,7 @@ bindkey -s '^o' 'cd "$(codels | fzf)"\n'
 bindkey -s '^g' 'chgs\n'
 bindkey -s '^v' 'vicfg\n'
 bindkey -s '^p' 'git pull\n'
+bindkey -s '^s' 'git status\n'
 
 # ctrl+space
 bindkey '^ ' autosuggest-accept
