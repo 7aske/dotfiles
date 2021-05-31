@@ -100,6 +100,7 @@ bindkey '^e' edit-command-line
 bindkey -s '^o' 'cd "$(codels | fzf)"\n'
 bindkey -s '^g' 'chgs\n'
 bindkey -s '^v' 'vicfg\n'
+bindkey -s '^p' 'git pull\n'
 
 # ctrl+space
 bindkey '^ ' autosuggest-accept
