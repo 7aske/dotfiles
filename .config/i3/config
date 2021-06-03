@@ -126,6 +126,7 @@ bindsym $mod+Shift+Mod1+n  exec --no-startup-id dunst_reload
 bindsym $mod+n             exec --no-startup-id dunstctl context
 bindsym $mod+Ctrl+n        exec --no-startup-id dunstctl close
 bindsym $mod+Shift+n       exec --no-startup-id dunstctl history-pop
+bindsym $mod+semicolon     exec --no-startup-id st -c floating -e tmux a -t ssh
 
 # 7aske-scripts
 bindsym $mod+F10           exec --no-startup-id echo 0 | dmenu -p 'screen: ' -fn '$dmenu_font' | xargs screencam -n
