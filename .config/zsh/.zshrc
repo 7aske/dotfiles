@@ -103,6 +103,7 @@ bindkey -s '^v' 'vicfg\n'
 bindkey -s '^p' 'git pull\n'
 bindkey -s '^u' 'git push\n'
 bindkey -s '^s' 'git status\n'
+bindkey -s '^y' 'yay\n'
 
 # ctrl+space
 bindkey '^ ' autosuggest-accept
