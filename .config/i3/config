@@ -159,6 +159,7 @@ bindsym $mod+Shift+m  exec --no-startup-id wtoggle cantata
 
 bindsym $mod+v        exec --no-startup-id clipmenu
 bindsym Menu          exec --no-startup-id clipmenu
+bindsym $mod+Menu     exec --no-startup-id eval "$(xclip -sel c -o)"
 # 7aske-scripts
 bindsym $mod+F2       exec --no-startup-id kblang -t && notify-send "Keyboard Layout" "Toggle"
 bindsym $mod+Shift+F2 exec --no-startup-id kblang -fn '$dmenu_font'
