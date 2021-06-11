@@ -30,7 +30,7 @@ git_pull() {
 		return 1
 	fi
 
-    git -C "$DIR" pull 2>/dev/null | while read -r OUTPUT; do
+    git -C "$DIR" pull --no-stat 2>/dev/null | grep Updating | while read -r OUTPUT; do
         if [ -n "$DISPLAY" ]; then
             notify-send -u low -i git "$1" "$OUTPUT"
         else
