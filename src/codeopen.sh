@@ -114,6 +114,7 @@ if [ -n "$PROJ" ]; then
 		"jetbrains") _open_jetbrains ;;
 		"idea") _open_jetbrains idea ;;
 		"clion") _open_jetbrains clion ;;
+		"goland") _open_jetbrains goland ;;
 		"pycharm") _open_jetbrains pycharm ;;
 		"webstorm") _open_jetbrains webstorm ;;
 		"studio"|"android") _open_jetbrains studio ;;
