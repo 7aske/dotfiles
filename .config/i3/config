@@ -200,6 +200,7 @@ mode "$mode_ide" {
     bindsym v exec --no-startup-id vscodium; mode default
     bindsym i exec --no-startup-id idea; mode default
     bindsym c exec --no-startup-id clion; mode default
+    bindsym g exec --no-startup-id goland; mode default
     bindsym p exec --no-startup-id pycharm; mode default
     bindsym w exec --no-startup-id webstorm; mode default
     bindsym s exec --no-startup-id studio; mode default
