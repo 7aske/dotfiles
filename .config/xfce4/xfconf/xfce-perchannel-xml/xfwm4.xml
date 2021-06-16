@@ -96,5 +96,7 @@
     <property name="margin_bottom" type="int" value="0"/>
     <property name="margin_right" type="int" value="0"/>
     <property name="frame_border_top" type="int" value="0"/>
+    <property name="cycle_minimized" type="bool" value="false"/>
+    <property name="zoom_pointer" type="bool" value="true"/>
   </property>
 </channel>
