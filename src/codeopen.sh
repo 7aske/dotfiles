@@ -8,7 +8,7 @@ TYPE="${TYPE:-"term"}"
 [ -z "$(command -v cgs)" ] && echo "cgs: not found" && exit 1
 [ -z "$(command -v fzf)" ] && echo "fzf: not found" && exit 1
 
-available_types=("term" "vscode" "vim" "jetbrains" "idea" "pycharm" "clion" "studio" "goland" "webstorm")
+available_types=("term", "vscode", "vim", "jetbrains", "idea", "pycharm", "clion", "studio", "goland", "webstorm")
 available_menus=("dmenu", "rofi")
 
 _usage() {
