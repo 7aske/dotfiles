@@ -412,6 +412,7 @@ assign [class="(?i)viber"] $ws9
 assign [class="zoom"] zoom
 assign [title="WhatsApp"] $ws9
 assign [title="World of Warcraft"] w
+assign [class="Chia Blockchain"] c
 
 # Open specific applications in floating mode
 for_window [class="Arandr"] floating enable,resize set 800 600, move position center
