@@ -92,14 +92,13 @@ bindsym XF86AudioMute        exec --no-startup-id padefault mute
 # | (_| | |_) | |_) | | | (_| (_| | |_| | (_) | | | \__ \
 #  \__,_| .__/| .__/|_|_|\___\__,_|\__|_|\___/|_| |_|___/
 # applic|_|ati|_|ons
-bindsym $mod+Return       exec --no-startup-id $terminal
-bindsym $mod+BackSpace    exec --no-startup-id wtoggle $terminal2 --class floating
-bindsym $mod+Shift+Return exec --no-startup-id $terminal2
-#bindsym $mod+a            exec --no-startup-id TERMINAL_CMD="st -e" dmenu-recent -f -i -l 10 -p "run: " -fn '$dmenu_font'
-bindsym $mod+a            exec --no-startup-id rofi -show run
-bindsym $mod+d            exec --no-startup-id rofi -show drun
-bindsym $mod+Shift+semicolon     exec --no-startup-id dmenu_run -p ":" -f -b -fn '$dmenu_font'
-bindsym $mod+grave        exec --no-startup-id $terminal -e htop
+bindsym $mod+Return          exec --no-startup-id $terminal
+bindsym $mod+BackSpace       exec --no-startup-id xfce4-terminal --drop-down
+bindsym $mod+Shift+Return    exec --no-startup-id $terminal2
+bindsym $mod+a               exec --no-startup-id rofi -show run
+bindsym $mod+d               exec --no-startup-id rofi -show drun
+bindsym $mod+Shift+semicolon exec --no-startup-id dmenu_run -p ":" -f -b -fn '$dmenu_font'
+bindsym $mod+grave           exec --no-startup-id $terminal -e htop
 
 # edit config files
 bindsym $mod+Ctrl+c mode "$mode_config"
