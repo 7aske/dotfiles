@@ -50,6 +50,10 @@ fi
 PROJ="$(eval "cgs -adi | $menu_command")"
 
 _open_term() {
+	if [ -t 1 ]; then 
+		cd $PROJ
+		exec $SHELL
+	fi
 	if [ "$TERMINAL" = "st" ]; then
 		# 7aske 'st' build with '-d' option to chdir at start
 		notify-send -i terminal "codeopen" "opening $PROJ"
@@ -88,8 +92,13 @@ _open_vim() {
             notify-send "codeopen" "$errmsg"
             exit 1
         fi
-        notify-send -i "$CMD" "codeopen" "opening $PROJ"
-        $TERMINAL -e $CMD "$PROJ"
+	
+		if [ -t 1 ]; then
+			$CMD "$PROJ"
+		else
+			notify-send -i "$CMD" "codeopen" "opening $PROJ"
+			$TERMINAL -e $CMD "$PROJ"
+		fi
 }
 
 _open_jetbrains() {
