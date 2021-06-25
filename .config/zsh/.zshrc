@@ -97,7 +97,7 @@ bindkey '^[[P' delete-char
 # Edit line in vim with ctrl-e:
 autoload edit-command-line; zle -N edit-command-line
 bindkey '^e' edit-command-line
-bindkey -s '^o' 'cd "$(cgs -ad | fzf)"\n'
+bindkey -s '^o' 'exec codeopen\n'
 bindkey -s '^g' 'chgs\n'
 bindkey -s '^v' 'vicfg\n'
 bindkey -s '^p' 'git pull\n'
