@@ -259,9 +259,9 @@ bindsym $mod+Mod1+Up    resize shrink height 10 px or 10 ppt
 bindsym $mod+Mod1+Right resize grow   width  10 px or 10 ppt
 
 # workspace back and forth (with/without active container)
-bindsym Mod1+Tab workspace next
 bindsym Mod1+Shift+Tab workspace prev
 workspace_auto_back_and_forth yes
+bindsym Mod1+Tab workspace back_and_forth
 bindsym $mod+b workspace back_and_forth
 bindsym $mod+Shift+b move container to workspace back_and_forth; workspace back_and_forth
 
