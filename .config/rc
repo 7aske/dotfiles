@@ -71,6 +71,9 @@ alias wget='wget --hsts-file=~/.config/wget/.wget-hsts'
 alias diff="diff --color=auto"
 alias dd='dd status="progress"'
 alias rsync='rsync --progress'
+alias rm='rm -v'
+alias mkdir='mkdir -v'
+alias rmdir='rmdir -v'
 function randpwd() { python -c "import secrets; print(secrets.token_urlsafe(${1:-"16"}))"; }
 # navigation
 alias conf='builtin cd $HOME/.config/&& ls'
