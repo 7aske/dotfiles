@@ -14,7 +14,9 @@ esac
 
 capacity=$(cat /sys/class/power_supply/"$1"/capacity) || exit
 duration=$(acpi | awk '{print substr($5, 0, length($5) - 3)}')
+saver_icon="  "
 status=$(cat /sys/class/power_supply/"$1"/status)
+saver="$(cat /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode)"
 
 if [ "$capacity" -ge 75 ]; then
 	color="${color7:-"#ffffff"}"
@@ -28,7 +30,13 @@ else
 fi
 
 [ -z $warn ] && warn=" "
+[ "$saver" -eq 0 ] && saver_icon=""
 
 [ "$status" = "Charging" ] && color="#ffffff"
 
-printf "<span color='%s'>%s%s%s</span>\n" "$color" "$(echo "$status" | sed -e "s/,//;s/Discharging//;s/Not Charging//;s/Charging//;s/Unknown//;s/Full//;s/ 0*/ /g;s/ :/ /g")" "$warn" "$(echo "$capacity" | sed -e 's/$/%/') $([ -n "$duration" ] && echo "($duration)")"
+printf "<span color='%s'>%s%s%s%s</span>\n" \
+	"$color" \
+	"$(echo "$status" | sed -e "s/,//;s/Discharging//;s/Not Charging//;s/Charging//;s/Unknown//;s/Full//;s/ 0*/ /g;s/ :/ /g")" \
+	"$warn" \
+	"$(echo "$capacity" | sed -e 's/$/%/') $([ -n "$duration" ] && echo "($duration)")" \
+	"$saver_icon"
