@@ -11,7 +11,6 @@ while getopts ":f" ARG; do
 			exit 2;;
 	esac
 done
-echo $FORCE
 
 FOLDERS="$(find "$CODE" -type d \
 	\(\
@@ -25,6 +24,7 @@ FOLDERS="$(find "$CODE" -type d \
 		-name build               -prune \
 	\) -a \! \
 	\(\
+		-path $CODE/work*         -prune -o\
 		-path \*/lib/\*           -prune -o\
 		-path \*nvim/plugged\*    -prune -o\
 		-path \*neovim\*          -prune   \
