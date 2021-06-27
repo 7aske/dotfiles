@@ -30,6 +30,7 @@ FOLDERS="$(find "$CODE" -type d \
 		-path \*neovim\*          -prune   \
 	\) -prune -printf "%p\n")"
 
+SAVED=0
 for F in $FOLDERS; do 
 	echo $F
 	POSSIBLY_SAVED=$(du -sb $F | awk '{ print $1 }')
@@ -45,7 +46,7 @@ for F in $FOLDERS; do
 	fi
 done
 
-if [ "$SAVED" -eq 0 ]; then
+if [ "$SAVED" -eq 0 ] || [ -z "$SAVED" ]; then
 	echo "Nothing to clean"
 else
 	echo "Cleaned and saved $(numfmt --to iec --format "%f" "$SAVED")" 
