@@ -24,7 +24,7 @@ FOLDERS="$(find "$CODE" -type d \
 		-name build               -prune \
 	\) -a \! \
 	\(\
-		-path $CODE/work*         -prune -o\
+		-path $CODE/work\*         -prune -o\
 		-path \*/lib/\*           -prune -o\
 		-path \*nvim/plugged\*    -prune -o\
 		-path \*neovim\*          -prune   \
