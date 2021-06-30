@@ -73,6 +73,7 @@ alias dd='dd status="progress"'
 alias rsync='rsync --progress'
 alias mkdir='mkdir -v'
 alias rmdir='rmdir -v'
+alias cal='cal -m'
 function randpwd() { python -c "import secrets; print(secrets.token_urlsafe(${1:-"16"}))"; }
 # navigation
 alias conf='builtin cd $HOME/.config/&& ls'
