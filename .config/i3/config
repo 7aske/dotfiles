@@ -551,7 +551,7 @@ exec_always --no-startup-id xfce4-power-manager
 exec_always --no-startup-id xmodmap ~/.Xmodmap
 # exec_always --no-startup-id pamac-tray
 exec_always --no-startup-id pgrep udiskie || udiskie -s -f $file -a --appindicator
-exec_always --no-startup-id killall barrier; barrier
+exec_always --no-startup-id killall barrier; sleep 10; barrier
 #exec_always --no-startup-id pgrep pidswallow || pidswallow -gl
 exec_always --no-startup-id clipmenud
 exec_always --no-startup-id pgrep unclutter || unclutter --fork --timeout 5 --jitter 10 --ignore-scrolling
