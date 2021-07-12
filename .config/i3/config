@@ -445,6 +445,7 @@ for_window [class="Qtconfig-qt4"] floating enable, sticky enable, border normal
 for_window [class="Simple-scan"] floating enable, border normal
 for_window [class="Timeset-gui"] floating enable, border normal
 for_window [class="Xfburn"] floating enable
+for_window [class="(?i)blueman-manager"] floating enable, resize set 1024 720, move position center
 for_window [class="fpakman"] floating enable
 for_window [class="java-lang-Thread"] floating enable, move position center
 for_window [class="octopi"] floating enable
