@@ -4,7 +4,7 @@ _sync() {
 	[ -z "$1" ] && return 1
 	[ -z "$2" ] && return 1
 	([ ! -e "$1" ] && [ ! -e "$2" ]) && return 1
-	rsync -auz "$1" "$2"
+	rsync -uptgzd --filter '+ /*.data' --filter '- /*/' "$1" "$2"
 }
 
 TASKSERVER="${TASKSEVER:-"7aske.com"}"
@@ -17,7 +17,7 @@ SERVER_TASKDATA="$(ssh $TASKSERVER ". \$HOME/.profile; echo \$TASKDATA")"
 [ -z "$TASKSERVER" ]      && exit 1
 
 SERVER_FOLDER="$TASKSERVER_USER@$TASKSERVER:$SERVER_TASKDATA/"
-LOCAL_FOLDER="$TASKDATA"
+LOCAL_FOLDER="$TASKDATA/"
 
 echo "$TASKSERVER -> $(hostname)"
 _sync "$SERVER_FOLDER" "$LOCAL_FOLDER" || exit 2
