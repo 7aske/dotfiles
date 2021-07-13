@@ -11,6 +11,8 @@ TASKSERVER="${TASKSEVER:-"7aske.com"}"
 TASKSERVER_USER="${TASKSEVER_USER:-"nik"}"
 SERVER_CACHE="$HOME/.cache/tasksync_server_taskdata"
 
+[ ! -e "$(basename $SERVER_CACHE)" ] && mkdir "$(basename "$SERVER_CACHE")"
+
 if [ -e "$SERVER_CACHE" ]; then
 	. "$SERVER_CACHE"
 else
@@ -27,8 +29,12 @@ fi
 SERVER_FOLDER="$TASKSERVER_USER@$TASKSERVER:$SERVER_TASKDATA/"
 LOCAL_FOLDER="$TASKDATA/"
 
-echo "$TASKSERVER -> $(hostname)"
-_sync "$SERVER_FOLDER" "$LOCAL_FOLDER" || exit 2
+if [ "$1" = "recv" ] || [ -z "$1" ]; then
+	echo "$TASKSERVER -> $(hostname)"
+	_sync "$SERVER_FOLDER" "$LOCAL_FOLDER" || exit 2
+fi
 
-echo "$TASKSERVER <- $(hostname)"
-_sync "$LOCAL_FOLDER" "$SERVER_FOLDER" 
+if [ "$1" = "send" ] || [ -z "$1" ]; then
+	echo "$TASKSERVER <- $(hostname)"
+	_sync "$LOCAL_FOLDER" "$SERVER_FOLDER" 
+fi
