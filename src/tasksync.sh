@@ -9,8 +9,16 @@ _sync() {
 
 TASKSERVER="${TASKSEVER:-"7aske.com"}"
 TASKSERVER_USER="${TASKSEVER_USER:-"nik"}"
+SERVER_CACHE="$HOME/.cache/tasksync_server_taskdata"
 
-SERVER_TASKDATA="$(ssh $TASKSERVER ". \$HOME/.profile; echo \$TASKDATA")"
+if [ -e "$SERVER_CACHE" ]; then
+	. "$SERVER_CACHE"
+else
+	echo "Fetching SERVER_TASKDATA"
+	SERVER_TASKDATA="$(ssh $TASKSERVER ". \$HOME/.profile; echo \$TASKDATA")"
+	echo "SERVER_TASKDATA=$SERVER_TASKDATA" > "$SERVER_CACHE"
+fi
+
 
 [ -z "$SERVER_TASKDATA" ] && exit 1
 [ -z "$TASKDATA" ]        && exit 1
