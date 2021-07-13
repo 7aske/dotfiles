@@ -142,3 +142,7 @@ ideavim:
 
 imwheel:
 	ln -sf "$(shell pwd)/.imwheelrc" "${HOME}/.imwheelrc"
+
+task:
+	./mklink task
+	./mklink taskrc

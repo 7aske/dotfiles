@@ -44,6 +44,10 @@ interval=60
 interval=60
 command=~/.local/bin/statusbar/battery BAT1
 
+[tasks]
+label=
+interval=60
+
 [cgs]
 label= 
 interval=60

@@ -17,3 +17,5 @@ __pycache__
 .config/ranger/plugins/*
 
 .config/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml
+
+.config/task/*.data

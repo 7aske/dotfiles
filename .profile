@@ -12,6 +12,10 @@ export PLAYER="spotify"
 export TERMINAL="st"
 export MAIL="evolution"
 
+# task
+export TASKDATA="$HOME/.config/task"
+export TASKRC="$HOME/.config/taskrc"
+
 # Path setup
 export PATH="$HOME/.local/bin":"$PATH"
 export PATH="$PATH":"$HOME/.local/share/cargo/bin"
