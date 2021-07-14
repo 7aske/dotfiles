@@ -1,21 +1,25 @@
 #!/usr/bin/env sh
 
 junk=(
-	"$HOME/.node_repl_history"
-	"$HOME/.python_history"
-	"$HOME/.xsession_errors*"
-	"$HOME/.viminfo"
-	"$HOME/.mysql_history"
-	"$HOME/.sudo_as_admin_successful"
-	"$HOME/.mongorc.json"
-	"$HOME/.lesshst"
-	"$HOME/.yarnrc"
-	"$HOME/.dir_colors"
-	"$HOME/.dbshell"
 	"$HOME/.NERDTreeBookmarks"
 	"$HOME/.angular-config.json"
+	"$HOME/.bash_history"
+	"$HOME/.dbshell"
+	"$HOME/.dir_colors"
 	"$HOME/.install4j"
+	"$HOME/.lesshst"
+	"$HOME/.mongorc.json"
+	"$HOME/.mysql_history"
+	"$HOME/.node_repl_history"
+	"$HOME/.psql_history"
+	"$HOME/.python_history"
+	"$HOME/.rnd"
+	"$HOME/.sudo_as_admin_successful"
+	"$HOME/.testcontainers.properties"
+	"$HOME/.viminfo"
 	"$HOME/.wget-hsts"
+	"$HOME/.xsession_errors*"
+	"$HOME/.yarnrc"
 )
 
 for j in ${junk[@]}; do
