@@ -1,7 +1,7 @@
 # [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
 export CODE="$HOME/.local/src"
-export PROFILE_SOURCED=1
+export PROFILE_SOURCED=$USER
 
 # Default programs
 export EDITOR="nvim"
