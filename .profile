@@ -1,6 +1,7 @@
 # [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
 export CODE="$HOME/.local/src"
+export PROFILE_SOURCED=1
 
 # Default programs
 export EDITOR="nvim"
@@ -17,9 +18,22 @@ export TASKDATA="$HOME/.config/task"
 export TASKRC="$HOME/.config/taskrc"
 
 # Path setup
-export PATH="$HOME/.local/bin":"$PATH"
-export PATH="$PATH":"$HOME/.local/share/cargo/bin"
-export PATH="$PATH":"$HOME/Android/Sdk/emulator"
+prepend_path () {
+	case ":$PATH:" in
+		*:"$1":*)
+			;;
+		*)
+			PATH="$1:${PATH:+$PATH}"
+	esac
+}
+
+prepend_path "$HOME/.local/share/cargo/bin"
+prepend_path "$HOME/Android/Sdk/emulator"
+prepend_path "$HOME/.local/bin"
+
+unset append_path
+
+export PATH
 
 export QT_QPA_PLATFORMTHEME="qt5ct"
 
@@ -41,4 +55,6 @@ export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 export CARGO_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/cargo"
 export GOPATH="${XDG_DATA_HOME:-$HOME/.local/share}/go"
 export ANSIBLE_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/ansible/ansible.cfg"
-
+export NODE_REPL_HISTORY="${XDG_CACHE_HOME}/.node_repl_history"
+export PSQL_HISTORY="${XDG_CACHE_HOME}/.psql_history"
+export MYSQL_HISTFILE="${XDG_CACHE_HOME}/.mysql_history"

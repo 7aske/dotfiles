@@ -5,6 +5,9 @@ export HISTSIZE=10000
 export LESSHISTSIZE=0
 export SAVEHIST=10000
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+if [ -z "$PROFILE_SOURCED" ]; then
+	[ -e "$HOME/.profile" ] && . "$HOME/.profile"
+fi
 [ -f "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
 
 #        _ _   
@@ -169,6 +172,7 @@ function code() {
 
 # bash specific setup
 if [ -n "$BASH" ]; then
+	export HISTFILE="$HOME/.cache/.bash_history"
     compl_code() {
         COMPREPLY=()
         local word="${COMP_WORDS[COMP_CWORD]}"

@@ -113,7 +113,6 @@ picom: compton
 
 zsh:
 	./mklink zsh
-	./mksource .zprofile
 	ln -sf "${HOME}/.config/zsh/.zshrc" "${HOME}/.zshrc"
 
 zathura:
