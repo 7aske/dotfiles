@@ -7,8 +7,8 @@ _sync() {
 	rsync -uptgzd --filter '+ /*.data' --filter '- /*/' "$1" "$2"
 }
 
-TASKSERVER="${TASKSEVER:-"7aske.com"}"
-TASKSERVER_USER="${TASKSEVER_USER:-"nik"}"
+TASKSERVER="${TASKSERVER:-"7aske.com"}"
+TASKSERVER_USER="${TASKSERVER_USER:-"nik"}"
 SERVER_CACHE="$HOME/.cache/tasksync_server_taskdata"
 
 [ ! -e "$(basename $SERVER_CACHE)" ] && mkdir "$(basename "$SERVER_CACHE")"
