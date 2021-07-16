@@ -11,7 +11,7 @@ TASKSERVER="${TASKSERVER:-"7aske.com"}"
 TASKSERVER_USER="${TASKSERVER_USER:-"nik"}"
 SERVER_CACHE="$HOME/.cache/tasksync_server_taskdata"
 
-[ ! -e "$(basename $SERVER_CACHE)" ] && mkdir "$(basename "$SERVER_CACHE")"
+[ ! -e "$(dirname $SERVER_CACHE)" ] && mkdir "$(dirname "$SERVER_CACHE")"
 
 if [ -e "$SERVER_CACHE" ]; then
 	. "$SERVER_CACHE"
