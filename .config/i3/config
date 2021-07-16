@@ -466,6 +466,7 @@ for_window [class="Xfce4-power-manager-settings"] floating enable, move position
 for_window [class="Gnome-font-viewer"] floating enable, move position center
 for_window [title="calc"] floating enable, move position center, sticky enable
 for_window [class="mpv"] floating enable, move position center
+for_window [class="epicgameslauncher.exe"] floating enable, resize set 1280 820, move position center
 
 for_window [class="weather_floating"] floating enable, resize set 1280 820, move position center
 for_window [class="floating_popup"] floating enable, resize set 1280 768, move position center
