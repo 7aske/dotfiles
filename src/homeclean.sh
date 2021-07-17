@@ -24,7 +24,7 @@ junk=(
 	"$HOME/.sudo_as_admin_successful"
 	"$HOME/.testcontainers.properties"
 	"$HOME/.tig_history"
-	"$HOME/.nviminfo"
+	"$HOME/.nvimlog"
 	"$HOME/.wget-hsts"
 	"$HOME/.xsession_errors*"
 	"$HOME/.yarnrc"
