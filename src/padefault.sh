@@ -39,7 +39,16 @@ padef_toggle() {
 
 padef_volume() {
 	pactl set-sink-volume "$default_sink" "$1"
-	notify-send -i audio-speakers  "volume" " $1 ($(getvol)%)" -t 500
+	icon="audio-volume-low"
+	vol="$(getvol)"
+	if [ "$vol" -ge 66 ]; then
+		icon="audio-volume-high"
+	elif [ "$vol" -ge 33 ]; then
+		icon="audio-volume-medium"
+	elif [ "$vol" -eq 0 ]; then
+		icon="audio-off"
+	fi
+	notify-send -i $icon -h "int:value:$vol" -h "string:synchronous:volume"  "volume" " $1 ($(vol)%)" -t 500
 	exit 0
 }
 
