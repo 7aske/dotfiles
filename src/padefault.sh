@@ -7,7 +7,9 @@ _usage() {
 	echo "usage: padefault <command> [args]"
 	echo "commands:"
 	echo "    toggle          cycles default audio device"
-	echo "    mute            mutes default device"
+	echo "    mute            toggle mute on default device"
+	echo "    mute-all        toggle mute on all outputs"
+	echo "    mute-all-src    toggle mute on all inputs"
 	echo "    volume [args]   sets default audio device volume"
 	exit 0
 }
@@ -42,16 +44,38 @@ padef_volume() {
 }
 
 padef_mute() {
-	pactl set-sink-mute "$default_sink"
+	pactl set-sink-mute "$default_sink" toggle
 	notify-send "volume" "toggle mute" -t 500
 	exit 0
 }
 
+_is_any_muted() {
+	target="${1:-"sink"}"
+	for mute in $(pactl list "${target}s" | grep Mute | awk '{print $2}'); do
+		if [ "$mute" == "yes" ]; then
+			return 0
+		fi
+	done
+	return 1
+
+}
+
+pa_mute_all() {
+	target="${1:-"sink"}"
+	_is_any_muted "$target"
+	action="$(($?))"
+	for sink in $(pactl list "${target}s" short | awk '{print $1}'); do
+		pactl "set-${target}-mute" "$sink" $action
+	done
+}
+
 case "$1" in 
-	toggle|t) padef_toggle ;;
-	volume|vol|v) padef_volume "$2" ;;
-	mute|m) padef_mute ;;
-	-h|help|h) _usage ;;
-	*) padef_toggle ;;
+	toggle|t)          padef_toggle      ;;
+	volume|vol|v)      padef_volume "$2" ;;
+	mute|m)            padef_mute        ;;
+	mute-all|ma)       pa_mute_all       ;;
+	mute-all-src|mas)  pa_mute_all source;;
+	-h|help|h)         _usage            ;;
+	*)                 padef_toggle      ;;
 esac
 
