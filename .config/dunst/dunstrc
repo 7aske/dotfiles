@@ -151,7 +151,7 @@
 	corner_radius=0
 
     # Paths to default icons.
-    icon_path = /usr/share/icons/ePapirus/32x32/status/:/usr/share/icons/ePapirus/64x64/devices/:/usr/share/icons/ePapirus/64x64/apps/
+    icon_path = /usr/share/icons/ePapirus/32x32/status/:/usr/share/icons/ePapirus/64x64/devices/:/usr/share/icons/ePapirus/64x64/apps/:/usr/share/icons/ePapirus/22x22/actions/:/usr/share/icons/ePapirus/24x24/panel/
 
     # Limit icons size.
     max_icon_size=128
