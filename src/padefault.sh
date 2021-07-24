@@ -45,7 +45,7 @@ padef_volume() {
 
 padef_mute() {
 	pactl set-sink-mute "$default_sink" toggle
-	notify-send "volume" "toggle mute" -t 500
+	notify-send "volume" "toggle mute\n$default_sink" -t 500
 	exit 0
 }
 
@@ -67,6 +67,7 @@ pa_mute_all() {
 	for sink in $(pactl list "${target}s" short | awk '{print $1}'); do
 		pactl "set-${target}-mute" "$sink" $action
 	done
+	notify-send "volume" "$target toggle mute" -t 1000
 }
 
 case "$1" in 
