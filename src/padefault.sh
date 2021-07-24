@@ -26,10 +26,10 @@ padef_toggle() {
 			if [ "${#sinks[@]}" == "$index" ]
 			then
 				pactl set-default-sink "$(echo "${sinks[0]}" | cut -d ':' -f2)"
-				notify-send 'Default Audio Device' "${names[0]}" -t 1500
+				notify-send -i audio-speakers 'Default Audio Device' "${names[0]}" -t 1500
 			else
 				pactl set-default-sink "$(echo "${sinks[$index]}" | cut -d ':' -f2)"
-				notify-send 'Default Audio Device' "${names[$index]}" -t 1500
+				notify-send -i audio-speakers 'Default Audio Device' "${names[$index]}" -t 1500
 			fi
 		fi
 
@@ -39,13 +39,17 @@ padef_toggle() {
 
 padef_volume() {
 	pactl set-sink-volume "$default_sink" "$1"
-	notify-send  "volume" " $1 ($(getvol)%)" -t 500
+	notify-send -i audio-speakers  "volume" " $1 ($(getvol)%)" -t 500
 	exit 0
 }
 
 padef_mute() {
 	pactl set-sink-mute "$default_sink" toggle
-	notify-send "volume" "toggle mute\n$default_sink" -t 500
+	icon="audio-on"
+	if [ $(pactl list sinks | grep "Name: $default_sink" -A6 | tail -1 | awk '{print $2}')"" == "yes" ]; then
+		icon="audio-off"
+	fi
+	notify-send -i "$icon" "volume" "toggle mute\n$default_sink" -t 1000
 	exit 0
 }
 
@@ -67,7 +71,11 @@ pa_mute_all() {
 	for sink in $(pactl list "${target}s" short | awk '{print $1}'); do
 		pactl "set-${target}-mute" "$sink" $action
 	done
-	notify-send "volume" "$target toggle mute" -t 1000
+	icon="audio-speakers"
+	if [ "$target" == "source" ]; then
+		icon="audio-recorder"
+	fi
+	notify-send --hint=int:transient:1 -i "$icon" "volume" "toggle mute" -t 1000
 }
 
 case "$1" in 
