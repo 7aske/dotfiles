@@ -48,7 +48,7 @@ padef_volume() {
 	elif [ "$vol" -eq 0 ]; then
 		icon="audio-off"
 	fi
-	notify-send -i $icon -h "int:value:$vol" -h "string:synchronous:volume"  "volume" " $1 ($(vol)%)" -t 500
+	notify-send -i $icon -h "int:value:$vol" -h "string:synchronous:volume"  "volume" " $1 ($vol%)" -t 500
 	exit 0
 }
 
