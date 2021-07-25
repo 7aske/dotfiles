@@ -17,6 +17,9 @@ dunst \
     -cfr "${color4}" \
     -cf  "${color8}" \
     -bf  "${color4}" \
+	-lh  "${color4}" \
+	-nh  "${color3}" \
+	-ch  "${color1}" \
     -separator_color "${color4}" \
     -conf ~/.config/dunst/dunstrc &
 
