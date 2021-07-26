@@ -23,9 +23,8 @@ if [ $sources -eq $muted ] && [ $muted -gt 0 ]; then
 	icon="$muted_icon"
 fi
 
-
-
 if [ -z "$inputs" ]; then
-	color="$color7"
+	exit 0
 fi
+
 echo "<span color='$color'>$icon</span>"
