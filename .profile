@@ -18,6 +18,8 @@ export MAIL="evolution"
 export TASKDATA="$HOME/.config/task"
 export TASKRC="$HOME/.config/taskrc"
 
+export FZF_CODE=1
+
 # Path setup
 prepend_path () {
 	case ":$PATH:" in
