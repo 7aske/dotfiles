@@ -411,34 +411,37 @@ assign [class="(?i)discord"] $ws9
 assign [class="(?i)lightcord"] $ws9
 assign [class="(?i)skype"] $ws9
 assign [class="(?i)viber"] $ws9
-assign [class="zoom"] zoom
 assign [title="WhatsApp"] $ws9
+assign [class="zoom"] zoom
 assign [title="World of Warcraft"] w
 assign [class="battle.net.exe"] w
 assign [class="Chia Blockchain"] c
 
 # Open specific applications in floating mode
-for_window [class="Arandr"] floating enable,resize set 800 600, move position center
 for_window [class="(?i)GParted"] floating enable, border normal
 for_window [class="(?i)System-config-printer.py"] floating enable, border normal
 for_window [class="(?i)anydesk.bin"] floating enable, border normal
+for_window [class="(?i)blueman-manager"] floating enable, resize set 1024 720, move position center
 for_window [class="(?i)cantata"] floating enable, resize set 1024 768, move position center
 for_window [class="(?i)feh"] fullscreen enable
 for_window [class="(?i)gnome-calculator"] floating enable
+for_window [class="(?i)gnome-control-center"] floating enable, resize set 1280 820, move position center
 for_window [class="(?i)gnome-disks"] floating enable
+for_window [class="(?i)gnome-tweaks"] floating enable, resize set 1280 820, move position center
 for_window [class="(?i)jetbrains-toolbox"] floating enable, sticky enable
-for_window [class="(?i)lutris"] floating enable, move position center
 for_window [class="(?i)nm-connection-editor"] floating enable, border normal
 for_window [class="(?i)spotify"] floating enable, resize set 1280 768, move position center
 for_window [class="(?i)sxiv"] fullscreen enable
 for_window [class="(?i)vncviewer"] move position center
+for_window [class="Arandr"] floating enable,resize set 800 600, move position center
 for_window [class="Baobab"] floating enable resize set 1024 720, move position center
 for_window [class="Deluge"] floating enable move position center
+for_window [class="Evolution"] floating enable, resize set 1333 768, move position center
+for_window [class="Gnome-font-viewer"] floating enable, move position center
 for_window [class="Kvantum Manager"] floating enable, move position center
 for_window [class="Lightdm-settings"] floating enable
 for_window [class="Lxappearance"] floating enable, move position center, sticky enable, border normal
 for_window [class="Mailspring"] floating enable, resize set 1333 768, move position center
-for_window [class="Evolution"] floating enable, resize set 1333 768, move position center
 for_window [class="Manjaro Settings Manager"] floating enable, border normal
 for_window [class="Manjaro-hello"] floating enable
 for_window [class="Nitrogen"] floating enable, sticky enable, border normal
@@ -448,42 +451,40 @@ for_window [class="Pavucontrol"] floating enable, resize set 800 600, move posit
 for_window [class="Qtconfig-qt4"] floating enable, sticky enable, border normal
 for_window [class="Simple-scan"] floating enable, border normal
 for_window [class="Timeset-gui"] floating enable, border normal
+for_window [class="Transmission"] floating enable, move position center
 for_window [class="Xfburn"] floating enable
-for_window [class="(?i)blueman-manager"] floating enable, resize set 1024 720, move position center
+for_window [class="Xfce4-power-manager-settings"] floating enable, move position center
+for_window [class="Xfce4-settings-manager"] floating enable, move position center
+for_window [class="Yad"] floating enable, move position center
 for_window [class="fpakman"] floating enable
 for_window [class="java-lang-Thread"] floating enable, move position center
+for_window [class="mpv"] floating enable, move position center
 for_window [class="octopi"] floating enable
 for_window [class="qt5ct"] floating enable, sticky enable, border normal
 for_window [title=".*Bitwarden.*"] floating enable, resize set 1280 768, move position center
 for_window [title=".*Emulator.*"] floating enable
-for_window [title="Steam"] floating enable, resize set 1280 768, move position center
-for_window [class="Steam"] floating enable, resize set 1280 768, move position center
 for_window [title="File Transfer*"] floating enable
-for_window [title="Lutris"] floating enable, move position center
 for_window [title="alsamixer"] floating enable
+for_window [title="calc"] floating enable, move position center, sticky enable
 for_window [title="i3_help"] floating enable, sticky enable, border normal
 for_window [title="win0"] floating enable, move position center
-for_window [class="Transmission"] floating enable, move position center
-for_window [class="Yad"] floating enable, move position center
-for_window [class="Xfce4-settings-manager"] floating enable, move position center
-for_window [class="Xfce4-power-manager-settings"] floating enable, move position center
-for_window [class="Gnome-font-viewer"] floating enable, move position center
-for_window [title="calc"] floating enable, move position center, sticky enable
-for_window [class="mpv"] floating enable, move position center
-for_window [class="epicgameslauncher.exe"] floating enable, resize set 1280 820, move position center
-for_window [class="(?i)gnome-control-center"] floating enable, resize set 1280 820, move position center
-for_window [class="(?i)gnome-tweaks"] floating enable, resize set 1280 820, move position center
 
-for_window [class="weather_floating"] floating enable, resize set 1280 820, move position center
+# utility
 for_window [class="floating_popup"] floating enable, resize set 1280 768, move position center
 for_window [class="fullscreen"] fullscreen enable
 for_window [class="newsboat_float"] floating enable, resize set 1280 768, move position center
+for_window [class="weather_floating"] floating enable, resize set 1280 820, move position center
+
+# games
 for_window [title="World of Warcraft"] layout tabbed
+for_window [class="(?i)steam"] floating enable, resize set 1280 768, move position center
+for_window [title="(?i)lutris"] floating enable, move position center
+for_window [class="epicgameslauncher.exe"] floating enable, resize set 1280 820, move position center
 
 # virtual machines
-for_window [class="VirtualBox Manager"] floating disable, border 2
-for_window [class="VirtualBox Machine"] floating disable, border none, move container to workspace v
 for_window [class="VirtualBox Machine" title="(?i)^win"] move container to workspace w
+for_window [class="VirtualBox Machine"] floating disable, border none, move container to workspace v
+for_window [class="VirtualBox Manager"] floating disable, border 2
 
 #            _                                                          _
 #  _ __ ___ (_)___  ___    ___ ___  _ __ ___  _ __ ___   __ _ _ __   __| |___
