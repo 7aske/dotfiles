@@ -93,7 +93,7 @@ case "$1" in
 	mute|m)            padef_mute        ;;
 	mute-all|ma)       pa_mute_all       ;;
 	mute-all-src|mas)  pa_mute_all source;;
-	-h|help|h)         _usage            ;;
+	-h|help|--help|h)         _usage            ;;
 	*)                 padef_toggle      ;;
 esac
 
