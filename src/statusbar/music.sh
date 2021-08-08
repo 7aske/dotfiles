@@ -36,11 +36,15 @@ case $BLOCK_BUTTON in
     ;;
 4)
     playerctl "$PLAYER_ARG" volume "0.05+"
-    notify-send "$NOTIFY_ARGS" -i "$PLAYER" "playerctl" "volume +5%"
+	vol="$(playerctl "$PLAYER_ARG" volume)"
+	vol=$(echo "$vol * 100" | bc -l)
+    notify-send "$NOTIFY_ARGS" -h "int:value:$vol" -h "string:synchronous:volume" -i "$PLAYER" "playerctl" "volume +5%"
     ;;
 5)
     playerctl "$PLAYER_ARG" volume "0.05-"
-    notify-send "$NOTIFY_ARGS" -i "$PLAYER" "playerctl" "volume -5%"
+	vol="$(playerctl "$PLAYER_ARG" volume)"
+	vol=$(echo "$vol * 100" | bc -l)
+    notify-send "$NOTIFY_ARGS" -h "int:value:$vol" -h "string:synchronous:volume" -i "$PLAYER" "playerctl" "volume -5%"
     ;;
 esac
 
