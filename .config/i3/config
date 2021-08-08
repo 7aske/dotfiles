@@ -78,6 +78,9 @@ bindsym $mod+slash  exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/m
 bindsym $mod+comma  exec --no-startup-id BLOCK_BUTTON=3 ~/.local/bin/statusbar/music
 bindsym $mod+Shift+period exec --no-startup-id BLOCK_BUTTON=4 ~/.local/bin/statusbar/music
 bindsym $mod+Shift+comma  exec --no-startup-id BLOCK_BUTTON=5 ~/.local/bin/statusbar/music
+bindsym $mod+Mod1+period  exec --no-startup-id padefault vol +5%
+bindsym $mod+Mod1+slash   exec --no-startup-id padefault mute-all
+bindsym $mod+Mod1+comma   exec --no-startup-id padefault vol -5%
 
 # Pulse Audio controls
 # 7aske-scripts
