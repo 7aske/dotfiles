@@ -15,25 +15,47 @@ _usage() {
 }
 
 padef_toggle() {
-	sinks=($(pactl list sinks | grep Name: | cut -d ' ' -f2 | grep -n ''))
-	names=($(pacmd list-sinks | grep alsa.name | cut -d '=' -f2 | tr -d ' "'))
-	for sink in "${sinks[@]}"
-	do
-		name=$(echo "$sink" | cut -d ':' -f2)
-		index=$(echo "$sink" | cut -d ':' -f1)
-		if [ "$name" == "$default_sink" ]
-		then
-			if [ "${#sinks[@]}" == "$index" ]
-			then
-				pactl set-default-sink "$(echo "${sinks[0]}" | cut -d ':' -f2)"
-				notify-send -i audio-speakers 'Default Audio Device' "${names[0]}" -t 1500
-			else
-				pactl set-default-sink "$(echo "${sinks[$index]}" | cut -d ':' -f2)"
-				notify-send -i audio-speakers 'Default Audio Device' "${names[$index]}" -t 1500
-			fi
-		fi
+	declare -A sinks
+	index=0
+	while IFS= read -r line; do
+		sinks+=([$index]="$(echo $line | cut -d ':' -f2)")
+		index=$((index + 1))
+	done <<< "$(pactl list sinks | grep Name: | cut -d ' ' -f2 | grep -n '')"
 
+	declare -A names
+	index=0
+	while IFS= read -r line; do
+		names+=([$index]="$line")
+		index=$((index + 1))
+	done <<< "$(pactl list sinks | grep Description: | cut -d ':' -f2 | sed -e 's/^[ \t]*//')"
+
+	output=""
+
+	next_index=-1
+	for index in "${!sinks[@]}"; do
+		name=${sinks[$index]}
+		if [ "$name" == "$default_sink" ]; then
+			next_index="$(((index + 1) % ${#sinks[@]}))"
+			break;
+		fi
 	done
+
+	if [ $next_index -eq -1 ]; then
+		exit 1
+	fi
+
+	pactl set-default-sink "${sinks[$next_index]}"
+
+	for index in "${!sinks[@]}"; do
+		if [ "$next_index" == "$index" ]; then
+			output="$output[x] ${names[$index]}\n"
+		else
+			output="$output[ ] ${names[$index]}\n"
+		fi
+	done
+
+	printf "$output"
+	notify-send -i audio-speakers 'Default Audio Device' "$output" -t 1500
 	exit 0
 }
 
