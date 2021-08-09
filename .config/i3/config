@@ -167,7 +167,7 @@ bindsym $mod+Menu     exec --no-startup-id eval "$(xclip -sel c -o)"
 bindsym $mod+F2       exec --no-startup-id kblang -t && notify-send "Keyboard Layout" "Toggle"
 bindsym $mod+Shift+F2 exec --no-startup-id kblang -fn '$dmenu_font'
 # 7aske-scripts
-bindsym $mod+Home     exec --no-startup-id google-search
+bindsym XF86Search exec --no-startup-id google-search
 
 bindsym $mod+Tab      exec --no-startup-id rofi -show window
 
@@ -175,6 +175,9 @@ bindsym $mod+Ctrl+Shift+semicolon    exec --no-startup-id dmenu -b -p ":" -fn '$
 # sticky key fix
 bindsym $mod+F12    exec --no-startup-id xdotool keyup Shift_L Shift_R Control_L Control_R Alt_L Alt_R Super_L Super_R Hyper_L Hyper_R Caps_Lock 204 205 206 207
 
+bindsym $mod+Shift+Home   exec --no-startup-id desk goto
+bindsym $mod+Home         exec --no-startup-id desk stand
+bindsym $mod+End          exec --no-startup-id desk sit
 
 # layout toggling mode
 set $mode_codeopen codeopen: (t)erm (n)vim (v)scode (i)dea (c)lion (g)oland (p)ycharm (w)ebstorm (s)studio (j)etbrains

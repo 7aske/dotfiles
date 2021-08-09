@@ -94,6 +94,7 @@ alias lcl='builtin cd $HOME/.local&& ls'
 alias tmp='builtin cd $HOME/.local/tmp&& ls'
 alias chgs='cd "$(codegs)" && echo -e "\ngit status -s\n"; git status -s'
 alias vicfg='vimcfg'
+alias srcvenv='source venv/bin/activate'
 # misc
 alias tmux='tmux -f "$HOME/.config/tmux/.tmux.conf"'
 # ls
