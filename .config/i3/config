@@ -175,9 +175,11 @@ bindsym $mod+Ctrl+Shift+semicolon    exec --no-startup-id dmenu -b -p ":" -fn '$
 # sticky key fix
 bindsym $mod+F12    exec --no-startup-id xdotool keyup Shift_L Shift_R Control_L Control_R Alt_L Alt_R Super_L Super_R Hyper_L Hyper_R Caps_Lock 204 205 206 207
 
-bindsym $mod+Shift+Home   exec --no-startup-id desk goto
+bindsym $mod+Shift+Home   exec --no-startup-id desk move-to
 bindsym $mod+Home         exec --no-startup-id desk stand
 bindsym $mod+End          exec --no-startup-id desk sit
+bindsym $mod+Mod1+Home    exec --no-startup-id desk up 50
+bindsym $mod+Mod1+End     exec --no-startup-id desk down 50
 
 # layout toggling mode
 set $mode_codeopen codeopen: (t)erm (n)vim (v)scode (i)dea (c)lion (g)oland (p)ycharm (w)ebstorm (s)studio (j)etbrains

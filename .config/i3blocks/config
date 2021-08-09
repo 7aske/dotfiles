@@ -8,6 +8,7 @@ markup=pango
 #interval=persist
 #align=left
 
+
 [music]
 align=left
 label=
@@ -60,6 +61,12 @@ interval=60
 
 [services]
 interval=10
+
+[desk]
+label=異 
+command=desk mon-last
+interval=persist
+align=left
 
 [notify-status]
 interval=5
