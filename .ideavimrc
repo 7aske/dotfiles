@@ -1,13 +1,4 @@
-
-call plug#begin('~/.config/nvim/plugged')
-	Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-	Plug 'junegunn/fzf.vim'
-	Plug 'andymass/vim-matchup'
-	Plug 'godlygeek/tabular'
-	Plug 'kien/ctrlp.vim'
-call plug#end()
-
-
+" Basic
 let mapleader=" "
 set backspace=indent,eol,start
 set colorcolumn=80
@@ -19,23 +10,23 @@ set noshowmode
 set nowrap
 set nu rnu
 set showcmd
-set smartcase
+set ignorecase
 set smartindent
-set FZF
+set scrolloff=8
 
+" Plugins
 set surround
+set matchup
+set tabular
 set highlightedyank
 let g:highlightedyank_highlight_duration = '250'
 let g:highlightedyank_highlight_color = 'rgba(163, 190, 140, 155)'
 
-set matchup
-set tabular
-
 " Copy to clipboard
-vnoremap  <leader>y   "+y
-nnoremap  <leader>Y   "+yg_
-nnoremap  <leader>y   "+y
-nnoremap  <leader>yy  "+yy
+vnoremap <leader>y   "+y
+nnoremap <leader>Y   "+yg_
+nnoremap <leader>y   "+y
+nnoremap <leader>yy  "+yy
 
 " Paste from clipboard
 nnoremap <leader>p    "+p
@@ -43,33 +34,33 @@ nnoremap <leader>P    "+P
 vnoremap <leader>p    "+p
 vnoremap <leader>P    "+P
 
-
-nmap gD             <Action>(GotoImplementation)
-nmap gd             <Action>(GotoDeclaration)
-nmap gf             <Action>(GotoFile)
-nmap g[             <Action>(GotoPreviousError)
-nmap g]             <Action>(GotoNextError)
-nmap <space>r viw   <Action>(Replace)
-vmap <space>r       <Action>(Replace)
-vmap <c-n>          <Action>(SelectNextOccurrence)
+"nmap gf             <Action>(GotoFile)
+map  <C-p>          <Action>(GotoFile)
+map  <leader>b      <Action>(ToggleLineBreakpoint)
+map  <leader>gN     <Action>(VcsShowPrevChangeMarker)
+map  <leader>ga     <Action>(Annotate)
+map  <leader>gn     <Action>(VcsShowNextChangeMarker)
+map  <leader>gu     <Action>(Vcs.RollbackChangedLines)
+map  <S-Space>      <Action>(GotoNextError)
+nmap <c-n>          <Action>(SelectNextOccurrence)
 nmap <c-w>q         <Action>(CloseEditor)
 nmap <c-w>w         <Action>(Switcher)
-map  <space><space> <Action>(SearchEverywhere)
-map <leader>gu      <Action>(Vcs.RollbackChangedLines)
-map <leader>gn      <Action>(VcsShowNextChangeMarker)
-map <leader>gN      <Action>(VcsShowPrevChangeMarker)
+nmap <leader>G      <Action>(Generate)
+nmap <leader>R      <Action>(RefactoringMenu)
+nmap <leader>a      <Action>(ShowIntentionActions)
+nmap <leader>gd     <Action>(QuickJavaDoc)
+nmap <leader>r      <Action>(RenameElement)
+nmap gD             <Action>(GotoImplementation)
+nmap g[             <Action>(GotoPreviousError)
+nmap g]             <Action>(GotoNextError)
+nmap gd             <Action>(GotoDeclaration)
 
-command Goya         action ToggleDistractionFreeMode
-command W            action Switcher
-command Diff         action LocalHistory.ShowHistory
-command Gdiffb       action Vcs.ShowHistoryForBlock
-command Wrap         action EditorToggleUseSoftWraps
+command Goya        action ToggleDistractionFreeMode
+command W           action Switcher
+command Diff        action LocalHistory.ShowHistory
+command Gdiffb      action Vcs.ShowHistoryForBlock
+command Wrap        action EditorToggleUseSoftWraps
 
-nnoremap <leader>" ea"<Esc>Bi"<Esc>
-nnoremap <leader>' ea'<Esc>Bi'<Esc>
-nnoremap <leader>` ea`<Esc>Bi`<Esc>
-
-map <leader>b <Action>(ToggleLineBreakpoint)
 
 " Do incremental searching.
 set incsearch

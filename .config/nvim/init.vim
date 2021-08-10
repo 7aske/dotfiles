@@ -67,7 +67,7 @@ set number
 set path+=**
 set showcmd
 set signcolumn=yes:2
-set smartcase
+set ignorecase
 set smartindent
 set t_Co=256
 set updatetime=50
