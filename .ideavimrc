@@ -1,4 +1,12 @@
-" source ~/.local/src/sh/dotfiles/.config/nvim/init.vim
+
+call plug#begin('~/.config/nvim/plugged')
+	Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+	Plug 'junegunn/fzf.vim'
+	Plug 'andymass/vim-matchup'
+	Plug 'godlygeek/tabular'
+	Plug 'kien/ctrlp.vim'
+call plug#end()
+
 
 let mapleader=" "
 set backspace=indent,eol,start
@@ -13,6 +21,15 @@ set nu rnu
 set showcmd
 set smartcase
 set smartindent
+set FZF
+
+set surround
+set highlightedyank
+let g:highlightedyank_highlight_duration = '250'
+let g:highlightedyank_highlight_color = 'rgba(163, 190, 140, 155)'
+
+set matchup
+set tabular
 
 " Copy to clipboard
 vnoremap  <leader>y   "+y
@@ -27,19 +44,20 @@ vnoremap <leader>p    "+p
 vnoremap <leader>P    "+P
 
 
-nmap gD             :action GotoImplementation<CR>
-nmap gd             :action GotoDeclaration<CR>
-nmap gf             :action GotoFile<CR>
-nmap g[             :action GotoPreviousError<CR>
-nmap g]             :action GotoNextError<CR>
-
-nmap <space>r viw   :action Replace<CR>
-vmap <space>r       :action Replace<CR>
-
-vmap <c-n>          :action SelectNextOccurrence<CR>
-nmap <c-w>q         :action CloseEditor<CR>
-nmap <c-w>w         :action Switcher<CR>
-map  <space><space> :action SearchEverywhere<CR>
+nmap gD             <Action>(GotoImplementation)
+nmap gd             <Action>(GotoDeclaration)
+nmap gf             <Action>(GotoFile)
+nmap g[             <Action>(GotoPreviousError)
+nmap g]             <Action>(GotoNextError)
+nmap <space>r viw   <Action>(Replace)
+vmap <space>r       <Action>(Replace)
+vmap <c-n>          <Action>(SelectNextOccurrence)
+nmap <c-w>q         <Action>(CloseEditor)
+nmap <c-w>w         <Action>(Switcher)
+map  <space><space> <Action>(SearchEverywhere)
+map <leader>gu      <Action>(Vcs.RollbackChangedLines)
+map <leader>gn      <Action>(VcsShowNextChangeMarker)
+map <leader>gN      <Action>(VcsShowPrevChangeMarker)
 
 command Goya         action ToggleDistractionFreeMode
 command W            action Switcher
@@ -50,3 +68,11 @@ command Wrap         action EditorToggleUseSoftWraps
 nnoremap <leader>" ea"<Esc>Bi"<Esc>
 nnoremap <leader>' ea'<Esc>Bi'<Esc>
 nnoremap <leader>` ea`<Esc>Bi`<Esc>
+
+map <leader>b <Action>(ToggleLineBreakpoint)
+
+" Do incremental searching.
+set incsearch
+
+" Don't use Ex mode, use Q for formatting.
+map Q gq
