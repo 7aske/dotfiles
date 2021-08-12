@@ -38,6 +38,9 @@ command=~/.local/bin/statusbar/disk / 
 interval=60
 command=~/.local/bin/statusbar/disk /home 
 
+[launch]
+interval=60
+
 [weather]
 interval=60
 
@@ -62,11 +65,11 @@ interval=60
 [services]
 interval=10
 
-[desk]
-label=異 
-command=desk mon-last
-interval=persist
-align=left
+#[desk]
+#label= 
+#ommand=desk mon-last
+#interval=persist
+#align=left
 
 [notify-status]
 interval=5
