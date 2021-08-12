@@ -11,4 +11,4 @@ case $BLOCK_BUTTON in
 	3) show_weather ;;
 esac
 
-echo "$(curl wttr.in/?format=%t | iconv -c)"
+echo "$(curl wttr.in/?format=%T%c%t | cut -c 14- | iconv -c)"
