@@ -15,13 +15,23 @@ launch_data="$(curl -s "$api_url")"
 launches=$(echo "$launch_data" | jq ".count")
 launches_today=0
 
-IFS=$'\n'
-for launch_date in $(echo "$launch_data" | jq -jr '.result[] | .date_str, "\n"'); do
-	if [ "$launch_date" == "$today" ]; then
-		launches_today=$((launches_today+1))
-	fi
+for index in $(seq 0 $((launches-1))); do
+	while IFS='|' read launch_date t0 win_open; do
+		if [ "$launch_date" != "$today" ]; then
+			break
+		fi
+		timestamp="$(date -d "$launch_date 12PM" +"%s")"
+		if [ "$t0" != "null" ]; then
+			timestamp="$(date -d "$t0" +"%s")"
+		elif [ "$win_open" != null ]; then 
+			timestamp="$(date -d "$win_open" +"%s")"
+		fi
+
+		if [ $timestamp -gt $(date +"%s") ]; then
+			((launches_today++))
+		fi
+	done <<<$(echo "$launch_data" | jq -jr ".result[$index] | .date_str, \"|\", .t0, \"|\", .win_open, \"|\", \"\n\"")
 done
-IFS=
 
 if [ "$launches" -eq 0 ] || [ "$launches" = "null" ]; then
 	exit 0
