@@ -26,10 +26,10 @@ for i in "${!indices[@]}"; do
 
             if [ "$name" == "${idsinks[$i]}" ]; then
                 if [ "${#sinks[@]}" == "$index" ]; then
-                    notify-send "Switched Audio Output" "$wname -> ${names[0]}" -t 2000
+                    notify-send -a padefault "Switched Audio Output" "$wname -> ${names[0]}" -t 2000
                     pacmd move-sink-input "${indices[$i]}" "$(echo "${sinks[0]}" | cut -d ':' -f2)"
                 else
-                    notify-send "Switched Audio Output" "$wname -> ${names[$index]}" -t 2000
+                    notify-send -a padefault "Switched Audio Output" "$wname -> ${names[$index]}" -t 2000
                     pacmd move-sink-input "${indices[$i]}" "$(echo "${sinks[$index]}" | cut -d ':' -f2)"
                 fi
             fi

@@ -55,7 +55,7 @@ padef_toggle() {
 	done
 
 	printf "$output"
-	notify-send -i audio-speakers 'Default Audio Device' "$output" -t 1500
+	notify-send -a padefault -i audio-speakers 'Default Audio Device' "$output" -t 1500
 	exit 0
 }
 
@@ -70,7 +70,7 @@ padef_volume() {
 	elif [ "$vol" -eq 0 ]; then
 		icon="audio-off"
 	fi
-	notify-send -i $icon -h "int:value:$vol" -h "string:synchronous:volume"  "volume" " $1" -t 500
+	notify-send -a padefault -i $icon -h "int:value:$vol" -h "string:synchronous:volume"  "volume" " $1" -t 500
 	exit 0
 }
 
@@ -80,7 +80,7 @@ padef_mute() {
 	if [ $(pactl list sinks | grep "Name: $default_sink" -A6 | tail -1 | awk '{print $2}')"" == "yes" ]; then
 		icon="audio-off"
 	fi
-	notify-send -i "$icon" "volume" "toggle mute\n$default_sink" -t 1000
+	notify-send -a padefault -i "$icon" "volume" "toggle mute\n$default_sink" -t 1000
 	exit 0
 }
 
@@ -106,7 +106,7 @@ pa_mute_all() {
 	if [ "$target" == "source" ]; then
 		icon="audio-recorder"
 	fi
-	notify-send --hint=int:transient:1 -i "$icon" "volume" "toggle mute" -t 1000
+	notify-send -a padefault --hint=int:transient:1 -i "$icon" "volume" "toggle mute" -t 1000
 }
 
 case "$1" in 
@@ -115,7 +115,7 @@ case "$1" in
 	mute|m)            padef_mute        ;;
 	mute-all|ma)       pa_mute_all       ;;
 	mute-all-src|mas)  pa_mute_all source;;
-	-h|help|--help|h)         _usage            ;;
+	-h|help|--help|h)  _usage            ;;
 	*)                 padef_toggle      ;;
 esac
 
