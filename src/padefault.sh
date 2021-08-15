@@ -6,12 +6,117 @@ default_sink=$(pacmd info | grep "Default sink name:" | cut -d ' ' -f4)
 _usage() {
 	echo "usage: padefault <command> [args]"
 	echo "commands:"
+	echo "    toggle-focus    cycles focused window audio device"
 	echo "    toggle          cycles default audio device"
 	echo "    mute            toggle mute on default device"
 	echo "    mute-all        toggle mute on all outputs"
 	echo "    mute-all-src    toggle mute on all inputs"
 	echo "    volume [args]   sets default audio device volume"
 	exit 0
+}
+
+padef_toggle_focus() {
+	declare -A application_ids # application pid -> sink number
+	declare -A application_idx # application pid -> sink index
+	declare -A application_ico # application pid -> icon
+	while IFS= read -r line; do
+		while IFS=' ' read -a arr; do
+			application_ids+=([${arr[0]}]=${arr[1]})
+			application_idx+=([${arr[0]}]=${arr[2]})
+			echo ${arr[@]}
+		done <<< $(echo $line)
+	done <<< "$(pacmd list-sink-inputs | awk '
+		{
+			if ($1 == "sink:") {
+				sink=$2
+			} else if ($1 == "application.process.id") {
+				pid=substr($3, 2, length($3) - 2)
+			} else if ($1 == "index:") {
+				idx=$2
+			} 
+
+			if (sink != "" && pid != "" && idx != "") { 
+				print pid " " sink " " idx
+				pid=""
+				sink=""
+				idx=""
+			}
+		}')" # outputs pid sink pairs
+
+	declare -a sinks # sink short names for move-to
+	declare -A descs # sink description for notification
+	while IFS= read -r line; do
+		while IFS=' ' read -a arr; do
+			sinks+=(${arr[0]})
+			descs+=([${arr[0]}]="${arr[@]:1}")
+		done <<< $(echo $line)
+	done <<< "$(pactl list sinks | awk '{
+		if ($1 == "Description:") {
+			desc=substr($0, length($1)+2, length($0))
+		} else if ($1 == "Name:") {
+			name=$2
+		}
+		if (name != "" && desc != "") {
+			print name " " desc
+			name=""
+			desc=""
+		}
+	}')" # outputs pid sink pairs
+
+	# searching process trees for all related pids
+	if [ -n "$1" ]; then
+		wpid="$(xdotool search --onlyvisible --name "$1" getwindowpid)"
+		if [ -z  "$wpid" ]; then
+			wpid="$(xdotool search --onlyvisible --class "$1" getwindowpid)"
+		fi
+		if [ -z  "$wpid" ]; then
+			exit 1
+		fi
+		wname="$(xdotool search --onlyvisible --name "$1" getwindowname)"
+	else
+		wname="$(xdotool getwindowfocus getwindowname)"
+		wpid="$(xdotool getwindowfocus getwindowpid)"
+	fi
+
+	# fix for programs that are not direct controllers of the 
+	# sink input
+	case "$wname" in
+		Cantata) pid="$(pgrep mpd)"       ;;
+		*) pid="$wpid $(pgrep -P "$wpid")";;
+	esac
+
+
+	output="$wname"
+	for app in ${!application_ids[@]}; do
+		if [[ ! "$pid" =~ "$app" ]]; then
+			continue
+		fi
+		
+		output="$output (${app})\n"
+		next_sink=-1
+		for sink in ${!sinks[@]}; do
+			if [ ${application_ids[$app]} -eq $sink ]; then
+				next_sink=$(((sink + 1) % ${#sinks[@]}))
+			fi
+		done
+
+		if [ $next_sink -ne -1 ]; then
+			name="${sinks[$next_sink]}"
+			desc="${descs[$name]}"
+			pacmd move-sink-input "${application_idx[$app]}" "${name}"
+
+			for sink in "${sinks[@]}"; do
+				if [ "$sink" == "$name" ]; then
+					output="$output[x] ${descs[$sink]}\n"
+				else
+					output="$output[ ] ${descs[$sink]}\n"
+				fi
+			done
+				
+			notify-send -a padefault -i "audio-speakers" "Switched Audio Output" "$output" -t 2000
+		fi
+
+	done
 }
 
 padef_toggle() {
@@ -110,6 +215,7 @@ pa_mute_all() {
 }
 
 case "$1" in 
+	toggle-focus|tf)   padef_toggle_focus "$2";;
 	toggle|t)          padef_toggle      ;;
 	volume|vol|v)      padef_volume "$2" ;;
 	mute|m)            padef_mute        ;;
