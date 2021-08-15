@@ -24,7 +24,7 @@
     #   %I  iconname (without its path)
     #   %p  progress value if set ([  0%] to [100%]) or nothing
     # Markup is allowed
-    format = "%s %p\n%b"
+    format = "%a\n%s %p\n%b"
     
     # Sort messages by urgency.
     sort = yes
@@ -195,3 +195,12 @@
     background = "#D62929"
     foreground = "#F9FAF9"
     timeout = 0
+
+[WhatsApp]
+	appname = whatsapp-for-linux
+	new_icon = whatsapp
+
+[padefault]
+	appname = padefault
+	history_ignore = yes
+	set_stack_tag = padefault
