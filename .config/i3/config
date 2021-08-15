@@ -55,7 +55,7 @@ bindsym $mod+p            exec --no-startup-id pavucontrol
 bindsym $mod+Ctrl+p       exec --no-startup-id padefault ma 
 bindsym $mod+Mod1+p       exec --no-startup-id padefault mas
 bindsym $mod+Shift+p      exec --no-startup-id padefault toggle
-bindsym $mod+Ctrl+Shift+p exec --no-startup-id pafocus
+bindsym $mod+Ctrl+Shift+p exec --no-startup-id padefault toggle-focus
 
 # Screen brightness controls
 # bindsym XF86MonBrightnessUp exec --no-startup-id "xbacklight -inc 10; notify-send --hint=int:transient:1 -t $notif_duration 'brightness up'"
