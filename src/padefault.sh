@@ -2,16 +2,18 @@
 
 # toggles default sound output device
 default_sink=$(pacmd info | grep "Default sink name:" | cut -d ' ' -f4)
+notify_timeout="1000"
 
 _usage() {
 	echo "usage: padefault <command> [args]"
 	echo "commands:"
-	echo "    toggle-focus    cycles focused window audio device"
-	echo "    toggle          cycles default audio device"
-	echo "    mute            toggle mute on default device"
-	echo "    mute-all        toggle mute on all outputs"
-	echo "    mute-all-src    toggle mute on all inputs"
-	echo "    volume [args]   sets default audio device volume"
+	echo "    volume-focus [args] sets volume of the focused window"
+	echo "    toggle-focus        cycles focused window audio device"
+	echo "    toggle              cycles default audio device"
+	echo "    mute                toggle mute on default device"
+	echo "    mute-all            toggle mute on all outputs"
+	echo "    mute-all-src        toggle mute on all inputs"
+	echo "    volume [args]       sets default audio device volume"
 	exit 0
 }
 
@@ -117,6 +119,7 @@ padef_toggle_focus() {
 		fi
 
 	done
+	exit 0
 }
 
 padef_toggle() {
@@ -167,7 +170,7 @@ padef_toggle() {
 padef_volume() {
 	pactl set-sink-volume "$default_sink" "$1"
 	icon="audio-volume-low"
-	vol="$(getvol)"
+	vol="$(padef_get_vol "$default_sink")"
 	if [ "$vol" -ge 66 ]; then
 		icon="audio-volume-high"
 	elif [ "$vol" -ge 33 ]; then
@@ -175,8 +178,80 @@ padef_volume() {
 	elif [ "$vol" -eq 0 ]; then
 		icon="audio-off"
 	fi
-	notify-send -a padefault -i $icon -h "int:value:$vol" -h "string:synchronous:volume"  "volume" " $1" -t 500
+	notify-send -a padefault -i $icon -h "int:value:$vol" -h "string:synchronous:volume"  "volume" " $1" -t "$notify_timeout"
 	exit 0
+}
+
+padef_focus_volume() {
+	declare -A application_idx # application pid -> sink index
+	while IFS= read -r line; do
+		while IFS=' ' read -a arr; do
+			application_idx+=([${arr[0]}]=${arr[1]})
+		done <<< $(echo $line)
+	done <<< "$(pacmd list-sink-inputs | awk '
+		{
+			if ($1 == "application.process.id") {
+				pid=substr($3, 2, length($3) - 2)
+			} else if ($1 == "index:") {
+				idx=$2
+			} 
+
+			if (pid != "" && idx != "") { 
+				print pid " " idx
+				pid=""
+				idx=""
+			}
+		}')" # outputs pid sink pairs
+
+	wname="$(xdotool getwindowfocus getwindowname)"
+	wpid="$(xdotool getwindowfocus getwindowpid)"
+
+	# fix for programs that are not direct controllers of the 
+	# sink input
+	case "$wname" in
+		Cantata) pid="$(pgrep mpd)"       ;;
+		*) pid="$wpid $(pgrep -P "$wpid")";;
+	esac
+
+	index=-1
+	for app in ${!application_idx[@]}; do
+		echo $app
+		if [[ "$pid" =~ "$app" ]]; then
+			index="${application_idx[$app]}"
+			break
+		fi
+	done
+
+	if [ $index -eq -1 ]; then
+		exit 1
+	fi
+
+	pactl set-sink-input-volume "$index" "$1"
+	icon="audio-volume-low"
+	vol="$(padef_get_sink_vol "$index")"
+	if [ "$vol" -ge 66 ]; then
+		icon="audio-volume-high"
+	elif [ "$vol" -ge 33 ]; then
+		icon="audio-volume-medium"
+	elif [ "$vol" -eq 0 ]; then
+		icon="audio-off"
+	fi
+
+	notify-send -a padefault -i $icon -h "int:value:$vol" -h "string:synchronous:volume" \
+		"volume" "$wname" -t "$notify_timeout"
+	exit 0
+
+}
+
+padef_get_vol() {
+	sink="${1:-"$default_sink"}"
+	pactl list sinks | grep -A7 "^[[:space:]]Name: $sink" | \
+		tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,'
+}
+
+padef_get_sink_vol() {
+	pactl list sink-inputs | grep -A10 "^Sink Input #$1" | \
+		tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,'
 }
 
 padef_mute() {
@@ -215,6 +290,7 @@ pa_mute_all() {
 }
 
 case "$1" in 
+	volume-focus|vf)   padef_focus_volume "$2";;
 	toggle-focus|tf)   padef_toggle_focus "$2";;
 	toggle|t)          padef_toggle      ;;
 	volume|vol|v)      padef_volume "$2" ;;
