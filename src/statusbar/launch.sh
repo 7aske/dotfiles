@@ -13,7 +13,7 @@ show_summary() {
 today="$(date +"%b %d")"
 case $BLOCK_BUTTON in
 	1) show_summary ;;
-	3) xdg-open "$web_url" ;;
+	3) xdg-open "$web_url" 2>&1 >/dev/null ;;
 esac
 
 launch_data="$(curl -s "$api_url")"
