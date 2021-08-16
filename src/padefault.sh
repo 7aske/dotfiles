@@ -25,7 +25,6 @@ padef_toggle_focus() {
 		while IFS=' ' read -a arr; do
 			application_ids+=([${arr[0]}]=${arr[1]})
 			application_idx+=([${arr[0]}]=${arr[2]})
-			echo ${arr[@]}
 		done <<< $(echo $line)
 	done <<< "$(pacmd list-sink-inputs | awk '
 		{
@@ -182,6 +181,78 @@ padef_volume() {
 	exit 0
 }
 
+padef_spec_volume() {
+	declare -A application_idx # application pid -> sink index
+	while IFS= read -r line; do
+		while IFS=' ' read -a arr; do
+			application_idx+=([${arr[0]}]=${arr[1]})
+		done <<< $(echo $line)
+	done <<< "$(pacmd list-sink-inputs | awk '
+		{
+			if ($1 == "application.process.id") {
+				pid=substr($3, 2, length($3) - 2)
+			} else if ($1 == "index:") {
+				idx=$2
+			} 
+
+			if (pid != "" && idx != "") { 
+				print pid " " idx
+				pid=""
+				idx=""
+			}
+		}')" # outputs pid sink pairs
+
+	# searching process trees for all related pids
+	if [ -n "$1" ]; then
+		wpid="$(xdotool search --name "$1" getwindowpid)"
+		if [ -z  "$wpid" ]; then
+			wpid="$(xdotool search --class "$1" getwindowpid)"
+		fi
+		if [ -z  "$wpid" ]; then
+			exit 1
+		fi
+		wname="$(xdotool search --name "$1" getwindowname)"
+	else
+		exit 1
+	fi
+
+
+	# fix for programs that are not direct controllers of the 
+	# sink input
+	case "$wname" in
+		Cantata) pid="$(pgrep mpd)"       ;;
+		*) pid="$wpid $(pgrep -P "$wpid")";;
+	esac
+
+	index=-1
+	for app in ${!application_idx[@]}; do
+		if [[ "$pid" =~ "$app" ]]; then
+			index="${application_idx[$app]}"
+			break
+		fi
+	done
+
+	if [ $index -eq -1 ]; then
+		exit 1
+	fi
+
+	pactl set-sink-input-volume "$index" "$2"
+	icon="audio-volume-low"
+	vol="$(padef_get_sink_vol "$index")"
+	if [ "$vol" -ge 66 ]; then
+		icon="audio-volume-high"
+	elif [ "$vol" -ge 33 ]; then
+		icon="audio-volume-medium"
+	elif [ "$vol" -eq 0 ]; then
+		icon="audio-off"
+	fi
+
+	notify-send -a padefault -i $icon -h "int:value:$vol" -h "string:synchronous:volume" \
+		"volume" "$wname" -t "$notify_timeout"
+	exit 0
+
+}
+
 padef_focus_volume() {
 	declare -A application_idx # application pid -> sink index
 	while IFS= read -r line; do
@@ -215,7 +286,6 @@ padef_focus_volume() {
 
 	index=-1
 	for app in ${!application_idx[@]}; do
-		echo $app
 		if [[ "$pid" =~ "$app" ]]; then
 			index="${application_idx[$app]}"
 			break
@@ -290,14 +360,15 @@ pa_mute_all() {
 }
 
 case "$1" in 
-	volume-focus|vf)   padef_focus_volume "$2";;
-	toggle-focus|tf)   padef_toggle_focus "$2";;
-	toggle|t)          padef_toggle      ;;
-	volume|vol|v)      padef_volume "$2" ;;
-	mute|m)            padef_mute        ;;
-	mute-all|ma)       pa_mute_all       ;;
-	mute-all-src|mas)  pa_mute_all source;;
-	-h|help|--help|h)  _usage            ;;
-	*)                 padef_toggle      ;;
+	volume-specific|vs) padef_spec_volume  "$2" "$3";;
+	volume-focus|vf)    padef_focus_volume "$2";;
+	toggle-focus|tf)    padef_toggle_focus "$2";;
+	toggle|t)           padef_toggle      ;;
+	volume|vol|v)       padef_volume "$2" ;;
+	mute|m)             padef_mute        ;;
+	mute-all|ma)        pa_mute_all       ;;
+	mute-all-src|mas)   pa_mute_all source;;
+	-h|help|--help|h)   _usage            ;;
+	*)                  padef_toggle      ;;
 esac
 
