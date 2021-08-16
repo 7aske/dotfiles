@@ -82,6 +82,10 @@ bindsym $mod+Mod1+period  exec --no-startup-id padefault vol +5%
 bindsym $mod+Mod1+slash   exec --no-startup-id padefault mute-all
 bindsym $mod+Mod1+comma   exec --no-startup-id padefault vol -5%
 
+bindsym $mod+Ctrl+Mod1+period  exec --no-startup-id padefault volume-focus +5%
+bindsym $mod+Ctrl+Mod1+slash   exec --no-startup-id padefault volume-focus 100%
+bindsym $mod+Ctrl+Mod1+comma   exec --no-startup-id padefault volume-focus -5%
+
 # Pulse Audio controls
 # 7aske-scripts
 bindsym XF86AudioRaiseVolume exec --no-startup-id padefault vol +5%
