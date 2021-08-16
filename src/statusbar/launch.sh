@@ -5,9 +5,14 @@
 web_url="https://go4liftoff.com/launches"
 api_url="https://fdo.rocketlaunch.live/json/launches/next/5"
 
+show_summary() {
+	data="$(curl "$api_url" | jq -jr '.result[] | .date_str, "|", .name, "|", (.win_open | strptime("%Y-%m-%dT%H:%MZ") |  strflocaltime("%H:%M"))?, "|", (.t0 | strptime("%Y-%m-%dT%H:%MZ") |  strflocaltime("%H:%M"))?, "\n"')"
+	notify-send -a "launches" -i rocket "Upcoming launches" "$today\n\n$(echo -e "Date|Name|Win Open|T0|\n$data" | column -t -s'|')"
+}
+
 today="$(date +"%b %d")"
 case $BLOCK_BUTTON in
-	1) notify-send -i rocket "Upcoming launches" "$today\n\n$(curl "$api_url" | jq -jr '.result[] | .date_str, "|", .name, "|", select(.t0!=null), "\n"' | column -t -s'|')" ;;
+	1) show_summary ;;
 	3) xdg-open "$web_url" ;;
 esac
 
