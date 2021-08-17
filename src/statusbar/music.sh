@@ -3,7 +3,7 @@
 . "$HOME/.profile"
 [ -e  "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh" 
 
-NOTIFY_ARGS="--hint=int:transient:1 -t 750 -a music"
+NOTIFY_ARGS="-a playerctl"
 
 if [ "$(playerctl "--player=$PLAYER" status 2>&1)" = "No players found" ]; then
 	ANY_PLAYER="$(playerctl --list-all | cut -d'.' -f1 | head -1)"
@@ -35,7 +35,13 @@ case $BLOCK_BUTTON in
     notify-send "$NOTIFY_ARGS" -i "$PLAYER" "playerctl" "prev song"
     ;;
 4)
-	if [[ "$PLAYER_ARG" =~ "spotify" ]]; then
+	if [[ "$PLAYER_ARG" =~ "chromium" ]]; then
+		if ( pgrep "brave" ); then
+			padefault volume-specific "brave" "+5%"
+		else
+			padefault volume-specific "chromium" "+5%"
+		fi
+	elif [[ "$PLAYER_ARG" =~ "spotify" ]]; then
 		padefault volume-specific "spotify" "+5%"
 	else
 		playerctl "$PLAYER_ARG" volume "0.05+"
@@ -45,7 +51,13 @@ case $BLOCK_BUTTON in
 	fi
     ;;
 5)
-	if [[ "$PLAYER_ARG" =~ "spotify" ]]; then
+	if [[ "$PLAYER_ARG" =~ "chromium" ]]; then
+		if ( pgrep "brave" ); then
+			padefault volume-specific "brave" "-5%"
+		else
+			padefault volume-specific "chromium" "-5%"
+		fi
+	elif [[ "$PLAYER_ARG" =~ "spotify" ]]; then
 		padefault volume-specific "spotify" "-5%"
 	else
 		playerctl "$PLAYER_ARG" volume "0.05-"
