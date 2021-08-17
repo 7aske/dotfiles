@@ -175,7 +175,7 @@ bindsym XF86Search exec --no-startup-id google-search
 
 bindsym $mod+Tab      exec --no-startup-id rofi -show window
 
-bindsym $mod+Ctrl+Shift+semicolon    exec --no-startup-id dmenu -b -p ":" -fn '$dmenu_font' | (xargs i3-msg) 2>&1 | xargs notify-send
+bindsym $mod+Ctrl+Shift+semicolon exec --no-startup-id i3shell
 # sticky key fix
 bindsym $mod+F12    exec --no-startup-id xdotool keyup Shift_L Shift_R Control_L Control_R Alt_L Alt_R Super_L Super_R Hyper_L Hyper_R Caps_Lock 204 205 206 207
 
