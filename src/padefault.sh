@@ -45,22 +45,27 @@ padef_toggle_focus() {
 		}')" # outputs pid sink pairs
 
 	declare -a sinks # sink short names for move-to
+	declare -a indices # sink indexes
 	declare -A descs # sink description for notification
 	while IFS= read -r line; do
 		while IFS=' ' read -a arr; do
-			sinks+=(${arr[0]})
-			descs+=([${arr[0]}]="${arr[@]:1}")
+			indices+=(${arr[0]})
+			sinks+=(${arr[1]})
+			descs+=([${arr[1]}]="${arr[@]:2}")
 		done <<< $(echo $line)
 	done <<< "$(pactl list sinks | awk '{
 		if ($1 == "Description:") {
 			desc=substr($0, length($1)+2, length($0))
 		} else if ($1 == "Name:") {
 			name=$2
+		} else if ($1 == "Sink") {
+			idx=substr($2, 2)
 		}
-		if (name != "" && desc != "") {
-			print name " " desc
+		if (name != "" && desc != "" && idx != "") {
+			print idx " " name " " desc
 			name=""
 			desc=""
+			idx=""
 		}
 	}')" # outputs pid sink pairs
 
@@ -95,10 +100,12 @@ padef_toggle_focus() {
 		
 		output="$output (${app})\n"
 		next_sink=-1
-		for sink in ${!sinks[@]}; do
+		index=0
+		for sink in ${indices[@]}; do
 			if [ ${application_ids[$app]} -eq $sink ]; then
-				next_sink=$(((sink + 1) % ${#sinks[@]}))
+				next_sink=$(((index + 1) % ${#indices[@]}))
 			fi
+			((index++))
 		done
 
 		if [ $next_sink -ne -1 ]; then
