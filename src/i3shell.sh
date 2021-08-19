@@ -3,7 +3,7 @@
 I3SHELL_HISTFILE="${I3SHELL_HISTFILE:-"$HOME/.cache/i3shell"}"
 I3SHELL_HISTSIZE="${I3SHELL_HISTSIZE:-"1000"}"
 
-COMMAND="$(cat "$I3SHELL_HISTFILE" | sort | uniq | dmenu -b -p ':' -l 3)"
+COMMAND="$(tac "$I3SHELL_HISTFILE" | uniq | dmenu -b -p ':' -l 3)"
 
 if [ -z "$COMMAND" ]; then
 	exit 1
