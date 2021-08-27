@@ -26,5 +26,5 @@ case $BLOCK_BUTTON in
 	1) notify-send -a services "active services" "$(for serv in ${!SERVICES[@]}; do echo "$serv"; done)" ;;
 esac
 
-echo "<span>$(for serv in ${SERVICES[@]}; do echo -n "$serv "; done)</span>"
+echo "<span> $(for serv in ${SERVICES[@]}; do echo -n "$serv "; done)</span>"
 
