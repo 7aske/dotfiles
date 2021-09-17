@@ -159,9 +159,9 @@ if [ -n "$FZF_CODE" ]; then
 		fi
 
 		if [ $# -eq 1 ]; then
-			MATCH="$(fd . "$CODE" -d 2 -t d | fzf -f "$1" | head -1)"
+			MATCH="$(fd . "$CODE" -d 2 -L -t d | fzf -f "$1" | head -1)"
 		elif [ $# -eq 2 ]; then
-			MATCH="$(fd . "$CODE/$1" -d 2 -t d | fzf -f "$2" | head -1)"
+			MATCH="$(fd . "$CODE/$1" -d 2 -L -t d | fzf -f "$2" | head -1)"
 		fi
 
 		if [ -z "$MATCH" ]; then
