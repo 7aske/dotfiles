@@ -52,7 +52,7 @@ fi
 [ -n "$src" ] && src="$src:"
 
 if [ "$dest" != "$src" ] && [ -n "$1" ]; then
-	/usr/bin/env rsync --progress -have "ssh -p $port" "$src$repo" "$dest$repo"
+	/usr/bin/env rsync --cvs-exclude --progress -have "ssh -p $port" "$src$repo" "$dest$repo"
 else
 	_usage
 fi
