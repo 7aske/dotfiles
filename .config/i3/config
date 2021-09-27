@@ -398,9 +398,11 @@ bindsym $mod+Ctrl+Up    move workspace to output up
 bindsym $mod+Ctrl+Right move workspace to output right
 bindsym $mod+Ctrl+Down  move workspace to output down
 
+bindsym $mod+Mod1+Return exec --no-startup-id i3nextws
+
 # mark navigation
-bindsym $mod+Ctrl+m exec xinp --i3 -f $dmenu_font -F 'mark %s' -l 1 -p 'mark: '
-bindsym $mod+apostrophe exec xinp --i3 -f $dmenu_font -F '[con_mark="%s"] focus' -l 1 -p 'goto: '
+bindsym $mod+Ctrl+m     exec --no-startup-id xinp --i3 -f $dmenu_font -F 'mark %s' -l 1 -p 'mark: '
+bindsym $mod+apostrophe exec --no-startup-id xinp --i3 -f $dmenu_font -F '[con_mark="%s"] focus' -l 1 -p 'goto: '
 
 # move the currently focused window to the scratchpad
 bindsym $mod+Shift+minus move scratchpad
