@@ -50,7 +50,7 @@ set $terminal2  kitty
 # \__ \ (_) | |_| | | | | (_| | (_>  < | | | | | |_| \__ \ | (__
 # |___/\___/ \__,_|_| |_|\__,_|\___/\/_| |_| |_|\__,_|___/_|\___|
 
-bindsym $mod+p            exec --no-startup-id pavucontrol
+bindsym $mod+p            exec --no-startup-id wtoggle pavucontrol
 # 7aske-scripts
 bindsym $mod+Ctrl+p       exec --no-startup-id padefault ma 
 bindsym $mod+Mod1+p       exec --no-startup-id padefault mas
