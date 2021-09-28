@@ -22,7 +22,7 @@ call plug#begin('~/.config/nvim/plugged')
 	Plug 'machakann/vim-highlightedyank'
 	Plug 'andymass/vim-matchup'
 	Plug 'godlygeek/tabular'
-	Plug 'plasticboy/vim-markdown'
+	Plug 'tpope/vim-markdown'
 	Plug 'ap/vim-css-color'
 	Plug 'neoclide/coc.nvim', {'branch': 'release'}
 	Plug 'sheerun/vim-polyglot'
@@ -74,6 +74,8 @@ set updatetime=50
 set wildmenu
 syntax on
 let &scrolloff = &lines / 5
+
+let g:markdown_syntax_conceal = 0
 
 " Copy to clipboard
 vnoremap  <leader>y   "+y
