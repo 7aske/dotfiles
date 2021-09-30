@@ -50,6 +50,7 @@ map <leader>R      <Action>(RefactoringMenu)
 nmap <leader>a      <Action>(ShowIntentionActions)
 nmap <leader>gd     <Action>(QuickJavaDoc)
 nmap <leader>r      <Action>(RenameElement)
+nmap <leader>S      dWWPBB
 nmap gD             <Action>(GotoImplementation)
 nmap g[             <Action>(GotoPreviousError)
 nmap g]             <Action>(GotoNextError)

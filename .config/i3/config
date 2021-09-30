@@ -132,7 +132,7 @@ bindsym $mod+Shift+Mod1+n  exec --no-startup-id dunst_reload
 bindsym $mod+n             exec --no-startup-id dunstctl context
 bindsym $mod+Ctrl+n        exec --no-startup-id dunstctl close
 bindsym $mod+Shift+n       exec --no-startup-id dunstctl history-pop
-bindsym $mod+semicolon     exec --no-startup-id tmux list-sessions | cut -d: -f1 | rofi -dmenu -p session | xargs -r $terminal -c floating -e tmux a -t
+bindsym $mod+semicolon     exec --no-startup-id tmux list-sessions | cut -d: -f1 | rofi -dmenu -p session | xargs -r $terminal -c tmux_floating -e tmux a -t
 
 # 7aske-scripts
 bindsym $mod+F10           exec --no-startup-id echo 0 | dmenu -p 'screen: ' -fn '$dmenu_font' | xargs screencam -n
@@ -492,6 +492,7 @@ for_window [class="floating_popup"] floating enable, resize set 1280 768, move p
 for_window [class="fullscreen"] fullscreen enable
 for_window [class="newsboat_float"] floating enable, resize set 1280 768, move position center
 for_window [class="weather_floating"] floating enable, resize set 1280 820, move position center
+for_window [class="tmux_floating"] floating enable, resize set 1333 768, move position center
 
 # games
 for_window [title="World of Warcraft"] layout tabbed
