@@ -39,11 +39,17 @@ shift $((OPTIND-1))
 [ "${1:-}" = "--" ] && shift
 
 repo="$1"
-if ! [[ $repo =~ ^/.* ]]; then
-	repo="$CODE/$repo/"
+if ! [[ $repo =~ ^.*/$ ]]; then
+	repo="$repo/"
 fi
 
-if [ -z "$repo" ] || [ ! -e "$repo" ]; then
+DEST_CODE="$(ssh -p $port $dest '. ~/.profile; echo $CODE')"
+if [ -z "$DEST_CODE" ]; then
+	echo -e "$prog: DEST_CODE: no such file or directory"
+	_usage
+fi
+
+if [ -z "$repo" ]; then
 	echo -e "$prog: $repo: no such file or directory"
 	_usage
 fi
@@ -51,8 +57,16 @@ fi
 [ -n "$dest" ] && dest="$dest:"
 [ -n "$src" ] && src="$src:"
 
+src="$src$CODE/$repo"
+dest="$dest$DEST_CODE/$repo"
+
+if [ ! -e "$CODE/$repo" ]; then
+	echo -e "$prog: $repo: no such file or directory"
+	_usage
+fi
+
 if [ "$dest" != "$src" ] && [ -n "$1" ]; then
-	/usr/bin/env rsync --cvs-exclude --progress -have "ssh -p $port" "$src$repo" "$dest$repo"
+	/usr/bin/env rsync --filter=':- .gitignore' --progress -have "ssh -p $port" "$src" "$dest"
 else
 	_usage
 fi
