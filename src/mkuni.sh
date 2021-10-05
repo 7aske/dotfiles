@@ -11,7 +11,7 @@ usage() {
 uni_mkdir() {
     set -v
     case "$2" in
-        "v")
+        v|p)
             mkdir -v "$1-$2$(printf "%02d" "$3")"
             ;;
         *)
