@@ -13,6 +13,8 @@ istty() {
 [ -e ~/.config/zsh/antigen.zsh ] && source ~/.config/zsh/antigen.zsh
 
 antigen use oh-my-zsh
+antigen bundle docker
+antigen bundle docker-compose
 antigen bundle mvn
 antigen bundle npm
 antigen bundle pip
