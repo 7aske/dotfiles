@@ -42,9 +42,9 @@ fi
 
 menu_command="fzf"
 if [ "$MENU" = "dmenu" ]; then
-	menu_command="dmenu -l 10 -f -i -p 'open:'"
+	menu_command="dmenu -l 10 -f -i -p '$TYPE:'"
 elif [ "$MENU" = "rofi" ]; then
-    menu_command="rofi -dmenu -sort -matching fuzzy -p 'open'"
+    menu_command="rofi -dmenu -sort -matching fuzzy -p '$TYPE'"
 fi
 
 PROJ="$(eval "cgs -adi | $menu_command")"
