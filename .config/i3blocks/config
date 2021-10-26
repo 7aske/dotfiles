@@ -38,6 +38,10 @@ command=~/.local/bin/statusbar/disk / 
 interval=60
 command=~/.local/bin/statusbar/disk /home 
 
+[crypto]
+interval=60
+command=~/.local/bin/crypto -t0 -f '%s:$%.1f'
+
 [launch]
 interval=60
 
