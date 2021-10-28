@@ -60,7 +60,7 @@
     # geometry = "1024x4-12+32"
 	origin = top-right
 	offset = 12x32
-	width = (0, 600)
+	width = (0, 800)
 	height = 300
     
     # Shrink window if it's smaller than the width.  Will be ignored if
