@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 show_weather() {
 	#i3-msg "workspace weather"
@@ -11,4 +11,9 @@ case $BLOCK_BUTTON in
 	3) show_weather ;;
 esac
 
-echo "$(curl wttr.in/"$WEATHER"?format=%T%c%t | cut -c 14- | iconv -c)"
+weather="$(curl wttr.in/"$WEATHER"?format=%T%c%t)"
+if ! [[ "$weather" =~ "Unknown location" ]]; then
+	echo "$weather" | cut -c 14- | iconv -c
+else
+	echo " "
+fi
