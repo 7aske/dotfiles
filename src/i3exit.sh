@@ -4,11 +4,9 @@
 # with openrc use loginctl
 test $(cat /proc/1/comm) = "systemd" && logind=systemctl || logind=loginctl
 
-lockcommand="gnome-screensaver-command -l"
-
 case "$1" in
     lock)
-        $lockcommand
+        lock
         ;;
     logout)
         i3-msg exit
@@ -17,10 +15,10 @@ case "$1" in
         loginctl lock-session
         ;;
     suspend)
-        $lockcommand && $logind suspend
+        lock && $logind suspend
         ;;
     hibernate)
-        $lockcommand && $logind hibernate
+        lock && $logind hibernate
         ;;
     reboot)
         $logind reboot
