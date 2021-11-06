@@ -8,7 +8,7 @@ TYPE="${TYPE:-"term"}"
 [ -z "$(command -v cgs)" ] && echo "cgs: not found" && exit 1
 [ -z "$(command -v fzf)" ] && echo "fzf: not found" && exit 1
 
-available_types=("term" "vscode" "vim" "jetbrains" "idea" "pycharm" "clion" "studio" "goland" "webstorm")
+available_types=("term" "vscode" "vim" "jetbrains" "idea" "pycharm" "clion" "studio" "goland" "webstorm" "rider")
 available_menus=("dmenu" "rofi")
 
 _usage() {
@@ -126,6 +126,7 @@ if [ -n "$PROJ" ]; then
 		"goland") _open_jetbrains goland ;;
 		"pycharm") _open_jetbrains pycharm ;;
 		"webstorm") _open_jetbrains webstorm ;;
+		"rider") _open_jetbrains rider ;;
 		"studio"|"android") _open_jetbrains studio ;;
 	esac
 fi
