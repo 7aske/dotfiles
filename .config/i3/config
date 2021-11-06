@@ -186,7 +186,7 @@ bindsym $mod+Mod1+Home    exec --no-startup-id desk up   7
 bindsym $mod+Mod1+End     exec --no-startup-id desk down 7
 
 # layout toggling mode
-set $mode_codeopen codeopen: (t)erm (n)vim (v)scode (i)dea (c)lion (g)oland (p)ycharm (w)ebstorm (s)studio (j)etbrains
+set $mode_codeopen codeopen: (t)erm (n)vim (v)scode (i)dea (c)lion (g)oland (p)ycharm (w)ebstorm (s)studio (r)ider (j)etbrains
 bindsym $mod+o mode "$mode_codeopen"
 set $codeopen_menu rofi
 mode "$mode_codeopen" {
@@ -200,6 +200,7 @@ mode "$mode_codeopen" {
     bindsym p exec --no-startup-id codeopen -m $codeopen_menu -t pycharm; mode default
     bindsym w exec --no-startup-id codeopen -m $codeopen_menu -t webstorm; mode default
     bindsym s exec --no-startup-id codeopen -m $codeopen_menu -t studio; mode default
+    bindsym r exec --no-startup-id codeopen -m $codeopen_menu -t rider; mode default
     bindsym j exec --no-startup-id codeopen -m $codeopen_menu -t jetbrains; mode default
 
     # exit system mode: "Enter" or "Escape"
@@ -207,7 +208,7 @@ mode "$mode_codeopen" {
     bindsym Escape mode default
 }
 
-set $mode_ide open: (i)dea (c)lion (g)oland (p)ycharm (w)ebstorm (s)studio (d)atagrip
+set $mode_ide open: (i)dea (c)lion (g)oland (p)ycharm (w)ebstorm (s)studio (r)ider (d)atagrip
 bindsym $mod+Shift+o mode "$mode_ide"
 mode "$mode_ide" {
     # set default desktop layout <stacking|tabbed>
@@ -218,6 +219,7 @@ mode "$mode_ide" {
     bindsym p exec --no-startup-id pycharm; mode default
     bindsym w exec --no-startup-id webstorm; mode default
     bindsym s exec --no-startup-id studio; mode default
+    bindsym r exec --no-startup-id rider; mode default
     bindsym d exec --no-startup-id datagrip; mode default
 
     # exit system mode: "Enter" or "Escape"
