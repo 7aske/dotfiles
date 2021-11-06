@@ -1,6 +1,15 @@
 #!/usr/bin/env sh
 
 UNI_NAME="nikola_tasic_3698"
+PRINT=0
+
+while getopts "p" arg; do
+	case $arg in
+		p) PRINT=1 ;;
+	esac
+done
+
+shift $((OPTIND - 1))
 
 
 usage() {
@@ -8,17 +17,15 @@ usage() {
     exit 2
 }
 
-uni_mkdir() {
-    set -v
+uni_get_name() {
     case "$2" in
         v|p)
-            mkdir -v "$1-$2$(printf "%02d" "$3")"
+            echo "$1-$2$(printf "%02d" "$3")"
             ;;
         *)
-            mkdir -v "$1-$2$(printf "%02d" "$3")-$UNI_NAME"
+            echo "$1-$2$(printf "%02d" "$3")-$UNI_NAME"
             ;;
     esac
-    set +v
 }
 
 [ -z "$1" ] && usage
@@ -35,4 +42,9 @@ else
     NUM="$2"
 fi
 
-uni_mkdir "$SUBJECT" "$1" "$NUM"
+NAME="$(uni_get_name "$SUBJECT" "$1" "$NUM")"
+if (( $PRINT )); then
+	echo "$NAME"
+else
+	mkdir -v "$NAME"
+fi
