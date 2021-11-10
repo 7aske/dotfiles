@@ -10,7 +10,7 @@ set noshowmode
 set nowrap
 set nu rnu
 set showcmd
-set ignorecase
+set smartcase
 set smartindent
 set scrolloff=8
 
