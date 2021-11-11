@@ -61,7 +61,7 @@
 	origin = top-right
 	offset = 12x32
 	width = (0, 800)
-	height = 300
+	height = 1000
     
     # Shrink window if it's smaller than the width.  Will be ignored if
     # width is 0.
