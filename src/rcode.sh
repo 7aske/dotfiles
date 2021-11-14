@@ -43,9 +43,14 @@ if ! [[ $repo =~ ^.*/$ ]]; then
 	repo="$repo/"
 fi
 
-DEST_CODE="$(ssh -p $port $dest '. ~/.profile; echo $CODE')"
-if [ -z "$DEST_CODE" ]; then
-	echo -e "$prog: DEST_CODE: no such file or directory"
+if [ -n "$dest" ]; then
+	REMOTE_CODE="$(ssh -p $port $dest '. ~/.profile; echo $CODE')"
+elif [ -n "$src" ]; then
+	REMOTE_CODE="$(ssh -p $port $src  '. ~/.profile; echo $CODE')"
+fi
+
+if [ -z "$REMOTE_CODE" ]; then
+	echo -e "$prog: REMOTE_CODE: no such file or directory"
 	_usage
 fi
 
@@ -58,7 +63,7 @@ fi
 [ -n "$src" ] && src="$src:"
 
 src="$src$CODE/$repo"
-dest="$dest$DEST_CODE/$repo"
+dest="$dest$REMOTE_CODE/$repo"
 
 if [ ! -e "$CODE/$repo" ]; then
 	echo -e "$prog: $repo: no such file or directory"
