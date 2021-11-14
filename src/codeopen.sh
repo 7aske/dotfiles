@@ -47,7 +47,12 @@ elif [ "$MENU" = "rofi" ]; then
     menu_command="rofi -dmenu -sort -matching fuzzy -p '$TYPE'"
 fi
 
-PROJ="$(eval "cgs -adi | $menu_command")"
+# use grep to remove $CODE prefix
+SELECTED="$(eval "cgs -adi | grep -oP '^$CODE/\K.*' | $menu_command")"
+if [ -z "$SELECTED" ]; then
+	exit 0
+fi
+PROJ="$CODE/$SELECTED"
 
 _open_term() {
 	if [ -t 1 ]; then 
