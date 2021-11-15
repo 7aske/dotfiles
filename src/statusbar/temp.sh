@@ -6,7 +6,7 @@ case $BLOCK_BUTTON in
 	1) notify-send "CPU hogs" "$(ps axch -o cmd:15,%cpu --sort=-%cpu | head)" ;;
 esac
 
-temp="$(sensors | awk '/Package id 0:/{print substr($4, 2)} /Tdie/{print substr($2, 2)}')"
+temp="$(sensors | awk '/Package id 0:/{print substr($4, 2)} /Tdie|Tctl/{print substr($2, 2)}')"
 temp_val="$(echo $temp | awk '{print substr($0, 1, length($0)-4)}')"
 
 color="$color7"
