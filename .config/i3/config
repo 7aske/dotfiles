@@ -771,4 +771,5 @@ mode "$mode_gaps_outer" {
         bindsym Shift+0     gaps outer all set   0
 
         bindsym Return mode default
-        bindsym Escape mode default}
+        bindsym Escape mode default
+}
