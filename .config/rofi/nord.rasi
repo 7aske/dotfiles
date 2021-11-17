@@ -1,6 +1,6 @@
 * {
 	theme0-transparent: #3b425277;
-	theme0: #1E3440;
+	theme0: #2E3440;
 	theme1: #3B4252;
 	theme2: #434C5E;
 	theme3: #4C566A;
@@ -24,108 +24,121 @@
     padding: 0px;
     spacing: 0px;
     text-color: @theme4;
+    highlight: bold #EBCB8B;
+	backlight:   #ccffeedd;
 }
 
-#window {
+window {
     width: 33%;
+	children:  [mainbox];
 }
 
-#mainbox {
+mainbox {
 	border: 2px;
-	border-color: @theme3;
+	border-color: @theme13;
+	children: [ inputbar, message, listview ];
 }
 
-#inputbar {
+inputbar {
     background-color: @theme1;
 	padding: 10px 0px 5px 10px;
     text-color: @theme3;
     children: [prompt, textbox-prompt-colon, entry, case-indicator];
 }
 
-#prompt {
+prompt {
 	padding: @prompt-padding;
-	text-color: @theme1;
+	text-color: @theme0;
     background-color: @theme14;
 }
 
-#textbox-prompt-colon {
+textbox-prompt-colon {
     background-color: @theme14;
     expand: false;
     str: ":";
-    text-color: @theme1;
+    text-color: @theme0;
 	padding: 2px 0px 2px 0px;
 }
 
-#entry {
+entry {
     background-color: @theme3;
     text-color: @theme4;
 	padding: @prompt-padding;
 }
 
-#message {
+message {
     border: 0px 0px 1px;
     border-color: @theme3;
     padding: 0px 0px 6px 7px;
 }
 
-#listview {
+listview {
     background-color: @theme1;
     lines: 10;
 	padding: 10px;
     scrollbar: true;
 }
 
-#element {
-    padding: 0px 0px 0px 7px;
-    margin: 0px 0px 5px 0px;
+element {
+    padding: 4px 0px 4px 7px;
     text-color: @theme4;
 }
 
-#element.normal.normal {
+element normal.normal {
     text-color: @theme4;
 }
 
-#element.normal.urgent {
+element normal.urgent {
     text-color: @theme11;
 }
 
-#element.normal.active {
+element normal.active {
     text-color: @theme10;
 }
 
-#element.alternate.normal {
+element alternate.normal {
+	background-color: @theme0;
     text-color: @theme4;
 }
 
-#element.alternate.urgent {
+element alternate.urgent {
     text-color: @theme11;
 }
 
-#element.alternate.active {
+element alternate.active {
     text-color: @theme10;
 }
 
-#element.selected.normal {
-    background-color: @theme8;
+element selected.normal {
+    background-color: @theme15;
     text-color: @theme1;
 }
 
-#element.selected.urgent {
+element selected.urgent {
     background-color: @theme11;
     text-color: @theme4;
 }
 
-#element.selected.active {
+element selected.active {
     background-color: @theme10;
     text-color: @theme4;
 }
 
-#scrollbar {
+scrollbar {
     handle-color: @theme3;
-    handle-width: 0.50em;
+    handle-width: 16px;
 }
 
-#button.selected {
+button.selected {
     background-color: @theme8;
     text-color: @theme4;
+}
+
+element-text, element-icon {
+    background-color: inherit;
+    text-color:       inherit;
+}
+
+entry, prompt, case-indicator {
+    text-font: inherit;
 }
