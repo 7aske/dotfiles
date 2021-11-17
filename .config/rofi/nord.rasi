@@ -97,7 +97,7 @@ element normal.active {
 }
 
 element alternate.normal {
-	background-color: @theme0;
+	background-color: @theme2;
     text-color: @theme4;
 }
 
@@ -110,7 +110,7 @@ element alternate.active {
 }
 
 element selected.normal {
-    background-color: @theme15;
+    background-color: @theme8;
     text-color: @theme1;
 }
 
