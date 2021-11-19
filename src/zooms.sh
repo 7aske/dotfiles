@@ -23,11 +23,13 @@ shift $((OPTIND - 1))
 
 day="$(date "+%w")"
 if [ -n "$1" ]; then
-	LECTURE="$(echo -e "$ZOOMS" | tr ';' '\n' | grep -i "$1" | cut -d"-" -f2)"
+	LECTURE="$(echo -e "$ZOOMS" | tr ';' '\n' | grep -i "$1" | cut -d"-" -f2 | tr -d ' \t\r\n')"
 else
-	LECTURE="$(echo -e "$ZOOMS" | tr ';' '\n' | awk -F'-' 'NF && ($2 == '$day' || NF == 2 || "'$ALL'" == "true") { print $0 }' | dmenu -i -l 10 | awk -F"-" '{print $3}')"
+	LECTURE="$(echo -e "$ZOOMS" | tr ';' '\n' | awk -F'-' 'NF && ($2 == '$day' || NF == 2 || "'$ALL'" == "true") { print $0 }' | dmenu -i -l 10 | awk -F"-" '{print $3}' | tr -d ' \t\r\n')"
 fi
 
+
 if [ -n "$LECTURE" ]; then
-	(setsid xdg-open "$LECTURE") &
+	echo "opening $LECTURE"
+	(setsid xdg-open "$LECTURE" >/dev/null 2>&1) &
 fi
