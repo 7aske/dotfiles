@@ -13,15 +13,23 @@ if [ -z "$ZOOMS" ]; then
 fi
 
 ALL=false
-while getopts "a" arg; do
+LIST=0
+while getopts "al" arg; do
 	case $arg in
 		a) ALL=true ;;
+		l) LIST=1 ;;
 	esac
 done
 
 shift $((OPTIND - 1))
 
 day="$(date "+%w")"
+
+if (( $LIST )); then
+	echo -e "$ZOOMS" | tr ';' '\n' | awk -F'-' 'NF && ($2 == '$day' || NF == 2 || "'$ALL'" == "true") { print $0 }'
+	exit 0
+fi
+
 if [ -n "$1" ]; then
 	LECTURE="$(echo -e "$ZOOMS" | tr ';' '\n' | grep -i "$1" | cut -d"-" -f2 | tr -d ' \t\r\n')"
 else
