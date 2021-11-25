@@ -45,7 +45,6 @@ map  <S-Space>      <Action>(GotoNextError)
 nmap <c-n>          <Action>(SelectNextOccurrence)
 nmap <c-w>q         <Action>(CloseEditor)
 nmap <c-w>w         <Action>(Switcher)
-nmap <leader>gt     <Action>(GotoTest)
 nmap <leader>G      <Action>(Generate)
 map  <leader>R      <Action>(RefactoringMenu)
 nmap <leader>a      <Action>(ShowIntentionActions)
@@ -57,6 +56,7 @@ nmap gD             <Action>(GotoImplementation)
 nmap g[             <Action>(GotoPreviousError)
 nmap g]             <Action>(GotoNextError)
 nmap gd             <Action>(GotoDeclaration)
+nmap gt             <Action>(GotoTest)
 
 command Goya        action ToggleDistractionFreeMode
 command W           action Switcher
