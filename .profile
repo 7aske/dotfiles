@@ -6,7 +6,7 @@ export PROFILE_SOURCED=$USER
 # Default programs
 export EDITOR="nvim"
 export BROWSER="brave"
-export FILE="nautilus"
+export FILE="thunar"
 export TERMFILE="ranger"
 export READER="zathura"
 export PLAYER="spotify"
@@ -33,6 +33,7 @@ prepend_path () {
 prepend_path "$HOME/.local/share/cargo/bin"
 prepend_path "$HOME/Android/Sdk/emulator"
 prepend_path "$HOME/.local/bin"
+prepend_path "$HOME/.local/bin/scripts"
 
 unset append_path
 
