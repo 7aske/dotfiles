@@ -38,7 +38,6 @@
 *.color14: nord7
 *.color15: nord6
 
-*.dpi:                 96
 *.antialias:           true
 *.hinting:             true
 *.rgba:                rgba
@@ -50,6 +49,6 @@
 *.reverseVideo:        on
 *.selectToClipboard:   false
 
-*.font:	               Fira Code:pixelsize=16:antialias=true:autohint=true;
+*.font:	               Fira Code:size=16:antialias=true:autohint=true;
 *.alpha:               0.9
 Xcursor.theme:         capitaine-cursors-light
