@@ -1,5 +1,4 @@
 configuration {
-	theme: "nord";
 	font: "Fira Code 12";
     fake-transparency: true;
     combi-hide-mode-prefix: true;
@@ -9,4 +8,6 @@ configuration {
 	matching: "regex";
 	tokenize: true;
 }
+
+@theme "nord"
 
