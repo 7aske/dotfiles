@@ -10,7 +10,11 @@ for val in $(free --mega -h | awk '/^Mem:/ {print int($3 / $2 * 100) " " $3 "/" 
 	FREE+=($val)
 done
 	
-if [ "${FREE[0]}" -ge 90 ]; then
+# initial case where Mibs are comparted to Gibs
+# and the resulting ratio is greater then 100
+if [ "${FREE[0]}" -ge 100 ]; then
+	color="${color7:-"#D8DEE9"}"
+elif [ "${FREE[0]}" -ge 90 ]; then
 	color="${color1:-"#BF616A"}"
 elif [ "${FREE[0]}" -ge 75 ]; then
 	color="${color3:-"#D08770"}"
