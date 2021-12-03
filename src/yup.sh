@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Select package manager to use
+PACMAN="${PACMAN:-"yay"}"
+
 tempfile="/tmp/yup"
 
 function _root_check(){
@@ -16,7 +19,7 @@ function _root_check(){
 
 function _pacup_write(){
 	_root_check -r
-	yay -Qu | grep -v "Avoid running yay as root/sudo" | sudo tee "$tempfile"
+	$PACMAN -Qu | grep -v "Avoid running $PACMAN as root/sudo" | sudo tee "$tempfile"
 }
 
 function pacup_count(){
@@ -28,12 +31,12 @@ function pacup_count(){
 }
 
 function pacup_update(){
-	yay -Syy
+	$PACMAN -Syy
 	_pacup_write
 }
 
 function pacup_list(){
-	cat "$tempfile" | cut -d' ' -f1,4 | column -o ' | ' -t
+	cat "$tempfile" | column -o ' ' -t
 }
 
 function pacup_reset(){
@@ -46,6 +49,6 @@ while getopts "urcl" arg; do
 		r) _pacup_write ;;
 		c) pacup_count  ;;
 		l) pacup_list   ;;
-		*) yay && _pacup_write && exit 0 ;;
+		*) $PACMAN && _pacup_write && exit 0 ;;
 	esac
 done
