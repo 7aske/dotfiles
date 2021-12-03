@@ -613,7 +613,7 @@ exec_always --no-startup-id alternating_layouts
 # compton/picom
 bindsym $mod+Shift+F5 exec --no-startup-id killall picom
 bindsym $mod+F5 exec --no-startup-id picom -b --experimental-backends --config ~/.config/compton/compton.conf
-# exec_always --no-startup-id sleep 1 && pgrep picom || picom -b --experimental-backends --config ~/.config/compton/compton.conf
+exec_always --no-startup-id sleep 1 && pgrep picom || picom -b --experimental-backends --config ~/.config/compton/compton.conf
 
 # set background
 # exec_always --no-startup-id wal -i ~/.config/wallpaper
@@ -645,7 +645,7 @@ set_from_resource $color14    i3wm.color14 #A3BE8C
 set_from_resource $color15    i3wm.color15 #B48EAD
 set_from_resource $fg         foreground
 set_from_resource $bg         background
-
+set               $bg_trans   #2E344077
 
 # class                    border  background       text indicator   cborder
 client.focused            $color3     $color3    $color0  $color13   $color3
@@ -664,6 +664,7 @@ client.background             $bg
 
 # Start i3blocks to display status bar
 bar {
+	i3bar_command i3bar -t
 	status_command i3blocks
     position top
 
@@ -674,9 +675,9 @@ bar {
 	workspace_min_width 32
     colors {
         #background $background
-        background                 $bg
-        focused_background         $bg
-        statusline                 $fg
+        background            $bg_trans
+        focused_background    $bg_trans
+        statusline            $fg
         focused_statusline    $color15
         separator             $color12
 
