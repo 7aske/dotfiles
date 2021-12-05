@@ -20,6 +20,7 @@ all: albert \
 	neofetch \
 	newsboat \
 	nvim \
+	ranger \
 	rofi \
 	sxiv \
 	tmux \
@@ -83,6 +84,9 @@ newsboat:
 
 nvim:
 	./mklink nvim
+
+ranger:
+	./mklink ranger
 
 rofi:
 	./mklink rofi
