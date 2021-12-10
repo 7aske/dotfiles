@@ -590,7 +590,7 @@ exec_always --no-startup-id killall barrier; sleep 10; barrier
 exec_always --no-startup-id pgrep pidswallow || pidswallow -gl
 exec_always --no-startup-id clipmenud
 exec_always --no-startup-id pgrep unclutter || unclutter --fork --timeout 5 --jitter 10 --ignore-scrolling
-exec_always --no-startup-id pgrep xautolock || xautolock -resetsaver -detectsleep -time 10 -locker lock -cornersize 64 -corners ----
+exec_always --no-startup-id pgrep xautolock || xautolock -resetsaver -detectsleep -time 10 -notify 10 -locker lock -cornersize 64 -corners ----
 # 7aske-scripts
 exec_always --no-startup-id dunst_reload
 # 7aske-scripts

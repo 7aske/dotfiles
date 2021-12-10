@@ -84,6 +84,9 @@ interval=5
 [mic-status]
 interval=5
 
+[power]
+interval=persist
+
 [layout]
 label= 
 interval=60
