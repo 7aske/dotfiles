@@ -4,11 +4,11 @@ TIMEOUT="${TIMEOUT:-5}"
 [ -e "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
 
 ICON=""
-color="${color7:-'#D8DEE9'}"
 
 trap 'exit 130' SIGINT
 
 while true; do
+	color="${color7:-'#D8DEE9'}"
 	read -t $TIMEOUT button
 	case $button in
 		1) if [ -e "/tmp/statusbar-power" ]; then
