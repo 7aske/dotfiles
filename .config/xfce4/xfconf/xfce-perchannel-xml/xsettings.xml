@@ -3,7 +3,7 @@
 <channel name="xsettings" version="1.0">
   <property name="Net" type="empty">
     <property name="ThemeName" type="string" value="Nordic-darker"/>
-    <property name="IconThemeName" type="string" value="Papirus-Dark-nordic-blue-folders"/>
+    <property name="IconThemeName" type="string" value="Papirus-Light-nordic-blue-folders"/>
     <property name="DoubleClickTime" type="int" value="532"/>
     <property name="DoubleClickDistance" type="int" value="8"/>
     <property name="DndDragThreshold" type="int" value="8"/>
@@ -14,7 +14,7 @@
     <property name="EnableInputFeedbackSounds" type="bool" value="true"/>
   </property>
   <property name="Xft" type="empty">
-    <property name="DPI" type="int" value="96"/>
+    <property name="DPI" type="int" value="140"/>
     <property name="Antialias" type="int" value="1"/>
     <property name="Hinting" type="int" value="-1"/>
     <property name="HintStyle" type="string" value="hintfull"/>
@@ -46,6 +46,6 @@
     <property name="WindowScalingFactor" type="int" value="1"/>
   </property>
   <property name="Xfce" type="empty">
-    <property name="LastCustomDPI" type="int" value="96"/>
+    <property name="LastCustomDPI" type="int" value="140"/>
   </property>
 </channel>

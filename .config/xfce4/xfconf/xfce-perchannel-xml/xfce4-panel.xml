@@ -284,12 +284,15 @@
         <value type="string" value="blueman-applet"/>
       </property>
       <property name="known-legacy-items" type="array">
+        <value type="string" value="barrier"/>
         <value type="string" value="pamac-tray"/>
         <value type="string" value="xfce4-power-manager"/>
         <value type="string" value="networkmanager applet"/>
         <value type="string" value="pasystray"/>
       </property>
       <property name="known-items" type="array">
+        <value type="string" value="discord1"/>
+        <value type="string" value="Barrier"/>
         <value type="string" value="lightcord1"/>
       </property>
     </property>

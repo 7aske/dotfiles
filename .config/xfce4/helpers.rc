@@ -1,6 +1,5 @@
-FileManager=custom-FileManager
-MailReader=custom-MailReader
+FileManager=thunar
+MailReader=evolution
 WebBrowser=brave
 TerminalEmulator=custom-TerminalEmulator
-FileManagerDismissed=true
 
