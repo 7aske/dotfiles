@@ -87,6 +87,9 @@ interval=5
 [power]
 interval=persist
 
+[volume]
+interval=5
+
 [layout]
 label= 
 interval=60

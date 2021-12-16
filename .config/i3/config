@@ -599,7 +599,7 @@ exec_always --no-startup-id fix_xcursor
 
 # pulseaudio
 exec_always --no-startup-id pgrep pulseaudio || pulseaudio -D
-exec_always --no-startup-id pgrep pasystray  || pasystray
+# exec_always --no-startup-id pgrep pasystray  || pasystray
 
 # touchpad and keyboard config
 # 7aske-scripts
