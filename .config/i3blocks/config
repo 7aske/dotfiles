@@ -84,8 +84,8 @@ interval=5
 [mic-status]
 interval=5
 
-[power]
-interval=persist
+#[power]
+#interval=persist
 
 [volume]
 interval=5
