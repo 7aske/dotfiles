@@ -4,21 +4,29 @@
 # with openrc use loginctl
 test $(cat /proc/1/comm) = "systemd" && logind=systemctl || logind=loginctl
 
+_lock() { lock; }
+
 case "$1" in
     lock)
-        lock
-        ;;
+		case $DESKTOP_SESSION in
+			xfce) xfce4-session-screensaver-command -l ;;
+			*) _lock ;;
+		esac ;;
     logout)
-        i3-msg exit
-        ;;
+		case $DESKTOP_SESSION in
+			xfce) xfce4-session-logout -l ;;
+			*) i3-msg exit ;;
+		esac ;;
     switch_user)
-        loginctl lock-session
-        ;;
+		case $DESKTOP_SESSION in
+			xfce) xfce4-session-logout -u ;;
+			*) loginctl lock-session ;;
+		esac ;;
     suspend)
-        lock && $logind suspend
+        $logind suspend
         ;;
     hibernate)
-        lock && $logind hibernate
+        $logind hibernate
         ;;
     reboot)
         $logind reboot
