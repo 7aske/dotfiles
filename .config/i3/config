@@ -618,6 +618,7 @@ exec_always --no-startup-id sleep 1 && pgrep picom || picom -b --experimental-ba
 # set background
 # exec_always --no-startup-id wal -i ~/.config/wallpaper
 exec --no-startup-id ~/.fehbg
+exec --no-startup-id nitrogen --restore
 
 #            _
 #   ___ ___ | | ___  _ __ ___
