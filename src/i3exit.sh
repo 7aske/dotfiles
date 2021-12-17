@@ -9,7 +9,7 @@ _lock() { lock; }
 case "$1" in
     lock)
 		case $DESKTOP_SESSION in
-			xfce) xfce4-session-screensaver-command -l ;;
+			xfce) xfce4-screensaver-command -l ;;
 			*) _lock ;;
 		esac ;;
     logout)
