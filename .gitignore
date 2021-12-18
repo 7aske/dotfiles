@@ -19,5 +19,6 @@ __pycache__
 .config/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml
 .config/xfce4/xfconf/xfce-perchannel-xml/displays.xml
 .config/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
+.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-settings-manager.xml
 
 .config/task/*.data
