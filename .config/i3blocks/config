@@ -48,10 +48,6 @@ interval=60
 [weather]
 interval=60
 
-[battery]
-interval=60
-command=~/.local/bin/statusbar/battery BAT1
-
 [tasks]
 label=
 interval=60
@@ -86,6 +82,10 @@ interval=5
 
 #[power]
 #interval=persist
+
+[battery]
+interval=60
+command=~/.local/bin/statusbar/battery BAT1
 
 [volume]
 interval=5
