@@ -5,21 +5,33 @@ usage() {
     exit 2
 }
 
+class=""
+
+while getopts "c:" arg; do
+	case $arg in
+		c) class="$OPTARG" ;;
+	esac
+done
+
+shift $((OPTIND - 1))
+
 [ -z "$1" ] && usage
 
+[ -z "$class" ] && class="$1"
+
 program="$(basename $1)"
-processes="$(pgrep -x "$program")"
+processes="$(pgrep -f "$program")"
 
 if [ -n "$processes" ]; then
-	visible="$(xdotool search --onlyvisible --class $program | xargs -I% xprop -id % | grep -c "window state: Normal")"
+	visible="$(xdotool search --onlyvisible --class $class | xargs -I% xprop -id % | grep -c "window state: Normal")"
 	if [ "$visible" -gt 0 ]; then
-		for win in $(xdotool search --onlyvisible --class $program); do 
+		for win in $(xdotool search --onlyvisible --class $class); do 
 			if grep -q "window state: Normal" <(xprop -id $win); then
 				xdotool windowunmap $win
 			fi
 		done
 	else
-		for win in $(xdotool search --class $program); do
+		for win in $(xdotool search --class $class); do
 			if grep -q "window state: Withdrawn" <(xprop -id $win); then
 				xdotool windowmap $win
 			fi
