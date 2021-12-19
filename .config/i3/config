@@ -148,7 +148,7 @@ bindsym $mod+Mod1+Shift+b      exec --no-startup-id virtualbox
 bindsym $mod+Mod1+d            exec --no-startup-id discord
 bindsym $mod+Mod1+r            exec --no-startup-id $terminal -c newsboat_float -e newsboat
 bindsym $mod+Mod1+Ctrl+r       exec --no-startup-id $terminal -c newsboat_float -e podboat
-bindsym $mod+Scroll_Lock       exec --no-startup-id wtoggle bitwarden-desktop
+bindsym $mod+Scroll_Lock       exec --no-startup-id wtoggle -c bitwarden bitwarden-desktop
 bindsym $mod+Pause       	   exec --no-startup-id sleep 1 && xset dpms force off
 bindsym $mod+y 				   workspace y; exec --no-startup-id $browser "https://youtube.com"
 
