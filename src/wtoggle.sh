@@ -20,9 +20,13 @@ shift $((OPTIND - 1))
 [ -z "$class" ] && class="$1"
 
 program="$(basename $1)"
-processes="$(pgrep -f "$program")"
+if [ -z "$class" ]; then
+	processes="$(pgrep -cf "$program" -O 1)"
+else
+	processes="$(pgrep -cf "$class|$program" -O 1)"
+fi
 
-if [ -n "$processes" ]; then
+if [ "$processes" -gt 0 ]; then
 	visible="$(xdotool search --onlyvisible --class $class | xargs -I% xprop -id % | grep -c "window state: Normal")"
 	if [ "$visible" -gt 0 ]; then
 		for win in $(xdotool search --onlyvisible --class $class); do 
