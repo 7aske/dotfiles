@@ -15,5 +15,8 @@
     <property name="logout" type="empty">
       <property name="enabled" type="bool" value="false"/>
     </property>
+    <property name="saver-activation" type="empty">
+      <property name="delay" type="int" value="5"/>
+    </property>
   </property>
 </channel>

@@ -13,6 +13,7 @@ markup=pango
 align=left
 label=
 interval=5
+signal=11
 
 [cpu]
 label= 
@@ -53,7 +54,7 @@ label=
 interval=60
 
 [cgs]
-label= 
+label=<span size='medium'> </span>
 interval=60
 
 #[newsboat]
@@ -89,6 +90,7 @@ command=~/.local/bin/statusbar/battery BAT1
 
 [volume]
 interval=5
+signal=10
 
 [layout]
 label= 
