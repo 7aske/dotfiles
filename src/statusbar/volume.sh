@@ -56,8 +56,8 @@ fi
 if _is_any_muted; then
 	ICON=$ICON_MUTED
 	color="${color1:-"#BF616A"}"
-	echo "<span color=\"$color\">$ICON </span>"
+	echo "<span color=\"$color\" size='large'> $ICON </span>"
 	exit 0
 fi
 
-echo "$ICON <span color=\"$color\">$VOLUME</span>"
+echo "<span size='large'>$ICON</span> <span color=\"$color\">$VOLUME</span>"
