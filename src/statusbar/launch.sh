@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+# killswitch
+SWITCH="/tmp/statusbar_$(basename $0)" 
+case $BLOCK_BUTTON in
+	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
+esac
+
+if [ -e "$SWITCH" ]; then
+	exit 0;
+fi
+
 [ -e "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh" 
 
 web_url="https://go4liftoff.com/launches"

@@ -72,6 +72,9 @@ color="$color7"
 case "$PLAYER_STATUS" in
 	"Playing")
 		icon="喇"
+		case "$PLAYER" in
+			spotify) icon="" ;;
+		esac
 		color="$color2"
 		text="$(playerctl "$PLAYER_ARG" metadata title | cut -c -30 | iconv -c)"
 		;;
@@ -87,4 +90,9 @@ case "$PLAYER_STATUS" in
 		;;
 esac
 
-printf "<span color='$color'>%s %s</span>\n" "$icon" "$text"
+SWITCH="/tmp/statusbar_$(basename $0)" 
+if [ -e "$SWITCH" ]; then
+	text=""
+fi
+
+printf "<span size='large' color='$color'>%s</span> <span color='$color'>%s</span>\n" "$icon" "$text"

@@ -1,5 +1,16 @@
 #!/usr/bin/env sh
 
+# killswitch
+SWITCH="/tmp/statusbar_$(basename $0)" 
+case $BLOCK_BUTTON in
+	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
+esac
+
+if [ -e "$SWITCH" ]; then
+	echo "<span size='x-large'></span>"
+	exit 0
+fi
+
 _bc() {
 	echo "scale=${2:-"2"}; $1" | bc
 }

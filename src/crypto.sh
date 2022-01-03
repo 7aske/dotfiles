@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 
 
+# i3blocks statusbar killswitch
+SWITCH="/tmp/statusbar_$(basename $0)" 
+case $BLOCK_BUTTON in
+	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
+esac
+
+if [ -e "$SWITCH" ]; then
+	exit 0;
+fi
+
 # Associative array of crypto currency names
 declare -A CRYPTO_MAP
 
