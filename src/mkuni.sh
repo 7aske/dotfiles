@@ -37,7 +37,7 @@ if [ -z "$2" ]; then
 
     [ -z "$NUM" ] && NUM="00"
 
-    NUM=$(($NUM + 1))
+	NUM="$(echo "$NUM + 1" | bc -l)"
 else
     NUM="$2"
 fi
