@@ -62,9 +62,11 @@ interval=60
 
 [packages]
 interval=60
+signal=9
 
 [services]
 interval=10
+signal=9
 
 #[desk]
 #label= 
@@ -74,12 +76,15 @@ interval=10
 
 [notify-status]
 interval=5
+signal=9
 
 [rec-status]
 interval=5
+signal=9
 
 [mic-status]
 interval=5
+signal=9
 
 #[power]
 #interval=persist
@@ -87,6 +92,7 @@ interval=5
 [battery]
 interval=60
 command=~/.local/bin/statusbar/battery BAT1
+signal=9
 
 [volume]
 interval=5
@@ -95,6 +101,7 @@ signal=10
 [layout]
 label= 
 interval=60
+signal=9
 
 [clock]
 label=
