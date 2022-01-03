@@ -49,6 +49,7 @@ while getopts "urcl" arg; do
 		r) _pacup_write ;;
 		c) pacup_count  ;;
 		l) pacup_list   ;;
-		*) $PACMAN && _pacup_write && exit 0 ;;
-	esac
+	esac && exit 0
 done
+
+$PACMAN -Syyu && _pacup_write

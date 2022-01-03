@@ -18,7 +18,12 @@ do_update(){
 }
 
 case "$BLOCK_BUTTON" in
-	1) notify-send -i package -u low "updates available" "$(yup -l)" ;; 
+	1) 
+		if [ $(dunstctl is-paused) = true ]; then
+			i3-msg "exec --no-startup-id $TERMINAL -c floating -e less -Srf /tmp/yup"
+		else 
+			notify-send -i package -u low "updates available" "$(yup -l)"
+		fi ;;
 	2) yup -u && notify-send -i package -u low "syncing completed" ;; 
 	3) do_update ;;
 esac 2>/dev/null 1>/dev/null
