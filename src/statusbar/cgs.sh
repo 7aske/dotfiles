@@ -9,7 +9,7 @@ case $BLOCK_BUTTON in
     3) notify-send -i git "Repositories" "$(cgs -v)" ;;
 esac
 
-repos="$(/usr/bin/cgs | wc -l)"
+repos="$(/usr/bin/cgs -b | wc -l)"
 
 if [ "$repos" -le 1 ]; then
 	color="${color7:-"#ffffff"}"
