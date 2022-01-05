@@ -5,7 +5,7 @@
 [ -f  "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
 
 case $BLOCK_BUTTON in
-    1) notify-send -i git "Repositories" "$(cgs -m)" ;;
+    1) notify-send -i git "Repositories" "$(cgs -mb | cut -c -80)" ;;
     3) notify-send -i git "Repositories" "$(cgs -v)" ;;
 esac
 
