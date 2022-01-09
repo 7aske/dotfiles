@@ -597,8 +597,8 @@ exec_always --no-startup-id dunst_reload
 exec_always --no-startup-id fix_xcursor
 # exec_always --no-startup-id pgrep -x $terminal || $terminal
 
-# pulseaudio
-exec_always --no-startup-id pgrep pulseaudio || pulseaudio -D
+# pulseaudio (weird hack because pulseaudi doesn't seem to properly start every time)
+exec_always --no-startup-id pgrep pulseaudio || (while ! $(pulseaudio -k; pulseaudio -D); do; done)
 # exec_always --no-startup-id pgrep pasystray  || pasystray
 
 # touchpad and keyboard config
