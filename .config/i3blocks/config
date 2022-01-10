@@ -2,29 +2,23 @@ command=~/.local/bin/statusbar/$BLOCK_NAME
 separator_block_width=15
 markup=pango
 
-
 #[window]
 #command=xtitle -s
 #interval=persist
 #align=left
 
-
 [music]
 align=left
-label=
 interval=5
 signal=11
 
 [cpu]
-label= 
 interval=5
 
 [temp]
-label= 
 interval=5
 
 [memory]
-label= 
 interval=10
 
 [bandwidth]
@@ -33,10 +27,12 @@ interval=1
 
 [disk]
 interval=60
+signal=9
 command=~/.local/bin/statusbar/disk / 
 
 [disk]
 interval=60
+signal=9
 command=~/.local/bin/statusbar/disk /home 
 
 [crypto]
@@ -54,7 +50,6 @@ label=
 interval=60
 
 [cgs]
-label=<span size='medium'> </span>
 interval=60
 
 #[newsboat]
