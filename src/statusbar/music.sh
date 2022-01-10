@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-. "$HOME/.profile"
+SWITCH="$HOME/.cache/statusbar_$(basename $0)" 
+
+[ -e "$HOME/.profile" ] && . "$HOME/.profile"
 [ -e  "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh" 
 
 NOTIFY_ARGS="-a playerctl -t 500"
@@ -90,7 +92,6 @@ case "$PLAYER_STATUS" in
 		;;
 esac
 
-SWITCH="/tmp/statusbar_$(basename $0)" 
 if [ -e "$SWITCH" ]; then
 	text=""
 fi

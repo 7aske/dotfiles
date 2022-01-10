@@ -8,10 +8,11 @@
 
 icon="$2"
 
+SWITCH="$HOME/.cache/statusbar_$(basename $0)"
+
 case $BLOCK_BUTTON in
-	1) pgrep -x dunst >/dev/null && \
-		notify-send -i drive-harddisk " Disk space" "$(df -h --output=source,avail,size,target | grep -e "^/" -e "Filesystem" | grep -ve "boot" -e "efi")" ;;
-	2) gnome-disks ;;
+	1) gnome-disks ;;
+	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH"; pkill -SIGRTMIN+9 i3blocks ;;
 	3) baobab ;;
 esac
 
@@ -26,5 +27,8 @@ if [ -n "$usage" ]; then
 	fi
 fi
 
-
-printf "%s <span color='$color'>%s</span>\n" "$icon" "$(numfmt --to iec --from-unit=1024 --format "%f" $usage)"
+if [ -e "$SWITCH" ]; then
+	printf "<span color='$color'>%s </span>\n" "$icon"
+else
+	printf "%s <span color='$color'>%s</span>\n" "$icon" "$(numfmt --to iec --from-unit=1024 --format "%f" $usage)"
+fi

@@ -1,11 +1,14 @@
 #!/usr/bin/env sh
 
+SWITCH="$HOME/.cache/statusbar_$(basename $0)" 
+
 [ -z "$CODE" ] && return 1
 [ -f  "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
 [ -f  "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
 
 case $BLOCK_BUTTON in
     1) notify-send -i git "Repositories" "$(cgs -mb | cut -c -80)" ;;
+	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
     3) notify-send -i git "Repositories" "$(cgs -v)" ;;
 esac
 
@@ -20,11 +23,18 @@ elif [ "$repos" -le 5 ]; then
 else
 	color="${color1:-"#ff8144"}"
 fi
+  
+ICON=''
 
 if [ $repos -eq 0 ]; then
 	exit 0
 fi
 
-echo "<span color='$color'>$repos</span>"
+if [ -e "$SWITCH" ]; then
+	echo "<span size='medium' color='$color'>$ICON </span>"
+else
+	echo "<span size='medium'>$ICON</span> <span color='$color'>$repos</span>"
+fi
+
 
 

@@ -2,7 +2,7 @@
 
 
 # i3blocks statusbar killswitch
-SWITCH="/tmp/statusbar_$(basename $0)" 
+SWITCH="$HOME/.cache/statusbar_$(basename $0)" 
 case $BLOCK_BUTTON in
 	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
 esac
