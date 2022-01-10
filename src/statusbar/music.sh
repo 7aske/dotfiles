@@ -85,10 +85,11 @@ case "$PLAYER_STATUS" in
 		;;
 	"Stopped")
 		icon=""
+		text=""
 		;;
 	"Paused")
 		icon=""
-		text="$(playerctl "$PLAYER_ARG" metadata title | cut -c -30 | iconv -c)"
+		text=""
 		;;
 esac
 
