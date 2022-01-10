@@ -12,8 +12,8 @@ esac
 
 color="${color2:-"#A3BE8C"}"
 muted_color="${color1:-"#BF616A"}"
-icon=""
-muted_icon=""
+icon=" "
+muted_icon=" "
 
 sources="$(pactl list sources short | grep -vc "monitor")"
 muted="$(pactl list sources | grep -B6 "Mute: yes" | grep "Name:" | grep -vc "monitor")"
@@ -27,4 +27,4 @@ if [ -z "$inputs" ]; then
 	exit 0
 fi
 
-echo "<span color='$color'>$icon</span>"
+echo "<span size='large' color='$color'>$icon</span>"
