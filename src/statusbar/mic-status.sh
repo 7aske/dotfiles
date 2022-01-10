@@ -27,4 +27,4 @@ if [ -z "$inputs" ]; then
 	exit 0
 fi
 
-echo "<span size='large' color='$color'>$icon</span>"
+echo "<span size='medium' color='$color'>$icon</span>"

@@ -31,9 +31,9 @@ _is_any_muted() {
 
 VOLUME="$(padef_get_vol)"
 
-ICON_LOW=""
-ICON_MED=""
-ICON_HIGH=""
+ICON_LOW="奄"
+ICON_MED="奔"
+ICON_HIGH="墳"
 ICON_MUTED="婢"
 
 if [ "$VOLUME" -ge 100 ]; then
@@ -60,4 +60,4 @@ if _is_any_muted; then
 	exit 0
 fi
 
-echo "<span size='large'>$ICON</span> <span color=\"$color\">$VOLUME</span>"
+echo "<span size='x-large'>$ICON</span> <span rise='2pt' color=\"$color\">$VOLUME</span>"
