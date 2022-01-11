@@ -18,10 +18,11 @@ case $BLOCK_BUTTON in
  : not charging
  : charging
 : charged/stagnant charge
- : battery very low!" ;;
+ : battery very low!" ;;
 esac
 
 saver_icon="  "
+warn=" "
 saver="$(cat /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode)"
 
 if [ "$capacity" -ge 65 ]; then
@@ -32,24 +33,18 @@ elif [ "$capacity" -ge 25 ]; then
 	color="${theme12:-"#D08770"}"
 else
 	color="${color1:-"#BF616A"}"
-	warn="  "
+	warn="  "
 fi
 
 [ -z $warn ] && warn=" "
 [ "$saver" -eq 0 ] && saver_icon=""
 
 [ "$status" = "Charging" ] && color="${color2:-"#A3BE8C"}"
+icon="$(echo "$status" | sed -e "s/,//;s/Discharging//;s/Not Charging//;s/Charging//;s/Unknown//;s/Full//;s/ 0*/ /g;s/ :/ /g")"
 
 if [ -e "$SWITCH" ]; then
-	printf "<span color='%s'>%s%s</span>\n" \
-		"$color" \
-		"$(echo "$status" | sed -e "s/,//;s/Discharging//;s/Not Charging//;s/Charging//;s/Unknown//;s/Full//;s/ 0*/ /g;s/ :/ /g")" \
-		"$warn"
+	echo "<span color='$color'>$icon$warn</span>"
 else
-	printf "<span color='%s'>%s%s%s%s</span>\n" \
-		"$color" \
-		"$(echo "$status" | sed -e "s/,//;s/Discharging//;s/Not Charging//;s/Charging//;s/Unknown//;s/Full//;s/ 0*/ /g;s/ :/ /g")" \
-		"$warn" \
-		"$(echo "$capacity" | sed -e 's/$/%/')" \
-		"$saver_icon"
+	capacity="$(echo "$capacity" | sed -e 's/$/%/')"
+	echo "<span color='$color'>$icon $capacity$warn$saver_icon</span>"
 fi

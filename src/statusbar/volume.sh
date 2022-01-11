@@ -60,4 +60,4 @@ if _is_any_muted; then
 	exit 0
 fi
 
-echo "<span size='x-large'>$ICON</span> <span rise='2pt' color=\"$color\">$VOLUME</span>"
+echo "<span size='x-large'>$ICON</span> <span rise='2pt' color=\"$color\">$VOLUME%</span>"
