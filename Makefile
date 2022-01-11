@@ -117,6 +117,7 @@ picom: compton
 
 zsh:
 	./mklink zsh
+	mkdir -p ${HOME}/.cache/zsh
 	ln -sf "${HOME}/.config/zsh/.zshrc" "${HOME}/.zshrc"
 
 zathura:
