@@ -152,9 +152,9 @@ bindsym $mod+Scroll_Lock       exec --no-startup-id wtoggle -c bitwarden bitward
 bindsym $mod+Pause       	   exec --no-startup-id sleep 1 && xset dpms force off
 bindsym $mod+y 				   workspace y; exec --no-startup-id $browser "https://youtube.com"
 
-bindsym Print            --release exec --no-startup-id scrot && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot" "saved to homedir"
-bindsym $mod+Print       --release exec --no-startup-id scrot -u && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot (window)" "saved to homedir"
-bindsym $mod+Shift+Print --release exec --no-startup-id scrot -s -f -l style=dash -o /dev/stdout | xclip -sel c -t image/png && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot (selection)" "copied to clipboard"
+bindsym Print            --release exec --no-startup-id maim ~/$(date +%s).png && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot" "saved to homedir"
+bindsym $mod+Print       --release exec --no-startup-id maim -i $(xdotool getactivewindow) ~/$(date +%s).png && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot (window)" "saved to homedir"
+bindsym $mod+Shift+Print --release exec --no-startup-id maim -b 3 -s | xclip -sel c -t image/png && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot (selection)" "copied to clipboard"
 
 bindsym $mod+Shift+x     --release exec --no-startup-id xkill
 bindsym $mod+Mod1+x      --release exec --no-startup-id xpick
