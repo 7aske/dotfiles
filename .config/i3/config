@@ -52,10 +52,10 @@ set $terminal2  kitty
 
 bindsym $mod+p            exec --no-startup-id wtoggle pavucontrol
 # 7aske-scripts
-bindsym $mod+Ctrl+p       exec --no-startup-id padefault ma;           exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym $mod+Mod1+p       exec --no-startup-id padefault mas;          exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym $mod+Shift+p      exec --no-startup-id padefault toggle;       exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym $mod+Ctrl+Shift+p exec --no-startup-id padefault toggle-focus; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
+bindsym $mod+Ctrl+p       exec --no-startup-id padefault ma;           exec --no-startup-id sleep 0.05 && pkill -SIGRTMIN+10 i3blocks
+bindsym $mod+Mod1+p       exec --no-startup-id padefault mas;          exec --no-startup-id sleep 0.05 && pkill -SIGRTMIN+10 i3blocks
+bindsym $mod+Shift+p      exec --no-startup-id padefault toggle;       exec --no-startup-id sleep 0.05 && pkill -SIGRTMIN+10 i3blocks
+bindsym $mod+Ctrl+Shift+p exec --no-startup-id padefault toggle-focus; exec --no-startup-id sleep 0.05 && pkill -SIGRTMIN+10 i3blocks
 
 # Screen brightness controls
 # bindsym XF86MonBrightnessUp exec --no-startup-id "xbacklight -inc 10; notify-send --hint=int:transient:1 -t $notif_duration 'brightness up'"
