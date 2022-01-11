@@ -3,6 +3,12 @@
 # killswitch
 SWITCH="$HOME/.cache/statusbar_$(basename $0)" 
 
+case $BLOCK_BUTTON in
+	1) i3-msg "exec --no-startup-id nm-connection-editor" 2>&1 >/dev/null ;;
+	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
+    3) notify-send -i network-wired "Local IP" "Local IP: $(ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | head -1)\nPublic IP: $(curl -s api.ipify.org)" ;;
+esac
+
 if [ -e "$SWITCH" ]; then
 	echo "<span size='x-large'></span>"
 	exit 0
@@ -11,12 +17,6 @@ fi
 _bc() {
 	echo "scale=${2:-"2"}; $1" | bc
 }
-
-case $BLOCK_BUTTON in
-	1) i3-msg "exec --no-startup-id nm-connection-editor" ;;
-	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
-    3) notify-send -i network-wired "Local IP" "Local IP: $(ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | head -1)\nPublic IP: $(curl -s api.ipify.org)" ;;
-esac
 
 IFACE="$(ip link | grep -e "BROADCAST" | sed 1q | awk '{print $2}' | cut -d ':' -f1)"
 
