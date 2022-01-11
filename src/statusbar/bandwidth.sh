@@ -2,9 +2,6 @@
 
 # killswitch
 SWITCH="$HOME/.cache/statusbar_$(basename $0)" 
-case $BLOCK_BUTTON in
-	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
-esac
 
 if [ -e "$SWITCH" ]; then
 	echo "<span size='x-large'></span>"
@@ -16,8 +13,9 @@ _bc() {
 }
 
 case $BLOCK_BUTTON in
-    1) notify-send -i modem "Public IP" "$(curl -s api.ipify.org)" ;;
-    3) notify-send -i network-wired "Local IP" "$(ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | head -1)" ;;
+	1) i3-msg "exec --no-startup-id nm-connection-editor" ;;
+	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
+    3) notify-send -i network-wired "Local IP" "Local IP: $(ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | head -1)\nPublic IP: $(curl -s api.ipify.org)" ;;
 esac
 
 IFACE="$(ip link | grep -e "BROADCAST" | sed 1q | awk '{print $2}' | cut -d ':' -f1)"
