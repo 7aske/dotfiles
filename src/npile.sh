@@ -3,7 +3,7 @@
 file=$(readlink -f "$1")
 dir=$(dirname "$file")
 base="${file%.*}"
-MD_COMPLIER="${MD_COMPILER:-"pandoc"}"
+MD_COMPLIER="${MD_COMPILER:-"markdown-pdf"}"
 
 function _compile_md_pandoc(){
 	pandoc \
@@ -32,6 +32,17 @@ function _compile_md_r(){
 	QT_STYLE_OVERRIDE='Windows' wkhtmltopdf "$html_filename" "$pdf_filename"
 	rm "$html_filename"
 	(pgrep -fi  "$pdf_filename" 2>&1>/dev/null) || (zathura "$pdf_filename" &)
+
+}
+
+function _compile_markdown_pdf(){
+	pdf_filename="$base.pdf"
+	html_filename="$base.html"
+	opts=""
+	if [ -e "remarkable.json" ]; then
+		opts="$opts -m remarkable.json"
+	fi
+	markdown-pdf -m '{"html":true,"xhtmlOut":true,"breaks":true}'  -o "$pdf_filename" "$file"
 }
 
 function _compile_tex(){
@@ -43,8 +54,9 @@ case "$file" in
 	*\.tex) _compile_tex ;;
 	*\.md)
 		case "$MD_COMPLIER" in
-			"pandoc")  _compile_md_pandoc ;;
-			"r")       _compile_md_r ;;
+			"markdown-pdf") _compile_markdown_pdf ;;
+			"pandoc")       _compile_md_pandoc ;;
+			"r")            _compile_md_r ;;
 		esac ;;
 	*config.h) sudo make install ;;
 	*\.c) cc "$file" -o "$base" && "$base" ;;
