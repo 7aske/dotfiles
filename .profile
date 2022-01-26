@@ -12,7 +12,7 @@ export READER="zathura"
 export PLAYER="spotify"
 export TERMINAL="st"
 export TERMINAL_LAUNCH="$TERMINAL -e"
-export MAIL="evolution"
+export MAIL="thunderbird"
 
 # task
 export TASKDATA="$HOME/.config/task"
