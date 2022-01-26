@@ -7,7 +7,7 @@ SWITCH="$HOME/.cache/statusbar_$(basename $0)"
 [ -f  "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
 
 case $BLOCK_BUTTON in
-    1) notify-send -i git "Repositories" "$(cgs -mb | cut -c -80)" ;;
+    1) notify-send -i git "Repositories" "$(cgs -mb | cut -d ' ' -f1-13)" ;;
 	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
     3) notify-send -i git "Repositories" "$(cgs -v)" ;;
 esac
