@@ -36,12 +36,9 @@ ICON_MED="奔"
 ICON_HIGH="墳"
 ICON_MUTED="婢"
 
-if [ "$VOLUME" -ge 100 ]; then
+if [ "$VOLUME" -ge 90 ]; then
 	ICON=$ICON_HIGH
-	color="${color3:-"#D08770"}"
-elif [ "$VOLUME" -ge 90 ]; then
-	ICON=$ICON_HIGH
-	color="${color3:-"#D08770"}"
+	color="${color1:-"#BF616A"}"
 elif [ "$VOLUME" -ge 66 ]; then
 	ICON=$ICON_HIGH
 	color="${color3:-"#D08770"}"
