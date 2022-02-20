@@ -19,7 +19,6 @@ antigen bundle mvn
 antigen bundle npm
 antigen bundle pip
 antigen bundle rust
-antigen bundle rustup
 antigen bundle command-not-found
 antigen bundle virtualenv
 antigen bundle gitignore
