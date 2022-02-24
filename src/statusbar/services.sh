@@ -9,6 +9,11 @@ if [ "$(systemctl is-active mysqld)" = "active" ] \
 	SERVICES+=(["mysql"]="")
 fi
 
+if [ "$(systemctl is-active mongodb)" = "active" ] \
+	|| [ "$(netstat -tln | grep -cE "([0-9]+.[0-9]+.[0-9]+.[0-9]+|::[1:]):27017\b")" -gt 0 ]; then
+	SERVICES+=(["mongodb"]="")
+fi
+
 if [ "$(systemctl is-active postgresql)" = "active" ] \
 	|| [ "$(netstat -tln | grep -cE "([0-9]+.[0-9]+.[0-9]+.[0-9]+|::[1:]):5432\b")" -gt 0 ]; then
 	SERVICES+=(["postres"]="")
