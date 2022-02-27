@@ -70,7 +70,7 @@ bindsym XF86AudioPrev  exec --no-startup-id playerctl previous;   exec --no-star
 # 7aske-scripts
 bindsym XF86Tools      exec --no-startup-id wtoggle $player
 
-bindsym XF86Calculator exec --no-startup-id $terminal -e calc
+bindsym XF86Calculator exec --no-startup-id $terminal -c calc -e calc
 
 # media controls re-using i3blocks script
 bindsym $mod+period       exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/music; exec --no-startup-id sleep 0.5 && pkill -SIGRTMIN+11 i3blocks
@@ -483,11 +483,11 @@ for_window [class="java-lang-Thread"] floating enable, move position center
 for_window [class="mpv"] floating enable, resize set 80 ppt 80 ppt, move position center, fullscreen enable
 for_window [class="octopi"] floating enable
 for_window [class="qt5ct"] floating enable, sticky enable, border normal
-for_window [title=".*Bitwarden.*"] floating enable, resize set 70 ppt 70 ppt, move position center
+for_window [title=".*Bitwarden.*"] floating enable, resize set 70 ppt 80 ppt, move position center
 for_window [title=".*Emulator.*"] floating enable
 for_window [title="File Transfer*"] floating enable
 for_window [title="alsamixer"] floating enable
-for_window [title="calc"] floating enable, move position center, sticky enable
+for_window [class="calc"] floating enable, resize set 20ppt 40ppt, move position center, sticky enable
 for_window [title="i3_help"] floating enable, sticky enable, border normal
 for_window [title="win0"] floating enable, move position center
 for_window [class="zoom"] floating enable, move position center
