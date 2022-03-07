@@ -7,7 +7,13 @@ SWITCH="$HOME/.cache/statusbar_$(basename $0)"
 [ -f  "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
 
 case $BLOCK_BUTTON in
-    1) notify-send -i git "Repositories" "$(cgs -mb | cut -d ' ' -f1-13)" ;;
+    1) 
+		if [ $(dunstctl is-paused) = true ]; then
+			cgs -mb > /tmp/cgs
+			i3-msg "exec --no-startup-id $TERMINAL -c floating -e less -Srf /tmp/cgs" >/dev/null 2>&1
+		else 
+			notify-send -i git "Repositories" "$(cgs -mb)"
+		fi ;;
 	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
     3) notify-send -i git "Repositories" "$(cgs -v)" ;;
 esac
