@@ -511,6 +511,7 @@ for_window [class="epicgameslauncher.exe"] floating enable, resize set 70ppt 70p
 
 # virtual machines
 for_window [class="VirtualBox Machine" title="(?i)^win"] move container to workspace w
+for_window [title=".*on QEMU/KVM"]      floating disable, border none, move container to workspace v
 for_window [class="VirtualBox Machine"] floating disable, border none, move container to workspace v
 for_window [class="VirtualBox Manager"] floating disable, border 2
 
