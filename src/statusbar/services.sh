@@ -19,6 +19,11 @@ if [ "$(systemctl is-active postgresql)" = "active" ] \
 	SERVICES+=(["postres"]="")
 fi
 
+if [ "$(systemctl is-active redis)" = "active" ] \
+	|| [ "$(netstat -tln | grep -cE "([0-9]+.[0-9]+.[0-9]+.[0-9]+|::[1:]):6379\b")" -gt 0 ]; then
+	SERVICES+=(["redis"]="")
+fi
+
 if [ "$(systemctl is-active nginx)" = "active" ]; then
 	SERVICES+=(["nginx"]="")
 fi
