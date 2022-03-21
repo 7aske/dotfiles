@@ -30,11 +30,13 @@ gsl()     { git status --long $@;          }
 gss()     { git status -s $@;              }
 gst()     { git stash $@;                  }
 gsta()    { git stash apply $@;            }
+gstp()    { git stash pop $@;              }
+gsts()    { git stash show $@;             }
 gfet()    { git fetch $@;                  }
 glog()    { git log --graph $@;            }
 gremote() { git remote -v $@;              }
 gco()     { git checkout $@;               }
-gammend() { git commit --amend $@;        }
+gammend() { git commit --amend $@;         }
 
 #       _ _                     
 #  __ _| (_) __ _ ___  ___  ___ 
