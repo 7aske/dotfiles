@@ -22,7 +22,14 @@ do_update(){
 case "$BLOCK_BUTTON" in
 	1) 
 		if [ $(dunstctl is-paused) = true ]; then
-			i3-msg "exec --no-startup-id $TERMINAL -c floating -e less -Srf /tmp/yup"
+			yup -l | awk -F ' ' '{for(i=1;i<=NF;i++){ if (i != 3) {print $i}}}' | \
+				zenity --list \
+				--column Name \
+				--column Current \
+				--column Updated \
+				--class=STATUSBAR_POPUP \
+				--title=yup \
+				--text="Available updates:"
 		else 
 			notify-send -i package -u low "updates available" "$(yup -l)"
 		fi ;;

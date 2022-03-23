@@ -9,8 +9,14 @@ SWITCH="$HOME/.cache/statusbar_$(basename $0)"
 case $BLOCK_BUTTON in
     1) 
 		if [ $(dunstctl is-paused) = true ]; then
-			cgs -mb > /tmp/cgs
-			i3-msg "exec --no-startup-id $TERMINAL -c floating -e less -Srf /tmp/cgs" >/dev/null 2>&1
+			cgs | awk -F ' ' '{for(i=1;i<=NF;i++){print $i}}' | \
+				zenity --list \
+				--column Lang \
+				--column Name \
+				--column Branch \
+				--class=STATUSBAR_POPUP \
+				--title="rgs"
+				--text="Dirty repositories:"
 		else 
 			notify-send -i git "Repositories" "$(cgs -mb)"
 		fi ;;
