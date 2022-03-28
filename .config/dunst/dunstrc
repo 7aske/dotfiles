@@ -151,6 +151,8 @@
     #frame_color = "#788388"
     #separator_color = "#263238"
 
+	enable_posix_regex = yes
+
 [urgency_low]
 	background  = "#3B4252"
 	frame_color = "#81A1C1"
@@ -180,3 +182,8 @@
 	appname = padefault
 	history_ignore = yes
 	set_stack_tag = padefault
+
+[welcome]
+	body = ".*[Dd]obro( nam)? do[sš]l?a.*"
+	skip_display = yes
+
