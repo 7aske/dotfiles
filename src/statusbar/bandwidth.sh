@@ -2,6 +2,7 @@
 
 # killswitch
 SWITCH="$HOME/.cache/statusbar_$(basename $0)" 
+[ -f  "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
 
 case $BLOCK_BUTTON in
 	1) i3-msg "exec --no-startup-id nm-connection-editor" 2>&1 >/dev/null ;;
@@ -9,20 +10,14 @@ case $BLOCK_BUTTON in
     3) notify-send -i network-wired "Local IP" "Local IP: $(ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | head -1)\nPublic IP: $(curl -s api.ipify.org)" ;;
 esac
 
-if [ -e "$SWITCH" ]; then
-	echo "<span size='x-large'></span>"
-	exit 0
-fi
-
 _bc() {
 	echo "scale=${2:-"2"}; $1" | bc
 }
 
 IFACE="$(ip link | grep -e "BROADCAST" | sed 1q | awk '{print $2}' | cut -d ':' -f1)"
+speed="$(cat /sys/class/net/$IFACE/speed)"
 
 SLEEP=1
-
-OUT_FORMAT=" %5s 祝%5s"
 
 while getopts ":f:" ARG; do
 	case $ARG in
@@ -54,12 +49,33 @@ TX_DELTA=$((TX_NEW - TX_OLD))
 TIME_DELTA="$(_bc "$((TIME_END - TIME_START)) / 1000000")"
 
 FORMAT="%4f"
-RX_OUT="$(_bc "$RX_DELTA / $TIME_DELTA" 0)"
-RX_OUT="$(numfmt --to iec --format "$FORMAT" $RX_OUT)"
+RX="$(_bc "$RX_DELTA / $TIME_DELTA" 0)"
+RX_OUT="$(numfmt --to iec --format "$FORMAT" $RX)"
 
-TX_OUT="$(_bc "$TX_DELTA / $TIME_DELTA" 0)"
-TX_OUT="$(numfmt --to iec --format "$FORMAT" $TX_OUT)"
+TX="$(_bc "$TX_DELTA / $TIME_DELTA" 0)"
+TX_OUT="$(numfmt --to iec --format "$FORMAT" $TX)"
 
+max=$(awk "BEGIN { if ($TX > $RX) {print $TX} else {print $RX} }")
+ratio="$(_bc "$max / ($speed * 104857.6)" 2)"
+
+color="$color7"
+if (( $(echo "$ratio > 0.8" | bc -l) )); then
+	color="$theme11"
+elif (( $(echo "$ratio > 0.4" | bc -l) )); then
+	color="$theme12"
+elif (( $(echo "$ratio > 0.2" | bc -l) )); then
+	color="$theme13"
+elif (( $(echo "$ratio > 0.1" | bc -l) )); then
+	color="$theme14"
+fi
+
+
+if [ -e "$SWITCH" ]; then
+	echo "<span color='$color' size='x-large'></span>"
+	exit 0
+fi
+
+OUT_FORMAT="<span color='$color'> %5s 祝%5s</span>"
 
 printf "$OUT_FORMAT" "$RX_OUT" "$TX_OUT"
 echo
