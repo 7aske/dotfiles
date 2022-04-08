@@ -21,7 +21,7 @@ case $BLOCK_BUTTON in
 			notify-send -i git "Repositories" "$(cgs -mb)"
 		fi ;;
 	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
-    3) notify-send -i git "Repositories" "$(cgs -v)" ;;
+    3) notify-send -i git "Repositories" "$(cgs -F)" ;;
 esac
 
 repos="$(/usr/bin/cgs -b | wc -l)"
