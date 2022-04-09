@@ -40,6 +40,10 @@ if [ "$(echo "$NETSTAT" | grep -cE "([0-9]+.[0-9]+.[0-9]+.[0-9]+|::[1:]?):4200.*
 	SERVICES+=(["node:4200"]="")
 fi
 
+if [ "$(echo "$NETSTAT" | grep -cE "([0-9]+.[0-9]+.[0-9]+.[0-9]+|::[1:]?):6419.*python\b")" -gt 0 ]; then
+	SERVICES+=(["python:6419"]="")
+fi
+
 if [ "$(systemctl is-active nginx)" = "active" ]; then
 	SERVICES+=(["nginx:80"]="")
 fi
