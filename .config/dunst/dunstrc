@@ -184,6 +184,6 @@
 	set_stack_tag = padefault
 
 [welcome]
-	body = ".*[Dd]obro( nam)? do[sš]l?a.*"
+	body = ".*[Dd]obro( nam)? do[sš]l?[ai].*"
 	skip_display = yes
 
