@@ -1,5 +1,5 @@
 FileManager=thunar
-MailReader=evolution
+MailReader=thunderbird
 TerminalEmulator=custom-TerminalEmulator
 WebBrowser=brave
 
