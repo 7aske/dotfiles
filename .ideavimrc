@@ -57,6 +57,7 @@ nmap g[             <Action>(GotoPreviousError)
 nmap g]             <Action>(GotoNextError)
 nmap gd             <Action>(GotoDeclaration)
 nmap gt             <Action>(GotoTest)
+nmap gs             <Action>(GotoSuperMethod)
 
 command Goya        action ToggleDistractionFreeMode
 command W           action Switcher
