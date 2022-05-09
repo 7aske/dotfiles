@@ -4,6 +4,7 @@
 
 TYPE="${TYPE:-"term"}"
 
+[ -e "$HOME/.profile" ] && . "$HOME/.profile"
 [ -z "$CODE" ] && echo "'CODE' env not set" && exit 1
 [ -z "$(command -v cgs)" ] && echo "cgs: not found" && exit 1
 [ -z "$(command -v fzf)" ] && echo "fzf: not found" && exit 1
