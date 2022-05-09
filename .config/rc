@@ -158,15 +158,19 @@ function open() {
 
 if [ -n "$FZF_CODE" ]; then
 	function code() {
+		_CODE="$(cgs -C)"
+		if [ -z "$_CODE" ]; then
+			_CODE="$CODE"
+		fi
 		if [ $# -eq 0 ]; then
-			builtin cd "$CODE" && ls
+			builtin cd "$_CODE" && ls
 			return 0
 		fi
 
 		if [ $# -eq 1 ]; then
-			MATCH="$(fd . "$CODE" -d 2 -L -t d | fzf -f "$1" | head -1)"
+			MATCH="$(fd . "$_CODE" -d 2 -L -t d | fzf -f "$1" | head -1)"
 		elif [ $# -eq 2 ]; then
-			MATCH="$(fd . "$CODE/$1" -d 2 -L -t d | fzf -f "$2" | head -1)"
+			MATCH="$(fd . "$_CODE/$1" -d 2 -L -t d | fzf -f "$2" | head -1)"
 		fi
 
 		if [ -z "$MATCH" ]; then
@@ -177,20 +181,24 @@ if [ -n "$FZF_CODE" ]; then
 	}
 else
 	function code() {
+		_CODE="$(cgs -C)"
+		if [ -z "$_CODE" ]; then
+			_CODE="$CODE"
+		fi
 		if [ $# -eq 0 ]; then
-				builtin cd "$CODE" && ls
+				builtin cd "$_CODE" && ls
 		elif [ $# -eq 1 ]; then
-			if [ -d "$CODE/$1" ]; then
-				builtin cd "$CODE/$1" && ls
+			if [ -d "$_CODE/$1" ]; then
+				builtin cd "$_CODE/$1" && ls
 			else
-				cdir="$(find "$CODE" -maxdepth 2 -name "*$1*" | sed -n '1p')"
+				cdir="$(find "$_CODE" -maxdepth 2 -name "*$1*" | sed -n '1p')"
 				[ -d "$cdir" ] && builtin cd "$cdir" && ls
 			fi
 		elif [ $# -eq 2 ]; then
-			if [ -d "$CODE/$1/$2" ]; then
-				builtin cd "$CODE/$1/$2" && ls
+			if [ -d "$_CODE/$1/$2" ]; then
+				builtin cd "$_CODE/$1/$2" && ls
 			else
-				cdir="$(find "$CODE/$1" -maxdepth 1 -name "*$2*" | sed -n '1p')"
+				cdir="$(find "$_CODE/$1" -maxdepth 1 -name "*$2*" | sed -n '1p')"
 				[ -d "$cdir" ] && builtin cd "$cdir" && ls
 			fi
 		fi
