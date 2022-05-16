@@ -78,7 +78,7 @@ case "$PLAYER_STATUS" in
 			spotify) icon="" ;;
 		esac
 		color="$color2"
-		text="$(playerctl "$PLAYER_ARG" metadata title | cut -c -30 | iconv -c)"
+		text="$(playerctl "$PLAYER_ARG" metadata title | cut -c -30 | iconv -c | sed 's_&_&amp;_g; s_<_&lt;_g; s_>_&gt;_g;')"
 		;;
 	"No players found")
 		icon=""
