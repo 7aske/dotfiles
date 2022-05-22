@@ -69,7 +69,7 @@ alias o='xdg-open'
 alias z='zathura'
 alias s='systemctl'
 alias e="$TERMFILE"
-function c { vscodium $@ || codium $@ || code-insiders $@ || /usr/bin/code $@; }
+function c { /usr/bin/code $@; }
 alias bat='bat -p --paging never --theme=base16'
 alias myip='curl -s api.ipify.org'
 alias grep='grep --color=auto'
