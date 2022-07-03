@@ -87,7 +87,7 @@ padef_toggle_focus() {
 	# fix for programs that are not direct controllers of the 
 	# sink input
 	case "$wname" in
-		Cantata) pid="$(pgrep mpd)"       ;;
+		Cantata*) pid="$(pgrep mpd)"       ;;
 		*) pid="$wpid $(pgrep -P "$wpid")";;
 	esac
 
@@ -227,7 +227,7 @@ padef_spec_volume() {
 	# fix for programs that are not direct controllers of the 
 	# sink input
 	case "$wname" in
-		Cantata) pid="$(pgrep mpd)"       ;;
+		Cantata*) pid="$(pgrep mpd)"       ;;
 		*) pid="$wpid $(pgrep -P "$wpid")";;
 	esac
 
@@ -287,7 +287,7 @@ padef_focus_volume() {
 	# fix for programs that are not direct controllers of the 
 	# sink input
 	case "$wname" in
-		Cantata) pid="$(pgrep mpd)"       ;;
+		Cantata*) pid="$(pgrep mpd)"       ;;
 		*) pid="$wpid $(pgrep -P "$wpid")";;
 	esac
 
