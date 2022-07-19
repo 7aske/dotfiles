@@ -73,14 +73,16 @@ bindsym XF86Tools      exec --no-startup-id wtoggle $player
 bindsym XF86Calculator exec --no-startup-id $terminal -c calc -e calc
 
 # media controls re-using i3blocks script
-bindsym $mod+period       exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/music; exec --no-startup-id sleep 0.5 && pkill -SIGRTMIN+11 i3blocks
-bindsym $mod+slash        exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/music; exec --no-startup-id sleep 0.1 && pkill -SIGRTMIN+11 i3blocks
-bindsym $mod+comma        exec --no-startup-id BLOCK_BUTTON=3 ~/.local/bin/statusbar/music; exec --no-startup-id sleep 0.5 && pkill -SIGRTMIN+11 i3blocks
-bindsym $mod+Shift+period exec --no-startup-id BLOCK_BUTTON=4 ~/.local/bin/statusbar/music;
-bindsym $mod+Shift+comma  exec --no-startup-id BLOCK_BUTTON=5 ~/.local/bin/statusbar/music;
-bindsym $mod+Mod1+period  exec --no-startup-id padefault vol +5%;  exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym $mod+Mod1+slash   exec --no-startup-id padefault mute-all; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym $mod+Mod1+comma   exec --no-startup-id padefault vol -5%;  exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
+bindsym $mod+period            exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/music; exec --no-startup-id sleep 0.5 && pkill -SIGRTMIN+11 i3blocks
+bindsym $mod+slash             exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/music; exec --no-startup-id sleep 0.1 && pkill -SIGRTMIN+11 i3blocks
+bindsym $mod+comma             exec --no-startup-id BLOCK_BUTTON=3 ~/.local/bin/statusbar/music; exec --no-startup-id sleep 0.5 && pkill -SIGRTMIN+11 i3blocks
+bindsym $mod+Shift+period      exec --no-startup-id BLOCK_BUTTON=4 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
+bindsym $mod+Shift+comma       exec --no-startup-id BLOCK_BUTTON=5 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
+bindsym $mod+Ctrl+Shift+period exec --no-startup-id BLOCK_BUTTON=6 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
+bindsym $mod+Ctrl+Shift+comma  exec --no-startup-id BLOCK_BUTTON=7 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
+bindsym $mod+Mod1+period       exec --no-startup-id padefault vol +5%;                           exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
+bindsym $mod+Mod1+slash        exec --no-startup-id padefault mute-all;                          exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
+bindsym $mod+Mod1+comma        exec --no-startup-id padefault vol -5%;                           exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
 
 bindsym $mod+Ctrl+Mod1+period  exec --no-startup-id padefault volume-focus +5%
 bindsym $mod+Ctrl+Mod1+slash   exec --no-startup-id padefault volume-focus 100%
