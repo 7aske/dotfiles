@@ -22,7 +22,7 @@ if [ "$PLAYER_STATUS" = "No players found" ] && [ -n "$BLOCK_BUTTON" ]; then
 	exit 0
 fi
 
-
+curr_vol=""
 case $BLOCK_BUTTON in
 1)
     playerctl next "$PLAYER_ARG"
@@ -38,7 +38,7 @@ case $BLOCK_BUTTON in
     ;;
 4)
 	if [[ "$PLAYER_ARG" =~ "chromium" ]]; then
-		if ( pgrep "brave" ); then
+		if ( pgrep "brave" >/dev/null ); then
 			padefault volume-specific "brave" "+5%"
 		else
 			padefault volume-specific "chromium" "+5%"
@@ -54,7 +54,7 @@ case $BLOCK_BUTTON in
     ;;
 5)
 	if [[ "$PLAYER_ARG" =~ "chromium" ]]; then
-		if ( pgrep "brave" ); then
+		if ( pgrep "brave" >/dev/null ); then
 			padefault volume-specific "brave" "-5%"
 		else
 			padefault volume-specific "chromium" "-5%"
@@ -68,6 +68,8 @@ case $BLOCK_BUTTON in
 		notify-send $NOTIFY_ARGS -h "int:value:$vol" -h "string:synchronous:volume" -i "$PLAYER" "playerctl" "volume -5%"
 	fi
     ;;
+6) playerctl "$PLAYER_ARG" position "5+" ;;
+7) playerctl "$PLAYER_ARG" position "5-" ;;
 esac
 
 color="$color7"
