@@ -311,6 +311,9 @@ bindsym $mod+u border toggle $border_size; exec --no-startup-id notify-send --hi
 # kill focused window
 bindsym $mod+q kill
 
+# master stack
+#bindsym $mod+space exec --no-startup-id i3-swap-master
+
 # split orientation
 bindsym $mod+space split toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration 'toggled tiling'
 
@@ -616,6 +619,10 @@ exec_always --no-startup-id xset r rate 195 55
 # alternating split layout
 # https://github.com/olemartinorg/i3-alternating-layout
 exec_always --no-startup-id alternating_layouts
+
+# master stack
+# https://github.com/Hippo0o/i3-master-layout
+#exec_always --no-startup-id i3-master-layout
 
 # compton/picom
 bindsym $mod+Shift+F5 exec --no-startup-id killall picom
