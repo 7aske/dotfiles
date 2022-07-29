@@ -45,7 +45,7 @@ menu_command="fzf"
 if [ "$MENU" = "dmenu" ]; then
 	menu_command="dmenu -l 10 -f -i -p '$TYPE:'"
 elif [ "$MENU" = "rofi" ]; then
-    menu_command="rofi -dmenu -sort -matching fuzzy -p '$TYPE'"
+    menu_command="rofi -dmenu -sort -i -matching fuzzy -p '$TYPE'"
 fi
 
 # use grep to remove $CODE prefix
