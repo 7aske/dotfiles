@@ -56,6 +56,7 @@ autoload -U compinit
 zstyle ':completion:*' menu select
 zmodload zsh/complist
 compinit
+setopt completealiases
 _comp_options+=(globdots)		# Include hidden files.
 COMPLETION_WAITING_DOTS="true"
 
