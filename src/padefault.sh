@@ -3,6 +3,7 @@
 # toggles default sound output device
 default_sink=$(pacmd info | grep "Default sink name:" | cut -d ' ' -f4)
 notify_timeout="1000"
+MAX_VOLUME="${MAX_VOLUME:-130}"
 
 _usage() {
 	echo "usage: padefault <command> [args]"
@@ -174,7 +175,13 @@ padef_toggle() {
 }
 
 padef_volume() {
-	pactl set-sink-volume "$default_sink" "$1"
+	vol="$(padef_get_vol "$default_sink")"
+	vol=$((vol + ${1%%%}))
+	if (( $vol > $MAX_VOLUME )); then
+		pactl set-sink-volume "$default_sink" "$MAX_VOLUME%"
+	else
+		pactl set-sink-volume "$default_sink" "$1"
+	fi
 	icon="audio-volume-low"
 	vol="$(padef_get_vol "$default_sink")"
 	if [ "$vol" -ge 66 ]; then
@@ -243,7 +250,13 @@ padef_spec_volume() {
 		exit 1
 	fi
 
-	pactl set-sink-input-volume "$index" "$2"
+	vol="$(padef_get_sink_vol "$index")"
+	vol=$((vol + ${2%%%}))
+	if (( $vol > $MAX_VOLUME )); then
+		pactl set-sink-input-volume "$index" "$MAX_VOLUME%"
+	else
+		pactl set-sink-input-volume "$index" "$2"
+	fi
 	icon="audio-volume-low"
 	vol="$(padef_get_sink_vol "$index")"
 	if [ "$vol" -ge 66 ]; then
@@ -303,7 +316,13 @@ padef_focus_volume() {
 		exit 1
 	fi
 
-	pactl set-sink-input-volume "$index" "$1"
+	vol="$(padef_get_sink_vol "$index")"
+	vol=$((vol + ${1%%%}))
+	if (( $vol > $MAX_VOLUME )); then
+		pactl set-sink-input-volume "$index" "$MAX_VOLUME%"
+	else
+		pactl set-sink-input-volume "$index" "$1"
+	fi
 	icon="audio-volume-low"
 	vol="$(padef_get_sink_vol "$index")"
 	if [ "$vol" -ge 66 ]; then
