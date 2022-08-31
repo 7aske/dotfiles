@@ -302,6 +302,9 @@ for_window [class="floating"] floating enable, resize set 70 ppt 70 ppt, move po
 # use Mouse+$mod to drag floating windows
 floating_modifier $mod
 
+# middle button on the title bar kills the window
+bindsym --release button2 kill
+
 # float and center the current window
 bindsym $mod+c floating enable; move position center
 
