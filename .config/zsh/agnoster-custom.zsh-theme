@@ -99,7 +99,7 @@ evil_git_num_untracked_files() {
 }
 
 evil_git_uncommited() {
-	expr $(git status --porcelain 2>/dev/null| egrep "^(M| M)" | wc -l)
+	expr $(git status --porcelain 2>/dev/null| grep -E "^(M| M)" | wc -l)
 }
 
 # Git: branch/detached head, dirty status
