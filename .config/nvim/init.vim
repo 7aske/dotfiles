@@ -72,6 +72,7 @@ set smartindent
 set t_Co=256
 set updatetime=50
 set wildmenu
+set isfname+=@-@
 syntax on
 let &scrolloff = &lines / 5
 

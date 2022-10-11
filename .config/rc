@@ -37,6 +37,7 @@ glog()    { git log --graph $@;            }
 gremote() { git remote -v $@;              }
 gco()     { git checkout $@;               }
 gammend() { git commit --amend $@;         }
+gsw()     { git switch $@;                 }
 
 #       _ _                     
 #  __ _| (_) __ _ ___  ___  ___ 
