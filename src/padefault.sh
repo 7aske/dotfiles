@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # toggles default sound output device
-default_sink=$(pacmd info | grep "Default sink name:" | cut -d ' ' -f4)
+default_sink=$(pactl info | grep "Default Sink:" | cut -d ' ' -f3)
 notify_timeout="1000"
 MAX_VOLUME="${MAX_VOLUME:-130}"
 
@@ -27,7 +27,7 @@ padef_toggle_focus() {
 			application_ids+=([${arr[0]}]=${arr[1]})
 			application_idx+=([${arr[0]}]=${arr[2]})
 		done <<< $(echo $line)
-	done <<< "$(pacmd list-sink-inputs | awk '
+	done <<< "$(pactl list sink-inputs | awk '
 		{
 			if ($1 == "sink:") {
 				sink=$2
@@ -112,7 +112,7 @@ padef_toggle_focus() {
 		if [ $next_sink -ne -1 ]; then
 			name="${sinks[$next_sink]}"
 			desc="${descs[$name]}"
-			pacmd move-sink-input "${application_idx[$app]}" "${name}"
+			pactl move-sink-input "${application_idx[$app]}" "${name}"
 
 			for sink in "${sinks[@]}"; do
 				if [ "$sink" == "$name" ]; then
@@ -201,7 +201,7 @@ padef_spec_volume() {
 		while IFS=' ' read -a arr; do
 			application_idx+=([${arr[0]}]=${arr[1]})
 		done <<< $(echo $line)
-	done <<< "$(pacmd list-sink-inputs | awk '
+	done <<< "$(pactl list sink-inputs | awk '
 		{
 			if ($1 == "application.process.id") {
 				pid=substr($3, 2, length($3) - 2)
@@ -279,7 +279,7 @@ padef_focus_volume() {
 		while IFS=' ' read -a arr; do
 			application_idx+=([${arr[0]}]=${arr[1]})
 		done <<< $(echo $line)
-	done <<< "$(pacmd list-sink-inputs | awk '
+	done <<< "$(pactl list sink-inputs | awk '
 		{
 			if ($1 == "application.process.id") {
 				pid=substr($3, 2, length($3) - 2)
