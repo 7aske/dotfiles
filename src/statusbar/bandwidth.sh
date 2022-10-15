@@ -14,7 +14,7 @@ _bc() {
 	echo "scale=${2:-"2"}; $1" | bc
 }
 
-IFACE="$(ip link | grep -e "BROADCAST" | sed 1q | awk '{print $2}' | cut -d ':' -f1)"
+IFACE="$(ip link | grep -E "BROADCAST.*state UP" | sed 1q | awk '{print $2}' | cut -d ':' -f1)"
 speed="$(cat /sys/class/net/$IFACE/speed)"
 
 SLEEP=1
