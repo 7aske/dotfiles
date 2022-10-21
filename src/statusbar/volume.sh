@@ -10,7 +10,7 @@ case $BLOCK_BUTTON in
 	5) padefault volume -5% 2>&1 >/dev/null;;
 esac
 
-default_sink=$(pacmd info | grep "Default sink name:" | cut -d ' ' -f4)
+default_sink=$(pactl info | grep "Default Sink:" | cut -d ' ' -f3)
 
 padef_get_vol() {
 	sink="${1:-"$default_sink"}"
