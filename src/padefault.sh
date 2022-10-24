@@ -29,12 +29,12 @@ padef_toggle_focus() {
 		done <<< $(echo $line)
 	done <<< "$(pactl list sink-inputs | awk '
 		{
-			if ($1 == "sink:") {
+			if ($1 == "Sink:") {
 				sink=$2
 			} else if ($1 == "application.process.id") {
 				pid=substr($3, 2, length($3) - 2)
-			} else if ($1 == "index:") {
-				idx=$2
+			} else if ($1 == "object.serial") {
+				idx=substr($3, 2, length($3) - 2)
 			} 
 
 			if (sink != "" && pid != "" && idx != "") { 
@@ -59,8 +59,8 @@ padef_toggle_focus() {
 			desc=substr($0, length($1)+2, length($0))
 		} else if ($1 == "Name:") {
 			name=$2
-		} else if ($1 == "Sink") {
-			idx=substr($2, 2)
+		} else if ($1 == "object.serial") {
+			idx=substr($3, 2, length($3) - 2)
 		}
 		if (name != "" && desc != "" && idx != "") {
 			print idx " " name " " desc
@@ -95,6 +95,7 @@ padef_toggle_focus() {
 
 	output="$wname"
 	for app in ${!application_ids[@]}; do
+		echo $app ${application_ids[$app]} ${application_idx[$app]}
 		if [[ ! "$pid" =~ "$app" ]]; then
 			continue
 		fi
