@@ -110,6 +110,7 @@ bindkey -s '^y' 'yay\n'
 
 # ctrl+space
 bindkey '^ ' autosuggest-accept
+bindkey '^r' history-incremental-search-backward
 
 # pidswallow
 [ -n "$DISPLAY" ]  && command -v xdo >/dev/null 2>&1 && xdo id > /tmp/term-wid-"$$"
