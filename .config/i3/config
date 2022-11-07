@@ -129,12 +129,13 @@ bindsym $mod+w       exec --no-startup-id $browser
 bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor
 bindsym $mod+Shift+w exec --no-startup-id $browser --incognito
 # 7aske-scripts
-bindsym $mod+Mod1+n        exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/notify-status; exec --no-startup-id pkill -SIGRTMIN+9 i3blocks
-bindsym $mod+Shift+Mod1+n  exec --no-startup-id dunst_reload
-bindsym $mod+n             exec --no-startup-id dunstctl context
-bindsym $mod+Ctrl+n        exec --no-startup-id dunstctl close
-bindsym $mod+Shift+n       exec --no-startup-id dunstctl history-pop
-bindsym $mod+semicolon     exec --no-startup-id tmux list-sessions | cut -d: -f1 | rofi -dmenu -p session | xargs -r $terminal -c tmux_floating -e tmux a -t
+bindsym $mod+Mod1+n         exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/notify-status; exec --no-startup-id pkill -SIGRTMIN+9 i3blocks
+bindsym $mod+Shift+Mod1+n   exec --no-startup-id dunst_reload
+bindsym $mod+n              exec --no-startup-id dunstctl context
+bindsym $mod+Ctrl+n         exec --no-startup-id dunstctl close
+bindsym $mod+Shift+n        exec --no-startup-id dunstctl history-pop
+bindsym $mod+semicolon      exec --no-startup-id tmux list-sessions | cut -d: -f1 | rofi -dmenu -p session | xargs -I% -r $terminal -c tmux_floating -e tmux a -t "%"
+bindsym $mod+Mod1+semicolon exec --no-startup-id rofi -dmenu -p "new session" | xargs -I% -r $terminal -c tmux_floating tmux new -s "%"
 
 # 7aske-scripts
 bindsym $mod+F10           exec --no-startup-id echo 0 | dmenu -p 'screen: ' -fn '$dmenu_font' | xargs screencam -n
