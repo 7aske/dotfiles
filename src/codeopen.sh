@@ -2,8 +2,6 @@
 
 . "$HOME/.profile"
 
-TYPE="${TYPE:-"term"}"
-
 [ -e "$HOME/.profile" ] && . "$HOME/.profile"
 [ -z "$CODE" ] && echo "'CODE' env not set" && exit 1
 [ -z "$(command -v cgs)" ] && echo "cgs: not found" && exit 1
@@ -36,16 +34,20 @@ while getopts ${optstring} arg; do
 	esac
 done
 
+menu_command="fzf"
+if [ "$MENU" = "dmenu" ]; then
+	menu_command="dmenu -l 10 -f -i -p ${TYPE:-type}:"
+elif [ "$MENU" = "rofi" ]; then
+    menu_command="rofi -dmenu -sort -i -matching fuzzy -p ${TYPE:-type}"
+fi
+
+if [ -z "$TYPE" ]; then
+	TYPE="$(echo ${available_types[*]} | tr ' ' '\n' | $menu_command)"
+fi
+
 if [[ ! " ${available_types[@]} " =~ " ${TYPE} " ]]; then
 	_usage
 	exit 2
-fi
-
-menu_command="fzf"
-if [ "$MENU" = "dmenu" ]; then
-	menu_command="dmenu -l 10 -f -i -p '$TYPE:'"
-elif [ "$MENU" = "rofi" ]; then
-    menu_command="rofi -dmenu -sort -i -matching fuzzy -p '$TYPE'"
 fi
 
 # use grep to remove $CODE prefix
