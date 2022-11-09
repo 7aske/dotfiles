@@ -6,8 +6,12 @@ SWITCH="$HOME/.cache/statusbar_$(basename $0)"
 [ -f  "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
 [ -f  "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
 
-status=$(cat /sys/class/power_supply/"$1"/status)
-capacity=$(cat /sys/class/power_supply/"$1"/capacity) || exit
+battery="$1"
+[ -z "$battery" ] && battery="$(dir -1 /sys/class/power_supply | grep -E BAT\? | sed 1q)"
+[ -z "$battery" ] && exit 1
+
+status=$(cat /sys/class/power_supply/"$battery"/status)
+capacity=$(cat /sys/class/power_supply/"$battery"/capacity) || exit
 
 case $BLOCK_BUTTON in
 	1) duration=$(acpi | awk '{print substr($5, 0, length($5) - 3)}')
@@ -64,7 +68,7 @@ fi
 
 [ "$status" = "Charging" ] && color="${color2:-"#A3BE8C"}"
 if ! [ "$status" = "Discharging" ]; then
-	icon="$(echo "$status" | sed -e "s/,//;s/Discharging//;s/Not Charging//;s/Charging//;s/Unknown//;s/Full//;s/ 0*/ /g;s/ :/ /g")"
+	icon="$(echo "$status" | sed -e "s/,//;s/Discharging//;s/Not [Cc]harging//;s/Charging//;s/Unknown//;s/Full//;s/ 0*/ /g;s/ :/ /g")"
 fi
 
 
