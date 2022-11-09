@@ -86,7 +86,7 @@ signal=10
 
 [battery]
 interval=60
-command=~/.local/bin/statusbar/battery BAT1
+command=~/.local/bin/statusbar/battery
 signal=9
 
 [volume]
