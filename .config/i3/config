@@ -181,7 +181,7 @@ bindsym $mod+Tab      exec --no-startup-id rofi -show window
 bindsym $mod+Ctrl+Shift+semicolon exec --no-startup-id i3shell
 # sticky key fix
 bindsym $mod+F12       exec --no-startup-id xdotool keyup Shift_L Shift_R Control_L Control_R Alt_L Alt_R Super_L Super_R Hyper_L Hyper_R Caps_Lock 204 205 206 207
-bindsym $mod+Shift+F12 exec --no-startup-id autorandr --change
+bindsym $mod+Shift+F12 exec --no-startup-id autorandr --change && nitrogen --restore
 
 bindsym $mod+Shift+Home   exec --no-startup-id desk move-to
 bindsym $mod+Home         exec --no-startup-id desk stand
