@@ -284,8 +284,8 @@ padef_focus_volume() {
 		{
 			if ($1 == "application.process.id") {
 				pid=substr($3, 2, length($3) - 2)
-			} else if ($1 == "index:") {
-				idx=$2
+			} else if ($1 == "Sink" && $2 == "Input") {
+				idx=substr($3, 2)
 			} 
 
 			if (pid != "" && idx != "") { 
