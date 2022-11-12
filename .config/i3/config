@@ -94,6 +94,10 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id padefault vol +5%;      exec -
 bindsym XF86AudioLowerVolume exec --no-startup-id padefault vol -5%;      exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
 bindsym XF86AudioMute        exec --no-startup-id padefault mute-all;     exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
 bindsym XF86AudioMicMute     exec --no-startup-id padefault mute-all-src; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
+bindsym Shift+XF86AudioRaiseVolume exec --no-startup-id BLOCK_BUTTON=4 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
+bindsym Shift+XF86AudioLowerVolume exec --no-startup-id BLOCK_BUTTON=5 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
+bindsym Ctrl+Mod1+XF86AudioRaiseVolume exec --no-startup-id padefault volume-focus +5%
+bindsym Ctrl+Mod1+XF86AudioLowerVolume exec --no-startup-id padefault volume-focus -5%
 
 #                    _ _           _   _
 #   __ _ _ __  _ __ | (_) ___ __ _| |_(_) ___  _ __  ___
