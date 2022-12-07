@@ -15,6 +15,7 @@ _usage() {
 	echo "    mute-all            toggle mute on all outputs"
 	echo "    mute-all-src        toggle mute on all inputs"
 	echo "    volume [args]       sets default audio device volume"
+	echo "    mic-volume [args]   sets default audio input volume"
 	exit 0
 }
 
@@ -196,6 +197,29 @@ padef_volume() {
 	exit 0
 }
 
+padef_mic_volume() {
+	default_source=$(pactl info | grep "Default Source:" | cut -d ' ' -f3)
+	vol="$(padef_get_mic_vol "$default_source")"
+	vol=$((vol + ${1%%%}))
+	if (( $vol > $MAX_VOLUME )); then
+		pactl set-source-volume "$default_source" "$MAX_VOLUME%"
+	else
+		pactl set-source-volume "$default_source" "$1"
+	fi
+
+	icon="audio-volume-low"
+	vol="$(padef_get_mic_vol "$default_source")"
+	if [ "$vol" -ge 66 ]; then
+		icon="audio-volume-high"
+	elif [ "$vol" -ge 33 ]; then
+		icon="audio-volume-medium"
+	elif [ "$vol" -eq 0 ]; then
+		icon="audio-off"
+	fi
+	notify-send -a padefault -i $icon -h "int:value:$vol" -h "string:synchronous:volume"  "volume" " $1" -t "$notify_timeout"
+	exit 0
+}
+
 padef_spec_volume() {
 	declare -A application_idx # application pid -> sink index
 	while IFS= read -r line; do
@@ -346,6 +370,12 @@ padef_get_vol() {
 		tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,'
 }
 
+padef_get_mic_vol() {
+	default_source=$(pactl info | grep "Default Source:" | cut -d ' ' -f3)
+	pactl list sources | grep -A7 "^[[:space:]]Name: $default_source" | \
+		tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,'
+}
+
 padef_get_sink_vol() {
 	pactl list sink-inputs | grep -A10 "^Sink Input #$1" | \
 		tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,'
@@ -392,6 +422,7 @@ case "$1" in
 	toggle-focus|tf)    padef_toggle_focus "$2";;
 	toggle|t)           padef_toggle      ;;
 	volume|vol|v)       padef_volume "$2" ;;
+	mic-volume|mv)      padef_mic_volume "$2" ;;
 	mute|m)             padef_mute        ;;
 	mute-all|ma)        pa_mute_all       ;;
 	mute-all-src|mas)   pa_mute_all source;;
