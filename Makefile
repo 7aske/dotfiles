@@ -38,7 +38,8 @@ all: albert \
 	rc \
 	xresources \
 	ideavim \
-	imwheel
+	imwheel \
+	qtile
 
 albert:
 	./mklink albert
@@ -150,3 +151,6 @@ imwheel:
 task:
 	./mklink task
 	./mklink taskrc
+
+qtile:
+	./mklink qtile
