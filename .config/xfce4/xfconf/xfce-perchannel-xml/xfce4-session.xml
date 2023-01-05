@@ -19,7 +19,8 @@
       <property name="Client0_Priority" type="empty"/>
       <property name="Client0_PerScreen" type="empty"/>
       <property name="Client1_Command" type="array">
-        <value type="string" value="i3"/>
+        <value type="string" value="qtile"/>
+        <value type="string" value="start"/>
       </property>
       <property name="Client1_Priority" type="empty"/>
       <property name="Client1_PerScreen" type="empty"/>
