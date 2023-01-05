@@ -24,3 +24,6 @@ __pycache__
 .config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
 
 .config/task/*.data
+
+.idea
+.config/xfce4/xfce4-screenshooter

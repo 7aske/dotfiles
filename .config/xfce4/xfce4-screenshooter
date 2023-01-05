@@ -5,4 +5,9 @@ action=2
 delay=0
 region=3
 show_mouse=1
+custom_action_command=none
+last_extension=png
+enable_imgur_upload=true
+show_in_folder=false
+show_border=1
 
