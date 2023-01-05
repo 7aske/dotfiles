@@ -2,6 +2,7 @@ import os
 import platform
 import re
 import subprocess
+from abc import ABC, abstractmethod
 from typing import List, Union
 
 import psutil
@@ -248,6 +249,7 @@ keys = [
     Key([ALT], "Tab", lazy.screen.toggle_group(), desc="Toggle through layouts"),
 
     # sound&music
+    # TODO add force_update calls for volume widgets
     Key([],                 "Xf86Tools",     scratchpad_toggle(PLAYER),                                                 desc="Toggle player"),
     Key([MOD],              "m",             scratchpad_toggle(PLAYER),                                                 desc="Toggle player"),
     Key([MOD, SHIFT],       "m",             scratchpad_toggle("cantata"),                                              desc="Toggle player"),
@@ -339,7 +341,6 @@ keys = [
 # | |_| | | | (_) | |_| | |_) \__ \
 #  \____|_|  \___/ \__,_| .__/|___/
 #                       |_|
-
 groups = [
     Group('1', layout="monadtall"),
     Group('2', layout="monadtall"),
@@ -388,7 +389,6 @@ groups.append(
 # | |__| (_| | |_| | (_) | |_| | |_\__ \
 # |_____\__,_|\__, |\___/ \__,_|\__|___/
 #             |___/
-
 default_layout_settings = dict(
     border_focus=color13,
     border_normal=color8,
@@ -402,10 +402,6 @@ layouts = [
         **default_layout_settings,
         new_client_position="top",
         ratio=0.55,
-    ),
-    layout.Stack(
-        **default_layout_settings,
-        num_stacks=2,
     ),
     layout.Columns(
         **default_layout_settings,
@@ -444,7 +440,104 @@ decoration_group = dict(
 extension_defaults = widget_defaults.copy()
 
 
-class NotificationWidget(qtile_extras_widget.GenPollText):
+class NotificationWidgetBackend(ABC):
+    """
+    Abstract class for notification widget backend.
+    Provides definitions for all necessary methods for a notification widget.
+    """
+
+    def __init__(self):
+        if type(self) is NotificationWidgetBackend:
+            raise TypeError("Can't instantiate abstract class")
+
+    @abstractmethod
+    def cmd_action(self):
+        """
+        Activate the notification action chooser.
+        """
+        pass
+
+    @abstractmethod
+    def cmd_pop(self):
+        """
+        Show the last notification.
+        """
+        pass
+
+    @abstractmethod
+    def cmd_close(self):
+        """
+        Close the last notification.
+        """
+        pass
+
+    @abstractmethod
+    def cmd_close_all(self):
+        """
+        Close all displayed notifications.
+        """
+        pass
+
+    @abstractmethod
+    def cmd_toggle_paused(self):
+        """
+        Toggle showing new notifications.
+        """
+        pass
+
+    @abstractmethod
+    def cmd_is_paused(self) -> bool:
+        """
+        Checks whether notifications are paused.
+        """
+        pass
+
+
+class DunstNotificationWidgetBackend(NotificationWidgetBackend):
+    """
+    Notification widget backend implementation for dunst.
+    """
+
+    def cmd_is_paused(self) -> bool:
+        """
+        Checks whether notifications are paused.
+        """
+        return subprocess.check_output(["dunstctl", "is-paused"]).decode(
+            "utf-8") == "false"
+
+    def cmd_action(self):
+        """
+        Activate the notification action chooser.
+        """
+        subprocess.call(["dunstctl", "context"])
+
+    def cmd_pop(self):
+        """
+        Show the last notification.
+        """
+        subprocess.call(["dunstctl", "history-pop"])
+
+    def cmd_close(self):
+        """
+        Close the last notification.
+        """
+        subprocess.call(["dunstctl", "close"])
+
+    def cmd_close_all(self):
+        """
+        Close all displayed notifications.
+        """
+        subprocess.call(["dunstctl", "close-all"])
+
+    def cmd_toggle_paused(self):
+        """
+        Toggle showing new notifications.
+        """
+        subprocess.call(["dunstctl", "set-paused", "toggle"])
+
+
+class NotificationWidget(qtile_extras_widget.GenPollText,
+                         DunstNotificationWidgetBackend):
     defaults = [
         ("icon_active", ""),
         ("icon_inactive", ""),
@@ -459,7 +552,7 @@ class NotificationWidget(qtile_extras_widget.GenPollText):
     ]
 
     def __init__(self, **config):
-        super().__init__(**config)
+        super(qtile_extras_widget.GenPollText, self).__init__("", **config)
         self.add_defaults(NotificationWidget.defaults)
         self.add_callbacks({
             MOUSE_LEFT: self.cmd_pop,
@@ -470,20 +563,8 @@ class NotificationWidget(qtile_extras_widget.GenPollText):
         })
 
     def cmd_toggle_paused(self):
-        subprocess.call(["dunstctl", "set-paused", "toggle"])
+        super().cmd_toggle_paused()
         self.cmd_force_update()
-
-    def cmd_action(self):
-        subprocess.call(["dunstctl", "context"])
-
-    def cmd_pop(self):
-        subprocess.call(["dunstctl", "history-pop"])
-
-    def cmd_close(self):
-        subprocess.call(["dunstctl", "close"])
-
-    def cmd_close_all(self):
-        subprocess.call(["dunstctl", "close-all"])
 
     def poll(self):
         active = self.is_active_cmd()
@@ -534,10 +615,202 @@ CHECK_UPDATES_WIDGET = qtile_extras_widget.CheckUpdates(
     colour_have_updates=color13,
     colour_no_updates=background,
     mouse_callbacks={
-        'Button1': lambda: qtile.cmd_spawn(TERMINAL + ' -e yay -Syu')},
+        MOUSE_LEFT: lambda: qtile.cmd_spawn(in_terminal("yay -Syu"))},
 )
 
-VOLUME_WIDGET = qtile_extras_widget.PulseVolume(
+
+class VolumeWidget(qtile_extras_widget.GenPollText, ABC):
+    defaults = [
+        ("color_muted", color11),
+        ("color_high", color12),
+        ("color_medium", color13),
+        ("color_low", color14),
+    ]
+
+    def __init__(self, **config):
+        super().__init__(**config)
+        self.add_defaults(VolumeWidget.defaults)
+        self.add_callbacks({
+            MOUSE_LEFT: self.cmd_open_cp,
+            MOUSE_MIDDLE: self.cmd_toggle_mute,
+            MOUSE_RIGHT: None,
+            SCROLL_UP: self.cmd_increase_volume,
+            SCROLL_DOWN: self.cmd_decrease_volume,
+        })
+
+    @abstractmethod
+    def cmd_open_cp(self):
+        pass
+
+    @abstractmethod
+    def cmd_toggle_mute(self):
+        pass
+
+    @abstractmethod
+    def cmd_increase_volume(self):
+        pass
+
+    @abstractmethod
+    def cmd_decrease_volume(self):
+        pass
+
+    @abstractmethod
+    def cmd_is_muted(self) -> bool:
+        pass
+
+    @abstractmethod
+    def cmd_get_volume(self) -> int:
+        pass
+
+    @abstractmethod
+    def poll(self) -> str:
+        pass
+
+
+class OutputVolumeWidget(VolumeWidget):
+    defaults = [
+        ("update_interval", 10),
+        ("icon", ""),
+        ("icon_muted", "婢"),
+        ("format", "<span color='{color}'>{icon} {volume}%</span>"),
+    ]
+
+    def __init__(self, **config):
+        super().__init__(**config)
+        self.add_defaults(OutputVolumeWidget.defaults)
+
+    def cmd_open_cp(self):
+        qtile.cmd_spawn("pavucontrol -t 3")
+        self.cmd_force_update()
+
+    def cmd_toggle_mute(self):
+        subprocess.call(["padefault", "ma"])
+        self.cmd_force_update()
+
+    def cmd_increase_volume(self):
+        subprocess.call(["padefault", "vol", "+1%"])
+        self.cmd_force_update()
+
+    def cmd_decrease_volume(self):
+        subprocess.call(["padefault", "vol", "-1%"])
+        self.cmd_force_update()
+
+    def cmd_is_muted(self):
+        muted = int(subprocess.getoutput(
+            "pactl list sinks | grep -B6 -c 'Mute: yes'"))
+        sources = int(subprocess.getoutput(
+            "pactl list sinks short | wc -l"))
+
+        return muted == sources
+
+    def cmd_get_volume(self):
+        return int(subprocess.getoutput("getvol"))
+
+    def poll(self):
+        is_muted = self.cmd_is_muted()
+        volume = 0
+        # optimization
+        color = self.color_muted
+        if not is_muted:
+            volume = self.cmd_get_volume()
+
+            if volume > 90:
+                color = self.color_high
+            elif volume > 66:
+                color = self.color_medium
+            elif volume > 33:
+                color = self.color_low
+            else:
+                color = self.foreground
+
+        variables = dict(
+            icon=self.icon_muted if is_muted else self.icon,
+            color=color,
+            volume=volume,
+        )
+
+        return self.format.format(**variables)
+
+
+class InputVolumeWidget(VolumeWidget):
+    defaults = [
+        ("update_interval", 10),
+        ("icon", ""),
+        ("icon_muted", ""),
+        ("format", "<span color='{color}'>{icon} {volume}%</span>"),
+    ]
+
+    def __init__(self, **config):
+        super().__init__(**config)
+        self.add_defaults(InputVolumeWidget.defaults)
+
+    def cmd_open_cp(self):
+        qtile.cmd_spawn("pavucontrol -t 4")
+        self.cmd_force_update()
+
+    def cmd_toggle_mute(self):
+        subprocess.call(["padefault", "mas"])
+        self.cmd_force_update()
+
+    def cmd_increase_volume(self):
+        subprocess.call(["padefault", "mic-volume", "+1%"])
+        self.cmd_force_update()
+
+    def cmd_decrease_volume(self):
+        subprocess.call(["padefault", "mic-volume", "-1%"])
+        self.cmd_force_update()
+
+    def cmd_is_muted(self):
+        muted = int(subprocess.getoutput(
+            "pactl list sources | grep -B6 'Mute: yes' | grep 'Name:' | grep -vc 'monitor'"))
+        sources = int(subprocess.getoutput(
+            "pactl list sources short | grep -vc \"monitor\""))
+
+        return muted == sources and muted > 0
+
+    def cmd_get_volume(self):
+        return int(subprocess.getoutput("getmicvol"))
+
+    def poll(self):
+        listening = subprocess.getoutput(
+            "pactl list source-outputs | grep application.process.binary",
+        ).strip()
+
+        # hide if none are listening
+        if listening == "":
+            return ""
+
+        is_muted = self.cmd_is_muted()
+        volume = 0
+        # optimization
+        color = self.color_muted
+        if not is_muted:
+            volume = self.cmd_get_volume()
+
+            if volume > 90:
+                color = self.color_high
+            elif volume > 66:
+                color = self.color_medium
+            elif volume > 33:
+                color = self.color_low
+            else:
+                color = self.foreground
+
+        variables = dict(
+            icon=self.icon_muted if is_muted else self.icon,
+            color=color,
+            volume=volume,
+        )
+
+        return self.format.format(**variables)
+
+
+MIC_VOLUME_WIDGET = InputVolumeWidget(
+    **decoration_group,
+    foreground=foreground,
+)
+
+VOLUME_WIDGET = OutputVolumeWidget(
     **decoration_group,
     foreground=foreground,
 )
@@ -698,7 +971,9 @@ class CgsWidget(qtile_extras_widget.GenPollText):
         super().__init__(*args, **config)
         self.add_defaults(CgsWidget.defaults)
         self.add_callbacks({
-            MOUSE_LEFT: lambda: qtile.cmd_spawn("notify-send -i git 'Qtile - CgsWidget' \"$(cgs)\"", shell=True),
+            MOUSE_LEFT: lambda: qtile.cmd_spawn(
+                "notify-send -i git 'Qtile - CgsWidget' \"$(cgs)\"",
+                shell=True),
         })
         self.count = 0
 
@@ -735,8 +1010,6 @@ def group_box_widget():
         **decoration_group,
         highlight_method='block',
         block_highlight_text_color=background,
-        spacing=2,
-        borderwidth=2,
         urgent_border=color11,
         urgent_text=color11,
         background=transparent,
@@ -746,6 +1019,7 @@ def group_box_widget():
         this_screen_border=color13,
         other_current_screen_border=color14,
         other_screen_border=color15,
+        margin_x=-1,
         disable_drag=True,
     )
 
@@ -767,9 +1041,6 @@ def screen_widgets(primary=False):
         KEYBOARD_LAYOUT_ICON,
         KEYBOARD_LAYOUT_WIDGET,
         spacer(3),
-        widget_icon(''),
-        VOLUME_WIDGET,
-        spacer(3),
         CHECK_UPDATES_WIDGET,
         spacer(3),
         NOTIFICATION_WIDGET,
@@ -785,8 +1056,9 @@ def screen_widgets(primary=False):
         widget_icon(''),
         CPU_WIDGET,
         spacer(3),
-        widget_icon(''),
-        drawer([CPU_THERMAL_SENSOR_WIDGET]),
+        VOLUME_WIDGET,
+        spacer(3),
+        MIC_VOLUME_WIDGET,
         spacer(3),
         SYSTEM_CLOCK_WIDGET,
         spacer(7),
