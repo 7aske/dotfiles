@@ -177,6 +177,7 @@ keys = [
     Key([MOD, ALT],        "y",   lazy.spawn("vncviewer"),        desc="Launch vncviewer"),
     Key([MOD, ALT, SHIFT], "b",   lazy.spawn("virtualbox"),       desc="Launch virtualbox"),
     Key([MOD, ALT],        "d",   lazy.spawn("discord"),          desc="Launch discord"),
+    Key([MOD, ALT],        "k",   scratchpad_toggle("kalendar"),  desc="Launch discord"),
 
     # FIXME not using this anyway (use in_floating_terminal)
     # Key([MOD, ALT], "r",          lazy.spawn("$terminal -c newsboat_float -e newsboat"), desc="Launch newsboat"),
@@ -376,6 +377,7 @@ groups.append(
         DropDown(TERMINAL, TERMINAL, **center(0.6, 0.6)),
         DropDown(PLAYER, PLAYER, **center(0.6, 0.6)),
         DropDown("cantata", "cantata", **center(0.6, 0.6)),
+        DropDown("kalendar", "kalendar", **center(0.6, 0.6)),
         DropDown("pavucontrol", "pavucontrol", **center(0.4, 0.6)),
         DropDown("lutris", "lutris", **center(0.6, 0.8)),
         DropDown("bitwarden-desktop", "bitwarden-desktop", **center(0.6, 0.8)),
@@ -597,6 +599,7 @@ KEYBOARD_LAYOUT_WIDGET = qtile_extras_widget.KeyboardLayout(
     configured_keyboards=['us', 'rs latin', 'rs']
 )
 
+RAM_MEMORY_WIDGET_ICON = widget_icon('')
 RAM_MEMORY_WIDGET = qtile_extras_widget.Memory(
     **decoration_group,
     foreground=foreground,
@@ -815,17 +818,45 @@ VOLUME_WIDGET = OutputVolumeWidget(
     foreground=foreground,
 )
 
-# DISK_FREE_WIDGET = qtile_extras_widget.DF(
-#     **decoration_group,
-#     foreground=foreground,
-#     warn_color=color11,
-#     fmt=disk_fmt,
-#     format='{f}GB',
-#     partition=disk_partition,
-# )
+DISK_FREE_WIDGETS = list(map(lambda part: qtile_extras_widget.DF(
+    **decoration_group,
+    foreground=foreground,
+    warn_color=color11,
+    partition=part.mountpoint,
+    format='{p} {f}GB',
+    warn_space=10,
+    mouse_callbacks={
+        MOUSE_LEFT: lambda: qtile.cmd_spawn(f"{FILE} {part.mountpoint}"),
+    },
+), psutil.disk_partitions()))
 
 
-SYSTEM_CLOCK_WIDGET = qtile_extras_widget.Clock(
+class Clock(qtile_extras_widget.Clock):
+    def __init__(self, hover_format="%A, %B %d - %T", **config):
+        super().__init__(**config)
+        self.add_defaults(qtile_extras_widget.Clock.defaults)
+        self.hover_format = hover_format
+        self.default_format = self.format
+        self.add_callbacks({
+            MOUSE_LEFT: lambda: qtile.cmd_spawn("kalendar"),
+            MOUSE_MIDDLE: self.toggle_format,
+        })
+
+    def toggle_format(self):
+        fmt = self.default_format
+        self.default_format = self.hover_format
+        self.hover_format = fmt
+
+    def mouse_enter(self, x, y):
+        self.format = self.hover_format
+        self.tick()
+
+    def mouse_leave(self, x, y):
+        self.format = self.default_format
+        self.tick()
+
+
+SYSTEM_CLOCK_WIDGET = Clock(
     **decoration_group,
     format="%T",
     foreground=foreground,
@@ -846,6 +877,7 @@ CPU_THERMAL_SENSOR_WIDGET = qtile_extras_widget.ThermalSensor(
     tag_sensor=CPU_SENSOR_NAME,
 )
 
+MUSIC_WIDGET_ICON = widget_icon('')
 MUSIC_WIDGET = qtile_extras_widget.Mpris2(
     **decoration_group,
     foreground=foreground,
@@ -991,6 +1023,7 @@ class CgsWidget(qtile_extras_widget.GenPollText):
 
 CGS_WIDGET = CgsWidget(**decoration_group)
 
+CPU_WIDGET_ICON = widget_icon('')
 CPU_WIDGET = MyCpuWidget(**decoration_group, width=48)
 
 CHORD_WIDGET = DescriptiveChord(**decoration_group)
@@ -1047,13 +1080,15 @@ def screen_widgets(primary=False):
         spacer(3),
         CGS_WIDGET,
         spacer(),
-        widget_icon(''),
+        *DISK_FREE_WIDGETS,
+        spacer(3),
+        MUSIC_WIDGET_ICON,
         MUSIC_WIDGET,
         spacer(3),
-        widget_icon(''),
+        RAM_MEMORY_WIDGET_ICON,
         RAM_MEMORY_WIDGET,
         spacer(3),
-        widget_icon(''),
+        CPU_WIDGET_ICON,
         CPU_WIDGET,
         spacer(3),
         VOLUME_WIDGET,
@@ -1120,6 +1155,7 @@ floating_layout = layout.Floating(
         *layout.Floating.default_float_rules,
         Match(wm_class="spotify"),
         Match(wm_class="floating"),
+        Match(wm_class="kalendar"),
         Match(wm_class="pavucontrol"),
         Match(wm_class="lutris"),
         Match(wm_class="battle.net.exe"),
