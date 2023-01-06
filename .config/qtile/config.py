@@ -610,16 +610,67 @@ RAM_MEMORY_WIDGET = qtile_extras_widget.Memory(
         'Button1': lambda: qtile.cmd_spawn(in_terminal("htop"))},
 )
 
-CHECK_UPDATES_WIDGET = qtile_extras_widget.CheckUpdates(
+
+class Updates(qtile_extras_widget.CheckUpdates):
+    defaults = [
+        ("color_high", color11),
+        ("color_medium", color12),
+        ("color_low", color13),
+        ("low_updates_threshold", 15),
+        ("medium_updates_threshold", 40),
+        ("high_updates_threshold", 75),
+        # TODO use the already existing command from the class
+        ("notify_new_updates", lambda: qtile.cmd_spawn("notify-send 'Qtile - Updates' \"$(yay -Qu)\"", shell=True)),
+    ]
+
+    def __init__(self, **config):
+        super().__init__(**config)
+        self.add_defaults(Updates.defaults)
+        self.add_callbacks({
+            MOUSE_LEFT: self.cmd_force_update,
+        })
+
+    def _check_updates(self):
+        try:
+            updates = self.call_process(self.cmd, shell=True)
+        except subprocess.CalledProcessError:
+            updates = ""
+
+        num_updates = self.custom_command_modify(len(updates.splitlines()))
+
+        if num_updates < 0:
+            num_updates = 0
+
+        if num_updates > self.num_updates:
+            self.notify_new_updates()
+
+        self.num_updates = num_updates
+
+        if num_updates == 0:
+            self.layout.colour = self.colour_no_updates
+            return self.no_update_string
+
+        if num_updates >= self.high_updates_threshold:
+            self.layout.colour = self.color_high
+        elif num_updates >= self.medium_updates_threshold:
+            self.layout.colour = self.color_medium
+        elif num_updates >= self.low_updates_threshold:
+            self.layout.colour = self.color_low
+        else:
+            self.layout.colour = self.colour_have_updates
+
+        return self.display_format.format(**{"updates": num_updates})
+
+
+CHECK_UPDATES_WIDGET = Updates(
     **decoration_group,
     update_interval=1800,
     distro="Arch_checkupdates",
-    display_format=" {updates}",
-    no_update_string='',
-    colour_have_updates=color13,
+    display_format=" {updates}",
+    colour_have_updates=foreground,
     colour_no_updates=background,
     mouse_callbacks={
-        MOUSE_LEFT: lambda: qtile.cmd_spawn(in_terminal("yay -Syu"))},
+        MOUSE_RIGHT: lambda: qtile.cmd_spawn(in_terminal("yay -Syu"))},
 )
 
 

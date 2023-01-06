@@ -1,0 +1,9 @@
+[Trigger]
+Operation = Upgrade
+Operation = Install
+Operation = Remove
+Type = Package
+Target = *
+[Action]
+When = PostTransaction
+Exec = /usr/bin/sudo -u nik /usr/bin/qtile cmd-obj -o widget updates -f eval -a 'self.cmd_force_update()'
