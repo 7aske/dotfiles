@@ -41,6 +41,7 @@ PLAYER   = os.getenv("PLAYER",   "spotify")
 FILE     = os.getenv("FILE",     "thunar")
 TERMFILE = os.getenv("TERMFILE", "ranger")
 EDITOR   = os.getenv("EDITOR",   "vim")
+CALENDAR = os.getenv("CALENDAR", "calcurse")
 
 CODEOPEN_MENU  = "rofi"
 FONT           = "Fira Code Medium"
@@ -177,7 +178,7 @@ keys = [
     Key([MOD, ALT],        "y",   lazy.spawn("vncviewer"),        desc="Launch vncviewer"),
     Key([MOD, ALT, SHIFT], "b",   lazy.spawn("virtualbox"),       desc="Launch virtualbox"),
     Key([MOD, ALT],        "d",   lazy.spawn("discord"),          desc="Launch discord"),
-    Key([MOD, ALT],        "k",   scratchpad_toggle("kalendar"),  desc="Launch discord"),
+    Key([MOD, ALT],        "k",   scratchpad_toggle("calendar"),  desc="Launch discord"),
 
     # FIXME not using this anyway (use in_floating_terminal)
     # Key([MOD, ALT], "r",          lazy.spawn("$terminal -c newsboat_float -e newsboat"), desc="Launch newsboat"),
@@ -377,7 +378,7 @@ groups.append(
         DropDown(TERMINAL, TERMINAL, **center(0.6, 0.6)),
         DropDown(PLAYER, PLAYER, **center(0.6, 0.6)),
         DropDown("cantata", "cantata", **center(0.6, 0.6)),
-        DropDown("kalendar", "kalendar", **center(0.6, 0.6)),
+        DropDown("calendar", in_float_terminal(CALENDAR), **center(0.6, 0.6)),
         DropDown("pavucontrol", "pavucontrol", **center(0.4, 0.6)),
         DropDown("lutris", "lutris", **center(0.6, 0.8)),
         DropDown("bitwarden-desktop", "bitwarden-desktop", **center(0.6, 0.8)),
@@ -838,7 +839,7 @@ class Clock(qtile_extras_widget.Clock):
         self.hover_format = hover_format
         self.default_format = self.format
         self.add_callbacks({
-            MOUSE_LEFT: lambda: qtile.cmd_spawn("kalendar"),
+            MOUSE_LEFT: lambda: qtile.cmd_spawn(in_float_terminal(CALENDAR)),
             MOUSE_MIDDLE: self.toggle_format,
         })
 
@@ -893,6 +894,14 @@ MUSIC_WIDGET = qtile_extras_widget.Mpris2(
             "playerctl -p spotify play-pause"),
         'Button3': lambda: qtile.cmd_spawn("playerctl -p spotify previous"),
     },
+)
+
+WEATHER_WIDGET = qtile_extras_widget.OpenWeather(
+    **decoration_group,
+    foreground=foreground,
+    appid=os.getenv('OPENWEATHERMAP_API_KEY'),
+    cityid=os.getenv('OPENWEATHERMAP_CITY_ID'),
+    format='{icon} {main_temp}°{units_temperature}',
 )
 
 
@@ -1084,6 +1093,8 @@ def screen_widgets(primary=False):
         spacer(3),
         MUSIC_WIDGET_ICON,
         MUSIC_WIDGET,
+        spacer(3),
+        WEATHER_WIDGET,
         spacer(3),
         RAM_MEMORY_WIDGET_ICON,
         RAM_MEMORY_WIDGET,
