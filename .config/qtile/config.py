@@ -620,7 +620,9 @@ class Updates(qtile_extras_widget.CheckUpdates):
         ("medium_updates_threshold", 40),
         ("high_updates_threshold", 75),
         # TODO use the already existing command from the class
-        ("notify_new_updates", lambda: qtile.cmd_spawn("notify-send 'Qtile - Updates' \"$(yay -Qu)\"", shell=True)),
+        ("notify_new_updates", lambda: qtile.cmd_spawn(
+            "notify-send 'Qtile - Updates' \"$(checkupdates | column -t)\"",
+            shell=True)),
     ]
 
     def __init__(self, **config):
@@ -629,6 +631,7 @@ class Updates(qtile_extras_widget.CheckUpdates):
         self.add_callbacks({
             MOUSE_LEFT: self.cmd_force_update,
         })
+        self.num_updates = 0
 
     def _check_updates(self):
         try:
@@ -670,6 +673,7 @@ CHECK_UPDATES_WIDGET = Updates(
     colour_have_updates=foreground,
     colour_no_updates=background,
     mouse_callbacks={
+        # TODO use the already existing command from the class
         MOUSE_RIGHT: lambda: qtile.cmd_spawn(in_terminal("yay -Syu"))},
 )
 
@@ -941,8 +945,7 @@ MUSIC_WIDGET = qtile_extras_widget.Mpris2(
     scroll_delay=3,
     mouse_callbacks={
         'Button1': lambda: qtile.cmd_spawn("playerctl -p spotify next"),
-        'Button2': lambda: qtile.cmd_spawn(
-            "playerctl -p spotify play-pause"),
+        'Button2': lambda: qtile.cmd_spawn("playerctl -p spotify play-pause"),
         'Button3': lambda: qtile.cmd_spawn("playerctl -p spotify previous"),
     },
 )
@@ -952,7 +955,7 @@ WEATHER_WIDGET = qtile_extras_widget.OpenWeather(
     foreground=foreground,
     appid=os.getenv('OPENWEATHERMAP_API_KEY'),
     cityid=os.getenv('OPENWEATHERMAP_CITY_ID'),
-    format='{icon} {main_temp}°{units_temperature}',
+    format='{icon} {temp:.0f}°{units_temperature}',
 )
 
 
@@ -1134,9 +1137,9 @@ def screen_widgets(primary=False):
         KEYBOARD_LAYOUT_ICON,
         KEYBOARD_LAYOUT_WIDGET,
         spacer(3),
-        CHECK_UPDATES_WIDGET,
-        spacer(3),
         NOTIFICATION_WIDGET,
+        spacer(3),
+        CHECK_UPDATES_WIDGET,
         spacer(3),
         CGS_WIDGET,
         spacer(),
