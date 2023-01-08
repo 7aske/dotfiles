@@ -208,7 +208,7 @@ keys = [
     Key([MOD], "Scroll_Lock",     scratchpad_toggle("bitwarden-desktop"), desc="Launch bitwarden"),
     Key([MOD], "Pause",       	  lazy.spawn("sleep 1 && xset dpms force off", shell=True), desc="Turn off screen"),
 
-    Key([],           "Print", lazy.spawn(f"maim ~/$(date +%s).png && notify-send -i screengrab --hint=int:transient:1 -t {NOTIF_DURATION} 'screenshot" 'saved to homedir', shell=True), desc="Take screenshot"),
+    Key([],           "Print", lazy.spawn(f"maim ~/$(date +%s).png && notify-send -i screengrab --hint=int:transient:1 -t {NOTIF_DURATION} 'screenshot' 'saved to homedir'", shell=True), desc="Take screenshot"),
     Key([MOD],        "Print", lazy.spawn(f"maim -i $(xdotool getactivewindow) ~/$(date +%s).png && notify-send -i screengrab --hint=int:transient:1 -t {NOTIF_DURATION} 'screenshot (window)' 'saved to homedir'", shell=True), desc="Take window screenshot"),
     Key([MOD, SHIFT], "Print", lazy.spawn(f"maim -b 3 -s | xclip -sel c -t image/png && notify-send -i screengrab --hint=int:transient:1 -t {NOTIF_DURATION} 'screenshot (selection)' 'copied to clipboard'", shell=True), desc="Take screenshot of selection"),
 
