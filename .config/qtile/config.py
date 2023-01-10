@@ -6,6 +6,8 @@ from abc import ABC, abstractmethod
 from typing import List, Union
 
 import psutil
+from libqtile.log_utils import logger
+
 from libqtile import bar, layout, widget
 from libqtile import hook, qtile
 from libqtile.config import Drag, Group, Key, KeyChord, Match, Screen, \
@@ -191,15 +193,15 @@ keys = [
     Key([MOD],             "semicolon", lazy.spawn(f"tmux list-sessions | cut -d: -f1 | rofi -dmenu -p session | xargs -I% -r {TERMINAL} -c tmux_floating -e tmux a -t '%'", shell=True), desc="Launch tmux session selector"),
     Key([MOD, ALT],        "semicolon", lazy.spawn(f"rofi -dmenu -p 'new session' | xargs -I% -r {TERMINAL} -c tmux_floating tmux new -s '%'", shell=True), desc="Launch tmux session creator"),
 
-    Key([MOD, ALT],        "t",   lazy.spawn("transmission-gtk"), desc="Launch transmission"),
-    Key([MOD, ALT],        "l",   scratchpad_toggle("lutris"),    desc="Launch lutris"),
-    Key([MOD, ALT, SHIFT], "d",   lazy.spawn("gnome-disks"),      desc="Launch gnome-disks"),
-    Key([MOD, ALT],        "b",   lazy.spawn("baobab"),           desc="Launch baobab"),
-    Key([MOD, ALT],        "m",   scratchpad_toggle(MAIL),        desc="Launch mail"),
-    Key([MOD, ALT],        "y",   lazy.spawn("vncviewer"),        desc="Launch vncviewer"),
-    Key([MOD, ALT, SHIFT], "b",   lazy.spawn("virtualbox"),       desc="Launch virtualbox"),
-    Key([MOD, ALT],        "d",   lazy.spawn("discord"),          desc="Launch discord"),
-    Key([MOD, ALT],        "k",   scratchpad_toggle("calendar"),  desc="Launch discord"),
+    Key([MOD, ALT],        "t",   lazy.spawn("transmission-gtk"),         desc="Launch transmission"),
+    Key([MOD, ALT],        "l",   scratchpad_toggle("lutris"),            desc="Launch lutris"),
+    Key([MOD, ALT, SHIFT], "d",   lazy.spawn("gnome-disks"),              desc="Launch gnome-disks"),
+    Key([MOD, ALT],        "b",   scratchpad_toggle("bitwarden-desktop"), desc="Launch bitwarden"),
+    Key([MOD, ALT],        "m",   scratchpad_toggle(MAIL),                desc="Launch mail"),
+    Key([MOD, ALT],        "y",   lazy.spawn("vncviewer"),                desc="Launch vncviewer"),
+    Key([MOD, ALT, SHIFT], "b",   lazy.spawn("virtualbox"),               desc="Launch virtualbox"),
+    Key([MOD, ALT],        "d",   lazy.spawn("discord"),                  desc="Launch discord"),
+    Key([MOD, ALT],        "k",   scratchpad_toggle("calendar"),          desc="Launch calendar"),
 
     # FIXME not using this anyway (use in_floating_terminal)
     # Key([MOD, ALT], "r",          lazy.spawn("$terminal -c newsboat_float -e newsboat"), desc="Launch newsboat"),
@@ -354,6 +356,10 @@ keys = [
     Key([MOD], "F5", lazy.spawn("pgrep picom && killall picom || picom -b", shell=True), desc="Toggle picom"),
 
     # TODO keychord for changing layouts
+
+    Key([MOD],        "s", lazy.spawn('qtile cmd-obj -o cmd -f switchgroup'), desc='Launch prompt to switch to a group'),
+    Key([MOD, SHIFT], "s", lazy.spawn('qtile cmd-obj -o cmd -f togroup'),     desc='Launch prompt to move focused window to a group'),
+    Key([MOD, CTRL],  "s", lazy.spawn('qtile cmd-obj -o cmd -f togroup'),     desc='Launch prompt to move focused window to a group'),
 ]
 # @formatter:on
 
@@ -396,14 +402,18 @@ for i in groups:
 # Append ScratchPad to groups list. Default ScratchPad.
 groups.append(
     ScratchPad(SCRATCHPAD, [
-        DropDown(TERMINAL, TERMINAL, **center(0.6, 0.6)),
+        DropDown(TERMINAL, TERMINAL, **center(0.6, 0.6),
+                 on_focus_lost_hide=False),
         DropDown(PLAYER, PLAYER, **center(0.6, 0.6)),
         DropDown("cantata", "cantata", **center(0.6, 0.6)),
-        DropDown("calendar", in_float_terminal(CALENDAR), **center(0.6, 0.6)),
+        DropDown("calendar", in_float_terminal(CALENDAR), **center(0.6, 0.6),
+                 on_focus_lost_hide=False),
         DropDown("pavucontrol", "pavucontrol", **center(0.4, 0.6)),
-        DropDown("lutris", "lutris", **center(0.6, 0.8)),
-        DropDown("bitwarden-desktop", "bitwarden-desktop", **center(0.6, 0.8)),
-        DropDown(MAIL, MAIL, **center(0.6, 0.8)),
+        DropDown("lutris", "lutris", **center(0.6, 0.6),
+                 on_focus_lost_hide=False),
+        DropDown("bitwarden-desktop", "bitwarden-desktop", **center(0.6, 0.6),
+                 on_focus_lost_hide=False),
+        DropDown(MAIL, MAIL, **center(0.8, 0.8), on_focus_lost_hide=False),
     ]),
 )
 
@@ -1183,6 +1193,14 @@ CPU_WIDGET = CpuWidget(**decoration_group, width=70)
 
 CHORD_WIDGET = DescriptiveChord(**decoration_group)
 
+PROMPT_WIDGET = qtile_extras_widget.Prompt(
+    **decoration_group,
+)
+
+NOTIFY_WIDGET = qtile_extras_widget.Notify(
+    **decoration_group,
+)
+
 
 def layout_widget():
     return qtile_extras_widget.CurrentLayoutIcon(
@@ -1234,6 +1252,8 @@ def screen_widgets(primary=False):
         CHECK_UPDATES_WIDGET,
         spacer(3),
         CGS_WIDGET,
+        spacer(3),
+        PROMPT_WIDGET,
         spacer(),
         *DISK_FREE_WIDGETS,
         spacer(3),
@@ -1370,6 +1390,7 @@ def autostart():
                     shell=True)
     qtile.cmd_spawn('/usr/lib/geoclue-2.0/demos/agent', shell=True)
     qtile.cmd_spawn('nm-applet', shell=True)
+    qtile.cmd_spawn('birdtray', shell=True)
     qtile.cmd_spawn('xmodmap ~/.Xmodmap', shell=True)
     qtile.cmd_spawn('pgrep udiskie || udiskie -s -f $file -a --appindicator',
                     shell=True)
