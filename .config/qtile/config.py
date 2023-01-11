@@ -435,7 +435,7 @@ layouts = [
     layout.MonadTall(
         **default_layout_settings,
         new_client_position="top",
-        ratio=0.55,
+        ratio=0.75,
     ),
     layout.Columns(
         **default_layout_settings,
