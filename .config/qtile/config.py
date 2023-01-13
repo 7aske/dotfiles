@@ -1166,6 +1166,9 @@ WEATHER_WIDGET = qtile_extras_widget.OpenWeather(
     appid=os.getenv('OPENWEATHERMAP_API_KEY'),
     cityid=os.getenv('OPENWEATHERMAP_CITY_ID'),
     format='{icon} {temp:.0f}°{units_temperature}',
+    mouse_callbacks={
+        MOUSE_RIGHT: lambda: qtile.cmd_spawn(f"{BROWSER} https://openweathermap.org/city/{os.getenv('OPENWEATHERMAP_CITY_ID')}")
+    },
 )
 
 
