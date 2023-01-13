@@ -173,7 +173,7 @@ keys = [
         Key([], "c", lazy.spawn("vimcfg --config"),                                     desc="(c)onfig"),
         Key([], "d", lazy.spawn("vimcfg"),                                              desc="(d)efault"),
         Key([], "q", lazy.spawn("pycharm $CODE/sh/dotfiles/.config/qtile", shell=True), desc="(q)tile"),
-    ], name="codeopen"),
+    ], name="config"),
 
     Key([MOD],             "e",    lazy.spawn(in_terminal(TERMFILE)),        desc="Launch terminal file manager"),
     Key([MOD, SHIFT],      "e",    lazy.spawn(FILE),                         desc="Launch file manager"),
