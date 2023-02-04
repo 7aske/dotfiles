@@ -140,6 +140,20 @@ def group_to_next_screen(q):
     q.cmd_next_screen()
 
 
+def update_widget(name):
+    """
+    Update a widget.
+    """
+    return lazy.widget[name].cmd_force_update()
+
+
+def update_widget_shell(name):
+    """
+    Update a widget.
+    """
+    return "qtile cmd-obj -o widget " + name + " -f eval -a 'self.cmd_force_update()'"
+
+
 def focus_group_by_name(name):
     """
     Factory method for a focus group by name function that preserves the
@@ -341,7 +355,7 @@ keys = [
     Key([MOD],              "m",             scratchpad_toggle(PLAYER),                                                 desc="Toggle player"),
     Key([MOD, SHIFT],       "m",             scratchpad_toggle("cantata"),                                              desc="Toggle player"),
     Key([MOD],              "p",             scratchpad_toggle("pavucontrol"),                                          desc="Toggle PulseAudio Volume Control"),
-    Key([MOD, CTRL],        "p",             lazy.spawn("padefault ma"),                                                desc="Mute all outputs"),
+    Key([MOD, CTRL],        "p",             lazy.spawn("padefault ma;" + update_widget_shell("outputvolumewidget"), shell=True), desc="Mute all outputs"),
     Key([MOD, ALT],         "p",             lazy.spawn("padefault mas"),                                               desc="Mute all inputs"),
     Key([MOD, SHIFT],       "p",             lazy.spawn("padefault toggle"),                                            desc="Toggle default output device"),
     Key([MOD, CTRL, SHIFT], "p",             lazy.spawn("padefault toggle-focus"),                                      desc="Toggle output device of the focused window"),
