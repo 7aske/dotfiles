@@ -120,6 +120,65 @@ def center(width: float, height: float) -> dict:
     )
 
 
+def group_to_prev_screen(q):
+    """
+    Move the current group to the previous screen.
+    """
+    current_screen = qtile.screens.index(q.current_screen)
+    prev_screen = (current_screen - 1) % len(q.screens)
+    q.screens[current_screen].group.cmd_toscreen(screen=prev_screen)
+    q.cmd_prev_screen()
+
+
+def group_to_next_screen(q):
+    """
+    Move the current group to the next screen.
+    """
+    current_screen = q.screens.index(q.current_screen)
+    next_screen = (current_screen + 1) % len(q.screens)
+    q.screens[current_screen].group.cmd_toscreen(screen=next_screen)
+    q.cmd_next_screen()
+
+
+def focus_group_by_name(name):
+    """
+    Factory method for a focus group by name function that preserves the
+    groups current screen if present.
+    """
+
+    def inner(q):
+        """
+        Inner function to be passed to the qtile command object. Captures the
+        name of the group to focus.
+        """
+        for group in qtile.groups:
+            if group.name != name:
+                continue
+
+            current_screen_index = q.screens.index(q.current_screen)
+            if group.screen:
+                idx = group.screen.index
+                # If current screen is not that of the group we want to focus
+                # we first need to switch to that screen.
+                if current_screen_index != idx:
+                    q.cmd_to_screen(idx)
+
+                return group.cmd_toscreen(screen=idx)
+
+            # If the group has no screen that means that it is not visible
+            # on any of the screens.
+            idx = q.screens.index(q.current_screen)
+            if group.last_screen:
+                idx = group.last_screen.index
+            return group.cmd_toscreen(screen=idx)
+
+        # No-op if group not found.
+        # Shouldn't reach this anyway.
+        return lambda: None
+
+    return inner
+
+
 # ____      _
 #  / ___|___ | | ___  _ __ ___
 # | |   / _ \| |/ _ \| '__/ __|
@@ -159,6 +218,7 @@ keys = [
     Key([MOD],        "q",    lazy.window.kill(),                             desc="Launch terminal"),
     Key([MOD, SHIFT], "r",    lazy.restart(),                                 desc="Restart QTile"),
     Key([MOD, SHIFT], "c",    lazy.reload_config(),                           desc="Reload config"),
+    Key([MOD],        "u",    lazy.next_urgent(),                              desc="Next urgent window"),
 
     Key([MOD],        "Return",    lazy.spawn(TERMINAL),                             desc="Launch terminal"),
     Key([MOD, SHIFT], "Return",    scratchpad_toggle(TERMINAL), desc="Dropdown terminal"),
@@ -268,8 +328,10 @@ keys = [
         Key([], "j", lazy.spawn("jetbrains-toolbox"), desc="(j)etbrains-toolbox")
     ], name="launch"),
 
-    Key([MOD, CTRL], "Left",  lazy.next_screen(), desc="Move focus to next monitor"),
-    Key([MOD, CTRL], "Right", lazy.prev_screen(), desc="Move focus to previous monitor"),
+    Key([MOD, CTRL],      "Left",  lazy.next_screen(),                  desc="Move focus to next monitor"),
+    Key([MOD, CTRL],      "Right", lazy.prev_screen(),                  desc="Move focus to previous monitor"),
+    Key([MOD, ALT, CTRL], "Left",  lazy.function(group_to_next_screen), desc="Move current group to next monitor"),
+    Key([MOD, ALT, CTRL], "Right", lazy.function(group_to_prev_screen), desc="Move current group to previous monitor"),
 
     Key([ALT], "Tab", lazy.screen.toggle_group(), desc="Toggle through layouts"),
 
@@ -393,9 +455,10 @@ groups = [
 for i in groups:
     # @formatter:off
     keys.extend([
-        Key([MOD],        i.name, lazy.group[i.name].toscreen(),                              desc="Switch to group {}".format(i.name)),
-        Key([MOD, CTRL],  i.name, lazy.window.togroup(i.name),                                desc="move focused window to group {}".format(i.name)),
-        Key([MOD, SHIFT], i.name, lazy.window.togroup(i.name), lazy.group[i.name].toscreen(), desc="move focused window and screen to group {}".format(i.name)),
+        Key([MOD],        i.name, lazy.function(focus_group_by_name(i.name)),   desc="Switch to group {}".format(i.name)),
+        Key([MOD, CTRL],  i.name, lazy.window.togroup(i.name),                 desc="move focused window to group {}".format(i.name)),
+        Key([MOD, SHIFT], i.name, lazy.window.togroup(i.name),
+            lazy.function(focus_group_by_name(i.name)),                         desc="move focused window and screen to group {}".format(i.name)),
     ])
     # @formatter:on
 
@@ -1167,7 +1230,8 @@ WEATHER_WIDGET = qtile_extras_widget.OpenWeather(
     cityid=os.getenv('OPENWEATHERMAP_CITY_ID'),
     format='{icon} {temp:.0f}°{units_temperature}',
     mouse_callbacks={
-        MOUSE_RIGHT: lambda: qtile.cmd_spawn(f"{BROWSER} https://openweathermap.org/city/{os.getenv('OPENWEATHERMAP_CITY_ID')}")
+        MOUSE_RIGHT: lambda: qtile.cmd_spawn(
+            f"{BROWSER} https://openweathermap.org/city/{os.getenv('OPENWEATHERMAP_CITY_ID')}")
     },
 )
 
@@ -1217,6 +1281,7 @@ def layout_widget():
 def group_box_widget():
     return qtile_extras_widget.GroupBox(
         **decoration_group,
+        hide_unused=True,
         highlight_method='block',
         block_highlight_text_color=background,
         urgent_border=color11,
@@ -1224,9 +1289,9 @@ def group_box_widget():
         background=transparent,
         inactive=background,
         active=color13,
-        this_current_screen_border=color13,
+        this_current_screen_border=color14,
         this_screen_border=color13,
-        other_current_screen_border=color14,
+        other_current_screen_border=color15,
         other_screen_border=color15,
         margin_x=-1,
         disable_drag=True,
@@ -1374,7 +1439,7 @@ cursor_warp = True
 reconfigure_screens = True
 auto_minimize = False
 wmname = "LG3D"
-focus_on_window_activation = "urgent"
+focus_on_window_activation = "focus"
 
 
 #  ____  _             _
