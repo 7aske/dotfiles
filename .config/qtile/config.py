@@ -1365,27 +1365,66 @@ def screen_widgets(primary=False):
     return widgets
 
 
-screens = [
-    Screen(
-        top=bar.Bar(
-            screen_widgets(primary=True),
-            BAR_HEIGHT,
-            background=transparent),
-    ),
-    Screen(
-        top=bar.Bar(
-            screen_widgets(),
-            BAR_HEIGHT,
-            background=transparent),
-    ),
-    # Remove code block below for a two monitor setup
-    Screen(
-        top=bar.Bar(
-            screen_widgets(),
-            BAR_HEIGHT,
-            background=transparent),
-    ),
-]
+# We handle screens a bit more manually than usual, because we want to
+# be able to set the refresh rate of each screen independently - to fix
+# the issue when dragging and resizing a floating windows.
+screens = []
+if os.getenv("XDG_SESSION_TYPE") == "x11":
+    from Xlib import display
+    from Xlib.ext import randr
+
+    # initialize Xlib and RandR extension
+    d = display.Display(':0')
+    info = d.screen(d.get_default_screen())
+    res = randr.get_screen_resources(info.root)
+
+    # get active modes for each screen
+    active_modes = list(map(lambda inf: inf.mode,
+                            filter(lambda c: c.mode,
+                                   set(randr.get_crtc_info(info.root, crtc,
+                                                           res.config_timestamp)
+                                       for crtc in res.crtcs))))
+
+    # calculate refresh rates for each mode since it's not available as
+    # a property
+    refresh_rates = {mode.id: (mode.dot_clock / (mode.h_total * mode.v_total))
+                     for mode
+                     in res.modes}
+
+    # create a screen for each refresh rate. Refresh rates should correlate to
+    # the number of screens
+    for i, mode in enumerate(active_modes):
+        screens.append(Screen(
+            # get the refresh rade for each of the modes used by screens
+            x11_drag_polling_rate=refresh_rates[mode],
+            top=bar.Bar(
+                # set only the first screen as primary
+                screen_widgets(primary=i == 0),
+                BAR_HEIGHT,
+                background=transparent),
+        ))
+else:
+    screens.extend([
+        Screen(
+            top=bar.Bar(
+                screen_widgets(primary=True),
+                BAR_HEIGHT,
+                background=transparent),
+        ),
+        Screen(
+            top=bar.Bar(
+                screen_widgets(),
+                BAR_HEIGHT,
+                background=transparent),
+        ),
+        # Remove code block below for a two monitor setup
+        Screen(
+            top=bar.Bar(
+                screen_widgets(),
+                BAR_HEIGHT,
+                background=transparent),
+        ),
+    ])
 
 #  __  __
 # |  \/  | ___  _   _ ___  ___
