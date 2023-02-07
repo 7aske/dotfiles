@@ -356,7 +356,7 @@ keys = [
     Key([MOD, SHIFT],       "m",             scratchpad_toggle("cantata"),                                              desc="Toggle player"),
     Key([MOD],              "p",             scratchpad_toggle("pavucontrol"),                                          desc="Toggle PulseAudio Volume Control"),
     Key([MOD, CTRL],        "p",             lazy.spawn("padefault ma;" + update_widget_shell("outputvolumewidget"), shell=True), desc="Mute all outputs"),
-    Key([MOD, ALT],         "p",             lazy.spawn("padefault mas"),                                               desc="Mute all inputs"),
+    Key([MOD, ALT],         "p",             lazy.spawn("padefault mas" + update_widget_shell("inputvolumewidget"), shell=True),  desc="Mute all inputs"),
     Key([MOD, SHIFT],       "p",             lazy.spawn("padefault toggle"),                                            desc="Toggle default output device"),
     Key([MOD, CTRL, SHIFT], "p",             lazy.spawn("padefault toggle-focus"),                                      desc="Toggle output device of the focused window"),
     Key([MOD],              "period",        lazy.spawn("env BLOCK_BUTTON=1 ~/.local/bin/statusbar/music", shell=True), desc="Next media"),
