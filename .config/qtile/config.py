@@ -1047,8 +1047,7 @@ class CpuWidget(qtile_extras_widget.CPU):
         ("color_low", color13),
         ("color_medium", color12),
         ("color_high", color11),
-        ("update_interval", None),
-        ("interval", 2),
+        ("update_interval", 2),
         ("foreground", foreground),
         ("markup", True),
         ("icon", ""),
@@ -1069,7 +1068,7 @@ class CpuWidget(qtile_extras_widget.CPU):
     def poll(self):
         variables = dict()
 
-        load_percent = round(psutil.cpu_percent(interval=self.interval), 1)
+        load_percent = round(psutil.cpu_percent(interval=self.update_interval), 1)
 
         if load_percent > 90:
             variables["color"] = self.color_high
