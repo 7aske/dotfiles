@@ -1348,6 +1348,8 @@ def screen_widgets(primary=False):
         spacer(3),
         CPU_WIDGET,
         spacer(3),
+        CPU_THERMAL_SENSOR_WIDGET,
+        spacer(3),
         VOLUME_WIDGET,
         spacer(3),
         MIC_VOLUME_WIDGET,
