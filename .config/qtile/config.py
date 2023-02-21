@@ -342,10 +342,10 @@ keys = [
         Key([], "j", lazy.spawn("jetbrains-toolbox"), desc="(j)etbrains-toolbox")
     ], name="launch"),
 
-    Key([MOD, CTRL],      "Right",  lazy.next_screen(),                  desc="Move focus to next monitor"),
-    Key([MOD, CTRL],      "Left", lazy.prev_screen(),                    desc="Move focus to previous monitor"),
-    Key([MOD, ALT, CTRL], "Right",  lazy.function(group_to_next_screen), desc="Move current group to next monitor"),
-    Key([MOD, ALT, CTRL], "Left", lazy.function(group_to_prev_screen),   desc="Move current group to previous monitor"),
+    Key([MOD, CTRL],      "Left",  lazy.next_screen(),                  desc="Move focus to next monitor"),
+    Key([MOD, CTRL],      "Right", lazy.prev_screen(),                  desc="Move focus to previous monitor"),
+    Key([MOD, ALT, CTRL], "Left",  lazy.function(group_to_next_screen), desc="Move current group to next monitor"),
+    Key([MOD, ALT, CTRL], "Right", lazy.function(group_to_prev_screen), desc="Move current group to previous monitor"),
 
     Key([ALT], "Tab", lazy.screen.toggle_group(), desc="Toggle through layouts"),
 
@@ -1207,7 +1207,7 @@ CPU_THERMAL_SENSOR_WIDGET = qtile_extras_widget.ThermalSensor(
     foreground=foreground,
     foreground_alert=color11,
     update_interval=2,
-    threshold=80,
+    threshold=60,
     fmt='{}',
     tag_sensor=CPU_SENSOR_NAME,
 )
@@ -1347,8 +1347,6 @@ def screen_widgets(primary=False):
         RAM_MEMORY_WIDGET,
         spacer(3),
         CPU_WIDGET,
-        spacer(3),
-        CPU_THERMAL_SENSOR_WIDGET,
         spacer(3),
         VOLUME_WIDGET,
         spacer(3),
