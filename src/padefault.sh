@@ -3,7 +3,7 @@
 # toggles default sound output device
 default_sink=$(pactl info | grep "Default Sink:" | cut -d ' ' -f3)
 notify_timeout="1000"
-MAX_VOLUME="${MAX_VOLUME:-130}"
+MAX_VOLUME="${MAX_VOLUME:-150}"
 
 _usage() {
 	echo "usage: padefault <command> [args]"
