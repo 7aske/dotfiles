@@ -232,7 +232,8 @@ keys = [
     Key([MOD],        "q",    lazy.window.kill(),                             desc="Launch terminal"),
     Key([MOD, SHIFT], "r",    lazy.restart(),                                 desc="Restart QTile"),
     Key([MOD, SHIFT], "c",    lazy.reload_config(),                           desc="Reload config"),
-    Key([MOD],        "u",    lazy.next_urgent(),                              desc="Next urgent window"),
+    Key([MOD],        "c",    lazy.window.center(),                           desc="Center floating window"),
+    Key([MOD],        "u",    lazy.next_urgent(),                             desc="Next urgent window"),
 
     Key([MOD],        "Return",    lazy.spawn(TERMINAL),                             desc="Launch terminal"),
     Key([MOD, SHIFT], "Return",    scratchpad_toggle(TERMINAL), desc="Dropdown terminal"),
