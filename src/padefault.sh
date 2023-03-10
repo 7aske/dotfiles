@@ -200,9 +200,10 @@ padef_volume() {
 padef_mic_volume() {
 	default_source=$(pactl info | grep "Default Source:" | cut -d ' ' -f3)
 	vol="$(padef_get_mic_vol "$default_source")"
-	vol=$((vol + ${1%%%}))
-	if (( $vol > $MAX_VOLUME )); then
+	# check only if we're increasing volume
+	if [[ "$1" = +* ]] && (( $((vol + ${1%%%})) > $MAX_VOLUME )); then
 		pactl set-source-volume "$default_source" "$MAX_VOLUME%"
+		vol=$MAX_VOLUME
 	else
 		pactl set-source-volume "$default_source" "$1"
 	fi
