@@ -1069,7 +1069,8 @@ class CpuWidget(qtile_extras_widget.CPU):
     def poll(self):
         variables = dict()
 
-        load_percent = round(psutil.cpu_percent(interval=self.update_interval), 1)
+        load_percent = round(psutil.cpu_percent(interval=self.update_interval),
+                             1)
 
         if load_percent > 90:
             variables["color"] = self.color_high
@@ -1312,6 +1313,25 @@ def group_box_widget():
     )
 
 
+def tasklist_widget():
+    return qtile_extras_widget.TaskList(
+        **decoration_group,
+        border=color14,
+        foreground=background,
+        borderwidth=1,
+        margin_x=0,
+        margin_y=0,
+        highlight_method='block',
+        urgent_border=color11,
+        urgent_text=background,
+        txt_floating=' ',
+        txt_maximized=' ',
+        txt_minimized=' ',
+        icon_size=16,
+        title_width_method="uniform",
+    )
+
+
 #  ____
 # / ___|  ___ _ __ ___  ___ _ __  ___
 # \___ \ / __| '__/ _ \/ _ \ '_ \/ __|
@@ -1334,6 +1354,8 @@ def screen_widgets(primary=False):
         CHECK_UPDATES_WIDGET,
         spacer(3),
         CGS_WIDGET,
+        spacer(3),
+        tasklist_widget(),
         spacer(3),
         PROMPT_WIDGET,
         spacer(),
