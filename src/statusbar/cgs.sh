@@ -36,7 +36,7 @@ else
 	color="${color1:-"#ff8144"}"
 fi
   
-ICON=''
+ICON='󰊢'
 
 if [ $repos -eq 0 ]; then
 	exit 0

@@ -52,8 +52,8 @@ if [ $count -eq 0 ]; then
 fi
 
 if [ -e "$SWITCH" ]; then
-	echo "<span color=\"$color\"> </span>"
+	echo "<span color=\"$color\">󰏔 </span>"
 else
-	echo " <span color=\"$color\">$count</span>"
+	echo "󰏔 <span color=\"$color\">$count</span>"
 fi
 

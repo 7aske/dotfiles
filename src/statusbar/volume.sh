@@ -31,10 +31,10 @@ _is_any_muted() {
 
 VOLUME="$(padef_get_vol)"
 
-ICON_LOW="奄"
-ICON_MED="奔"
-ICON_HIGH="墳"
-ICON_MUTED="婢"
+ICON_LOW="󰕿"
+ICON_MED="󰖀"
+ICON_HIGH="󰕾"
+ICON_MUTED="󰖁"
 
 if [ "$VOLUME" -ge 90 ]; then
 	ICON=$ICON_HIGH

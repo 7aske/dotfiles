@@ -61,4 +61,4 @@ fi
 
 
 
-echo "異 $launches<span color='$color'>$extra</span>"
+echo "󰑣 $launches<span color='$color'>$extra</span>"

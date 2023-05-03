@@ -71,11 +71,11 @@ fi
 
 
 if [ -e "$SWITCH" ]; then
-	echo "<span color='$color' size='x-large'></span>"
+	echo "<span color='$color' size='x-large'>󰈁</span>"
 	exit 0
 fi
 
-OUT_FORMAT="<span color='$color'> %5s 祝%5s</span>"
+OUT_FORMAT="<span color='$color'>󰇚 %5s 󰕒%5s</span>"
 
 printf "$OUT_FORMAT" "$RX_OUT" "$TX_OUT"
 echo
