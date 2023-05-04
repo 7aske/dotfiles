@@ -638,8 +638,8 @@ exec_always --no-startup-id alternating_layouts
 
 # compton/picom
 bindsym $mod+Shift+F5 exec --no-startup-id killall picom
-bindsym $mod+F5 exec --no-startup-id picom -b --experimental-backends --config ~/.config/compton/compton.conf
-exec_always --no-startup-id sleep 1 && pgrep picom || picom -b --experimental-backends --config ~/.config/compton/compton.conf
+bindsym $mod+F5 exec --no-startup-id picom -b --config ~/.config/compton/compton.conf
+exec_always --no-startup-id sleep 1 && pgrep picom || picom -b --config ~/.config/compton/compton.conf
 
 # set background
 # exec_always --no-startup-id wal -i ~/.config/wallpaper
