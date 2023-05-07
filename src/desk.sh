@@ -11,11 +11,11 @@ desk_move_to() {
 }
 
 desk_stand() {
-	idasen-controller --forward --stand
+	idasen-controller --forward --move-to stand
 }
 
 desk_sit() {
-	idasen-controller --forward --sit
+	idasen-controller --forward --move-to sit
 }
 
 desk_mon() {
