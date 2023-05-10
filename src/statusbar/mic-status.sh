@@ -5,9 +5,9 @@
 inputs="$(pactl list source-outputs | grep application.process.binary)"
 
 case $BLOCK_BUTTON in
-	1) notify-send -i audio-recorder "active inputs" "$(echo $inputs | cut -d= -f2 | sed -e 's/["\ ]//g')" ;;
+	1) pavucontrol -t 4 2>&1 >/dev/null;;
 	2) padefault mute-all-src ;;
-	3) pavucontrol ;;
+	3) notify-send -i audio-recorder "active inputs" "$(echo $inputs | cut -d= -f2 | sed -e 's/["\ ]//g')" ;;
 	4) padefault mic-volume +1% 2>&1 >/dev/null;;
 	5) padefault mic-volume -1% 2>&1 >/dev/null;;
 esac

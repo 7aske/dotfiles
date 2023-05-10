@@ -3,7 +3,7 @@
 [ -e "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh" 
 
 case $BLOCK_BUTTON in
-	1) i3-msg 'exec --no-startup-id wtoggle pavucontrol' 2>&1 >/dev/null ;;
+	1) pavucontrol -t 3 2>&1 >/dev/null;;
 	2) padefault ma     2>&1 >/dev/null;;
 	3) padefault toggle 2>&1 >/dev/null;;
 	4) padefault volume +5% 2>&1 >/dev/null;;
