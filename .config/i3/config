@@ -525,7 +525,6 @@ for_window [class="tmux_floating"] floating enable, resize set 70ppt 70ppt, move
 for_window [title="^World of Warcraft$"] layout tabbed border none
 for_window [class="(?i)steam"] floating enable, resize set 70ppt 70ppt, move position center
 for_window [class="(?i)lutris"] floating enable, move position center
-for_window [class="epicgameslauncher.exe"] floating enable, resize set 70ppt 70ppt, move position center
 
 # virtual machines
 for_window [class="VirtualBox Machine" title="(?i)^win"] move container to workspace w
