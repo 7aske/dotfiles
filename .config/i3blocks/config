@@ -12,6 +12,9 @@ align=left
 interval=5
 signal=11
 
+[weather]
+interval=60
+
 [cpu]
 interval=5
 
@@ -35,19 +38,16 @@ interval=60
 signal=9
 command=~/.local/bin/statusbar/disk /home 
 
-[crypto]
-interval=60
-command=~/.local/bin/crypto -t0 -f '%s $%.1f'
+#[crypto]
+#interval=60
+#command=~/.local/bin/crypto -t0 -f '%s $%.1f'
 
 [launch]
 interval=60
 
-[weather]
-interval=60
-
-[tasks]
-label=
-interval=60
+#[tasks]
+#label=
+#interval=60
 
 [cgs]
 interval=60
@@ -65,13 +65,9 @@ signal=9
 
 #[desk]
 #label= 
-#ommand=desk mon-last
+#command=desk mon-last
 #interval=persist
 #align=left
-
-[notify-status]
-interval=5
-signal=9
 
 [rec-status]
 interval=5
@@ -84,18 +80,22 @@ signal=10
 #[power]
 #interval=persist
 
+[volume]
+interval=5
+signal=10
+
 [battery]
 interval=60
 command=~/.local/bin/statusbar/battery
 signal=9
 
-[volume]
-interval=5
-signal=10
-
 [layout]
 label= 
 interval=60
+signal=9
+
+[notify-status]
+interval=5
 signal=9
 
 [clock]
