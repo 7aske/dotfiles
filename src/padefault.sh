@@ -63,6 +63,15 @@ padef_toggle_focus() {
 		} else if ($1 == "Sink") {
 			idx=substr($2, 2)
 		}
+
+		if (name ~ /alsa_output.usb-Generic_USB_Audio-00.HiFi__hw_Audio(_2)?__sink/) {
+			name=""
+		}
+
+		if (desc ~ /(USB Audio S\/PDIF Output)|(USB Audio Speakers)/) {
+			desc=""
+		}
+
 		if (name != "" && desc != "" && idx != "") {
 			print idx " " name " " desc
 			name=""
@@ -132,48 +141,68 @@ padef_toggle_focus() {
 }
 
 padef_toggle() {
-	declare -A sinks
-	index=0
+	declare -a sinks # sink short names for move-to
+	declare -a indices # sink indexes
+	declare -A descs # sink description for notification
 	while IFS= read -r line; do
-		sinks+=([$index]="$(echo $line | cut -d ':' -f2)")
-		index=$((index + 1))
-	done <<< "$(pactl list sinks | grep Name: | cut -d ' ' -f2 | grep -n '')"
+		while IFS=' ' read -a arr; do
+			indices+=(${arr[0]})
+			sinks+=(${arr[1]})
+			descs+=([${arr[1]}]="${arr[@]:2}")
+		done <<< $(echo $line)
+	done <<< "$(pactl list sinks | awk '{
+		if ($1 == "Description:") {
+			desc=substr($0, length($1)+2, length($0))
+		} else if ($1 == "Name:") {
+			name=$2
+		} else if ($1 == "Sink") {
+			idx=substr($2, 2)
+		}
 
-	declare -A names
-	index=0
-	while IFS= read -r line; do
-		names+=([$index]="$line")
-		index=$((index + 1))
-	done <<< "$(pactl list sinks | grep Description: | cut -d ':' -f2 | sed -e 's/^[ \t]*//')"
+		if (name ~ /alsa_output.usb-Generic_USB_Audio-00.HiFi__hw_Audio(_2)?__sink/) {
+			name=""
+		}
+
+		if (desc ~ /(USB Audio S\/PDIF Output)|(USB Audio Speakers)/) {
+			desc=""
+		}
+
+		if (name != "" && desc != "" && idx != "") {
+			print idx " " name " " desc
+			name=""
+			desc=""
+			idx=""
+		}
+	}')" # outputs pid sink pairs
+
+	echo ${sinks[@]}
 
 	output=""
-
-	next_index=-1
-	for index in "${!sinks[@]}"; do
-		name=${sinks[$index]}
-		if [ "$name" == "$default_sink" ]; then
-			next_index="$(((index + 1) % ${#sinks[@]}))"
-			break;
+	next_sink=-1
+	index=0
+	for sink in ${indices[@]}; do
+		name="${sinks[$index]}"
+		if [ $default_sink == $name ]; then
+			next_sink=$(((index + 1) % ${#indices[@]}))
 		fi
+		((index++))
 	done
 
-	if [ $next_index -eq -1 ]; then
-		exit 1
+	if [ $next_sink -ne -1 ]; then
+		name="${sinks[$next_sink]}"
+		desc="${descs[$name]}"
+		pactl set-default-sink "${name}"
+
+		for sink in "${sinks[@]}"; do
+			if [ "$sink" == "$name" ]; then
+				output="$output[x] ${descs[$sink]}\n"
+			else
+				output="$output[ ] ${descs[$sink]}\n"
+			fi
+		done
+
+		notify-send -a padefault -i "audio-speakers" "Switched Audio Output" "$output" -t 2000
 	fi
-
-	pactl set-default-sink "${sinks[$next_index]}"
-
-	for index in "${!sinks[@]}"; do
-		if [ "$next_index" == "$index" ]; then
-			output="$output[x] ${names[$index]}\n"
-		else
-			output="$output[ ] ${names[$index]}\n"
-		fi
-	done
-
-	printf "$output"
-	notify-send -a padefault -i audio-speakers 'Default Audio Device' "$output" -t 1500
-	exit 0
 }
 
 padef_volume() {
