@@ -17,6 +17,7 @@ antigen bundle docker
 antigen bundle docker-compose
 antigen bundle kubectl
 antigen bundle mvn
+antigen bundle gradle
 antigen bundle npm
 antigen bundle pip
 antigen bundle rust
