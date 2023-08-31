@@ -53,7 +53,8 @@ stty stop undef		# Disable ctrl-s to freeze terminal.
 
 # Basic auto/tab complete:
 setopt correct
-autoload -U compinit
+autoload -Uz compinit
+fpath+=~/.zfunc
 zstyle ':completion:*' menu select
 zmodload zsh/complist
 compinit
