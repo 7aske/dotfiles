@@ -3,11 +3,9 @@
 prog="$(basename $0)"
 
 function _usage (){
-	echo "usage "$prog" -?hpsv <-s|-d> <repo>"
+	echo "usage "$prog" -?hp <push|pull> <remote> <repo>"
 	echo "    -?,h         show this message and exit"
 	echo "    -p <port>    ssh port used by rsync"
-	echo "    -s <host>    source host"
-	echo "    -d <host>    destination host"
 	exit 2
 }
 
@@ -26,11 +24,6 @@ while getopts "h?:p:s:d:" opt; do
         ;;
     p)  port=$OPTARG
         ;;
-    s)  src=$OPTARG
-        ;;
-    d)  dest=$OPTARG
-		echo $dest
-        ;;
     esac
 done
 
@@ -38,19 +31,32 @@ shift $((OPTIND-1))
 
 [ "${1:-}" = "--" ] && shift
 
-repo="$1"
+cmd="$1"
+remote="$2"
+repo="$3"
+
+if [ -z "$repo" ]; then
+	cwd="$(pwd)"
+	repo="${cwd//$CODE\//}"
+fi
+
+if [ "$cmd" != "pull" ] && [ "$cmd" != "push" ]; then
+	_usage
+fi
+
+if [ -z "$cmd" ] || [ -z "$remote" ] || [ -z "$repo" ]; then
+	_usage
+fi
+
 if ! [[ $repo =~ ^.*/$ ]]; then
 	repo="$repo/"
 fi
 
-if [ -n "$dest" ]; then
-	REMOTE_CODE="$(ssh -p $port $dest '. ~/.profile; echo $CODE')"
-elif [ -n "$src" ]; then
-	REMOTE_CODE="$(ssh -p $port $src  '. ~/.profile; echo $CODE')"
-fi
+REMOTE_CODE="$(ssh -p $port $remote '. ~/.profile; echo $CODE')"
+echo ssh -p $port $remote '. ~/.profile; echo $CODE'
 
 if [ -z "$REMOTE_CODE" ]; then
-	echo -e "$prog: REMOTE_CODE: no such file or directory"
+	echo -e "$prog: $REMOTE_CODE: no such file or directory"
 	_usage
 fi
 
@@ -59,8 +65,11 @@ if [ -z "$repo" ]; then
 	_usage
 fi
 
-[ -n "$dest" ] && dest="$dest:"
-[ -n "$src" ] && src="$src:"
+if [ "$cmd" == "push" ]; then
+	dest="$remote:"
+elif [ "$cmd" == "pull" ]; then
+	src="$remote:"
+fi
 
 src="$src$CODE/$repo"
 dest="$dest$REMOTE_CODE/$repo"
