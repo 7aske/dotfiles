@@ -64,11 +64,11 @@ padef_toggle_focus() {
 			idx=substr($2, 2)
 		}
 
-		if (name ~ /alsa_output.usb-Generic_USB_Audio-00.HiFi__hw_Audio(_2)?__sink/) {
+		if (name ~ /alsa_output.usb-Generic_USB_Audio-00.HiFi__(SPDIF|Headphones)__sink/) {
 			name=""
 		}
 
-		if (desc ~ /(USB Audio S\/PDIF Output)|(USB Audio Speakers)/) {
+		if (desc ~ /(USB Audio S\/PDIF Output)|(USB Audio Front Headphones)/) {
 			desc=""
 		}
 
@@ -159,11 +159,11 @@ padef_toggle() {
 			idx=substr($2, 2)
 		}
 
-		if (name ~ /alsa_output.usb-Generic_USB_Audio-00.HiFi__hw_Audio(_2)?__sink/) {
+		if (name ~ /alsa_output.usb-Generic_USB_Audio-00.HiFi__(SPDIF|Headphones)__sink/) {
 			name=""
 		}
 
-		if (desc ~ /(USB Audio S\/PDIF Output)|(USB Audio Speakers)/) {
+		if (desc ~ /(USB Audio S\/PDIF Output)|(USB Audio Front Headphones)/) {
 			desc=""
 		}
 
