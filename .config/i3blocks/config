@@ -12,7 +12,7 @@ align=left
 interval=5
 signal=11
 
-[weather]
+[owm-weather]
 interval=60
 
 [cpu]
