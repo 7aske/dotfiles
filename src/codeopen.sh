@@ -56,6 +56,9 @@ if [ -z "$SELECTED" ]; then
 	exit 0
 fi
 PROJ="$CODE/$SELECTED"
+if [ -L "$PROJ" ]; then
+	PROJ="$(readlink -f "$PROJ")"
+fi
 
 _open_term() {
 	if [ -t 1 ]; then 
