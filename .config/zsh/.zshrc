@@ -13,6 +13,7 @@ istty() {
 [ -e ~/.config/zsh/antigen.zsh ] && source ~/.config/zsh/antigen.zsh
 
 antigen use oh-my-zsh
+antigen bundle aws
 antigen bundle docker
 antigen bundle docker-compose
 antigen bundle kubectl
@@ -118,4 +119,4 @@ bindkey '^r' history-incremental-search-backward
 [ -n "$DISPLAY" ]  && command -v xdo >/dev/null 2>&1 && xdo id > /tmp/term-wid-"$$"
 trap "( rm -f /tmp/term-wid-"$$" )" EXIT HUP
 
-[ -e "$HOME/.zprofile" ] && . "$HOME/.zprofile"
+[ -e "$HOME/.zprofile" ] && source "$HOME/.zprofile"
