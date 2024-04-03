@@ -56,7 +56,7 @@ stty stop undef		# Disable ctrl-s to freeze terminal.
 setopt correct
 autoload -Uz compinit
 fpath+=~/.zfunc
-zstyle ':completion:*' menu select
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" menu select
 zmodload zsh/complist
 compinit
 setopt completealiases
