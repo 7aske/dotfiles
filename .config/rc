@@ -38,6 +38,7 @@ gremote() { git remote -v $@;              }
 gco()     { git checkout $@;               }
 gammend() { git commit --amend $@;         }
 gsw()     { git switch $@;                 }
+lg()      { lazygit $@; }
 
 #       _ _                     
 #  __ _| (_) __ _ ___  ___  ___ 
