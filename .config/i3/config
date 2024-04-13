@@ -133,7 +133,7 @@ mode "$mode_config" {
 bindsym $mod+e       exec --no-startup-id $terminal -e $termfile
 bindsym $mod+Shift+e exec --no-startup-id $file
 bindsym $mod+w       exec --no-startup-id $browser
-bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor
+bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor /tmp/$(uuidgen).txt
 bindsym $mod+Shift+w exec --no-startup-id $browser --incognito
 # 7aske-scripts
 bindsym $mod+Mod1+n         exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/notify-status; exec --no-startup-id pkill -SIGRTMIN+9 i3blocks

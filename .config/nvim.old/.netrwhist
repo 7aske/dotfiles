@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =6
+let g:netrw_dirhist_6='/home/nik/.local/src/sh/dotfiles'
+let g:netrw_dirhist_5='/home/nik/Documents/uni/se211'
+let g:netrw_dirhist_4='/home/nik/.local/src/sh/dotfiles/.config/nvim'
+let g:netrw_dirhist_3='/home/nik/.local/src/sh/dotfiles/.config/nvim/plugged/i3-vim-syntax'
+let g:netrw_dirhist_2='/home/nik/.local/src/sh/dotfiles/.config/nvim/plugged'
+let g:netrw_dirhist_1='/home/nik/.local/src/sh/dotfiles/.config/nvim'
+let g:netrw_dirhist_0='/home/nik/.local/src/sh/dotfiles/.config'
+let g:netrw_dirhist_9='/home/nik/.local/src/sh/dotfiles/.config/nvim'
+let g:netrw_dirhist_8='/home/nik/.local/src/work/rzp-backend/src/main/java/com/example/backend/service'
+let g:netrw_dirhist_7='/home/nik/.local/src/sh/dotfiles/.config/nvim'
