@@ -120,3 +120,11 @@ bindkey '^r' history-incremental-search-backward
 trap "( rm -f /tmp/term-wid-"$$" )" EXIT HUP
 
 [ -e "$HOME/.zprofile" ] && source "$HOME/.zprofile"
+
+function toggle-autocomplete {
+    if [ -z "$ZSH_AUTOSUGGEST_HISTORY_IGNORE" ]; then
+        export ZSH_AUTOSUGGEST_HISTORY_IGNORE=\*
+    else
+        unset ZSH_AUTOSUGGEST_HISTORY_IGNORE
+    fi
+}
