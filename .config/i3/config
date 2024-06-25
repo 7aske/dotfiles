@@ -643,7 +643,7 @@ exec_always --no-startup-id alternating_layouts
 # compton/picom
 bindsym $mod+Shift+F5 exec --no-startup-id killall picom
 bindsym $mod+F5 exec --no-startup-id picom -b --config ~/.config/compton/compton.conf
-exec_always --no-startup-id sleep 1 && pgrep picom || picom -b --config ~/.config/compton/compton.conf
+#exec_always --no-startup-id sleep 1 && pgrep picom || picom -b --config ~/.config/compton/compton.conf
 
 # set background
 # exec_always --no-startup-id wal -i ~/.config/wallpaper
@@ -695,19 +695,20 @@ client.background             $bg
 
 # Start i3blocks to display status bar
 bar {
-	i3bar_command i3bar -t
+	i3bar_command i3bar
 	status_command i3blocks
     position top
 
 	tray_output primary
+    tray_padding 0
 
     font $status_font
 	separator_symbol 
 	workspace_min_width 32
     colors {
         #background $background
-        background            $bg_trans
-        focused_background    $bg_trans
+        background            $bg
+        focused_background    $bg
         statusline            $fg
         focused_statusline    $color15
         separator             $color12
