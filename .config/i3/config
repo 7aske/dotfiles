@@ -218,7 +218,7 @@ mode "$mode_codeopen" {
     bindsym r exec --no-startup-id codeopen -m $codeopen_menu -t rider; mode default
     bindsym j exec --no-startup-id codeopen -m $codeopen_menu -t jetbrains; mode default
 
-    bindsym Shift+g exec --no-startup-id codeopen -m $codeopen_menu -t lazygit; mode default
+    bindsym Shift+g exec --no-startup-id codeopen -m $codeopen_menu lazygit; mode default
 
     # exit codeopen mode: "Enter" or "Escape"
     bindsym Return mode default
