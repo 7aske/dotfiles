@@ -70,17 +70,21 @@ fi
 
 _open_term() {
     if [ -t 1 ]; then
-        cd $PROJ
-        exec $SHELL
-    fi
-
-    if [ "$TERMINAL" = "st" ]; then
-        # 7aske 'st' build with '-d' option to chdir at start
-        notify-send -i terminal "codeopen" "opening $PROJ"
-        $TERMINAL -d "$PROJ" $([ -n "$1" ] && echo "-e $1")
+        if [ -n "$1" ]; then
+            cd "$PROJ" && $1
+        else
+            cd "$PROJ"
+            exec $SHELL
+        fi
     else
-        notify-send -i terminal "codeopen" "opening $PROJ"
-        $TERMINAL -cd "$PROJ" $([ -n "$1" ] && echo "-e $1")
+        if [ "$TERMINAL" = "st" ]; then
+            # 7aske 'st' build with '-d' option to chdir at start
+            notify-send -i terminal "codeopen" "opening $PROJ"
+            $TERMINAL -d "$PROJ" $([ -n "$1" ] && echo "-e $1")
+        else
+            notify-send -i terminal "codeopen" "opening $PROJ"
+            $TERMINAL -cd "$PROJ" $([ -n "$1" ] && echo "-e $1")
+        fi
     fi
 }
 
@@ -147,6 +151,6 @@ if [ -n "$PROJ" ]; then
     "webstorm") _open_jetbrains webstorm ;;
     "rider") _open_jetbrains rider ;;
     "studio" | "android") _open_jetbrains studio ;;
-    *) source <(echo "cd $PROJ && $TYPE") ;;
+    *) _open_term $TYPE ;;
     esac
 fi
