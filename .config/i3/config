@@ -151,6 +151,7 @@ bindsym $mod+Shift+F10     exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/stat
 bindsym $mod+Mod1+t            exec --no-startup-id transmission-gtk
 bindsym $mod+Mod1+l            exec --no-startup-id wtoggle lutris
 bindsym $mod+Mod1+Shift+d      exec --no-startup-id gnome-disks
+bindsym $mod+Shift+d           exec --no-startup-id $terminal -e lazydocker
 bindsym $mod+Mod1+b            exec --no-startup-id baobab
 bindsym $mod+Mod1+m            exec --no-startup-id wtoggle $mail
 bindsym $mod+Mod1+v            exec --no-startup-id vncviewer
@@ -201,11 +202,10 @@ bindsym $mod+Mod1+Home    exec --no-startup-id desk up   7
 bindsym $mod+Mod1+End     exec --no-startup-id desk down 7
 
 # layout toggling mode
-set $mode_codeopen codeopen: (t)erm (n)vim (v)scode (i)dea (c)lion (g)oland (p)ycharm (w)ebstorm (s)studio (r)ider (j)etbrains
+set $mode_codeopen codeopen: (t)erm (n)vim (v)scode (i)dea (c)lion (g)oland lazy(G)it (p)ycharm (w)ebstorm (s)studio (r)ider (j)etbrains
 bindsym $mod+o mode "$mode_codeopen"
 set $codeopen_menu rofi
 mode "$mode_codeopen" {
-    # set default desktop layout <stacking|tabbed>
     bindsym t exec --no-startup-id codeopen -m $codeopen_menu -t term; mode default
     bindsym v exec --no-startup-id codeopen -m $codeopen_menu -t vscode; mode default
     bindsym n exec --no-startup-id codeopen -m $codeopen_menu -t vim; mode default
@@ -218,7 +218,9 @@ mode "$mode_codeopen" {
     bindsym r exec --no-startup-id codeopen -m $codeopen_menu -t rider; mode default
     bindsym j exec --no-startup-id codeopen -m $codeopen_menu -t jetbrains; mode default
 
-    # exit system mode: "Enter" or "Escape"
+    bindsym Shift+g exec --no-startup-id codeopen -m $codeopen_menu -t lazygit; mode default
+
+    # exit codeopen mode: "Enter" or "Escape"
     bindsym Return mode default
     bindsym Escape mode default
 }
