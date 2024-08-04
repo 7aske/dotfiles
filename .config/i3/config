@@ -457,6 +457,7 @@ assign [class="(?i)viber"] $ws9
 assign [title="WhatsApp"] $ws9
 assign [class="zoom"] zoom
 assign [title="World of Warcraft"] w
+assign [class="steam_app_8930"] w
 assign [class="battle.net.exe"] w
 assign [class="Chia Blockchain"] c
 
@@ -530,6 +531,7 @@ for_window [class="tmux_floating"] floating enable, resize set 70ppt 70ppt, move
 
 # games
 for_window [title="^World of Warcraft$"] layout tabbed border none
+for_window [class="steam_app_8930"] layout tabbed border none
 for_window [class="(?i)steam"] floating enable, resize set 70ppt 70ppt, move position center
 for_window [class="(?i)lutris"] floating enable, move position center
 
