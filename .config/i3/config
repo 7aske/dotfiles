@@ -50,7 +50,7 @@ set $terminal2  kitty
 # \__ \ (_) | |_| | | | | (_| | (_>  < | | | | | |_| \__ \ | (__
 # |___/\___/ \__,_|_| |_|\__,_|\___/\/_| |_| |_|\__,_|___/_|\___|
 
-bindsym $mod+p            exec --no-startup-id wtoggle pavucontrol
+bindsym $mod+p            exec --no-startup-id wtoggle2 pavucontrol
 # 7aske-scripts
 bindsym $mod+Ctrl+p       exec --no-startup-id padefault ma;           exec --no-startup-id sleep 0.05 && pkill -SIGRTMIN+10 i3blocks
 bindsym $mod+Mod1+p       exec --no-startup-id padefault mas;          exec --no-startup-id sleep 0.05 && pkill -SIGRTMIN+10 i3blocks
@@ -68,7 +68,7 @@ bindsym XF86AudioStop  exec --no-startup-id playerctl stop;       exec --no-star
 bindsym XF86AudioNext  exec --no-startup-id playerctl next;       exec --no-startup-id pkill -SIGRTMIN+11 i3blocks
 bindsym XF86AudioPrev  exec --no-startup-id playerctl previous;   exec --no-startup-id pkill -SIGRTMIN+11 i3blocks
 # 7aske-scripts
-bindsym XF86Tools      exec --no-startup-id wtoggle $player
+bindsym XF86Tools      exec --no-startup-id wtoggle2 -d 75%x75% $player
 
 bindsym XF86Calculator exec --no-startup-id $terminal -c calc -e calc
 
@@ -109,12 +109,12 @@ bindsym Mod1+XF86AudioLowerVolume exec --no-startup-id padefault mic-volume -1%;
 #  \__,_| .__/| .__/|_|_|\___\__,_|\__|_|\___/|_| |_|___/
 # applic|_|ati|_|ons
 bindsym $mod+Return          exec --no-startup-id $terminal
-bindsym $mod+BackSpace       exec --no-startup-id xfce4-terminal --drop-down
+bindsym $mod+BackSpace       exec --no-startup-id wtoggle2 -d 75%x75% $terminal
 bindsym $mod+Shift+Return    exec --no-startup-id $terminal2
 bindsym $mod+a               exec --no-startup-id rofi -show run
 bindsym $mod+d               exec --no-startup-id rofi -show drun
 bindsym $mod+Shift+semicolon exec --no-startup-id dmenu_run -p ":" -f -b -fn '$dmenu_font'
-bindsym $mod+grave           exec --no-startup-id $terminal -e htop
+bindsym $mod+grave           exec --no-startup-id wtoggle2 -T htop
 
 # edit config files
 bindsym $mod+Ctrl+c mode "$mode_config"
@@ -148,19 +148,19 @@ bindsym $mod+Mod1+semicolon exec --no-startup-id rofi -dmenu -p "new session" | 
 bindsym $mod+F10           exec --no-startup-id echo 0 | dmenu -p 'screen: ' -fn '$dmenu_font' | xargs screencam -n
 bindsym $mod+Shift+F10     exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/rec-status
 
-bindsym $mod+Mod1+t            exec --no-startup-id transmission-gtk
-bindsym $mod+Mod1+l            exec --no-startup-id wtoggle lutris
+bindsym $mod+Mod1+t            exec --no-startup-id wtoggle2 transmission-gtk
+bindsym $mod+Mod1+l            exec --no-startup-id wtoggle2 -d 75%x75% lutris
 bindsym $mod+Mod1+Shift+d      exec --no-startup-id gnome-disks
-bindsym $mod+Shift+d           exec --no-startup-id $terminal -e lazydocker
-bindsym $mod+Mod1+k            exec --no-startup-id $terminal -e k9s
+bindsym $mod+Shift+d           exec --no-startup-id wtoggle2 -T -f lazydocker
+bindsym $mod+Mod1+k            exec --no-startup-id wtoggle2 -T k9s
 bindsym $mod+Mod1+b            exec --no-startup-id baobab
-bindsym $mod+Mod1+m            exec --no-startup-id wtoggle $mail
+bindsym $mod+Mod1+m            exec --no-startup-id wtoggle2 $mail
 bindsym $mod+Mod1+v            exec --no-startup-id vncviewer
 bindsym $mod+Mod1+Shift+b      exec --no-startup-id virtualbox
 bindsym $mod+Mod1+d            exec --no-startup-id discord
 bindsym $mod+Mod1+r            exec --no-startup-id $terminal -c newsboat_float -e newsboat
 bindsym $mod+Mod1+Ctrl+r       exec --no-startup-id $terminal -c newsboat_float -e podboat
-bindsym $mod+Scroll_Lock       exec --no-startup-id wtoggle -c bitwarden bitwarden-desktop
+bindsym $mod+Scroll_Lock       exec --no-startup-id wtoggle2 bitwarden-desktop
 bindsym $mod+Pause       	   exec --no-startup-id sleep 1 && xset dpms force off
 bindsym $mod+y 				   workspace y; exec --no-startup-id $browser "https://youtube.com"
 
@@ -177,8 +177,8 @@ bindsym $mod+Mod1+x      --release exec --no-startup-id xpick
 bindsym $mod+Ctrl+x      --release exec --no-startup-id $terminal -c floating -e zsh -c "xprop -id $(xdotool getwindowfocus) | less"
 
 # 7aske-scripts
-bindsym $mod+m        exec --no-startup-id wtoggle $player
-bindsym $mod+Shift+m  exec --no-startup-id wtoggle cantata
+bindsym $mod+m        exec --no-startup-id wtoggle2 -d 75%x75% $player
+bindsym $mod+Shift+m  exec --no-startup-id wtoggle2 -d 75%x75% cantata
 
 bindsym $mod+v        exec --no-startup-id clipmenu
 bindsym Menu          exec --no-startup-id clipmenu
