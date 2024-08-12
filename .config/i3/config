@@ -646,10 +646,14 @@ exec_always --no-startup-id alternating_layouts
 #exec_always --no-startup-id i3-master-layout
 
 # compton/picom
-bindsym $mod+Shift+F5 exec --no-startup-id killall picom
-bindsym $mod+F5 exec --no-startup-id picom -b --config ~/.config/compton/compton.conf
+#bindsym $mod+Shift+F5 exec --no-startup-id killall picom
+#bindsym $mod+F5 exec --no-startup-id picom -b --config ~/.config/compton/compton.conf
 #exec_always --no-startup-id sleep 1 && pgrep picom || picom -b --config ~/.config/compton/compton.conf
 
+# xcompmgr
+bindsym $mod+Shift+F5 exec --no-startup-id killall xcompmgr
+bindsym $mod+F5 exec --no-startup-id xcompmgr -C
+exec_always --no-startup-id sleep 1 && pgrep xcompmgr || xcompmgr -C
 # set background
 # exec_always --no-startup-id wal -i ~/.config/wallpaper
 exec --no-startup-id ~/.fehbg
