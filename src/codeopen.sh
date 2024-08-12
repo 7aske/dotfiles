@@ -55,20 +55,31 @@ if [ -z "$TYPE" ]; then
     fi
 fi
 
+PROJ=""
+
 #if [[ ! " ${available_types[@]} " =~ " ${TYPE} " ]]; then
 #	_usage
 #	exit 2
 #fi
 
-# use grep to remove $CODE prefix
-SELECTED="$(eval "cgs -adi | grep -oP '^$CODE/\K.*' | $menu_command")"
-if [ -z "$SELECTED" ]; then
-    exit 0
-fi
-PROJ="$CODE/$SELECTED"
-if [ -L "$PROJ" ]; then
-    PROJ="$(readlink -f "$PROJ")"
-fi
+_select_project() {
+    # use grep to remove $CODE prefix
+    if [ "$1" == "dirty" ]; then
+        PROJ="$(eval "cgs -m -sm | tac | $menu_command" | awk -v code="$CODE" '{print code "/" $1 "/" $2}')"
+    else
+        SELECTED="$(eval "cgs -adi | grep -oP '^$CODE/\K.*' | $menu_command")"
+        PROJ="$CODE/$SELECTED"
+    fi
+
+    if [ ! -e "$PROJ" ]; then
+        exit 0
+    fi
+
+    if [ -L "$PROJ" ]; then
+        PROJ="$(readlink -f "$PROJ")"
+    fi
+    echo "Selected: $PROJ"
+}
 
 _open_term() {
     if [ -t 1 ]; then
@@ -81,16 +92,18 @@ _open_term() {
     else
         if [ "$TERMINAL" = "st" ]; then
             # 7aske 'st' build with '-d' option to chdir at start
-            notify-send -i terminal "codeopen" "opening $PROJ in $TERMINAL with $1"
+            notify-send -i terminal "codeopen" "opening $PROJ in $TERMINAL"
             $TERMINAL -d "$PROJ" $([ -n "$1" ] && echo "-e $1")
         else
-            notify-send -i terminal "codeopen" "opening $PROJ"
+            notify-send -i terminal "codeopen" "opening $PROJ in $TERMINAL"
             $TERMINAL -cd "$PROJ" $([ -n "$1" ] && echo "-e $1")
         fi
     fi
 }
 
 _open_vscode() {
+    _select_project
+
     if [ -x "$(command -v vscodium)" ]; then
         CMD="vscodium"
     elif [ -x "$(command -v code-insiders)" ]; then
@@ -108,6 +121,8 @@ _open_vscode() {
 }
 
 _open_vim() {
+    _select_project
+
     if [ -x "$(command -v nvim)" ]; then
         CMD=nvim
     elif [ -x "$(command -v vim)" ]; then
@@ -128,6 +143,8 @@ _open_vim() {
 }
 
 _open_jetbrains() {
+    _select_project
+
     BIN_DIR="$HOME/.local/bin"
 
     if [ -z "$1" ]; then
@@ -140,9 +157,21 @@ _open_jetbrains() {
     fi
 }
 
-if [ -n "$PROJ" ]; then
-    case "$TYPE" in
-    "term") _open_term ;;
+_open_lazygit() {
+    _select_project dirty
+
+    if [ -x "$(command -v lazygit)" ]; then
+        _open_term lazygit
+    else
+        errmsg="lazygit: command not found"
+        echo -e "$errmsg"
+        notify-send "codeopen" "$errmsg"
+        exit 1
+    fi
+}
+
+case "$TYPE" in
+    "term") _select_project; _open_term ;;
     "vscode") _open_vscode ;;
     "vim") _open_vim ;;
     "jetbrains") _open_jetbrains ;;
@@ -153,6 +182,6 @@ if [ -n "$PROJ" ]; then
     "webstorm") _open_jetbrains webstorm ;;
     "rider") _open_jetbrains rider ;;
     "studio" | "android") _open_jetbrains studio ;;
-    *) _open_term $TYPE ;;
-    esac
-fi
+    "lazygit") _open_lazygit ;;
+    *) _select_project; _open_term $TYPE ;;
+esac
