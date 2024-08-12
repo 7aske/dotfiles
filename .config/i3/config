@@ -152,7 +152,7 @@ bindsym $mod+Mod1+t            exec --no-startup-id wtoggle2 transmission-gtk
 bindsym $mod+Mod1+l            exec --no-startup-id wtoggle2 -d 75%x75% lutris
 bindsym $mod+Mod1+Shift+d      exec --no-startup-id gnome-disks
 bindsym $mod+Shift+d           exec --no-startup-id wtoggle2 -T -f lazydocker
-bindsym $mod+Mod1+k            exec --no-startup-id wtoggle2 -T k9s
+bindsym $mod+Mod1+k            exec --no-startup-id wtoggle2 -T -f k9s
 bindsym $mod+Mod1+b            exec --no-startup-id baobab
 bindsym $mod+Mod1+m            exec --no-startup-id wtoggle2 $mail
 bindsym $mod+Mod1+v            exec --no-startup-id vncviewer
