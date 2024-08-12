@@ -20,27 +20,6 @@ export TASKRC="$HOME/.config/taskrc"
 
 export FZF_CODE=1
 
-# Path setup
-prepend_path () {
-	case ":$PATH:" in
-		*:"$1":*)
-			;;
-		*)
-			PATH="$1:${PATH:+$PATH}"
-	esac
-}
-
-prepend_path "$HOME/.local/share/cargo/bin"
-prepend_path "$HOME/Android/Sdk/emulator"
-prepend_path "$HOME/.local/bin"
-prepend_path "$HOME/.local/bin/scripts"
-
-unset append_path
-
-export PATH
-
-export QT_QPA_PLATFORMTHEME="qt5ct"
-
 # Thanks to Luke Smith https://github.com/LukeSmithxyz/voidrice
 # ~/ Clean-up:
 export ANSIBLE_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/ansible/ansible.cfg"
@@ -65,3 +44,25 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
+
+# Path setup
+prepend_path () {
+	case ":$PATH:" in
+		*:"$1":*)
+			;;
+		*)
+			PATH="$1:${PATH:+$PATH}"
+	esac
+}
+
+prepend_path "$CARGO_HOME/bin"
+prepend_path "$GOPATH/bin"
+prepend_path "$HOME/Android/Sdk/emulator"
+prepend_path "$HOME/.local/bin"
+prepend_path "$HOME/.local/bin/scripts"
+
+unset prepend_path
+
+export PATH
+
+export QT_QPA_PLATFORMTHEME="qt5ct"
