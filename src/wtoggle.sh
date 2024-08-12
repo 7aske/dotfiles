@@ -48,7 +48,7 @@ if [ "$processes" -gt 0 ]; then
 		done
 	else
 		for win in $(xdotool search --class $class); do
-			if grep -q "window state: withdrawn" <(xprop -id $win) \
+			if grep -iq "window state: withdrawn" <(xprop -id $win) \
 				|| ( [ $focused -eq 0 ] && ! grep -q "CLIENT_LEADER" <(xprop -id $win)  ); then
 				xdotool windowmap $win
 				xdotool set_desktop_for_window $win $(xdotool get_desktop)
