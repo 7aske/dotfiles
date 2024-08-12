@@ -38,6 +38,8 @@ while getopts ${optstring} arg; do
     esac
 done
 
+shift $((OPTIND - 1))
+
 menu_command="fzf"
 if [ "$MENU" = "dmenu" ]; then
     menu_command="dmenu -l 10 -f -i -p ${TYPE:-type}:"
@@ -79,7 +81,7 @@ _open_term() {
     else
         if [ "$TERMINAL" = "st" ]; then
             # 7aske 'st' build with '-d' option to chdir at start
-            notify-send -i terminal "codeopen" "opening $PROJ"
+            notify-send -i terminal "codeopen" "opening $PROJ in $TERMINAL with $1"
             $TERMINAL -d "$PROJ" $([ -n "$1" ] && echo "-e $1")
         else
             notify-send -i terminal "codeopen" "opening $PROJ"
