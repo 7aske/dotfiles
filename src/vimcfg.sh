@@ -8,7 +8,7 @@ case "$1" in
     "--etc")  find_cmd="sudo find "; cfg_dir="/etc" ;;
     "--home") find_flags=" -maxdepth 1 -type f"; cfg_dir="$HOME" ;;
     "--config") find_flags=" -maxdepth 2 -type f"; cfg_dir="$HOME/.config" ;;
-    *) cfg_dir="$CODE/sh/dotfiles" ;;
+    *) cfg_dir="${CODE_DOTFILES:-$CODE/sh/dotfiles}" ;;
 esac
 
 [ -z "$EDITOR" ] &&  echo "$prog: EDITOR env variable not set" && exit 1
