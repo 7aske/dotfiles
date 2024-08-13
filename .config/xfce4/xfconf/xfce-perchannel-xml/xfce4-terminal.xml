@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="xfce4-terminal" version="1.0">
+  <property name="background-mode" type="string" value="TERMINAL_BACKGROUND_TRANSPARENT"/>
+  <property name="background-darkness" type="double" value="0.84999999999999998"/>
+  <property name="color-foreground" type="string" value="#d3d3d7d7cfcf"/>
+  <property name="color-background" type="string" value="#2e2e34344040"/>
+  <property name="color-palette" type="string" value="rgb(59,66,82);rgb(191,97,106);rgb(163,190,140);rgb(235,203,139);rgb(129,161,193);rgb(180,142,173);rgb(136,192,208);rgb(229,233,240);rgb(76,86,106);rgb(191,97,106);rgb(163,190,140);rgb(235,203,139);rgb(129,161,193);rgb(180,142,173);rgb(143,188,187);rgb(236,239,244)"/>
+  <property name="dropdown-status-icon" type="bool" value="false"/>
+  <property name="dropdown-width" type="uint" value="50"/>
+  <property name="dropdown-position-vertical" type="uint" value="51"/>
+  <property name="dropdown-always-show-tabs" type="bool" value="false"/>
+  <property name="dropdown-show-borders" type="bool" value="true"/>
+  <property name="font-name" type="string" value="Fira Code 14"/>
+  <property name="misc-always-show-tabs" type="bool" value="false"/>
+  <property name="misc-bell" type="bool" value="false"/>
+  <property name="misc-bell-urgent" type="bool" value="true"/>
+  <property name="misc-borders-default" type="bool" value="false"/>
+  <property name="misc-cursor-blinks" type="bool" value="false"/>
+  <property name="misc-cursor-shape" type="string" value="TERMINAL_CURSOR_SHAPE_BLOCK"/>
+  <property name="misc-default-geometry" type="string" value="80x24"/>
+  <property name="misc-inherit-geometry" type="bool" value="false"/>
+  <property name="misc-menubar-default" type="bool" value="false"/>
+  <property name="misc-mouse-autohide" type="bool" value="true"/>
+  <property name="misc-mouse-wheel-zoom" type="bool" value="true"/>
+  <property name="misc-toolbar-default" type="bool" value="false"/>
+  <property name="misc-confirm-close" type="bool" value="false"/>
+  <property name="misc-cycle-tabs" type="bool" value="true"/>
+  <property name="misc-tab-close-buttons" type="bool" value="true"/>
+  <property name="misc-tab-close-middle-click" type="bool" value="true"/>
+  <property name="misc-tab-position" type="string" value="GTK_POS_TOP"/>
+  <property name="misc-highlight-urls" type="bool" value="true"/>
+  <property name="misc-middle-click-opens-uri" type="bool" value="true"/>
+  <property name="misc-copy-on-select" type="bool" value="false"/>
+  <property name="misc-show-relaunch-dialog" type="bool" value="true"/>
+  <property name="misc-rewrap-on-resize" type="bool" value="true"/>
+  <property name="misc-slim-tabs" type="bool" value="false"/>
+  <property name="misc-new-tab-adjacent" type="bool" value="false"/>
+  <property name="misc-search-dialog-opacity" type="uint" value="100"/>
+  <property name="misc-show-unsafe-paste-dialog" type="bool" value="false"/>
+  <property name="scrolling-bar" type="string" value="TERMINAL_SCROLLBAR_NONE"/>
+  <property name="scrolling-lines" type="uint" value="999999"/>
+  <property name="scrolling-on-output" type="bool" value="false"/>
+  <property name="shortcuts-no-menukey" type="bool" value="true"/>
+  <property name="shortcuts-no-mnemonics" type="bool" value="true"/>
+  <property name="text-blink-mode" type="string" value="TERMINAL_TEXT_BLINK_MODE_NEVER"/>
+  <property name="font-use-system" type="bool" value="false"/>
+</channel>
