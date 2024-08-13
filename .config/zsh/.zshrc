@@ -96,7 +96,7 @@ echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
 # change dir using FZF
-bindkey -s '^f' 'cd "$(dirname "$(fzf)")"\n'
+bindkey -s '^f' 'cd "$(dirname "$(fzf --preview "bat --color=always {}" --preview-window "up,60%,border-bottom,+{2}+3/3,~3")")"\n'
 
 bindkey '^[[P' delete-char
 
