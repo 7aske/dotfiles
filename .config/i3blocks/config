@@ -84,6 +84,11 @@ signal=10
 interval=5
 signal=10
 
+[headset]
+interval=60
+command=~/.local/bin/statusbar/headset
+signal=9
+
 [battery]
 interval=60
 command=~/.local/bin/statusbar/battery
