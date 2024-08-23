@@ -1,31 +1,34 @@
 #!/usr/bin/env sh
 # Give a battery name (e.g. BAT0) as an argument.
 
+
+
 SWITCH="$HOME/.cache/statusbar_$(basename $0)"
+SIDETONE="$HOME/.cache/statusbar_headset_sidetone"
 
 [ -f  "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
 [ -f  "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
 
-battery="$1"
-[ -z "$battery" ] && battery="$(dir -1 /sys/class/power_supply | grep -E BAT\? | sed 1q)"
-[ -z "$battery" ] && exit 1
+OUT="$(headsetcontrol -b | sed -n 's/.*\(Status\|Level\)/\1/p')"
 
-status=$(cat /sys/class/power_supply/"$battery"/status)
-capacity=$(cat /sys/class/power_supply/"$battery"/capacity) || exit
+status=$(echo "$OUT" | sed -n 's/.*Status: \([^ ]*\).*/\1/p')
+capacity=$(echo "$OUT" | sed -n 's/.*Level: \([0-9]\+\)%/\1/p;s/BATTERY_//')
+
+if [ -z "$capacity" ]; then
+	echo "󰟎 "
+fi
 
 case $BLOCK_BUTTON in
-    1) if [ "$status" = "Not charging" ]; then
-        notify-send -a battery -i battery "Battery" "$status: $capacity%"
-    else
-        duration=$(acpi | awk '{print substr($5, 0, length($5) - 3)}')
-        notify-send -a battery -i battery "Battery" "$([ "$status" = "Charging" ] && printf "Until charged" || printf "Remaining"): $duration"
-    fi ;;
-	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
-    3) notify-send "󱟦 Battery module" "\n󰂂 : discharging
-󰂑 : not charging
-󰂄 : charging
-: charged/stagnant charge
- : battery very low!" ;;
+    1) notify-send -a battery -i battery "Battery" "$(echo "$OUT" | sed 's/BATTERY_AVAILABLE/Discharging/;s/BATTERY_CHARGING/Charging/')" ;;
+    2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
+    3) [ -e "$SIDETONE" ] && rm "$SIDETONE" || touch "$SIDETONE";
+        if [ -e "$SIDETONE" ]; then
+            notify-send -i audio-headset "Headset" "Sidetone disabled"
+            headsetcontrol -s 0 >/dev/null
+        else
+            notify-send -i audio-headset "Headset" "Sidetone enabled"
+            headsetcontrol -s 64 >/dev/null
+        fi ;;
 esac
 
 warn=" "
@@ -70,15 +73,14 @@ fi
 
 [ -z $warn ] && warn=" "
 
-[ "$status" = "Charging" ] && color="${color2:-"#A3BE8C"}"
-if ! [ "$status" = "Discharging" ]; then
-	icon="$(echo "$status" | sed -e "s/,//;s/Discharging/󰂂/;s/Not [Cc]harging//;s/Charging/󰂄/;s/Unknown//;s/Full//;s/ 0*/ /g;s/ :/ /g")"
+if [ "$status" = "BATTERY_CHARGING" ]; then
+	icon="󰂄"
+    color="${color2:-"#A3BE8C"}"
 fi
 
-
 if [ -e "$SWITCH" ]; then
-	echo "<span color='$color'>$icon$warn</span>"
+	echo "<span color='$color'>󰋋 $icon$warn</span>"
 else
 	capacity="$(echo "$capacity" | sed -e 's/$/%/')"
-	echo "$icon<span color='$color'> $capacity$warn$saver_icon</span>"
+	echo "󰋋 $icon<span color='$color'> $capacity$warn$saver_icon</span>"
 fi
