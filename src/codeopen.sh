@@ -57,10 +57,6 @@ fi
 
 PROJ=""
 
-#if [[ ! " ${available_types[@]} " =~ " ${TYPE} " ]]; then
-#	_usage
-#	exit 2
-#fi
 
 _select_project() {
     # use grep to remove $CODE prefix
@@ -78,10 +74,15 @@ _select_project() {
     if [ -L "$PROJ" ]; then
         PROJ="$(readlink -f "$PROJ")"
     fi
-    echo "Selected: $PROJ"
+    
+    if ! ( git -C "$PROJ" rev-parse HEAD ); then
+        exit 1
+    fi
 }
 
 _open_term() {
+    _select_project
+
     if [ -t 1 ]; then
         if [ -n "$1" ]; then
             cd "$PROJ" && $1
@@ -171,7 +172,7 @@ _open_lazygit() {
 }
 
 case "$TYPE" in
-    "term") _select_project; _open_term ;;
+    "term") _open_term ;;
     "vscode") _open_vscode ;;
     "vim") _open_vim ;;
     "jetbrains") _open_jetbrains ;;
@@ -183,5 +184,5 @@ case "$TYPE" in
     "rider") _open_jetbrains rider ;;
     "studio" | "android") _open_jetbrains studio ;;
     "lazygit") _open_lazygit ;;
-    *) _select_project; _open_term $TYPE ;;
+    *) _open_term $TYPE ;;
 esac
