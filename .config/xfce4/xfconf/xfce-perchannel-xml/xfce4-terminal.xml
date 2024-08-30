@@ -2,7 +2,7 @@
 
 <channel name="xfce4-terminal" version="1.0">
   <property name="background-mode" type="string" value="TERMINAL_BACKGROUND_TRANSPARENT"/>
-  <property name="background-darkness" type="double" value="0.84999999999999998"/>
+  <property name="background-darkness" type="double" value="0.94999999999999996"/>
   <property name="color-foreground" type="string" value="#d3d3d7d7cfcf"/>
   <property name="color-background" type="string" value="#2e2e34344040"/>
   <property name="color-palette" type="string" value="rgb(59,66,82);rgb(191,97,106);rgb(163,190,140);rgb(235,203,139);rgb(129,161,193);rgb(180,142,173);rgb(136,192,208);rgb(229,233,240);rgb(76,86,106);rgb(191,97,106);rgb(163,190,140);rgb(235,203,139);rgb(129,161,193);rgb(180,142,173);rgb(143,188,187);rgb(236,239,244)"/>
@@ -11,7 +11,7 @@
   <property name="dropdown-position-vertical" type="uint" value="51"/>
   <property name="dropdown-always-show-tabs" type="bool" value="false"/>
   <property name="dropdown-show-borders" type="bool" value="true"/>
-  <property name="font-name" type="string" value="Fira Code 14"/>
+  <property name="font-name" type="string" value="Fira Code 12"/>
   <property name="misc-always-show-tabs" type="bool" value="false"/>
   <property name="misc-bell" type="bool" value="false"/>
   <property name="misc-bell-urgent" type="bool" value="true"/>
@@ -44,5 +44,5 @@
   <property name="shortcuts-no-menukey" type="bool" value="true"/>
   <property name="shortcuts-no-mnemonics" type="bool" value="true"/>
   <property name="text-blink-mode" type="string" value="TERMINAL_TEXT_BLINK_MODE_NEVER"/>
-  <property name="font-use-system" type="bool" value="false"/>
+  <property name="font-use-system" type="bool" value="true"/>
 </channel>
