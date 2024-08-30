@@ -1,5 +1,10 @@
 #!/bin/bash
 
+SWITCH="$HOME/.cache/statusbar_$(basename $0)" 
+case $BLOCK_BUTTON in
+	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
+esac
+
 BASE_URL="http://api.openweathermap.org/data/2.5/weather"
 URL="${BASE_URL}?id=${OPENWEATHERMAP_CITY_ID}&appid=${OPENWEATHERMAP_API_KEY}&units=metric"
 
@@ -25,7 +30,6 @@ ICONS["50d"]="🌫"
 ICONS["50n"]="🌫"
 ICONS["unknown"]="❓"
 
-
 response=$(curl -s $URL)
 
 if [ $? -eq 0 ]; then
@@ -33,7 +37,12 @@ if [ $? -eq 0 ]; then
     icon=$(echo $response | jq -r '.weather[0].icon')
     description=$(echo $response | jq -r '.weather[0].description')
 
-	printf "<span rise='-4pt'>%.1f°C</span> <span size='medium' rise='-4pt'>%s</span>\n" $temperature ${ICONS["$icon"]}
+    if [ -e "$SWITCH" ]; then
+        printf "<span size='medium' rise='-18pt'>%s</span>\n" ${ICONS["$icon"]}
+    else
+        printf "<span rise='-6pt'>%.1f°C</span> <span size='medium' rise='-4pt'>%s</span>\n" $temperature ${ICONS["$icon"]}
+    fi
+
 else
     echo ${ICONS["unknown"]}
 fi
