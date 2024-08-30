@@ -1,11 +1,40 @@
+OUTDIR=~/.local/bin
+INDIR=src
+STATUS_OUTDIR=~/.local/bin/statusbar
+STATUS_INDIR=src/statusbar
+SYSTEMD_INDIR=src/systemd
+SYSTEMD_OUTDIR=~/.config/systemd/user
+
 ifeq (uninstall,$(firstword $(MAKECMDGOALS)))
   ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
   $(eval $(ARGS):;@:)
 endif
 
+default_recipe: scripts-install
 
-.PHONY: all
-all: albert \
+.PHONY: install
+install: scripts-install dotfiles-install
+
+.PHONY: scripts-install
+scripts-install:
+	./install.sh $(INDIR) $(OUTDIR)
+	./install.sh $(STATUS_INDIR) $(STATUS_OUTDIR)
+
+.PHONY: scripts-uninstall
+scripts-uninstall:
+	./uninstall.sh $(INDIR) $(OUTDIR)
+	./uninstall.sh $(STATUS_INDIR) $(STATUS_OUTDIR)
+
+add:
+	touch src/$(s).sh
+	chmod u+x src/$(s).sh
+
+systemd:
+	cp $(SYSTEMD_INDIR)/* $(SYSTEMD_OUTDIR)/
+
+
+.PHONY: dotfiles-install
+dotfiles-install: albert \
 	bspwm \
 	sxhkd \
 	conky \

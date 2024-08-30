@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+
+if [ -z "$1" ]; then
+        echo "fatal: Repository name not specified"
+        exit 1
+fi
+
+REPO="$1.git"
+GIT_DIR="/srv/git"
+GIT_HOME="/home/git/repo"
+
+if [ ! -e "$GIT_DIR/$REPO" ]; then
+        echo "fatal: $REPO: no such file or directory"
+        exit 1
+fi
+
+rm -rf "$GIT_DIR/$REPO"
+rm -rf "$GIT_HOME/$REPO"
+

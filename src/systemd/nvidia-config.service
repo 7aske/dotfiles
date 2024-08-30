@@ -1,0 +1,12 @@
+[Unit]
+Description=Reload Nvidia config
+After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+
+
+[Service]
+ExecStart=/usr/bin/nvidia-settings --config ~/.config/nvidia-settings-rc -l
+#User=my_user_name
+#Environment=DISPLAY=:0
+
+[Install]
+WantedBy=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
