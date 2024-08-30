@@ -22,6 +22,13 @@ foreground="$theme4"
 background="$theme0"
 cursor="$theme4"
 
+export blue="${theme10}"
+export red="${theme11}"
+export orange="${theme12}"
+export yellow="${theme13}"
+export green="${theme14}"
+export magenta="${theme15}"
+
 export color0="$theme1"
 export color1="$theme11"
 export color2="$theme14"

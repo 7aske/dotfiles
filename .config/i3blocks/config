@@ -28,15 +28,19 @@ interval=10
 label=
 interval=1
 
-[disk]
+[disks]
 interval=60
 signal=9
-command=~/.local/bin/statusbar/disk / 
 
-[disk]
-interval=60
-signal=9
-command=~/.local/bin/statusbar/disk /home 
+# [disk]
+# interval=60
+# signal=9
+# command=~/.local/bin/statusbar/disk / 
+#
+# [disk]
+# interval=60
+# signal=9
+# command=~/.local/bin/statusbar/disk /home 
 
 #[crypto]
 #interval=60
