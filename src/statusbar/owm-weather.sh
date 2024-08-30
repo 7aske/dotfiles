@@ -28,7 +28,7 @@ ICONS["13d"]="❄️"
 ICONS["13n"]="❄️"
 ICONS["50d"]="🌫"
 ICONS["50n"]="🌫"
-ICONS["unknown"]="❓"
+ICONS["unknown"]="󱘖 "
 
 response=$(curl -s $URL)
 
