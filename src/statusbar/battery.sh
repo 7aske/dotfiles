@@ -17,7 +17,7 @@ case $BLOCK_BUTTON in
     1) if [ "$status" = "Not charging" ]; then
         notify-send -a battery -i battery "Battery" "$status: $capacity%"
     else
-        duration=$(acpi | awk '{print substr($5, 0, length($5) - 3)}')
+        duration=$(acpi | awk '$4 != "0%," {print substr($5, 0, length($5) - 3)}')
         notify-send -a battery -i battery "Battery" "$([ "$status" = "Charging" ] && printf "Until charged" || printf "Remaining"): $duration"
     fi ;;
 	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
