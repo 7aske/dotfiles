@@ -1,4 +1,9 @@
 return {
+  { "norcalli/nvim-colorizer.lua",
+        opts = {
+            '*';
+        }
+  },
   { "shaunsingh/nord.nvim" },
   {
     "LazyVim/LazyVim",
