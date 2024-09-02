@@ -14,8 +14,10 @@ OUT="$(headsetcontrol -b | sed -n 's/.*\(Status\|Level\)/\1/p')"
 status=$(echo "$OUT" | sed -n 's/.*Status: \([^ ]*\).*/\1/p')
 capacity=$(echo "$OUT" | sed -n 's/.*Level: \([0-9]\+\)%/\1/p;s/BATTERY_//')
 
-if [ -z "$capacity" ]; then
+if [ -n "$BLOCK_BUTTON" ] && [ -z "$capacity" ]; then
+    notify-send -a battery -i audio-headset "Headset" "Headset not connected"
 	echo "󰟎 "
+    exit 0
 fi
 
 case $BLOCK_BUTTON in
@@ -30,6 +32,11 @@ case $BLOCK_BUTTON in
             headsetcontrol -s 64 >/dev/null
         fi ;;
 esac
+
+if [ -z "$capacity" ]; then
+	echo "󰟎 "
+    exit 0
+fi
 
 warn=" "
 
