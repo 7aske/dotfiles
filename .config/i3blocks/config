@@ -13,7 +13,7 @@ interval=5
 signal=11
 
 [owm-weather]
-interval=60
+interval=300
 
 [cpu]
 interval=5
