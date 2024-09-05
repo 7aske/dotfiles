@@ -40,7 +40,7 @@ if [ $? -eq 0 ]; then
     if [ -e "$SWITCH" ]; then
         printf "<span size='medium' rise='-18pt'>%s</span>\n" ${ICONS["$icon"]}
     else
-        printf "<span rise='-6pt'>%.1f°C</span> <span size='medium' rise='-4pt'>%s</span>\n" $temperature ${ICONS["$icon"]}
+        printf "<span rise='-2pt'>%.1f°C</span> <span size='medium' rise='-2pt'>%s</span>\n" $temperature ${ICONS["$icon"]}
     fi
 
 else

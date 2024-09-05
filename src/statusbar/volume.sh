@@ -36,18 +36,16 @@ ICON_MED="󰖀"
 ICON_HIGH="󰕾"
 ICON_MUTED="󰖁"
 
+color="${foreground:-"#D8DEE9"}"
+
 if [ "$VOLUME" -ge 90 ]; then
 	ICON=$ICON_HIGH
-	color="${color1:-"#BF616A"}"
 elif [ "$VOLUME" -ge 66 ]; then
 	ICON=$ICON_HIGH
-	color="${color3:-"#D08770"}"
 elif [ "$VOLUME" -ge 33 ]; then
 	ICON=$ICON_MED
-    color="${color2:-"#EBCB8B"}"
 else
 	ICON=$ICON_LOW
-	color="${color7:-"#D8DEE9"}"
 fi
 
 if _is_any_muted; then
@@ -57,4 +55,4 @@ if _is_any_muted; then
 	exit 0
 fi
 
-echo "<span size='x-large'>$ICON</span> <span rise='2pt' color=\"$color\">$VOLUME%</span>"
+echo "<span size='x-large'>$ICON</span> <span rise='1pt' color=\"$color\">$VOLUME%</span>"

@@ -75,10 +75,17 @@ if ! [ "$status" = "Discharging" ]; then
 	icon="$(echo "$status" | sed -e "s/,//;s/Discharging/󰂂/;s/Not [Cc]harging//;s/Charging/󰂄/;s/Unknown//;s/Full//;s/ 0*/ /g;s/ :/ /g")"
 fi
 
+setting=/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode
+state=$(cat $setting)
+
+if [ $state -eq 1 ]; then
+    saver_icon=' '
+fi
+
 
 if [ -e "$SWITCH" ]; then
-	echo "<span color='$color'>$icon$warn</span>"
+	echo "<span color='$color'>$icon</span><span color='$color' rise='-1pt'>$warn$saver_icon</span>"
 else
 	capacity="$(echo "$capacity" | sed -e 's/$/%/')"
-	echo "$icon<span color='$color'> $capacity$warn$saver_icon</span>"
+	echo "$icon<span color='$color' rise='-1pt'> $capacity</span><span color='$color' rise='-1pt'>$warn$saver_icon</span>"
 fi

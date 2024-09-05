@@ -89,5 +89,5 @@ if [ -e "$SWITCH" ]; then
 	echo "<span color='$color'>󰋋 $icon$warn</span>"
 else
 	capacity="$(echo "$capacity" | sed -e 's/$/%/')"
-	echo "󰋋 $icon<span color='$color'> $capacity$warn$saver_icon</span>"
+	echo "󰋋 $icon<span color='$color' rise='-1pt'> $capacity$warn$saver_icon</span>"
 fi

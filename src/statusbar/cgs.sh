@@ -45,7 +45,7 @@ fi
 if [ -e "$SWITCH" ]; then
 	echo "<span size='medium' color='$color'>$ICON </span>"
 else
-	echo "<span size='medium'>$ICON</span> <span color='$color'>$repos</span>"
+	echo "<span size='medium'>$ICON</span> <span color='$color' rise='-1pt'>$repos</span>"
 fi
 
 

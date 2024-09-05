@@ -26,5 +26,5 @@ ICON="󰍛"
 if [ -e "$SWITCH" ]; then
 	printf "<span color='%s'>%s </span>\n" "$color" "$ICON"
 else
-	printf "$ICON <span color='%s'>%3d%%</span>\n" "$color" "$cpu_usage"
+	printf "$ICON <span color='%s' rise='-1pt'>%3d%%</span>\n" "$color" "$cpu_usage"
 fi

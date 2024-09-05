@@ -12,10 +12,10 @@ case $BLOCK_BUTTON in
 	5) padefault mic-volume -1% 2>&1 >/dev/null;;
 esac
 
-color="${color2:-"#A3BE8C"}"
+color="${foreground:-"#D8DEE9"}"
 muted_color="${color1:-"#BF616A"}"
 icon=" "
-muted_icon=" "
+muted_icon="  "
 
 sources="$(pactl list sources short | grep -vc "monitor")"
 muted="$(pactl list sources | grep -B6 "Mute: yes" | grep "Name:" | grep -vc "monitor")"
@@ -29,16 +29,6 @@ padef_get_vol() {
 }
 
 VOLUME="$(padef_get_vol)"
-
-if [ "$VOLUME" -ge 90 ]; then
-	color="${color1:-"#BF616A"}"
-elif [ "$VOLUME" -ge 66 ]; then
-	color="${color3:-"#D08770"}"
-elif [ "$VOLUME" -ge 33 ]; then
-    color="${color2:-"#EBCB8B"}"
-else
-	color="${color7:-"#D8DEE9"}"
-fi
 
 if [ $sources -eq $muted ] && [ $muted -gt 0 ]; then
 	color="$muted_color"
