@@ -17,3 +17,5 @@ map("v", "<C-A-Up>", ":m '<-2<cr>gv=gv", { desc = "Move Up" })
 -- buffers
 map("n", "<C-A-Left>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 map("n", "<C-A-Right>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+
+map("n", "<leader>m", "<cmd>!make<cr>", { desc = "make" })
