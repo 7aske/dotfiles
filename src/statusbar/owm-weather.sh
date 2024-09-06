@@ -11,7 +11,9 @@ WEATHER_CACHE="$HOME/.cache/weather.tmp"
 WEATHER_JSON="$HOME/.cache/weather.json"
 SWITCH="$HOME/.cache/statusbar_$(basename $0)" 
 case $BLOCK_BUTTON in
+    1) [ -e "$WEATHER_CACHE" ] && notify-send -i weather -a weather -t 10000 "OpenWeatherMap" "$(cat $WEATHER_CACHE)" ;;
 	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
+    3) xdg-open "https://openweathermap.org/city/$OPENWEATHERMAP_CITY_ID" ;;
 esac
 
 BASE_URL="http://api.openweathermap.org/data/2.5/weather"
@@ -23,23 +25,20 @@ if [ -z "$BLOCK_BUTTON" ]; then
     resp_code=$?
     echo $response > "$WEATHER_JSON"
 
-    echo "Location: $(echo $response | jq -r '.name')" > "$WEATHER_CACHE"
+    echo "Location:    $(echo $response | jq -r '.name')" > "$WEATHER_CACHE"
     echo "Temperature: $(echo $response | jq -r '.main.temp' | numfmt --format '%.0f' )°C" >> "$WEATHER_CACHE"
-    echo "Weather: $(echo $response | jq -r '.weather[0].description')" >> "$WEATHER_CACHE"
-    echo "Humidity: $(echo $response | jq -r '.main.humidity')%" >> "$WEATHER_CACHE"
-    echo "Wind: $(echo $response | jq -r '.wind.speed')m/s" >> "$WEATHER_CACHE"
-    echo "Pressure: $(echo $response | jq -r '.main.pressure')hPa" >> "$WEATHER_CACHE"
-    echo "Last update: $(date)" >> "$WEATHER_CACHE"
-else
+    echo "Weather:     $(echo $response | jq -r '.weather[0].description')" >> "$WEATHER_CACHE"
+    echo "Humidity:    $(echo $response | jq -r '.main.humidity')%" >> "$WEATHER_CACHE"
+    echo "Wind:        $(echo $response | jq -r '.wind.speed')m/s" >> "$WEATHER_CACHE"
+    echo "Pressure:    $(echo $response | jq -r '.main.pressure')hPa" >> "$WEATHER_CACHE"
+    echo "Last update: $(date +%T)" >> "$WEATHER_CACHE"
+fi
+
+if [ $resp_code -ne 0 ]; then
     response=$(cat "$WEATHER_JSON")
     resp_code=0
 fi
 
-
-case $BLOCK_BUTTON in
-    1) [ -e "$WEATHER_CACHE" ] && notify-send -i weather -a weather -t 10000 "OpenWeatherMap" "$(cat $WEATHER_CACHE)" ;;
-    3) xdg-open "https://openweathermap.org/city/$OPENWEATHERMAP_CITY_ID" ;;
-esac
 
 declare -A ICONS
 
@@ -83,13 +82,14 @@ COLORS["13d"]="$theme4"
 COLORS["13n"]="$theme9"
 COLORS["50d"]="$theme3"
 COLORS["50n"]="$theme3"
+COLORS["unknown"]="$theme12"
 
 if [ $resp_code -eq 0 ]; then
     temperature=$(echo $response | jq -r '.main.temp' | numfmt --format '%.0f')
-    icon="$(echo $response | jq -r '.weather[0].icon')"
+    weather_icon="$(echo $response | jq -r '.weather[0].icon')"
     description=$(echo $response | jq -r '.weather[0].description')
-    color=${COLORS["$icon"]}
-    icon=${ICONS["$icon"]}
+    color=${COLORS["$weather_icon"]}
+    icon=${ICONS["$weather_icon"]}
 
     if [ -e "$SWITCH" ]; then
         echo "<span size='large' color='$color'>${icon} </span>"
