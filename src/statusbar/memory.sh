@@ -28,7 +28,7 @@ else
 	color="${color7:-"#D8DEE9"}"
 fi
 
-ICON=""
+ICON=" "
 
 if [ -e "$SWITCH" ]; then
 	printf "<span color='%s'>%s </span>\n" "$color" "$ICON"

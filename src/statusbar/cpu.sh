@@ -11,20 +11,22 @@ esac
 cpu_usage="$(mpstat 1 1 | grep 'Average:' | awk '{printf "%d", ((100 - $12))}')"
 
 
-if [ "$cpu_usage" -ge 90 ]; then
+if [ "$cpu_usage" -ge 75 ]; then
+    icon="󰡴"
 	color="${color1:-"#BF616A"}"
-elif [ "$cpu_usage" -ge 75 ]; then
-	color="${color3:-"#D08770"}"
 elif [ "$cpu_usage" -ge 50 ]; then
+    icon="󰊚"
+	color="${color3:-"#D08770"}"
+elif [ "$cpu_usage" -ge 25 ]; then
+    icon="󰡵"
     color="${color2:-"#EBCB8B"}"
 else
+    icon="󰡳"
 	color="${color7:-"#D8DEE9"}"
 fi
 
-ICON="󰍛"
-
 if [ -e "$SWITCH" ]; then
-	printf "<span color='%s'>%s </span>\n" "$color" "$ICON"
+	printf "<span color='%s' size='large'>%s </span>\n" "$color" "$icon"
 else
-	printf "$ICON <span color='%s' rise='-1pt'>%3d%%</span>\n" "$color" "$cpu_usage"
+	printf "<span size='large'>$icon</span> <span color='%s'>%3d%%</span>\n" "$color" "$cpu_usage"
 fi

@@ -21,11 +21,7 @@ case $BLOCK_BUTTON in
         notify-send -a battery -i battery "Battery" "$([ "$status" = "Charging" ] && printf "Until charged" || printf "Remaining"): $duration"
     fi ;;
 	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
-    3) notify-send "󱟦 Battery module" "\n󰂂 : discharging
-󰂑 : not charging
-󰂄 : charging
-: charged/stagnant charge
- : battery very low!" ;;
+    3) pkexec batconv >/dev/null 2>&1 ;;
 esac
 
 warn=" "
@@ -33,59 +29,72 @@ warn=" "
 if [ "$capacity" -eq 100 ]; then
 	color="${color7:-"#D8DEE9"}"
 	icon="󰁹"
+    charging="󰂅"
 elif [ "$capacity" -ge 90 ]; then
 	color="${color7:-"#D8DEE9"}"
 	icon="󰂂"
+    charging="󰂋"
 elif [ "$capacity" -ge 80 ]; then
 	color="${color7:-"#D8DEE9"}"
 	icon="󰂁"
+    charging="󰂊"
 elif [ "$capacity" -ge 70 ]; then
 	color="${color7:-"#D8DEE9"}"
 	icon="󰂀"
+    charging="󰂉"
 elif [ "$capacity" -ge 60 ]; then
     color="${color3:-"#EBCB8B"}"
 	icon="󰁿"
+    charging="󰂉"
 elif [ "$capacity" -ge 50 ]; then
     color="${color3:-"#EBCB8B"}"
 	icon="󰁾"
+    charging="󰢝"
 elif [ "$capacity" -ge 40 ]; then
 	color="${theme12:-"#D08770"}"
 	icon="󰁽"
+    charging="󰂈"
 elif [ "$capacity" -ge 30 ]; then
 	color="${theme12:-"#D08770"}"
 	icon="󰁼"
+    charging="󰂇"
 elif [ "$capacity" -ge 20 ]; then
 	color="${color1:-"#BF616A"}"
 	icon="󰁻"
+    chrarging="󰂆"
 	warn="  "
 elif [ "$capacity" -ge 10 ]; then
 	color="${color1:-"#BF616A"}"
 	icon="󰁺"
+    charging="󰢜"
 	warn="  "
 else
 	color="${color1:-"#BF616A"}"
 	icon="󰁺"
+    charging="󰢟"
 	warn="  "
 fi
 
 [ -z $warn ] && warn=" "
 
-[ "$status" = "Charging" ] && color="${color2:-"#A3BE8C"}"
-if ! [ "$status" = "Discharging" ]; then
-	icon="$(echo "$status" | sed -e "s/,//;s/Discharging/󰂂/;s/Not [Cc]harging//;s/Charging/󰂄/;s/Unknown//;s/Full//;s/ 0*/ /g;s/ :/ /g")"
+if [ "$status" = "Charging" ]; then
+    color="${color2:-"#A3BE8C"}"
 fi
+
+
+icon="$(echo "$status" | sed -e "s/,//;s/Discharging/$icon/;s/Not [Cc]harging/󰚦/;s/Charging/$charging/;s/Unknown/󰂑/;s/Full//;s/ 0*/ /g;s/ :/ /g")"
 
 setting=/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode
 state=$(cat $setting)
 
 if [ $state -eq 1 ]; then
-    saver_icon=' '
+    icon=""
 fi
 
 
 if [ -e "$SWITCH" ]; then
-	echo "<span color='$color'>$icon</span><span color='$color' rise='-1pt'>$warn$saver_icon</span>"
+	echo "<span color='$color'>$icon</span><span color='$color' rise='-1pt'>$warn</span>"
 else
 	capacity="$(echo "$capacity" | sed -e 's/$/%/')"
-	echo "$icon<span color='$color' rise='-1pt'> $capacity</span><span color='$color' rise='-1pt'>$warn$saver_icon</span>"
+	echo "$icon<span color='$color' rise='-1pt'> $capacity</span><span color='$color' rise='-1pt'>$warnsaver_icon</span>"
 fi

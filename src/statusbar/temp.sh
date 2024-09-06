@@ -13,18 +13,24 @@ temp="$(sensors | awk '/Package id 0:/{print substr($4, 2)} /Tdie|Tctl/{print su
 temp_val="$(echo $temp | awk '{print substr($0, 1, length($0)-4)}')"
 
 color="$color7"
-if [ "$temp_val" -ge 60 ]; then
+if [ "$temp_val" -ge 70 ]; then
 	color="$theme11"
-elif [ "$temp_val" -ge 50 ]; then
+    icon=""
+elif [ "$temp_val" -ge 60 ]; then
 	color="$theme12"
-elif [ "$temp_val" -ge 40 ]; then
+    icon=""
+elif [ "$temp_val" -ge 50 ]; then
 	color="$theme13"
+    icon=""
+elif [ "$temp_val" -ge 40 ]; then
+	color="$theme15"
+    icon=""
+else
+    icon=""
 fi
 
-ICON=""
-
 if [ -e "$SWITCH" ]; then
-	printf "<span color=\"%s\">%s</span>\n" $color $ICON
+	printf "<span color=\"%s\" size='large'>%s</span>\n" $color $icon
 else
-	printf "$ICON <span color=\"%s\">%s</span>\n" $color $temp
+	printf "<span size='large'>$icon</span> <span color=\"%s\">%s</span>\n" $color $temp
 fi

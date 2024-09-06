@@ -15,8 +15,8 @@ signal=11
 [owm-weather]
 interval=300
 
-[cpu]
-interval=5
+[cpu2-wrapper]
+interval=persist
 
 [temp]
 interval=5
@@ -85,7 +85,6 @@ signal=10
 #interval=persist
 
 [volume]
-interval=5
 signal=10
 
 [headset]

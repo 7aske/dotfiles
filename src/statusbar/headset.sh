@@ -43,51 +43,62 @@ warn=" "
 if [ "$capacity" -eq 100 ]; then
 	color="${color7:-"#D8DEE9"}"
 	icon="󰁹"
+    charging="󰂅"
 elif [ "$capacity" -ge 90 ]; then
 	color="${color7:-"#D8DEE9"}"
 	icon="󰂂"
+    charging="󰂋"
 elif [ "$capacity" -ge 80 ]; then
 	color="${color7:-"#D8DEE9"}"
 	icon="󰂁"
+    charging="󰂊"
 elif [ "$capacity" -ge 70 ]; then
 	color="${color7:-"#D8DEE9"}"
 	icon="󰂀"
+    charging="󰂉"
 elif [ "$capacity" -ge 60 ]; then
     color="${color3:-"#EBCB8B"}"
 	icon="󰁿"
+    charging="󰂉"
 elif [ "$capacity" -ge 50 ]; then
     color="${color3:-"#EBCB8B"}"
 	icon="󰁾"
+    charging="󰢝"
 elif [ "$capacity" -ge 40 ]; then
 	color="${theme12:-"#D08770"}"
 	icon="󰁽"
+    charging="󰂈"
 elif [ "$capacity" -ge 30 ]; then
 	color="${theme12:-"#D08770"}"
 	icon="󰁼"
+    charging="󰂇"
 elif [ "$capacity" -ge 20 ]; then
 	color="${color1:-"#BF616A"}"
 	icon="󰁻"
-	warn="  "
+    chrarging="󰂆"
 elif [ "$capacity" -ge 10 ]; then
 	color="${color1:-"#BF616A"}"
 	icon="󰁺"
+    charging="󰢜"
 	warn="  "
 else
 	color="${color1:-"#BF616A"}"
 	icon="󰁺"
+    charging="󰢟"
 	warn="  "
 fi
 
 [ -z $warn ] && warn=" "
 
 if [ "$status" = "BATTERY_CHARGING" ]; then
-	icon="󰂄"
+    icon="$charging"
     color="${color2:-"#A3BE8C"}"
+    warn=""
 fi
 
 if [ -e "$SWITCH" ]; then
 	echo "<span color='$color'>󰋋 $icon$warn</span>"
 else
 	capacity="$(echo "$capacity" | sed -e 's/$/%/')"
-	echo "󰋋 $icon<span color='$color' rise='-1pt'> $capacity$warn$saver_icon</span>"
+	echo "󰋋 <span color='$color'>$icon</span><span color='$color' rise='-1pt'> $capacity$warn$saver_icon</span>"
 fi

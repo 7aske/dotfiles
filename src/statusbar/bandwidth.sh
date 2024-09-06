@@ -71,7 +71,7 @@ fi
 
 
 if [ -e "$SWITCH" ]; then
-	echo "<span color='$color' size='x-large'>󰈁</span>"
+	echo "<span color='$color' size='medium'> </span>"
 	exit 0
 fi
 

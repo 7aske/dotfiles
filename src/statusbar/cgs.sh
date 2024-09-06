@@ -43,9 +43,9 @@ if [ $repos -eq 0 ]; then
 fi
 
 if [ -e "$SWITCH" ]; then
-	echo "<span size='medium' color='$color'>$ICON </span>"
+	echo "<span size='large' color='$color'>$ICON </span>"
 else
-	echo "<span size='medium'>$ICON</span> <span color='$color' rise='-1pt'>$repos</span>"
+	echo "<span size='large'>$ICON</span> <span color='$color'>$repos</span>"
 fi
 
 
