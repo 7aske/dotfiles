@@ -42,6 +42,7 @@ dotfiles-install: albert \
 	dunst \
 	i3 \
 	i3blocks \
+	i3status-rust \
 	i3status \
 	kitty \
 	mpd \
@@ -94,6 +95,9 @@ i3:
 
 i3blocks:
 	./mklink i3blocks
+
+i3status-rust:
+	./mklink i3status-rust
 
 i3status:
 	./mklink i3status

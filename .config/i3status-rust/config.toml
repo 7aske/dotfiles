@@ -1,0 +1,427 @@
+icons_format = "{icon}"
+
+[theme]
+theme = "nord-dark"
+[theme.overrides]
+separator = "<span font='13'></span>"
+
+[icons]
+icons = "awesome6"
+[icons.overrides]
+headphones = "󰋋"
+headphones_not_connected = "󰟎"
+bat_charging = "󰂄"
+bat = [
+    "󰂎",
+    "󰁻",
+    "󰁽",
+    "󰂀",
+    "󰁹"
+]
+bat_not_available = "󱉞"
+update = "󰏔"
+music_play = " "
+music_pause = " "
+music_next = " "
+music_prev = " "
+cgs = "󰊢"
+temp_1 = ""
+temp_2 = ""
+temp_3 = ""
+temp_4 = ""
+temp_5 = ""
+bat_0= "󰂎"
+bat_1= "󰁺"
+bat_2= "󰁻"
+bat_3= "󰁼"
+bat_4= "󰁽"
+bat_5= "󰁾"
+bat_6= "󰁿"
+bat_7= "󰂀"
+bat_8= "󰂁"
+bat_9= "󰂂"
+bat_10= "󰁹"
+bat_charging_0= "󰢟"
+bat_charging_1= "󰢜"
+bat_charging_2= "󰂆"
+bat_charging_3= "󰂇"
+bat_charging_4= "󰂈"
+bat_charging_5= "󰢝"
+bat_charging_6= "󰂉"
+bat_charging_7= "󰂉"
+bat_charging_8= "󰂊"
+bat_charging_9= "󰂋"
+bat_charging_10= "󰂅"
+bat_saver= ""
+
+[[block]]
+block = "music"
+format = " $icon {$title.str(max_w:20,rot_interval:0.5) $prev $play $next|}"
+format_alt = " $icon $prev $play $next"
+[[block.click]]
+button = "middle"
+widget = "."
+action = "toggle_format"
+[[block.click]]
+button = "up"
+action = "volume_up"
+[[block.click]]
+button = "down"
+action = "volume_down"
+
+[[block]]
+block = "custom"
+command = "~/.local/bin/statusbar/owm-weather"
+interval = 600
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/owm-weather"
+sync = true
+update = true
+[[block.click]]
+button = "middle"
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/owm-weather"
+sync = true
+update = true
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/owm-weather"
+sync = true
+update = true
+
+#[[block]]
+#block = "weather"
+#autolocate = true
+#format = " $icon $temp "
+#format_alt = " $icon "
+#[block.service]
+#name = "openweathermap"
+
+[[block]]
+block = "cpu"
+info_cpu = 20
+warning_cpu = 50
+critical_cpu = 90
+interval = 1
+format_alt = " $icon "
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/cpu"
+sync = true
+update = true
+[[block.click]]
+button = "middle"
+action = "toggle_format"
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/cpu"
+sync = true
+update = true
+
+[[block]]
+block = "custom"
+command = "~/.local/bin/statusbar/temp -j"
+interval = 5
+json = true
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/temp -j"
+sync = true
+update = true
+[[block.click]]
+button = "middle"
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/temp -j"
+sync = true
+update = true
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/temp -j"
+sync = true
+update = true
+
+
+[[block]]
+block = "memory"
+format = " $icon  "
+format_alt = " $icon $mem_used.eng(prefix:Mi)/$mem_total.eng(prefix:Mi) "
+warning_mem = 50
+critical_mem = 80
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/memory"
+[[block.click]]
+button = "middle"
+action = "toggle_format"
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/memory"
+
+
+[[block]]
+block = "net"
+format = " $icon "
+format_alt = " ^icon_net_up $speed_down.eng(prefix:K) ^icon_net_down $speed_up.eng(prefix:K) "
+[[block.click]]
+button = "middle"
+action = "toggle_format"
+
+[[block]]
+block = "custom"
+command = "~/.local/bin/statusbar/disk"
+interval = 60
+signal = 9
+hide_when_empty = true
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/disk"
+sync = true
+update = true
+[[block.click]]
+button = "middle"
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/disk"
+sync = true
+update = true
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/disk"
+sync = true
+update = true
+
+[[block]]
+block = "custom"
+command = "~/.local/bin/statusbar/cgs -j"
+interval = 60
+json = true
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/cgs -j"
+sync = true
+update = true
+[[block.click]]
+button = "middle"
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/cgs -j"
+sync = true
+update = true
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/cgs -j"
+sync = true
+update = true
+
+[[block]]
+block = "packages"
+package_manager = ["pacman", "aur"]
+format = " $icon $total.eng(w:3) "
+format_up_to_date = " $icon "
+error_interval = 300
+aur_command = "yay -Qua"
+critical_updates_regex = "linux"
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/packages"
+sync = true
+update = true
+[[block.click]]
+button = "middle"
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/packages"
+sync = true
+update = true
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/packages"
+sync = true
+update = true
+
+[[block]]
+block = "privacy"
+[[block.driver]]
+name = "v4l"
+[[block.driver]]
+name = "pipewire"
+exclude_input = ["openrgb"]
+display = "nickname"
+
+#[[block]]
+#block = "custom"
+#interval = 60
+#command = "~/.local/bin/statusbar/services"
+#hide_when_empty = true
+#[[block.click]]
+#button = "left"
+#cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/services"
+
+#[[block]]
+#block = "custom"
+#interval = 60
+#command = "~/.local/bin/statusbar/mic-status"
+#hide_when_empty = true
+#signal = 10
+#merge_with_next = true
+#[[block.click]]
+#button = "left"
+#cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/mic-status"
+#sync = true
+#update = true
+#[[block.click]]
+#button = "middle"
+#cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/mic-status"
+#sync = true
+#update = true
+#[[block.click]]
+#button = "right"
+#cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/mic-status"
+#sync = true
+#update = true
+#[[block.click]]
+#button = "up"
+#cmd = "BLOCK_BUTTON=4 ~/.local/bin/statusbar/mic-status"
+#sync = true
+#update = true
+#[[block.click]]
+#button = "down"
+#cmd = "BLOCK_BUTTON=5 ~/.local/bin/statusbar/mic-status"
+#sync = true
+#update = true
+
+[[block]]
+block = "sound"
+signal = 10
+max_vol = 130
+headphones_indicator = true
+[block.theme_overrides]
+warning_bg = { link = "critical_bg" }
+[[block.click]]
+button = "left"
+cmd = "wtoggle2 pavucontrol"
+[[block.click]]
+button = "middle"
+cmd = "padefault ma"
+sync = true
+update = true
+[[block.click]]
+button = "right"
+cmd = "padefault toggle"
+
+[[block]]
+block = "sound"
+signal = 10
+device_kind = "source"
+max_vol = 100
+[block.theme_overrides]
+warning_bg = { link = "critical_bg" }
+[[block.click]]
+button = "left"
+cmd = "wtoggle2 pavucontrol -t 4"
+[[block.click]]
+button = "middle"
+action = "toggle_mute"
+[[block.click]]
+button = "right"
+cmd = "padefault toggle"
+
+[[block]]
+block = "custom"
+interval = 60
+command = "~/.local/bin/statusbar/headset -j"
+signal = 10
+json = true
+hide_when_empty = true
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/headset -j"
+sync = true
+update = true
+[[block.click]]
+button = "middle"
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/headset -j"
+sync = true
+update = true
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/headset -j"
+sync = true
+update = true
+
+[[block]]
+block = "custom"
+interval = 60
+command = "~/.local/bin/statusbar/battery -j"
+signal = 9
+json = true
+if_command = "ls /sys/class/power_supply/*"
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/battery -j"
+sync = true
+update = true
+[[block.click]]
+button = "middle"
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/battery -j"
+sync = true
+update = true
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/battery -j"
+sync = true
+update = true
+
+[[block]]
+block = "keyboard_layout"
+driver = "setxkbmap"
+interval = 15
+format = " $layout "
+[block.mappings]
+"us (N/A)" = "EN"
+"rs (latin)" = "SR"
+"rs (N/A)" = "ЋИР"
+[[block.click]]
+button = "left"
+cmd = "kblang -l us,rs-latin,rs -t"
+sync = true
+update = true
+
+[[block]]
+block = "notify"
+driver = "dunst"
+format = " $icon "
+[[block.click]]
+button = "left"
+action = "show"
+[[block.click]]
+button = "middle"
+action = "toggle_paused"
+[[block.click]]
+button = "right"
+cmd = "dunstctl close-all"
+
+[[block]]
+block = "custom"
+command = "~/.local/bin/statusbar/clock"
+interval = 1
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/clock"
+[[block.click]]
+button = "middle"
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/clock"
+[[block.click]]
+button = "right"
+cmd = "wtoggle2 -T calcurse"
+
+[[block]]
+block = "menu"
+text = "\uf011 "
+[block.theme_overrides]
+idle_bg = { link = "info_bg" }
+idle_fg = { link = "info_fg" }
+[[block.items]]
+display = " -&gt;   Sleep   &lt;- "
+cmd = "systemctl suspend"
+[[block.items]]
+display = " -&gt; Power Off &lt;- "
+cmd = "poweroff"
+confirm_msg = "Confirm power off?"
+[[block.items]]
+display = " -&gt;  Reboot   &lt;- "
+cmd = "reboot"
+confirm_msg = "Confirm reboot?"
