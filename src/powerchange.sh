@@ -18,6 +18,7 @@ acpi_listen | while IFS= read -r line; do
         fi
         sleep 0.5
         pkill -SIGRTMIN+9 i3blocks
+        pkill -SIGRTMIN+9 i3status-rs
         notify-send -a battery -i battery 'Battery' "$status"
     fi
 done

@@ -38,6 +38,7 @@ set $status_font pango:FiraCode Nerd Font Medium 10
 set $gaps_inner  20
 set $gaps_outer  0
 set $border_size 2
+set $status_cmd  i3status-rs
 
 # set terminal commands
 set $terminal   $TERMINAL
@@ -52,37 +53,37 @@ set $terminal2  kitty
 
 bindsym $mod+p            exec --no-startup-id wtoggle2 pavucontrol
 # 7aske-scripts
-bindsym $mod+Ctrl+p       exec --no-startup-id padefault ma;           exec --no-startup-id sleep 0.05 && pkill -SIGRTMIN+10 i3blocks
-bindsym $mod+Mod1+p       exec --no-startup-id padefault mas;          exec --no-startup-id sleep 0.05 && pkill -SIGRTMIN+10 i3blocks
-bindsym $mod+Shift+p      exec --no-startup-id padefault toggle;       exec --no-startup-id sleep 0.05 && pkill -SIGRTMIN+10 i3blocks
-bindsym $mod+Ctrl+Shift+p exec --no-startup-id padefault toggle-focus; exec --no-startup-id sleep 0.05 && pkill -SIGRTMIN+10 i3blocks
+bindsym $mod+Ctrl+p       exec --no-startup-id padefault ma;           exec --no-startup-id sleep 0.05 && pkill -SIGRTMIN+10 $status_cmd
+bindsym $mod+Mod1+p       exec --no-startup-id padefault mas;          exec --no-startup-id sleep 0.05 && pkill -SIGRTMIN+10 $status_cmd
+bindsym $mod+Shift+p      exec --no-startup-id padefault toggle;       exec --no-startup-id sleep 0.05 && pkill -SIGRTMIN+10 $status_cmd
+bindsym $mod+Ctrl+Shift+p exec --no-startup-id padefault toggle-focus; exec --no-startup-id sleep 0.05 && pkill -SIGRTMIN+10 $status_cmd
 
 # Screen brightness controls
 # bindsym XF86MonBrightnessUp exec --no-startup-id "xbacklight -inc 10; notify-send --hint=int:transient:1 -t $notif_duration 'brightness up'"
 # bindsym XF86MonBrightnessDown exec --no-startup-id "xbacklight -dec 10; notify-send --hint=int:transient:1 -t $notif_duration 'brightness down'"
 
 # Media player controls
-bindsym XF86AudioPlay  exec --no-startup-id playerctl play-pause; exec --no-startup-id pkill -SIGRTMIN+11 i3blocks
-bindsym XF86AudioPause exec --no-startup-id playerctl play-pause; exec --no-startup-id pkill -SIGRTMIN+11 i3blocks
-bindsym XF86AudioStop  exec --no-startup-id playerctl stop;       exec --no-startup-id pkill -SIGRTMIN+11 i3blocks
-bindsym XF86AudioNext  exec --no-startup-id playerctl next;       exec --no-startup-id pkill -SIGRTMIN+11 i3blocks
-bindsym XF86AudioPrev  exec --no-startup-id playerctl previous;   exec --no-startup-id pkill -SIGRTMIN+11 i3blocks
+bindsym XF86AudioPlay  exec --no-startup-id playerctl play-pause; exec --no-startup-id pkill -SIGRTMIN+11 $status_cmd
+bindsym XF86AudioPause exec --no-startup-id playerctl play-pause; exec --no-startup-id pkill -SIGRTMIN+11 $status_cmd
+bindsym XF86AudioStop  exec --no-startup-id playerctl stop;       exec --no-startup-id pkill -SIGRTMIN+11 $status_cmd
+bindsym XF86AudioNext  exec --no-startup-id playerctl next;       exec --no-startup-id pkill -SIGRTMIN+11 $status_cmd
+bindsym XF86AudioPrev  exec --no-startup-id playerctl previous;   exec --no-startup-id pkill -SIGRTMIN+11 $status_cmd
 # 7aske-scripts
 bindsym XF86Tools      exec --no-startup-id wtoggle2 -d 75%x75% $player
 
 bindsym XF86Calculator exec --no-startup-id $terminal -c calc -e calc
 
-# media controls re-using i3blocks script
-bindsym $mod+period            exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/music; exec --no-startup-id sleep 0.5 && pkill -SIGRTMIN+11 i3blocks
-bindsym $mod+slash             exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/music; exec --no-startup-id sleep 0.1 && pkill -SIGRTMIN+11 i3blocks
-bindsym $mod+comma             exec --no-startup-id BLOCK_BUTTON=3 ~/.local/bin/statusbar/music; exec --no-startup-id sleep 0.5 && pkill -SIGRTMIN+11 i3blocks
-bindsym $mod+Shift+period      exec --no-startup-id BLOCK_BUTTON=4 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym $mod+Shift+comma       exec --no-startup-id BLOCK_BUTTON=5 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym $mod+Ctrl+Shift+period exec --no-startup-id BLOCK_BUTTON=6 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym $mod+Ctrl+Shift+comma  exec --no-startup-id BLOCK_BUTTON=7 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym $mod+Mod1+period       exec --no-startup-id padefault vol +5%;                           exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym $mod+Mod1+slash        exec --no-startup-id padefault mute-all;                          exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym $mod+Mod1+comma        exec --no-startup-id padefault vol -5%;                           exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
+# media controls re-using $status_cmd script
+bindsym $mod+period            exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/music; exec --no-startup-id sleep 0.5 && pkill -SIGRTMIN+11 $status_cmd
+bindsym $mod+slash             exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/music; exec --no-startup-id sleep 0.1 && pkill -SIGRTMIN+11 $status_cmd
+bindsym $mod+comma             exec --no-startup-id BLOCK_BUTTON=3 ~/.local/bin/statusbar/music; exec --no-startup-id sleep 0.5 && pkill -SIGRTMIN+11 $status_cmd
+bindsym $mod+Shift+period      exec --no-startup-id BLOCK_BUTTON=4 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
+bindsym $mod+Shift+comma       exec --no-startup-id BLOCK_BUTTON=5 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
+bindsym $mod+Ctrl+Shift+period exec --no-startup-id BLOCK_BUTTON=6 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
+bindsym $mod+Ctrl+Shift+comma  exec --no-startup-id BLOCK_BUTTON=7 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
+bindsym $mod+Mod1+period       exec --no-startup-id padefault vol +5%;                           exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
+bindsym $mod+Mod1+slash        exec --no-startup-id padefault mute-all;                          exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
+bindsym $mod+Mod1+comma        exec --no-startup-id padefault vol -5%;                           exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
 
 bindsym $mod+Ctrl+Mod1+period  exec --no-startup-id padefault volume-focus +5%
 bindsym $mod+Ctrl+Mod1+slash   exec --no-startup-id padefault volume-focus 100%
@@ -90,16 +91,16 @@ bindsym $mod+Ctrl+Mod1+comma   exec --no-startup-id padefault volume-focus -5%
 
 # Pulse Audio controls
 # 7aske-scripts
-bindsym XF86AudioRaiseVolume exec --no-startup-id padefault vol +1%;      exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym XF86AudioLowerVolume exec --no-startup-id padefault vol -1%;      exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym XF86AudioMute        exec --no-startup-id padefault mute-all;     exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym XF86AudioMicMute     exec --no-startup-id padefault mute-all-src; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym Shift+XF86AudioRaiseVolume exec --no-startup-id BLOCK_BUTTON=4 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym Shift+XF86AudioLowerVolume exec --no-startup-id BLOCK_BUTTON=5 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
+bindsym XF86AudioRaiseVolume exec --no-startup-id padefault vol +1%;      exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
+bindsym XF86AudioLowerVolume exec --no-startup-id padefault vol -1%;      exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
+bindsym XF86AudioMute        exec --no-startup-id padefault mute-all;     exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
+bindsym XF86AudioMicMute     exec --no-startup-id padefault mute-all-src; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
+bindsym Shift+XF86AudioRaiseVolume exec --no-startup-id BLOCK_BUTTON=4 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
+bindsym Shift+XF86AudioLowerVolume exec --no-startup-id BLOCK_BUTTON=5 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
 bindsym Ctrl+Mod1+XF86AudioRaiseVolume exec --no-startup-id padefault volume-focus +1%
 bindsym Ctrl+Mod1+XF86AudioLowerVolume exec --no-startup-id padefault volume-focus -1%
-bindsym Mod1+XF86AudioRaiseVolume exec --no-startup-id padefault mic-volume +1%; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym Mod1+XF86AudioLowerVolume exec --no-startup-id padefault mic-volume -1%; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
+bindsym Mod1+XF86AudioRaiseVolume exec --no-startup-id padefault mic-volume +1%; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
+bindsym Mod1+XF86AudioLowerVolume exec --no-startup-id padefault mic-volume -1%; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
 
 
 #                    _ _           _   _
@@ -136,7 +137,7 @@ bindsym $mod+w       exec --no-startup-id $browser
 bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor /tmp/$(uuidgen).txt
 bindsym $mod+Shift+w exec --no-startup-id $browser --incognito
 # 7aske-scripts
-bindsym $mod+Mod1+n         exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/notify-status; exec --no-startup-id pkill -SIGRTMIN+9 i3blocks
+bindsym $mod+Mod1+n         exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/notify-status; exec --no-startup-id pkill -SIGRTMIN+9 $status_cmd
 bindsym $mod+Shift+Mod1+n   exec --no-startup-id dunst_reload
 bindsym $mod+n              exec --no-startup-id dunstctl context
 bindsym $mod+Ctrl+n         exec --no-startup-id dunstctl close
@@ -184,7 +185,7 @@ bindsym $mod+v        exec --no-startup-id clipmenu
 bindsym Menu          exec --no-startup-id clipmenu
 bindsym $mod+Menu     exec --no-startup-id eval "$(xclip -sel c -o)"
 # 7aske-scripts
-bindsym $mod+Shift+space      exec --no-startup-id notify-send "Keyboard Layout" "Toggle" && kblang -t; exec --no-startup-id sleep 1 && pkill -SIGRTMIN+9 i3blocks
+bindsym $mod+Shift+space      exec --no-startup-id notify-send "Keyboard Layout" "Toggle" && kblang -t; exec --no-startup-id sleep 1 && pkill -SIGRTMIN+9 $status_cmd
 bindsym $mod+Mod1+Shift+space exec --no-startup-id kblang -fn '$dmenu_font'
 # 7aske-scripts
 bindsym XF86Search exec --no-startup-id google-search
@@ -196,11 +197,8 @@ bindsym $mod+Ctrl+Shift+semicolon exec --no-startup-id i3shell
 bindsym $mod+F12       exec --no-startup-id xdotool keyup Shift_L Shift_R Control_L Control_R Alt_L Alt_R Super_L Super_R Hyper_L Hyper_R Caps_Lock 204 205 206 207
 bindsym $mod+Shift+F12 exec --no-startup-id autorandr --change && nitrogen --restore
 
-bindsym $mod+Shift+Home   exec --no-startup-id desk move-to
-bindsym $mod+Home         exec --no-startup-id desk stand
-bindsym $mod+End          exec --no-startup-id desk sit
-bindsym $mod+Mod1+Home    exec --no-startup-id desk up   7
-bindsym $mod+Mod1+End     exec --no-startup-id desk down 7
+bindsym $mod+Home exec --no-startup-id idasen stand
+bindsym $mod+End  exec --no-startup-id idasen sit
 
 # layout toggling mode
 set $mode_codeopen codeopen: (t)erm (n)vim (v)scode (i)dea (c)lion (g)oland lazy(G)it (p)ycharm (w)ebstorm (s)studio (r)ider (j)etbrains
@@ -702,10 +700,9 @@ client.background             $bg
 # |___/\__\__,_|\__|\__,_|___/ |_.__/ \__,_|_|
 # status bar
 
-# Start i3blocks to display status bar
 bar {
 	i3bar_command i3bar
-	status_command i3blocks
+	status_command $status_cmd
     position top
 
 	tray_output primary

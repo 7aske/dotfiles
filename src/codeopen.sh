@@ -67,6 +67,8 @@ _select_project() {
         PROJ="$CODE/$SELECTED"
     fi
 
+    echo AAA $PROJ
+
     if [ ! -e "$PROJ" ]; then
         exit 0
     fi
@@ -81,8 +83,6 @@ _select_project() {
 }
 
 _open_term() {
-    _select_project
-
     if [ -t 1 ]; then
         if [ -n "$1" ]; then
             cd "$PROJ" && $1
@@ -93,10 +93,10 @@ _open_term() {
     else
         if [ "$TERMINAL" = "st" ]; then
             # 7aske 'st' build with '-d' option to chdir at start
-            notify-send -i terminal "codeopen" "opening $PROJ in $TERMINAL"
+            notify-send -i terminal "codeopen" "opening $PROJ in $TERMINAL" &
             $TERMINAL -d "$PROJ" $([ -n "$1" ] && echo "-e $1")
         else
-            notify-send -i terminal "codeopen" "opening $PROJ in $TERMINAL"
+            notify-send -i terminal "codeopen" "opening $PROJ in $TERMINAL" &
             $TERMINAL -cd "$PROJ" $([ -n "$1" ] && echo "-e $1")
         fi
     fi
@@ -172,7 +172,7 @@ _open_lazygit() {
 }
 
 case "$TYPE" in
-    "term") _open_term ;;
+    "term") _select_project; _open_term ;;
     "vscode") _open_vscode ;;
     "vim") _open_vim ;;
     "jetbrains") _open_jetbrains ;;
@@ -184,5 +184,5 @@ case "$TYPE" in
     "rider") _open_jetbrains rider ;;
     "studio" | "android") _open_jetbrains studio ;;
     "lazygit") _open_lazygit ;;
-    *) _open_term $TYPE ;;
+    *) _select_project; _open_term $TYPE ;;
 esac

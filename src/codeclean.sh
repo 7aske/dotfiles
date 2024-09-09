@@ -27,6 +27,7 @@ FOLDERS="$(find "$CODE" -type d \
 		-path $CODE/work\*         -prune -o\
 		-path \*/lib/\*           -prune -o\
 		-path \*nvim/plugged\*    -prune -o\
+		-path \*nvim.old/plugged\*    -prune -o\
 		-path \*neovim\*          -prune   \
 	\) -prune -printf "%p\n")"
 

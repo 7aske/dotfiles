@@ -1,32 +1,48 @@
 #!/usr/bin/env bash
 
-# preferred layouts to be shown first in layout dmenu prompt
-declare -a quick_layouts
-quick_layouts=("us" "rs")
-declare -A variants
-# preferred variants associated with given layouts to be
-# shown first in variant dmenu prompt
-variants=( ["rs"]="latin" ["us"]=" ")
+declare -a variants
 declare -a variant_keys
-variant_keys=( ${!variants[*]} )
 
-if [ "$1" = "-t" ]; then
-	selected="$(setxkbmap -query | grep layout | awk '{print $2}')"
+_usage() {
+    echo "usage: $(basename $0) [-h] [-l layouts] [-t]"
+}
+
+toggle=false
+while getopts "h?l:t" opt; do
+    case "$opt" in
+        h|\?)
+            _usage
+            ;;
+        t) toggle=true ;;
+        l)  IFS=',' read -r -a variants <<< "$OPTARG" ;;
+    esac
+done
+
+shift $((OPTIND-1))
+
+if $toggle; then
+    selected_layout="$(setxkbmap -query | grep layout | awk '{print $2}')"
+    selected_variant="$(setxkbmap -query | grep variant | awk '{print $2}')"
 	length="${#variants[@]}"
 	index=-1
 	current="${variants[@]}"
 	for i in "${!variants[@]}"; do
 		index=$(($index + 1))
-		[[ "$i" = "${selected}" ]] && break
+        IFS='-' read -r lay var <<< "${variants[$i]}"
+        if [[ "$lay" = "$selected_layout" && ( "$var" = "$selected_variant" ) ]]; then
+            break
+        fi
 	done
 
 	new_index="$((($index + 1) % $length))"
-	layout="${variant_keys[$new_index]}"
-	variant="${variants[$layout]}"
+    IFS='-' read -r layout variant <<< "${variants[$new_index]}"
+    variant="${variant:-" "}"
 fi
 
+echo "${variants[*]}" | tr ' ' '\n'
+
 if [ -z "$layout" ]; then
-	layout="$(cat <(IFS=$'\n'; printf "%s\n" ${quick_layouts[@]}) <(localectl list-x11-keymap-layouts --no-pager) | dmenu -fn 'Fira Code-10' -p "layout:")"
+	layout="$(cat <(echo "${variants[@]}" | tr ' ' '\n' | awk -F'-' '{print $1}' | sort | uniq) <(localectl list-x11-keymap-layouts --no-pager) | dmenu -fn 'Fira Code-10' -p "layout:")"
 fi
 
 if [ -z "$layout" ]; then
@@ -34,7 +50,7 @@ if [ -z "$layout" ]; then
 fi
 
 if [ -z "$variant" ]; then 
-	variant="$(cat <(echo -e "${variants[$layout]}") <(localectl list-x11-keymap-variants "$layout") | dmenu -fn 'Fira Code-10' -p "$layout:")"
+    variant="$(cat <(echo " ") <(echo "${variants[@]}" | tr ' ' '\n' | awk -F'-' '{print $2}' | sort | uniq) <(localectl list-x11-keymap-variants "$layout") | dmenu -fn 'Fira Code-10' -p "$layout:")"
 fi
 
 if [ -n "$variant" ] && [ "$variant" != " " ]; then

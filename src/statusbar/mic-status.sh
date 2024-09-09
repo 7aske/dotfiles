@@ -39,4 +39,4 @@ if [ -z "$inputs" ]; then
 	exit 0
 fi
 
-echo "<span rise='-2pt' size='medium' color='$color'>$icon</span><span rise='-3pt' color=\"$color\">$VOLUME%</span>"
+echo "<span size='medium' color='$color'>$icon</span><span color=\"$color\">$VOLUME%</span>"
