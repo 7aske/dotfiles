@@ -149,10 +149,11 @@ bindsym $mod+Mod1+semicolon exec --no-startup-id rofi -dmenu -p "new session" | 
 bindsym $mod+F10           exec --no-startup-id echo 0 | dmenu -p 'screen: ' -fn '$dmenu_font' | xargs screencam -n
 bindsym $mod+Shift+F10     exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/rec-status
 
-bindsym $mod+Mod1+t            exec --no-startup-id wtoggle2 transmission-gtk
 bindsym $mod+Mod1+l            exec --no-startup-id wtoggle2 -d 75%x75% lutris
 bindsym $mod+Mod1+Shift+d      exec --no-startup-id gnome-disks
 bindsym $mod+Shift+d           exec --no-startup-id wtoggle2 -T -f lazydocker
+bindsym $mod+bracketleft       exec --no-startup-id wtoggle2 -T -d60%x60% taskwarrior-tui
+bindsym $mod+bracketright      exec --no-startup-id wtoggle2 -T -d60%x60% newsboat
 bindsym $mod+Mod1+k            exec --no-startup-id wtoggle2 -T -f k9s
 bindsym $mod+Mod1+b            exec --no-startup-id wtoggle2 -d60%x60% bitwarden-desktop
 bindsym $mod+Mod1+m            exec --no-startup-id wtoggle2 -d75%x75% $mail

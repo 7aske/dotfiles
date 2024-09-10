@@ -171,9 +171,9 @@ prompt_status() {
   local -a symbols job
 	job=$(jobs -l | wc -l)
 
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}$RETVAL"
-  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}$RETVAL"
-  [[ $job -gt 0 ]] && symbols+="%{%F{cyan}%}$job "
+  symbols+="%{%F{red}%}%(?..%B%?%b)"
+  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}󱐋"
+  [[ $job -gt 0 ]] && symbols+="%{%F{cyan}%}$job  "
   [[ -n "$symbols" ]] && prompt_segment default default "$symbols"
 }
 
@@ -190,7 +190,6 @@ prompt_end() {
 
 ## Main prompt
 build_prompt() {
-  RETVAL=$?
   prompt_virtualenv
   prompt_context
   prompt_dir

@@ -78,9 +78,9 @@ fi
 icon="$(echo "$status" | sed -e "s/,//;s/Discharging/$icon/;s/Not [Cc]harging/󰚦/;s/Charging/$charging/;s/Unknown/󰂑/;s/Full//;s/ 0*/ /g;s/ :/ /g")"
 
 setting=/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode
-state=$(cat $setting)
+saver_state=$(cat $setting)
 
-if [ $state -eq 1 ]; then
+if [ $saver_state -eq 1 ]; then
     icon=""
     json_icon="bat_saver"
 fi
