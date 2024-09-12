@@ -5,7 +5,7 @@ SWITCH="$HOME/.cache/statusbar_$(basename $0)"
 case $BLOCK_BUTTON in
 	1) notify-send -i cpu "CPU hogs" "$(ps axch -o cmd:15,%cpu --sort=-%cpu | head)" ;;
 	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
-	3) i3-msg "exec --no-startup-id setsid -f st -c floating_popup -e htop" 2>/dev/null 1>/dev/null ;;
+	3) wtoggle2 -T htop 2>/dev/null 1>/dev/null ;;
 esac
 
 cpu_usage="$(mpstat 1 1 | grep 'Average:' | awk '{printf "%d", ((100 - $12))}')"

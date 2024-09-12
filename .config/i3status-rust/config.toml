@@ -114,7 +114,7 @@ update = true
 button = "middle"
 action = "toggle_format"
 [[block.click]]
-button = "left"
+button = "right"
 cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/cpu"
 sync = true
 update = true
@@ -215,8 +215,8 @@ interval = 60
 format = "$icon $count.eng(w:1) "
 format_singular = "$icon 1 "
 format_everything_done = ""
-warning_threshold = 3
-critical_threshold = 5
+warning_threshold = 5
+critical_threshold = 10
 data_location = "~/.config/task"
 [[block.click]]
 button = "left"

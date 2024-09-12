@@ -47,18 +47,18 @@ _span() {
 
 repos="$(/usr/bin/cgs -b | wc -l)"
 
-if [ "$repos" -le 1 ]; then
-    state="Idle"
-	color="${color7:-"#ffffff"}"
-elif [ "$repos" -le 3 ]; then
-    state="Info"
-    color="${color3:-"#fef44e"}"
-elif [ "$repos" -le 5 ]; then
+if [ "$repos" -ge 10 ]; then
     state="Critical"
 	color="${color5:-"#ff5252"}"
-else
+elif [ "$repos" -ge 7 ]; then
     state="Warning"
 	color="${color1:-"#ff8144"}"
+elif [ "$repos" -ge 5 ]; then
+    state="Info"
+    color="${color3:-"#fef44e"}"
+else
+    state="Idle"
+	color="${color7:-"#ffffff"}"
 fi
 
 
