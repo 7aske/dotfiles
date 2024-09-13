@@ -33,7 +33,7 @@ while getopts "j" opt; do
 done
 
 _json() {
-    echo '{"icon": "'${1:-"$(basename $0)"}'", "state":"'${2}'", "text":"'${3}'"}';
+    echo '{"icon": "'${1}'", "state":"'${2:-"Idle"}'", "text":"'${3}'"}';
 }
 
 _span() {
@@ -43,7 +43,6 @@ _span() {
         echo "<span size='large' color='$2'>$1 </span>"
     fi
 }
-
 
 repos="$(/usr/bin/cgs -b | wc -l)"
 
@@ -61,20 +60,23 @@ else
 	color="${color7:-"#ffffff"}"
 fi
 
-
 if [ $repos -eq 0 ]; then
+    if [ "$json" = true ]; then
+        _json "" "" ""
+    fi
+
 	exit 0
 fi
 
 if [ -e "$SWITCH" ]; then
     if [ "$json" = true ]; then
-        _json "" "$state"
+        _json "" "$state" "$ICON"
     else
         _span "$ICON" "$color"
     fi
 else
     if [ "$json" = true ]; then
-        _json "" "$state" "$repos"
+        _json "cgs" "$state" "$repos"
     else
         _span "$ICON" "$color" "$repos"
     fi

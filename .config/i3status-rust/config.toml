@@ -212,8 +212,8 @@ update = true
 [[block]]
 block = "taskwarrior"
 interval = 60
-format = "$icon $count.eng(w:1) "
-format_singular = "$icon 1 "
+format = "$icon $count.eng(w:1)"
+format_singular = "$icon"
 format_everything_done = ""
 warning_threshold = 5
 critical_threshold = 10
@@ -227,6 +227,7 @@ block = "custom"
 command = "~/.local/bin/statusbar/cgs -j"
 interval = 60
 json = true
+hide_when_empty = true
 [[block.click]]
 button = "left"
 cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/cgs -j"
