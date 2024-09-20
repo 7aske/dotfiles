@@ -32,3 +32,5 @@ notify-format "newsboat: %n unread articles, %f unread feeds"
 notify-program notify-send
 notify-xterm yes
 notify-screen yes
+
+browser "setsid xdg-open '%u' &>/dev/null"
