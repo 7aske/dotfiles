@@ -188,26 +188,26 @@ cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/disk"
 sync = true
 update = true
 
-[[block]]
-block = "custom"
-command = "~/.local/bin/statusbar/newsboat -j"
-interval = 60
-json = true
-[[block.click]]
-button = "left"
-cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/newsboat -j"
-sync = true
-update = true
-[[block.click]]
-button = "middle"
-cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/newsboat -j"
-sync = true
-update = true
-[[block.click]]
-button = "right"
-cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/newsboat -j"
-sync = true
-update = true
+#[[block]]
+#block = "custom"
+#command = "~/.local/bin/statusbar/newsboat -j"
+#interval = 60
+#json = true
+#[[block.click]]
+#button = "left"
+#cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/newsboat -j"
+#sync = true
+#update = true
+#[[block.click]]
+#button = "middle"
+#cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/newsboat -j"
+#sync = true
+#update = true
+#[[block.click]]
+#button = "right"
+#cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/newsboat -j"
+#sync = true
+#update = true
 
 [[block]]
 block = "taskwarrior"
