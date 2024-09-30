@@ -406,6 +406,7 @@ block = "keyboard_layout"
 driver = "setxkbmap"
 interval = 15
 format = " $layout "
+signal = 9
 [block.mappings]
 "us (N/A)" = "EN"
 "rs (latin)" = "SR"
