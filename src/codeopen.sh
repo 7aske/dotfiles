@@ -67,8 +67,6 @@ _select_project() {
         PROJ="$CODE/$SELECTED"
     fi
 
-    echo AAA $PROJ
-
     if [ ! -e "$PROJ" ]; then
         exit 0
     fi
@@ -77,7 +75,7 @@ _select_project() {
         PROJ="$(readlink -f "$PROJ")"
     fi
     
-    if ! ( git -C "$PROJ" rev-parse HEAD ); then
+    if ! ( git -C "$PROJ" rev-parse HEAD 2>&1 >/dev/null ); then
         exit 1
     fi
 }
