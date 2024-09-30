@@ -155,7 +155,7 @@ bindsym $mod+Shift+d           exec --no-startup-id wtoggle2 -T -f lazydocker
 bindsym $mod+bracketleft       exec --no-startup-id wtoggle2 -T -d60%x60% taskwarrior-tui
 bindsym $mod+Shift+bracketleft exec --no-startup-id wtoggle2 -T -d60%x60% calcurse
 bindsym $mod+bracketright      exec --no-startup-id wtoggle2 -T -d60%x60% newsboat
-bindsym $mod+Mod1+k            exec --no-startup-id wtoggle2 -T -f k9s
+bindsym $mod+Mod1+k            exec --no-startup-id wtoggle2 -T -d90%x80% k9s
 bindsym $mod+Mod1+b            exec --no-startup-id wtoggle2 -d60%x60% bitwarden-desktop
 bindsym $mod+Mod1+m            exec --no-startup-id pgrep birdtray && birdtray -t || wtoggle2 -d75%x75% $mail
 bindsym $mod+Mod1+v            exec --no-startup-id vncviewer
