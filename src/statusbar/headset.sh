@@ -117,7 +117,7 @@ else
             color="$color0"
         fi
 
-        _json "headphones" "$state" "<span color='$color'>$icon$capacity</span>"
+        _json "headphones" "$state" "<span color='$color' rise='-1pt'>$icon $capacity</span>"
     else
         echo "󰋋 <span color='$color'>$icon</span><span color='$color' rise='-1pt'> $capacity$warn</span>"
     fi
