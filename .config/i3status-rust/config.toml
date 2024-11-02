@@ -18,6 +18,7 @@ bat = [
     "󰂀",
     "󰁹"
 ]
+bell-slash = " "
 bat_not_available = "󱉞"
 update = "󰏔"
 music_play = " "
