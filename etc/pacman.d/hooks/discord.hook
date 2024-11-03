@@ -1,0 +1,7 @@
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = discor
+[Action]
+When = PostTransaction
+Exec = /usr/bin/beautifuldiscord --css $CODE/var/discord-custom-css/custom.css

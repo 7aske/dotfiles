@@ -4,6 +4,8 @@ STATUS_OUTDIR=~/.local/bin/statusbar
 STATUS_INDIR=src/statusbar
 SYSTEMD_INDIR=src/systemd
 SYSTEMD_OUTDIR=~/.config/systemd/user
+PACMAN_HOOKS_INDIR=etc/pacman.d/hooks
+PACMAN_HOOKS_OUTDIR=/etc/pacman.d/hooks
 
 ifeq (uninstall,$(firstword $(MAKECMDGOALS)))
   ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
@@ -32,6 +34,8 @@ add:
 systemd:
 	cp $(SYSTEMD_INDIR)/* $(SYSTEMD_OUTDIR)/
 
+pacman-hooks:
+	sudo cp $(PACMAN_HOOKS_INDIR)/* $(PACMAN_HOOKS_OUTDIR)/
 
 .PHONY: dotfiles-install
 dotfiles-install: albert \
