@@ -24,7 +24,7 @@ plugins:
     background: false
     args:
       - -c
-      - '"$@" | less'
+      - '"$@" | less -S'
       - dummy-arg
       - kubectl
       - logs
