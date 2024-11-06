@@ -31,30 +31,35 @@ temp_2 = ""
 temp_3 = ""
 temp_4 = ""
 temp_5 = ""
-bat_0= "󰂎"
-bat_1= "󰁺"
-bat_2= "󰁻"
-bat_3= "󰁼"
-bat_4= "󰁽"
-bat_5= "󰁾"
-bat_6= "󰁿"
-bat_7= "󰂀"
-bat_8= "󰂁"
-bat_9= "󰂂"
-bat_10= "󰁹"
-bat_charging_0= "󰢟"
-bat_charging_1= "󰢜"
-bat_charging_2= "󰂆"
-bat_charging_3= "󰂇"
-bat_charging_4= "󰂈"
-bat_charging_5= "󰢝"
-bat_charging_6= "󰂉"
-bat_charging_7= "󰂉"
-bat_charging_8= "󰂊"
-bat_charging_9= "󰂋"
-bat_charging_10= "󰂅"
-bat_saver= ""
+bat_0 = "󰂎"
+bat_1 = "󰁺"
+bat_2 = "󰁻"
+bat_3 = "󰁼"
+bat_4 = "󰁽"
+bat_5 = "󰁾"
+bat_6 = "󰁿"
+bat_7 = "󰂀"
+bat_8 = "󰂁"
+bat_9 = "󰂂"
+bat_10 = "󰁹"
+bat_charging_0 = "󰢟"
+bat_charging_1 = "󰢜"
+bat_charging_2 = "󰂆"
+bat_charging_3 = "󰂇"
+bat_charging_4 = "󰂈"
+bat_charging_5 = "󰢝"
+bat_charging_6 = "󰂉"
+bat_charging_7 = "󰂉"
+bat_charging_8 = "󰂊"
+bat_charging_9 = "󰂋"
+bat_charging_10 = "󰂅"
+bat_saver = ""
 news=""
+cpu = [
+    "<span font='13'>󰡳</span>",
+    "<span font='13'>󰡵</span>",
+    "<span font='13'>󰡴</span>",
+]
 
 [[block]]
 block = "music"
@@ -105,7 +110,8 @@ info_cpu = 20
 warning_cpu = 50
 critical_cpu = 90
 interval = 1
-format_alt = " $icon "
+format_alt = "$icon <span rise='1pt'>$utilization</span>"
+format= "$icon "
 [[block.click]]
 button = "left"
 cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/cpu"
@@ -125,6 +131,7 @@ block = "custom"
 command = "~/.local/bin/statusbar/temp -j"
 interval = 5
 json = true
+format=" $icon $text"
 [[block.click]]
 button = "left"
 cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/temp -j"
@@ -386,6 +393,7 @@ command = "~/.local/bin/statusbar/battery -j"
 signal = 9
 json = true
 if_command = "ls /sys/class/power_supply/*"
+format = "$icon $text"
 [[block.click]]
 button = "left"
 cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/battery -j"
@@ -421,7 +429,7 @@ update = true
 [[block]]
 block = "notify"
 driver = "dunst"
-format = " $icon "
+format = "$icon "
 [[block.click]]
 button = "left"
 action = "show"
