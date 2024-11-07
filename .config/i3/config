@@ -187,7 +187,7 @@ bindsym $mod+v        exec --no-startup-id clipmenu
 bindsym Menu          exec --no-startup-id clipmenu
 bindsym $mod+Menu     exec --no-startup-id eval "$(xclip -sel c -o)"
 # 7aske-scripts
-bindsym $mod+Shift+space      exec --no-startup-id kblang -t; exec --no-startup-id pkill -SIGRTMIN+9 $status_cmd
+bindsym $mod+Shift+space      exec --no-startup-id "kblang -l us,rs-latin,rs -t"; exec --no-startup-id pkill -SIGRTMIN+9 $status_cmd
 bindsym $mod+Mod1+Shift+space exec --no-startup-id kblang -fn '$dmenu_font'
 # 7aske-scripts
 bindsym XF86Search exec --no-startup-id google-search
