@@ -459,7 +459,8 @@ assign [class="zoom"] zoom
 assign [title="World of Warcraft"] w
 assign [class="steam_app_8930"] w
 assign [class="battle.net.exe"] w
-assign [class="Chia Blockchain"] c
+assign [class="jetbrains-datagrip"] d
+assign [title=".*Micosoft Teams.*"] $ws7
 
 # Open specific applications in floating mode
 for_window [class="(?i)GParted"] floating enable, border normal
