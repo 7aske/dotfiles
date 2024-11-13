@@ -260,7 +260,7 @@ format_up_to_date = " $icon "
 error_interval = 300
 aur_command = "yay -Qua"
 critical_updates_regex = "linux"
-status = 1
+signal = 1
 [[block.click]]
 button = "left"
 cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/packages"
