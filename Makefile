@@ -35,7 +35,9 @@ systemd:
 	cp $(SYSTEMD_INDIR)/* $(SYSTEMD_OUTDIR)/
 
 pacman-hooks:
-	sudo cp $(PACMAN_HOOKS_INDIR)/* $(PACMAN_HOOKS_OUTDIR)/
+	for file in $(PACMAN_HOOKS_INDIR)/*; do \
+		envsubst < $$file | sudo tee $(PACMAN_HOOKS_OUTDIR)/$$(basename $$file); \
+	done
 
 .PHONY: dotfiles-install
 dotfiles-install: albert \
