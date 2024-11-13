@@ -4,6 +4,7 @@ return {
             '*';
         }
   },
+  { "godlygeek/tabular" },
   { "shaunsingh/nord.nvim" },
   {
     "LazyVim/LazyVim",
