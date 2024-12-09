@@ -174,7 +174,23 @@ prompt_status() {
   symbols+="%{%F{red}%}%(?..%B%?%b)"
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}󱐋"
   [[ $job -gt 0 ]] && symbols+="%{%F{cyan}%}$job  "
-  [[ -n "$symbols" ]] && prompt_segment default default "$symbols"
+  [[ -n "$symbols" ]] && prompt_segment default default "$symbols%f"
+}
+
+prompt_docker() {
+  local docker_host=$(docker context show 2>/dev/null)
+  if [[ -n $docker_host ]] && [[ $docker_host != default ]]; then
+    prompt_segment default green " $docker_host"
+  fi
+}
+
+prompt_kubernetes() {
+  local kube_context=$(kubectl config current-context 2>/dev/null)
+  if [[ -n $kube_context ]] &&
+    [[ $kube_context != minikube ]] &&
+    [[ $kube_context != docker-desktop ]]; then
+    prompt_segment default blue " $kube_context"
+  fi
 }
 
 # End the prompt, closing any open segments
@@ -199,6 +215,8 @@ build_prompt() {
 
 build_rprompt() {
   RETVAL=$?
+  prompt_docker
+  prompt_kubernetes
 	prompt_status
 }
 

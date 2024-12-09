@@ -115,6 +115,8 @@ bindkey -s '^y' 'yay\n'
 bindkey '^ ' autosuggest-accept
 bindkey '^r' history-incremental-search-backward
 
+alias dockerhost="export DOCKER_HOST=\$(docker context inspect \$(docker context show) | jq -r '.[0].Endpoints.docker.Host')"
+
 # pidswallow
 [ -n "$DISPLAY" ]  && command -v xdo >/dev/null 2>&1 && xdo id > /tmp/term-wid-"$$"
 trap "( rm -f /tmp/term-wid-"$$" )" EXIT HUP
