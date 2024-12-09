@@ -2,17 +2,33 @@
 
 
 prog="$(basename $0)"
-find_flags="-maxdepth 3 -type f"
+find_flags="-maxdepth 1 -type f"
 find_cmd="find"
-case "$1" in
-    "--etc")  find_cmd="sudo find "; cfg_dir="/etc" ;;
-    "--home") find_flags=" -maxdepth 1 -type f"; cfg_dir="$HOME" ;;
-    "--config") find_flags=" -maxdepth 2 -type f"; cfg_dir="$HOME/.config" ;;
-    *) cfg_dir="${CODE_DOTFILES:-$CODE/sh/dotfiles}" ;;
-esac
+cfg_dir="$(find ${CODE_DOTFILES:-$CODE/sh/dotfiles} -maxdepth 3 -type f)"
+
+while getopts ":hHecs" opt; do
+    case $opt in
+        e) find_cmd="sudo find"; cfg_dir="/etc" ;;
+        H) cfg_dir="$cfg_dir $HOME/" ;;
+        c) cfg_dir="$cfg_dir $HOME/.config" ;;
+        s) cfg_dir="$cfg_dir $HOME/.local/bin/scripts";;
+        h) echo "Usage: $prog -[eHcsh]"; exit 0 ;;
+        \?) echo "$prog: invalid option -- '$OPTARG'"; exit 1 ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+
+#case "$1" in
+#    "--etc")  find_cmd="sudo find "; cfg_dir="/etc" ;;
+#    "--home") find_flags=" -maxdepth 1 -type f"; cfg_dir="$HOME" ;;
+#    "--config") find_flags=" -maxdepth 2 -type f"; cfg_dir="$HOME/.config" ;;
+#    "--scripts") find_flags=" -maxdepth 1 -type f"; cfg_dir="$HOME/.local/bin/scripts" ;;
+#    *) cfg_dir="${CODE_DOTFILES:-$CODE/sh/dotfiles}" ;;
+#esac
 
 [ -z "$EDITOR" ] &&  echo "$prog: EDITOR env variable not set" && exit 1
-[ ! -d "$cfg_dir" ] && echo "$prog: $cfg_dir: no such file or directory" && exit 1
+#[ ! -d "$cfg_dir" ] && echo "$prog: $cfg_dir: no such file or directory" && exit 1
 files="$($find_cmd $cfg_dir $find_flags)"
 
 

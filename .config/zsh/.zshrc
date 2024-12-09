@@ -105,7 +105,7 @@ autoload edit-command-line; zle -N edit-command-line
 bindkey '^e' edit-command-line
 bindkey -s '^o' 'codeopen\n'
 bindkey -s '^g' 'chgs\n'
-bindkey -s '^v' 'vicfg\n'
+bindkey -s '^v' 'vicfg -H -c -s\n'
 bindkey -s '^p' 'git pull\n'
 bindkey -s '^u' 'git push\n'
 bindkey -s '^s' 'git status\n'
