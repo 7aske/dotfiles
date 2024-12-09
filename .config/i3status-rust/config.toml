@@ -217,18 +217,18 @@ update = true
 #sync = true
 #update = true
 
-[[block]]
-block = "taskwarrior"
-interval = 60
-format = "$icon $count.eng(w:1)"
-format_singular = "$icon "
-format_everything_done = ""
-warning_threshold = 5
-critical_threshold = 10
-data_location = "~/.config/task"
-[[block.click]]
-button = "left"
-cmd = "wtoggle2 -T taskwarrior-tui"
+#[[block]]
+#block = "taskwarrior"
+#interval = 60
+#format = "$icon $count.eng(w:1)"
+#format_singular = "$icon "
+#format_everything_done = ""
+#warning_threshold = 5
+#critical_threshold = 10
+#data_location = "~/.config/task"
+#[[block.click]]
+#button = "left"
+#cmd = "wtoggle2 -T taskwarrior-tui"
 
 [[block]]
 block = "custom"
