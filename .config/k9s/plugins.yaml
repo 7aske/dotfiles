@@ -33,3 +33,22 @@ plugins:
       - $NAMESPACE
       - --context
       - $CONTEXT
+  log-less-deployment:
+    shortCut: Shift-K
+    description: "logs|less"
+    scopes:
+      - deployments
+      - po
+    command: bash
+    background: false
+    args:
+      - -c
+      - '"$@" | less -S'
+      - dummy-arg
+      - kubectl
+      - logs
+      - deployments/$NAME
+      - -n
+      - $NAMESPACE
+      - --context
+      - $CONTEXT
