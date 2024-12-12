@@ -185,11 +185,18 @@ prompt_docker() {
 }
 
 prompt_kubernetes() {
-  local kube_context=$(kubectl config current-context 2>/dev/null)
+  local kube_context=$(awk '$1 == "current-context:" {print $2}' $KUBECONFIG 2>/dev/null)
   if [[ -n $kube_context ]] &&
     [[ $kube_context != minikube ]] &&
     [[ $kube_context != docker-desktop ]]; then
-    prompt_segment default blue " $kube_context"
+      prompt_segment default blue " $kube_context"
+  fi
+}
+
+prompt_aws() {
+  local aws_profile="$AWS_PROFILE"
+  if [[ -n "$aws_profile" ]]; then
+    prompt_segment default yellow " $aws_profile"
   fi
 }
 
@@ -215,10 +222,21 @@ build_prompt() {
 
 build_rprompt() {
   RETVAL=$?
+  prompt_aws
   prompt_docker
   prompt_kubernetes
 	prompt_status
 }
+
+rp_toggle() {
+  if [ -z "$RPROMPT" ]; then
+    export RPROMPT='%{%f%B%k%}$(build_rprompt)'
+  else
+    export RPROMPT='%{%f%B%k%}$(prompt_status)'
+  fi
+}
+
+bindkey '^t' rp_toggle
 
 RPROMPT='%{%f%B%k%}$(build_rprompt)'
 PROMPT='%{%f%B%k%}$(build_prompt) '
