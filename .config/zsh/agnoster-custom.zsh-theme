@@ -185,7 +185,12 @@ prompt_docker() {
 }
 
 prompt_kubernetes() {
-  local kube_context=$(awk '$1 == "current-context:" {print $2}' $KUBECONFIG 2>/dev/null)
+  local kube_config=${KUBECONFIG:-$HOME/.kube/config}
+  if [[ ! -f $kube_config ]]; then
+    return
+  fi
+
+  local kube_context=$(awk '$1 == "current-context:" {print $2}' $kube_config 2>/dev/null)
   if [[ -n $kube_context ]] &&
     [[ $kube_context != minikube ]] &&
     [[ $kube_context != docker-desktop ]]; then
