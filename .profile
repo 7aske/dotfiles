@@ -7,7 +7,7 @@ export PROFILE_SOURCED=$USER
 # Default programs
 export EDITOR="nvim"
 export BROWSER="brave"
-export FILE="thunar"
+export FILE="nemo"
 export TERMFILE="ranger"
 export READER="zathura"
 export PLAYER="spotify"
