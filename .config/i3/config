@@ -619,7 +619,7 @@ exec_always --no-startup-id flameshot
 exec_always --no-startup-id birdtray
 # exec_always --no-startup-id pamac-tray
 exec_always --no-startup-id pgrep udiskie || udiskie -s -f $file -a --appindicator
-exec_always --no-startup-id pgrep barrier || sleep 3 && barrier
+exec_always --no-startup-id pgrep barrier || (sleep 3 && barrier)
 exec_always --no-startup-id pgrep pidswallow || pidswallow -gl
 exec_always --no-startup-id clipmenud
 exec_always --no-startup-id pgrep unclutter || unclutter --fork --timeout 5 --jitter 10 --ignore-scrolling
