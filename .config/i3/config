@@ -309,7 +309,7 @@ bindsym $mod+Shift+b move container to workspace back_and_forth; workspace back_
 font $font
 for_window [class=".*"] title_format " %title"
 # configure border style <normal|1pixel|pixel xx|none|pixel>
-# hide_edge_borders smart
+hide_edge_borders both
 for_window [class=".*"] border pixel $border_size
 
 # some role configuration
@@ -456,11 +456,14 @@ assign [class="(?i)skype"] $ws9
 assign [class="(?i)viber"] $ws9
 assign [title="WhatsApp"] $ws9
 assign [class="zoom"] zoom
-assign [title="World of Warcraft"] w
-assign [class="steam_app_8930"] w
-assign [class="battle.net.exe"] w
 assign [class="jetbrains-datagrip"] d
 assign [title=".*Micosoft Teams.*"] $ws7
+
+# Open games in specific workspaces
+assign [title="World of Warcraft"] g
+assign [title="Kerbal Space Program"] g
+assign [class="steam_app_.*"] g
+assign [class="battle.net.exe"] w
 
 # Open specific applications in floating mode
 for_window [class="(?i)GParted"] floating enable, border normal
@@ -531,9 +534,11 @@ for_window [class="weather_floating"] floating enable, resize set 75ppt 82ppt, m
 for_window [class="tmux_floating"] floating enable, resize set 70ppt 70ppt, move position center
 
 # games
-for_window [title="^World of Warcraft$"] layout tabbed border none
-for_window [class="steam_app_8930"] layout tabbed border none
+for_window [title="^World of Warcraft$"] layout tabbed, border none
+for_window [title="Kerbal Space Program"] layout tabbed, border none, floating disable
+for_window [class="steam_app_.*"] layout tabbed, border none, floating disable
 for_window [class="(?i)steam"] floating enable, resize set 70ppt 70ppt, move position center
+for_window [class="(?i)epicgameslauncher.exe"] floating enable, resize set 70ppt 70ppt, move position center
 for_window [class="(?i)lutris"] floating enable, move position center
 
 # virtual machines
@@ -749,6 +754,8 @@ gaps outer $gaps_outer
 # workspace specific gaps
 workspace w   gaps inner 0
 workspace w   gaps outer 0
+workspace g   gaps inner 0
+workspace g   gaps outer 0
 workspace v   gaps inner 0
 workspace v   gaps outer 0
 
@@ -756,12 +763,6 @@ workspace v   gaps outer 0
 # gaps inner|outer current|all set|plus|minus <px>
 # gaps inner all set 10
 # gaps outer all plus 5
-
-# Smart gaps (gaps used if only more than one container on the workspace)
-# smart_gaps on
-
-# Smart borders (draw borders around container only if it is not the only container on this workspace) on|no_gaps
-# smart_borders no_gaps
 
 # Press $mod+g to enter the gap mode. Choose o or i for modifying outer/inner gaps. Press one of + / - (in-/decrement for current workspace) or 0 (remove gaps for current workspace). If you also press Shift with these keys, the change will be global for all workspaces.
 bindsym $mod+Shift+g gaps inner all set $gaps_inner; gaps outer all set $gaps_outer; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "gaps" "gaps reset to default"
