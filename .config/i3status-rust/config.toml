@@ -169,7 +169,7 @@ cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/memory"
 [[block]]
 block = "net"
 format = " $icon  "
-format_alt = " ^icon_net_up $speed_down.eng(prefix:K) ^icon_net_down $speed_up.eng(prefix:K) "
+format_alt = " ^icon_net_down $speed_down.eng(prefix:K) ^icon_net_up $speed_up.eng(prefix:K) "
 [[block.click]]
 button = "middle"
 action = "toggle_format"
