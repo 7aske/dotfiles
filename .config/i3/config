@@ -512,7 +512,7 @@ for_window [class="java-lang-Thread"] floating enable, move position center
 for_window [class="mpv"] floating enable, resize set 80 ppt 80 ppt, move position center, fullscreen enable
 for_window [class="octopi"] floating enable
 for_window [class="qt5ct"] floating enable, sticky enable, border normal
-for_window [title=".*Bitwarden.*"] floating enable, resize set 70 ppt 80 ppt, move position center
+for_window [class="(?i)Bitwarden"] floating enable, resize set 70 ppt 80 ppt, move position center
 for_window [title=".*Emulator.*"] floating enable
 for_window [title="File Transfer*"] floating enable
 for_window [title="alsamixer"] floating enable
@@ -624,7 +624,7 @@ exec_always --no-startup-id flameshot
 exec_always --no-startup-id birdtray
 # exec_always --no-startup-id pamac-tray
 exec_always --no-startup-id pgrep udiskie || udiskie -s -f $file -a --appindicator
-exec_always --no-startup-id pgrep barrier || barrier
+exec_always --no-startup-id pgrep barrier || (sleep 3 && barrier)
 exec_always --no-startup-id pgrep pidswallow || pidswallow -gl
 exec_always --no-startup-id clipmenud
 exec_always --no-startup-id pgrep unclutter || unclutter --fork --timeout 5 --jitter 10 --ignore-scrolling

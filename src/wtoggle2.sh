@@ -112,20 +112,41 @@ ensure_screen() {
 	fi
 
 	if [ -z "$screen" ]; then
-        num_screens=$(xrandr --listactivemonitors | sed -n '2,$s/^.*\s\(\S\+\)$/\1/p' | wc -l)
-        mouse_x=$(xdotool getmouselocation | sed -n 's/^x:\s*\([0-9]\+\).*$/\1/p')
-        for monitor in "$(xrandr --listactivemonitors | tail -n +2 | sed -E 's/.*\+([0-9]+)\+0\s+([^ ]+)$/\1 \2/' | sort -n -r)"; do 
-            monitor_x_offset=$(echo $monitor | cut -d ' ' -f1)
-            if [[ $mouse_x -ge $monitor_x_offset ]]; then
-                screen=$(echo $monitor | cut -d ' ' -f2)
-                break
-            fi
-        done
+        screen="$(get_focused_monitor)"
 	fi
 
     if [ -z "$screen" ]; then
 		screen=$(xrandr | sed -n 's/^\(\S\+\).*primary.*$/\1/p')
     fi
+}
+
+get_focused_monitor() {
+    # Get the active window's geometry using xdotool
+    active_window=$(xdotool getactivewindow)
+    window_geometry=$(xdotool getwindowgeometry --shell "$active_window")
+
+    # Extract window position
+    window_x=$(echo "$window_geometry" | grep '^X=' | cut -d= -f2)
+    window_y=$(echo "$window_geometry" | grep '^Y=' | cut -d= -f2)
+
+    # Get monitor information from xrandr
+    monitor_info=$(xrandr --query | grep ' connected')
+
+    # Check which monitor the window belongs to
+    while IFS= read -r line; do
+        monitor_name=$(echo "$line" | awk '{print $1}')
+        monitor_geometry=$(echo "$line" | grep -o '[0-9]\+x[0-9]\++[0-9]\++[0-9]\+')
+        IFS='x+'
+        read -r monitor_width monitor_height monitor_x monitor_y <<< "$monitor_geometry"
+
+        if (( window_x >= monitor_x && window_x < monitor_x + monitor_width )) &&
+           (( window_y >= monitor_y && window_y < monitor_y + monitor_height )); then
+            echo "$monitor_name"
+            return
+        fi
+    done <<< "$monitor_info"
+
+	xrandr | sed -n 's/^\(\S\+\).*primary.*$/\1/p'
 }
 
 parse_dimensions() {
