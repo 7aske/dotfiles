@@ -383,6 +383,7 @@ set $ws8 "8"
 set $ws9 "9"
 
 workspace w output primary
+workspace g output primary
 workspace 1 output primary
 
 # switch to workspace
