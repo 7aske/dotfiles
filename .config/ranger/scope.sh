@@ -29,7 +29,7 @@ preview_images="$5"  # "True" if image previews are enabled, "False" otherwise.
 maxln=200    # Stop after $maxln lines.  Can be used like ls | head -n $maxln
 
 # Find out something about the file:
-mimetype=$(file --mime-type -Lb "$path")
+mimetype=$(xdg-mime query filetype "$path")
 extension=$(/bin/echo "${path##*.}" | awk '{print tolower($0)}')
 
 # Functions:
@@ -49,6 +49,8 @@ safepipe() { "$@"; test $? = 0 -o $? = 141; }
 # Image previews, if enabled in ranger.
 if [ "$preview_images" = "True" ]; then
     case "$mimetype" in
+        model/*) # preview in f3d
+            f3d --config=thumbnail --load-plugins=native --color=0.36,0.50,0.67 --background-color=0.18,0.20,0.25 --verbose=quiet --output="$cached" "$path" && exit 6 || exit 1 ;;
         # Image previews for SVG files, disabled by default.
         image/svg+xml)
            convert "$path" "$cached" && exit 6 || exit 1;;
@@ -57,9 +59,9 @@ if [ "$preview_images" = "True" ]; then
         # unsupported types.
         image/*)
             exit 7;;
-        # Image preview for video, disabled by default.:
-        ###video/*)
-        ###    ffmpegthumbnailer -i "$path" -o "$cached" -s 0 && exit 6 || exit 1;;
+        # Image preview for video
+        video/*)
+            ffmpegthumbnailer -i "$path" -o "$cached" -s 0 && exit 6 || exit 1;;
     esac
 fi
 
