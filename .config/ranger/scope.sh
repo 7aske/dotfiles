@@ -31,11 +31,12 @@ maxln=200    # Stop after $maxln lines.  Can be used like ls | head -n $maxln
 # Find out something about the file:
 mimetype=$(xdg-mime query filetype "$path")
 extension=$(/bin/echo "${path##*.}" | awk '{print tolower($0)}')
+default_size="1920x1080"
 
 # Functions:
 # runs a command and saves its output into $output.  Useful if you need
 # the return value AND want to use the output in a pipe
-try() { output=$(eval '"$@"'); }
+try() { output="$(eval '"$@"')"; }
 
 # writes the output of the previously used "try" command
 dump() { /bin/echo "$output"; }
@@ -49,19 +50,76 @@ safepipe() { "$@"; test $? = 0 -o $? = 141; }
 # Image previews, if enabled in ranger.
 if [ "$preview_images" = "True" ]; then
     case "$mimetype" in
+        ## Font
+        application/font*|application/*opentype)
+            preview_png="/tmp/$(basename "${cached%.*}").png"
+            if fontimage -o "${preview_png}" \
+                         --pixelsize "120" \
+                         --fontname \
+                         --pixelsize "80" \
+                         --text "  ABCDEFGHIJKLMNOPQRSTUVWXYZ  " \
+                         --text "  abcdefghijklmnopqrstuvwxyz  " \
+                         --text "  0123456789.:,;(*!?') ff fl fi ffi ffl  " \
+                         --text "  The quick brown fox jumps over the lazy dog.  " \
+                         "${path}";
+            then
+                convert -- "${preview_png}" "${cached}" \
+                    && rm "${preview_png}" \
+                    && exit 6
+            else
+                exit 1
+            fi
+            ;;
         model/*) # preview in f3d
             f3d --config=thumbnail --load-plugins=native --color=0.36,0.50,0.67 --background-color=0.18,0.20,0.25 --verbose=quiet --output="$cached" "$path" && exit 6 || exit 1 ;;
         # Image previews for SVG files, disabled by default.
-        image/svg+xml)
-           convert "$path" "$cached" && exit 6 || exit 1;;
+        image/x-fuji-raf)
+           exiftool "$path" -previewimage -b  > "$cached" && exit 6 || exit 1 ;;
+        image/svg+xml|image/svg)
+            rsvg-convert --keep-aspect-ratio --width "${default_size%x*}" "${path}" -o "${cached}.png" \
+                && mv "${cached}.png" "${cached}" \
+                && exit 6
+            exit 1;;
+
+            ## PDF
+        application/pdf)
+            pdftoppm -f 1 -l 1 \
+                    -scale-to-x "${default_size%x*}" \
+                    -scale-to-y -1 \
+                    -singlefile \
+                    -jpeg -tiffcompression jpeg \
+                    -- "${path}" "${cached%.*}" \
+                && exit 6 || exit 1;;
         # Image previews for image files. w3mimgdisplay will be called for all
         # image files (unless overriden as above), but might fail for
         # unsupported types.
         image/*)
+            local orientation
+            orientation="$( identify -format '%[EXIF:Orientation]\n' -- "${path}" )"
+            ## If orientation data is present and the image actually
+            ## needs rotating ("1" means no rotation)...
+            if [[ -n "$orientation" && "$orientation" != 1 ]]; then
+                ## ...auto-rotate the image according to the EXIF data.
+                convert -- "${path}" -auto-orient "${cached}" && exit 6
+            fi
+
+
             exit 7;;
         # Image preview for video
+        audio/*)
+            # Get embedded thumbnail
+            ffmpeg -i "${path}" -map 0:v -map -0:V -c copy "${cached}" && exit 6;;
         video/*)
-            ffmpegthumbnailer -i "$path" -o "$cached" -s 0 && exit 6 || exit 1;;
+            # Get embedded thumbnail
+            ffmpeg -i "${path}" -map 0:v -map -0:V -c copy "${cached}" && exit 6
+            # Get frame 10% into video
+            ffmpegthumbnailer -i "${path}" -o "${cached}" -s 0 && exit 6
+            exit 1;;
+    esac
+
+    case "$extension" in
+        exe)
+            wrestool -x -t 14 "$path" -o "$cached" && exit 6 || exit 1 ;;
     esac
 fi
 
@@ -83,7 +141,9 @@ case "$extension" in
     pdf)
         try pdftotext -l 10 -nopgbrk -q "$path" - && \
             { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
-    # BitTorrent Files
+    json)
+        safepipe jq --color-output . "$path" | trim && exit 5;;
+   # BitTorrent Files
     torrent)
         try transmission-show "$path" && { dump | trim; exit 5; } || exit 1;;
     # ODT Files
@@ -98,26 +158,49 @@ case "$extension" in
 esac
 
 case "$mimetype" in
-    # Syntax highlight for text files:
-    text/* | */xml)
-        if [ "$(tput colors)" -ge 256 ]; then
-            pygmentize_format=terminal256
-            highlight_format=xterm256
-        else
+    ## RTF and DOC
+    text/rtf|*msword)
+        ## Preview as text conversion
+        ## note: catdoc does not always work for .doc files
+        ## catdoc: http://www.wagner.pp.ru/~vitus/software/catdoc/
+        catdoc -- "${path}" && exit 5
+        exit 1;;
+    application/vnd.efi.*)
+        iso-info -i "${path}" && exit 5
+        exit 1;;
+    ## DOCX, ePub, FB2 (using markdown)
+    ## You might want to remove "|epub" and/or "|fb2" below if you have
+    ## uncommented other methods to preview those formats
+    *wordprocessingml.document|*/epub+zip|*/x-fictionbook+xml|*/wps-office.docx)
+        ## Preview as markdown conversion
+        pandoc -s -t markdown -- "${path}" && exit 5
+        exit 1;;
+
+    application/octet-stream | application/vnd.microsoft.portable-executable)
+        file --dereference --brief -- "${path}" && exit 5
+        exit 1;;
+
+    application/x-executable | application/x-pie-executable | application/x-sharedlib)
+        readelf -WCa "${path}" && exit 5
+        exit 1;;
+    text/* | application/*)
+        if [ "$(file --mime-type -Lb core_dns.yaml)" = "text/plain" ]; then
             pygmentize_format=terminal
             highlight_format=ansi
+            safepipe highlight --out-format=${highlight_format} "$path" && { dump | trim; exit 5; }
+            safepipe pygmentize -f ${pygmentize_format} "$path" && { dump | trim; exit 6; }
+            exit 2;;
+        else 
+            exit 1
         fi
-        try safepipe highlight --out-format=${highlight_format} "$path" && { dump | trim; exit 5; }
-        try safepipe pygmentize -f ${pygmentize_format} "$path" && { dump | trim; exit 5; }
-        exit 2;;
     # Ascii-previews of images:
     image/*)
         img2txt --gamma=0.6 --width="$width" "$path" && exit 4 || exit 1;;
     # Display information about media files:
-    video/* | audio/*)
-        exiftool "$path" && exit 5
-        # Use sed to remove spaces so the output fits into the narrow window
-        try mediainfo "$path" && { dump | trim | sed 's/  \+:/: /;';  exit 5; } || exit 1;;
+    video/*|audio/*)
+        mediainfo "${path}" | trim && exit 5
+        exiftool "${path}" | trim && exit 5
+        exit 1;;
 esac
 
-exit 1
+echo '----- File Type Classification -----' && file --dereference --brief -- "${path}" && exit 5
