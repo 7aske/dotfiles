@@ -30,6 +30,7 @@ maxln=200    # Stop after $maxln lines.  Can be used like ls | head -n $maxln
 
 # Find out something about the file:
 mimetype=$(xdg-mime query filetype "$path")
+default_mimetype="$(file --mime-type -Lb core_dns.yaml)"
 extension=$(/bin/echo "${path##*.}" | awk '{print tolower($0)}')
 default_size="1920x1080"
 
@@ -184,15 +185,13 @@ case "$mimetype" in
         readelf -WCa "${path}" && exit 5
         exit 1;;
     text/* | application/*)
-        if [ "$(file --mime-type -Lb core_dns.yaml)" = "text/plain" ]; then
+        if [ "$default_mimetype" = "text/plain" ]; then
             pygmentize_format=terminal
             highlight_format=ansi
             safepipe highlight --out-format=${highlight_format} "$path" && { dump | trim; exit 5; }
             safepipe pygmentize -f ${pygmentize_format} "$path" && { dump | trim; exit 6; }
             exit 2;;
-        else 
-            exit 1
-        fi
+        fi ;;
     # Ascii-previews of images:
     image/*)
         img2txt --gamma=0.6 --width="$width" "$path" && exit 4 || exit 1;;
