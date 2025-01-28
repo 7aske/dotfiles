@@ -30,7 +30,7 @@ maxln=200    # Stop after $maxln lines.  Can be used like ls | head -n $maxln
 
 # Find out something about the file:
 mimetype=$(xdg-mime query filetype "$path")
-default_mimetype="$(file --mime-type -Lb core_dns.yaml)"
+default_mimetype="$(file --mime-type -Lb $path)"
 extension=$(/bin/echo "${path##*.}" | awk '{print tolower($0)}')
 default_size="1920x1080"
 
@@ -82,7 +82,7 @@ if [ "$preview_images" = "True" ]; then
                 && exit 6
             exit 1;;
 
-            ## PDF
+        ## PDF
         application/pdf)
             pdftoppm -f 1 -l 1 \
                     -scale-to-x "${default_size%x*}" \
@@ -120,7 +120,10 @@ if [ "$preview_images" = "True" ]; then
 
     case "$extension" in
         exe)
-            wrestool -x -t 14 "$path" -o "$cached" && exit 6 || exit 1 ;;
+            wrestool -x -t 14 "$path" -o "$cached"
+            if [ -e "$cached" ]; then
+                exit 6
+            fi
     esac
 fi
 
@@ -160,7 +163,7 @@ esac
 
 case "$mimetype" in
     ## RTF and DOC
-    text/rtf|*msword)
+    text/rtf|*msword|*/wps-office.doc)
         ## Preview as text conversion
         ## note: catdoc does not always work for .doc files
         ## catdoc: http://www.wagner.pp.ru/~vitus/software/catdoc/
@@ -172,7 +175,7 @@ case "$mimetype" in
     ## DOCX, ePub, FB2 (using markdown)
     ## You might want to remove "|epub" and/or "|fb2" below if you have
     ## uncommented other methods to preview those formats
-    *wordprocessingml.document|*/epub+zip|*/x-fictionbook+xml|*/wps-office.docx)
+    *wordprocessingml.document|*/epub+zip|*/x-fictionbook+xml|*/wps-office.doc|*/wps-office.docx)
         ## Preview as markdown conversion
         pandoc -s -t markdown -- "${path}" && exit 5
         exit 1;;
@@ -185,12 +188,16 @@ case "$mimetype" in
         readelf -WCa "${path}" && exit 5
         exit 1;;
     text/* | application/*)
-        if [ "$default_mimetype" = "text/plain" ]; then
+        echo "mimetype: $mimetype file_mimetype: $default_mimetype extension: $extension"
+        if [[ "$default_mimetype" =~ .*/xml ]]; then
+            cat "$path" | xmllint - --format --output - && { dump | trim; exit 5; }
+            exit 1
+        elif [[ "$default_mimetype" =~ text/.* ]]; then
             pygmentize_format=terminal
             highlight_format=ansi
             safepipe highlight --out-format=${highlight_format} "$path" && { dump | trim; exit 5; }
             safepipe pygmentize -f ${pygmentize_format} "$path" && { dump | trim; exit 6; }
-            exit 2;;
+            exit 2
         fi ;;
     # Ascii-previews of images:
     image/*)
@@ -202,4 +209,6 @@ case "$mimetype" in
         exit 1;;
 esac
 
-echo '----- File Type Classification -----' && file --dereference --brief -- "${path}" && exit 5
+echo '----- File Type Classification -----' && file --dereference --brief -- "${path}" &&
+echo "mimetype: $mimetype file_mimetype: $default_mimetype extension: $extension"
+&& exit 5
