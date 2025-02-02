@@ -191,7 +191,7 @@ prompt_kubernetes() {
   fi
 
   local kube_context=$(awk '$1 == "current-context:" {print $2}' $kube_config 2>/dev/null)
-  if [[ -n $kube_context ]] &&
+  if [[ -n $kube_context ]] && ! [[ "$kube_context" = '""' ]] &&
     [[ $kube_context != minikube ]] &&
     [[ $kube_context != docker-desktop ]]; then
       prompt_segment default blue " $kube_context"
