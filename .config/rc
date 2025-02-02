@@ -65,6 +65,7 @@ alias wpp='_setsid wpp'
 
 alias cls='clear -x'
 alias autoremove='sudo pacman -R $(pacman -Qdtq)'
+alias hl='history | fzf --tac |  sed "s/^ *[0-9]* *//" | xclip -selection clipboard'
 alias v='nvim'
 alias n='nano'
 alias o='xdg-open'
