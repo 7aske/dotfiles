@@ -13,26 +13,34 @@ istty() {
 [ -e ~/.config/zsh/antigen.zsh ] && source ~/.config/zsh/antigen.zsh
 
 antigen use oh-my-zsh
-#antigen bundle aws
+antigen bundle ael-code/zsh-colored-man-pages
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-syntax-highlighting
+
+antigen bundle argocd
+antigen bundle aws
+antigen bundle colored-man-pages
+antigen bundle command-not-found
+antigen bundle direnv
 antigen bundle docker
 antigen bundle docker-compose
-antigen bundle kubectl
-antigen bundle mvn
+antigen bundle fd
+antigen bundle gitignore
 antigen bundle gradle
+antigen bundle helm
+antigen bundle history-substring-search
+antigen bundle kubectl
+antigen bundle minikube
+antigen bundle mvn
 antigen bundle npm
 antigen bundle pip
 antigen bundle rust
-antigen bundle command-not-found
 antigen bundle virtualenv
-antigen bundle gitignore
+antigen bundle emoji
 antigen bundle MichaelAquilina/zsh-you-should-use
 if [ -x "$(command -v notify-send 2>/dev/null)" ]; then
 	antigen bundle MichaelAquilina/zsh-auto-notify
 fi
-antigen bundle ael-code/zsh-colored-man-pages
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle fd
 
 if [ ! $(istty) ]; then
 	[ -e ~/.config/zsh/agnoster-custom.zsh-theme ] && source ~/.config/zsh/agnoster-custom.zsh-theme
@@ -130,3 +138,6 @@ function toggle-autocomplete {
         unset ZSH_AUTOSUGGEST_HISTORY_IGNORE
     fi
 }
+
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
