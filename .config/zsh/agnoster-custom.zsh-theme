@@ -234,13 +234,16 @@ build_rprompt() {
 }
 
 rp_toggle() {
-  if [ -z "$RPROMPT" ]; then
+  if [ -z "$RPROMPT_TOGGLE" ]; then
+    export RPROMPT_TOGGLE=1
     export RPROMPT='%{%f%B%k%}$(build_rprompt)'
   else
+    unset  RPROMPT_TOGGLE
     export RPROMPT='%{%f%B%k%}$(prompt_status)'
   fi
 }
 
+zle -N rp_toggle
 bindkey '^t' rp_toggle
 
 RPROMPT='%{%f%B%k%}$(build_rprompt)'
