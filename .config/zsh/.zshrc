@@ -30,6 +30,7 @@ antigen bundle gradle
 antigen bundle helm
 antigen bundle history-substring-search
 antigen bundle kubectl
+antigen bundle kubectx
 antigen bundle minikube
 antigen bundle mvn
 antigen bundle npm

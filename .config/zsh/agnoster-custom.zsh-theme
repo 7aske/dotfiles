@@ -41,6 +41,12 @@ case ${SOLARIZED_THEME:-dark} in
     *)     CURRENT_FG='black';;
 esac
 
+export ZSH_THEME_AWS_PROFILE_PREFIX=" "
+export ZSH_THEME_AWS_PROFILE_SUFFIX=""
+export ZSH_THEME_AWS_REGION_PREFIX=""
+export ZSH_THEME_AWS_REGION_SUFFIX=""
+export SHOW_AWS_PROMPT=false
+
 # Special Powerline characters
 
 () {
@@ -191,18 +197,59 @@ prompt_kubernetes() {
   fi
 
   local kube_context=$(awk '$1 == "current-context:" {print $2}' $kube_config 2>/dev/null)
-  if [[ -n $kube_context ]] && ! [[ "$kube_context" = '""' ]] &&
-    [[ $kube_context != minikube ]] &&
-    [[ $kube_context != docker-desktop ]]; then
+  if [[ -n $kube_context ]] && ! [[ "$kube_context" = '""' ]]; then
       prompt_segment default blue " $kube_context"
   fi
 }
 
+prompt_kubectx() {
+  (( $+commands[kubectl] )) || return
+  local color=blue
+
+  local current_ctx=$(kubectl config current-context 2> /dev/null)
+
+  [[ -n "$current_ctx" ]] || return
+
+  if [[ "$current_ctx" =~ ".*prod.*" ]]; then
+    color=red
+  fi
+
+  prompt_segment default $color " ${kubectx_mapping[$current_ctx]:-${current_ctx:gs/%/%%}}"
+}
+
 prompt_aws() {
   local aws_profile="$AWS_PROFILE"
-  if [[ -n "$aws_profile" ]]; then
-    prompt_segment default yellow " $aws_profile"
+  local color=yellow
+  
+  if [[ "$aws_profile" =~ ".*prod.*" ]]; then
+    color=red
   fi
+
+  if [[ -n "$aws_profile" ]]; then
+    prompt_segment default $color " $aws_profile"
+  fi
+}
+
+prompt_aws2() {
+  local aws_profile="$AWS_PROFILE"
+  local _aws_to_show
+  local region="${AWS_REGION:-${AWS_DEFAULT_REGION:-$AWS_PROFILE_REGION}}"
+  local color=yellow
+
+  if [[ -n "$AWS_PROFILE" ]];then
+    _aws_to_show+="${ZSH_THEME_AWS_PROFILE_PREFIX="<aws:"}${AWS_PROFILE}${ZSH_THEME_AWS_PROFILE_SUFFIX=">"}"
+  fi
+
+  if [[ -n "$region" ]]; then
+    [[ -n "$_aws_to_show" ]] && _aws_to_show+="${ZSH_THEME_AWS_DIVIDER=" "}"
+    _aws_to_show+="${ZSH_THEME_AWS_REGION_PREFIX="<region:"}${region}${ZSH_THEME_AWS_REGION_SUFFIX=">"}"
+  fi
+
+  if [[ "$aws_profile" =~ ".*prod.*" ]]; then
+    color=red
+  fi
+
+  prompt_segment default $color "$_aws_to_show"
 }
 
 # End the prompt, closing any open segments
@@ -227,9 +274,9 @@ build_prompt() {
 
 build_rprompt() {
   RETVAL=$?
-  prompt_aws
+  prompt_aws2
   prompt_docker
-  prompt_kubernetes
+  prompt_kubectx
 	prompt_status
 }
 
