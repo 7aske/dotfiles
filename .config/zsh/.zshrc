@@ -2,6 +2,9 @@
 
 HISTFILE=~/.cache/zsh/history
 ADOTDIR=~/.config/antigen
+AWS_REGION_FILE="$HOME/.aws_region"
+AWS_PROFILE_FILE="$HOME/.aws_profile"
+AWS_CONFIG_FILE="$HOME/.aws/config"
 
 istty() {
 	case $(tty) in 
@@ -9,6 +12,9 @@ istty() {
 		(*) return 1;;
 	esac
 }
+
+[ -e "$AWS_PROFILE_FILE" ] && source "$AWS_PROFILE_FILE"
+[ -e "$AWS_REGION_FILE" ] && source "$AWS_REGION_FILE"
 
 [ -e ~/.config/zsh/antigen.zsh ] && source ~/.config/zsh/antigen.zsh
 
@@ -43,7 +49,7 @@ if [ -x "$(command -v notify-send 2>/dev/null)" ]; then
 	antigen bundle MichaelAquilina/zsh-auto-notify
 fi
 
-if [ ! $(istty) ]; then
+if ! (( $(istty) )); then
 	[ -e ~/.config/zsh/agnoster-custom.zsh-theme ] && source ~/.config/zsh/agnoster-custom.zsh-theme
 else
 	antigen theme risto
@@ -63,11 +69,11 @@ stty stop undef		# Disable ctrl-s to freeze terminal.
 
 # Basic auto/tab complete:
 setopt correct
-autoload -Uz compinit
+autoload -Uz compinit bashcompinit
+compinit && bashcompinit
 fpath+=~/.zfunc
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" menu select
 zmodload zsh/complist
-compinit
 setopt completealiases
 _comp_options+=(globdots)		# Include hidden files.
 COMPLETION_WAITING_DOTS="true"
@@ -137,6 +143,38 @@ function toggle-autocomplete {
         export ZSH_AUTOSUGGEST_HISTORY_IGNORE=\*
     else
         unset ZSH_AUTOSUGGEST_HISTORY_IGNORE
+    fi
+}
+
+function aws_profile () {
+    if [ "$1" = "-u" ]; then
+        unset AWS_PROFILE
+        rm -f "$AWS_PROFILE_FILE"
+        return
+    fi
+
+    local PROFILES=($(cat "$AWS_CONFIG_FILE" | grep profile | awk '{print substr($2, 1, length($2)-1)}'))
+        
+    profile=$(printf '%s\n' "${PROFILES[@]}" | fzf --header="Select AWS Profile")
+    if [ -n "$profile" ]; then
+        export AWS_PROFILE=$profile
+        echo "AWS_PROFILE=$profile" > "$AWS_PROFILE_FILE"
+    fi
+}
+
+function aws_region() {
+    if [ "$1" = "-u" ]; then
+        unset AWS_DEFAULT_REGION
+        rm -f "$AWS_REGION_FILE"
+        return
+    fi
+
+    local REGIONS=($(cat "$AWS_CONFIG_FILE" | grep region | awk '{print $3}' | sort | uniq))
+
+    region=$(printf '%s\n' "${REGIONS[@]}" | fzf --header="Select AWS Region")
+    if [ -n "$region" ]; then
+        export AWS_DEFAULT_REGION=$region
+        echo "AWS_DEFAULT_REGION=$region" >> "$AWS_REGION_FILE"
     fi
 }
 
