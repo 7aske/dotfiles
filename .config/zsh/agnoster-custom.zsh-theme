@@ -190,16 +190,31 @@ prompt_docker() {
   fi
 }
 
+# Faster since it doesn't run kubectl
 prompt_kubernetes() {
   local kube_config=${KUBECONFIG:-$HOME/.kube/config}
   if [[ ! -f $kube_config ]]; then
     return
   fi
+  local color=blue
 
-  local kube_context=$(awk '$1 == "current-context:" {print $2}' $kube_config 2>/dev/null)
-  if [[ -n $kube_context ]] && ! [[ "$kube_context" = '""' ]]; then
-      prompt_segment default blue " $kube_context"
+  local current_ctx=$(awk '$1 == "current-context:" {
+    if ($2 ~ /^".*"$/) {
+      print substr($2, 2, length($2) - 2) 
+    } else {
+      print $2 
+    } 
+  }' $kube_config  2>/dev/null)
+
+  if [[ -z "$current_ctx" ]]; then
+    return
   fi
+
+  if [[ "$current_ctx" =~ ".*prod.*" ]]; then
+    color=red
+  fi
+
+  prompt_segment default $color " ${kubectx_mapping[$current_ctx]:-${current_ctx:gs/%/%%}}"
 }
 
 prompt_kubectx() {
@@ -276,7 +291,7 @@ build_rprompt() {
   RETVAL=$?
   prompt_aws2
   prompt_docker
-  prompt_kubectx
+  prompt_kubernetes
 	prompt_status
 }
 
