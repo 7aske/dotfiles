@@ -85,9 +85,9 @@ bindsym $mod+Mod1+period       exec --no-startup-id padefault vol +5%;          
 bindsym $mod+Mod1+slash        exec --no-startup-id padefault mute-all;                          exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
 bindsym $mod+Mod1+comma        exec --no-startup-id padefault vol -5%;                           exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
 
-bindsym $mod+Ctrl+Mod1+period  exec --no-startup-id padefault volume-focus +5%
-bindsym $mod+Ctrl+Mod1+slash   exec --no-startup-id padefault volume-focus 100%
-bindsym $mod+Ctrl+Mod1+comma   exec --no-startup-id padefault volume-focus -5%
+bindsym $mod+Shift+Mod1+period  exec --no-startup-id padefault volume-focus +5%
+bindsym $mod+Shift+Mod1+slash   exec --no-startup-id padefault volume-focus 100%
+bindsym $mod+Shift+Mod1+comma   exec --no-startup-id padefault volume-focus -5%
 
 # Pulse Audio controls
 # 7aske-scripts
@@ -97,8 +97,8 @@ bindsym XF86AudioMute        exec --no-startup-id padefault mute-all;     exec -
 bindsym XF86AudioMicMute     exec --no-startup-id padefault mute-all-src; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
 bindsym Shift+XF86AudioRaiseVolume exec --no-startup-id BLOCK_BUTTON=4 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
 bindsym Shift+XF86AudioLowerVolume exec --no-startup-id BLOCK_BUTTON=5 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
-bindsym Ctrl+Mod1+XF86AudioRaiseVolume exec --no-startup-id padefault volume-focus +1%
-bindsym Ctrl+Mod1+XF86AudioLowerVolume exec --no-startup-id padefault volume-focus -1%
+bindsym Ctrl+Shift+XF86AudioRaiseVolume exec --no-startup-id padefault volume-focus +1%
+bindsym Ctrl+Shift+XF86AudioLowerVolume exec --no-startup-id padefault volume-focus -1%
 bindsym Mod1+XF86AudioRaiseVolume exec --no-startup-id padefault mic-volume +1%; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
 bindsym Mod1+XF86AudioLowerVolume exec --no-startup-id padefault mic-volume -1%; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
 
@@ -269,11 +269,12 @@ bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
+set $move_amount 30px
 ## alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left  move left
-bindsym $mod+Shift+Down  move down
-bindsym $mod+Shift+Up    move up
-bindsym $mod+Shift+Right move right
+bindsym $mod+Shift+Left  move left  $move_amount
+bindsym $mod+Shift+Down  move down  $move_amount
+bindsym $mod+Shift+Up    move up    $move_amount
+bindsym $mod+Shift+Right move right $move_amount
 
 
 # alternatively, you can use the cursor keys:
@@ -288,10 +289,10 @@ bindsym $mod+Ctrl+Shift+k mark swap; focus up;    swap container with mark swap;
 bindsym $mod+Ctrl+Shift+l mark swap; focus right; swap container with mark swap; unmark swap; focus right
 
 # resizing
+bindsym $mod+Mod1+Right resize grow   width  10 px or 10 ppt
 bindsym $mod+Mod1+Left  resize shrink width  10 px or 10 ppt
 bindsym $mod+Mod1+Down  resize grow   height 10 px or 10 ppt
 bindsym $mod+Mod1+Up    resize shrink height 10 px or 10 ppt
-bindsym $mod+Mod1+Right resize grow   width  10 px or 10 ppt
 
 # workspace back and forth (with/without active container)
 bindsym Mod1+Shift+Tab workspace prev
@@ -334,7 +335,10 @@ bindsym $mod+q kill
 #bindsym $mod+space exec --no-startup-id i3-swap-master
 
 # split orientation
-bindsym $mod+space split toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration 'toggled tiling'
+#bindsym $mod+space split toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration 'toggled tiling'
+
+# toggle float/tile focus
+bindsym $mod+space focus mode_toggle
 
 # toggle fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "fullscreen" "fullscreen toggled"
