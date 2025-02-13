@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 context="$(kubectl config current-context)"
-
 function exit_if_empty() {
+
     [ -z "$1" ] && echo "Must select a $2" && exit 1
 }
 
@@ -51,8 +51,8 @@ exit_if_empty "$port" "port"
 
 local_port="$(get_port)"
 
-trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
 kubectl --context $context -n $namespace port-forward deployments/$deployment "$local_port:$port" &
+trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
 
 echo "Port forwarding $deployment:$port to localhost:$local_port"
 
