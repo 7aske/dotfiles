@@ -30,6 +30,7 @@ antigen bundle command-not-found
 antigen bundle direnv
 antigen bundle docker
 antigen bundle docker-compose
+antigen bundle emoji
 antigen bundle fd
 antigen bundle gitignore
 antigen bundle gradle
@@ -158,7 +159,7 @@ function aws_profile () {
     profile=$(printf '%s\n' "${PROFILES[@]}" | fzf --header="Select AWS Profile")
     if [ -n "$profile" ]; then
         export AWS_PROFILE=$profile
-        echo "AWS_PROFILE=$profile" > "$AWS_PROFILE_FILE"
+        echo "export AWS_PROFILE=$profile" > "$AWS_PROFILE_FILE"
     fi
 }
 
@@ -174,7 +175,7 @@ function aws_region() {
     region=$(printf '%s\n' "${REGIONS[@]}" | fzf --header="Select AWS Region")
     if [ -n "$region" ]; then
         export AWS_DEFAULT_REGION=$region
-        echo "AWS_DEFAULT_REGION=$region" >> "$AWS_REGION_FILE"
+        echo "export AWS_DEFAULT_REGION=$region" >> "$AWS_REGION_FILE"
     fi
 }
 
