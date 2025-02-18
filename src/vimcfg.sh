@@ -38,14 +38,30 @@ else
 	config_file="$(echo $files | sed 's/\ /\n/g' | grep -v ".git" | fzf --cycle --reverse )"
 fi
 
+git_root=""
+if git -C "$(basename $config_file)" rev-parse --is-inside-work-tree &>/dev/null; then
+    git_root="$(git -C $(basename $config_file) rev-parse --show-toplevel)"
+fi
+
+[ -z "$config_file" ] && exit 0
+[ -w "$config_file" ] && 
+
 cmd="$EDITOR $config_file"
 [ ! -w "$config_file" ] && cmd="sudo $EDITOR $config_file"
 
 if [ -f "$config_file" ]; then
 	if [ ! -t 1 ]; then
-		$TERMINAL -e $cmd
+        if [ -n "$git_root" ]; then
+            $TERMINAL -d "$git_root" -e $cmd
+        else
+            $TERMINAL -e $cmd
+        fi
 	else
-		$cmd
+        if [ -n "$git_root" ]; then
+            cd "$git_root" && $cmd
+        else 
+            $cmd
+        fi
 	fi
 elif [ -n "$config_file" ]; then
     echo "$prog: $config_file: no such file or directory" && exit 1
