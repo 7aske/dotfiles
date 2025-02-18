@@ -8,6 +8,8 @@ separator = "<span font='13'></span>"
 [icons]
 icons = "awesome6"
 [icons.overrides]
+3d_printer="󰹛"
+3d_printer_printing="󱇀"
 headphones = "󰋋"
 headphones_not_connected = "󰟎"
 bat_charging = "󰂄"
@@ -75,6 +77,30 @@ action = "volume_up"
 [[block.click]]
 button = "down"
 action = "volume_down"
+
+[[block]]
+block = "custom"
+command = "~/.local/bin/statusbar/klipper -j"
+interval = 60
+json = true
+format =" $icon $text"
+hide_when_empty = true
+signal=9
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/klipper -j"
+sync = true
+update = true
+[[block.click]]
+button = "middle"
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/klipper -j"
+sync = true
+update = true
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/klipper -j"
+sync = true
+update = true
 
 [[block]]
 block = "custom"
