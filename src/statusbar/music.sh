@@ -16,8 +16,12 @@ fi
 
 PLAYER_ARG="--player=$PLAYER,%any"
 PLAYER_STATUS="$(playerctl "$PLAYER_ARG" status 2>&1)"
+if [ "$PLAYER_STATUS" = "No players found" ] && [ $BLOCK_BUTTON -gt 3 ]; then
+    exit 0
+fi
+
 if [ "$PLAYER_STATUS" = "No players found" ] && [ -n "$BLOCK_BUTTON" ]; then
-    notify-send -i "$PLAYER" "$PLAYER" "starting"
+    notify-send -i "$PLAYER" "$PLAYER" "$PLAYER starting"
     i3-msg "exec --no-startup-id wtoggle2 -d 75%x75% $PLAYER" >/dev/null 2>&1
 	exit 0
 fi
