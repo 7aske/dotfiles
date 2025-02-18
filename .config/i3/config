@@ -149,7 +149,17 @@ bindsym $mod+Mod1+semicolon exec --no-startup-id rofi -dmenu -p "new session" | 
 bindsym $mod+F10           exec --no-startup-id echo 0 | dmenu -p 'screen: ' -fn '$dmenu_font' | xargs screencam -n
 bindsym $mod+Shift+F10     exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/rec-status
 
-bindsym $mod+Mod1+l            exec --no-startup-id wtoggle2 -d 75%x75% lutris
+set $mode_lutris games: rofi-(l)utris (L)utris (s)team
+bindsym $mod+Mod1+l mode "$mode_lutris"
+mode "$mode_lutris" {
+    bindsym l       exec --no-startup-id rofi-lutris;                       mode default
+    bindsym Shift+l exec --no-startup-id wtoggle2 -d 75%x75% lutris;        mode default
+    bindsym s       exec --no-startup-id wtoggle2 -d 75%x75% steam-runtime; mode default
+    # exit system mode: "Enter" or "Escape"
+    bindsym Return mode default
+    bindsym Escape mode default
+}
+
 bindsym $mod+Mod1+Shift+d      exec --no-startup-id gnome-disks
 bindsym $mod+Shift+d           exec --no-startup-id wtoggle2 -T -f lazydocker
 bindsym $mod+bracketleft       exec --no-startup-id wtoggle2 -T -d60%x60% taskwarrior-tui
@@ -165,7 +175,6 @@ bindsym $mod+Mod1+r            exec --no-startup-id $terminal -c newsboat_float 
 bindsym $mod+Mod1+Ctrl+r       exec --no-startup-id $terminal -c newsboat_float -e podboat
 bindsym $mod+Scroll_Lock       exec --no-startup-id wtoggle2 bitwarden-desktop
 bindsym $mod+Pause       	   exec --no-startup-id sleep 1 && xset dpms force off
-bindsym $mod+y 				   workspace y; exec --no-startup-id $browser "https://youtube.com"
 
 #bindsym Print            --release exec --no-startup-id maim ~/$(date +%s).png && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot" "saved to homedir"
 #bindsym $mod+Print       --release exec --no-startup-id maim -i $(xdotool getactivewindow) ~/$(date +%s).png && notify-send -i screengrab --hint=int:transient:1 -t $notif_duration "screenshot (window)" "saved to homedir"
