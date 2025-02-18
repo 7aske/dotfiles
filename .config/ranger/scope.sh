@@ -83,6 +83,10 @@ if [ "$preview_images" = "True" ]; then
             exit 1;;
 
         ## PDF
+        application/x-openscad)
+            openscad  "${path}" -o "${cached}.png" \
+            && mv "${cached}.png" "${cached}" \
+            && exit 6 || exit 1 ;;
         application/pdf)
             pdftoppm -f 1 -l 1 \
                     -scale-to-x "${default_size%x*}" \
