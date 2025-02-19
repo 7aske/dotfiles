@@ -10,6 +10,11 @@ icons = "awesome6"
 [icons.overrides]
 3d_printer="󰹛"
 3d_printer_printing="󱇀"
+3d_printer_paused="󰏤"
+3d_printer_standby="󰐫"
+3d_printer_complete=""
+3d_printer_error=""
+3d_printer_canceled="󰜺"
 headphones = "󰋋"
 headphones_not_connected = "󰟎"
 bat_charging = "󰂄"
@@ -83,7 +88,7 @@ block = "custom"
 command = "~/.local/bin/statusbar/klipper -j"
 interval = 60
 json = true
-format =" $icon $text"
+format =" $icon $text "
 hide_when_empty = true
 signal=9
 [[block.click]]
