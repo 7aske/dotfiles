@@ -8,7 +8,7 @@ SWITCH="$HOME/.cache/statusbar_$(basename $0)"
 tempfile="/tmp/yup_prev"
 count="$(yup -c)"
 
-prev_count="$(cat "$tempfile")"
+prev_count="$(cat "$tempfile" || echo 0)"
 
 if (( $prev_count < $count )); then
 	notify-send -i package -u low "updates available" "$(yup -l)"

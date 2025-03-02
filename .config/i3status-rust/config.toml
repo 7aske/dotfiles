@@ -88,7 +88,7 @@ block = "custom"
 command = "~/.local/bin/statusbar/klipper -j"
 interval = 60
 json = true
-format =" $icon $text "
+format =" $icon $text"
 hide_when_empty = true
 signal=9
 [[block.click]]
@@ -287,7 +287,7 @@ update = true
 block = "packages"
 package_manager = ["pacman", "aur"]
 format = " $icon $total.eng(w:2) "
-format_up_to_date = " $icon "
+format_up_to_date = ""
 error_interval = 300
 aur_command = "yay -Qua"
 critical_updates_regex = "linux"
@@ -307,6 +307,14 @@ button = "right"
 cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/packages"
 sync = true
 update = true
+
+# To trigger notifications
+[[block]]
+block = "custom"
+interval = 600
+command = "~/.local/bin/statusbar/packages"
+format = ""
+hide_when_empty = true
 
 [[block]]
 block = "privacy"
