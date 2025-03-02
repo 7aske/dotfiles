@@ -267,6 +267,7 @@ command = "~/.local/bin/statusbar/cgs -j"
 interval = 60
 json = true
 hide_when_empty = true
+signal = 7
 [[block.click]]
 button = "left"
 cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/cgs -j"
