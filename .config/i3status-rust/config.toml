@@ -312,7 +312,7 @@ update = true
 # To trigger notifications
 [[block]]
 block = "custom"
-interval = 600
+interval = 60
 command = "~/.local/bin/statusbar/packages"
 format = ""
 hide_when_empty = true
