@@ -98,6 +98,8 @@ _format_time() {
     fi
 }
 
+KLIPPER_NOTIFY_THRESHOLD="${KLIPPER_NOTIFY_THRESHOLD:-5}"
+
 if [ -z "$KLIPPER_HOST" ]; then 
     _output "error" ""
     exit 0
@@ -131,7 +133,7 @@ _notify_progress() {
         local escaped_filename="$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$filename")"
         local thumbnail="$(curl -s "$KLIPPER_HOST/server/files/thumbnails?filename=$escaped_filename" \
             | jq -r '.result | max_by(.width) | .thumbnail_path' \
-            | xargs perl -MURI::Escape -e 'print uri_escape($ARGV[0]);')"
+            | xargs -I% perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' '%')"
         [ -e "$thumbnail" ] || curl -s "$KLIPPER_HOST/server/files/gcodes/$thumbnail" > "/tmp/$thumbnail"
         body="$(cat << EOF
 Duration: ${print_hours} ${print_minutes}
@@ -155,7 +157,7 @@ EOF
     esac
 }
 
-if [ -n "$filename"] && [ -e "$tmpfilename" ]; then
+if [ -n "$filename" ] && [ -e "$tmpfilename" ]; then
     last_percentage="$(cat "$tmpfilename" || echo 0)"
     if ! [[ "$last_percentage" =~ ^[+-]?[0-9]+\.?[0-9]*$ ]]; then
         last_percentage=0
@@ -164,8 +166,8 @@ else
     last_percentage=0
 fi
 
-if [ "$(printf "%0.f > (%.0f + 5)\n" "$percent" "$last_percentage" | bc -l)" -eq "1" ] && [ "$status" = "printing" ]; then
-    echo "$percent" > "/tmp/$filename"
+if [ "$(printf "%0.f > (%.0f + $KLIPPER_NOTIFY_THRESHOLD)\n" "$percent" "$last_percentage" | bc -l)" -eq "1" ] && [ "$status" = "printing" ]; then
+    echo "$percent" > "$tmpfilename"
     if [ -z "$BLOCK_BUTTON" ]; then
         _notify_progress &
     fi
