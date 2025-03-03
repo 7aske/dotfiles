@@ -35,6 +35,10 @@
 # Different icons and json_colors can be set for each status type.
 
 SWITCH="$HOME/.cache/statusbar_$(basename $0)"
+_toggle_switch() {
+    [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH"; pkill "-SIGRTMIN+${1:-'9'}" i3status-rs
+}
+ZWSP="​"
 
 while getopts "j" opt; do
     case $opt in
@@ -157,8 +161,8 @@ EOF
     esac
 }
 
-if [ -n "$filename" ] && [ -e "$tmpfilename" ]; then
-    last_percentage="$(cat "$tmpfilename" || echo 0)"
+if [ -n "$filename" ] && [ -e "$tmpfile" ]; then
+    last_percentage="$(cat "$tmpfile" || echo 0)"
     if ! [[ "$last_percentage" =~ ^[+-]?[0-9]+\.?[0-9]*$ ]]; then
         last_percentage=0
     fi
@@ -167,7 +171,7 @@ else
 fi
 
 if [ "$(printf "%0.f > (%.0f + $KLIPPER_NOTIFY_THRESHOLD)\n" "$percent" "$last_percentage" | bc -l)" -eq "1" ] && [ "$status" = "printing" ]; then
-    echo "$percent" > "$tmpfilename"
+    echo "$percent" > "$tmpfile"
     if [ -z "$BLOCK_BUTTON" ]; then
         _notify_progress &
     fi
@@ -175,21 +179,21 @@ fi
 
 case $BLOCK_BUTTON in 
     1) xdg-open $KLIPPER_HOST ;;
-    2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH"; pkill -SIGRTMIN+9 i3status-rs ;;
+    2) _toggle_switch ;;
     3) _notify_progress &;;
 esac
 
 if [ "$status" == "printing" ]; then
     if [ -e "$SWITCH" ]; then
-        text="$(printf "%.0f%% %s%s" "$percent" "$remaining_hours" "$remaining_minutes")"
+        text="$(printf "%.0f%% %s%s " "$percent" "$remaining_hours" "$remaining_minutes")"
     else
-        text="$(printf "%.0f%%" "$percent")"
+        text="$(printf "%.0f%% " "$percent")"
     fi
 else
     if [ -e "$SWITCH" ]; then
         text="${status^}"
     else
-        text=" "
+        text="$ZWSP"
     fi
 fi
 
