@@ -335,7 +335,7 @@ bindsym --release button2 kill
 bindsym $mod+c floating enable; move position center
 
 # change borders
-bindsym $mod+u border toggle $border_size; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "border" "border toggled"
+bindsym $mod+u border toggle $border_size; exec --no-startup-id notify-send -i window --hint=int:transient:1 -t $notif_duration "border" "border toggled"
 
 # kill focused window
 bindsym $mod+q kill
@@ -350,13 +350,13 @@ bindsym $mod+q kill
 bindsym $mod+space focus mode_toggle
 
 # toggle fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "fullscreen" "fullscreen toggled"
+bindsym $mod+f fullscreen toggle; exec --no-startup-id notify-send -i window --hint=int:transient:1 -t $notif_duration "fullscreen" "fullscreen toggled"
 
 # Toggle floating/tiling
-bindsym $mod+t floating toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "floating" "floating toggled"
+bindsym $mod+t floating toggle; exec --no-startup-id notify-send -i focus-windows --hint=int:transient:1 -t $notif_duration "floating" "floating toggled"
 
 # toggle sticky
-bindsym $mod+Mod1+s sticky toggle; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "sticky" "sticky toggled"
+bindsym $mod+Mod1+s sticky toggle; exec --no-startup-id notify-send -i window-pin --hint=int:transient:1 -t $notif_duration "sticky" "sticky toggled"
 
 # switch to workspace with urgent window automatically
 # for_window [urgent="latest"] focus
@@ -571,10 +571,10 @@ for_window [class="VirtualBox Manager"] floating disable, border 2
 # misc commands
 
 # reload the configuration file
-bindsym $mod+Shift+c reload; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "config" "i3 config reloaded"
+bindsym $mod+Shift+c reload; exec --no-startup-id notify-send -i configure --hint=int:transient:1 -t $notif_duration "config" "i3 config reloaded"
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "restart" "i3 restarted"
+bindsym $mod+Shift+r restart; exec --no-startup-id notify-send -i system-restart --hint=int:transient:1 -t $notif_duration "restart" "i3 restarted"
 
 bindsym $mod+F4 exec --no-startup-id i3-layout-manager
 
@@ -781,7 +781,7 @@ workspace v   gaps outer 0
 # gaps outer all plus 5
 
 # Press $mod+g to enter the gap mode. Choose o or i for modifying outer/inner gaps. Press one of + / - (in-/decrement for current workspace) or 0 (remove gaps for current workspace). If you also press Shift with these keys, the change will be global for all workspaces.
-bindsym $mod+Shift+g gaps inner all set $gaps_inner; gaps outer all set $gaps_outer; exec --no-startup-id notify-send --hint=int:transient:1 -t $notif_duration "gaps" "gaps reset to default"
+bindsym $mod+Shift+g gaps inner all set $gaps_inner; gaps outer all set $gaps_outer; exec --no-startup-id notify-send -i bordertool --hint=int:transient:1 -t $notif_duration "gaps" "gaps reset to default"
 set $mode_gaps       Gaps: (o) outer, (i) inner, (0)px (1)0px, (2)0px, (3)0px, (4)0px
 set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
 set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
