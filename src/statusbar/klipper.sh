@@ -52,28 +52,28 @@ json_icons[paused]="3d_printer_paused"
 json_icons[standby]="3d_printer_standby"
 json_icons[complete]="3d_printer_complete"
 json_icons[error]="3d_printer_error"
-json_icons[canceled]="3d_printer_canceled"
+json_icons[cancelled]="3d_printer_cancelled"
 declare -A icons
 icons[printing]="󱇀"
 icons[paused]="󰏤"
 icons[standby]="󰐫"
 icons[complete]=""
 icons[error]=""
-icons[canceled]="󰜺"
+icons[cancelled]="󰜺"
 declare -A json_colors
 json_colors[printing]="Warning"
 json_colors[paused]="Warning"
 json_colors[standby]="Idle"
 json_colors[complete]="Good"
 json_colors[error]="Critical"
-json_colors[canceled]="Idle"
+json_colors[cancelled]="Idle"
 declare -A colors
 colors[printing]="#EBCB8B"
 colors[paused]="#EBCB8B"
 colors[standby]="#5E81AC"
 colors[complete]="#A3BE8C"
 colors[error]="#BF616A"
-colors[canceled]="#5E81AC"
+colors[cancelled]="#5E81AC"
 
 _output() {
     local color
