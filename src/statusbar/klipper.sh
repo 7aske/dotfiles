@@ -112,6 +112,11 @@ fi
 progress=$(curl -s $KLIPPER_HOST/printer/objects/query?display_status | jq -r '.result.status.display_status.progress')
 print_stats=$(curl -s $KLIPPER_HOST/printer/objects/query?print_stats | jq -r '.result.status.print_stats')
 
+if [ -z "$progress" ] || [ -z "$print_stats" ]; then
+    _output "error" ""
+    exit 0
+fi
+
 print_duration="$(jq -r '.print_duration' <<< "$print_stats")"
 filename="$(jq -r '.filename' <<< "$print_stats")"
 status="$(jq -r '.state' <<< "$print_stats")"
