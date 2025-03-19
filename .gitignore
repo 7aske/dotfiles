@@ -1,34 +1,34 @@
 __pycache__
 
-.config/conky/.conkycolors
+config/conky/.conkycolors
 
-.config/nvim/.netrwhist
-.config/nvim/spell
+config/nvim/.netrwhist
+config/nvim/spell
 
-.config/zsh/.zshrc.zwc
-.config/zsh/.zcompdump
+config/zsh/.zshrc.zwc
+config/zsh/.zcompdump
 
-.config/mpd/database
-.config/mpd/playlists
-.config/mpd/pid
-.config/mpd/state
-.config/mpd/sticker.sql
+config/mpd/database
+config/mpd/playlists
+config/mpd/pid
+config/mpd/state
+config/mpd/sticker.sql
 
-.config/ranger/plugins/*
+config/ranger/plugins/*
 
-.config/xfce4/helpers.rc
-.config/xfce4/xfconf/xfce-perchannel-xml/displays.xml
-.config/xfce4/xfconf/xfce-perchannel-xml/parole.xml
-.config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
+config/xfce4/helpers.rc
+config/xfce4/xfconf/xfce-perchannel-xml/displays.xml
+config/xfce4/xfconf/xfce-perchannel-xml/parole.xml
+config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
 .config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
-.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
-.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml
-.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-settings-editor.xml
-.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-settings-manager.xml
-.config/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
-.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+config/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml
+config/xfce4/xfconf/xfce-perchannel-xml/xfce4-settings-editor.xml
+config/xfce4/xfconf/xfce-perchannel-xml/xfce4-settings-manager.xml
+config/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
+config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
 
-.config/task/*.data
+config/task/*.data
 
 .idea
-.config/xfce4/xfce4-screenshooter
+config/xfce4/xfce4-screenshooter

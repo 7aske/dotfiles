@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 usage() {
-    echo "install.sh <input> <output>" && exit 2
+    echo "uninstall.sh <input> <output>" && exit 2
 }
 
 [ -z "$1" ] && usage
