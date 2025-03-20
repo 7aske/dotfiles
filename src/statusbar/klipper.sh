@@ -196,7 +196,7 @@ if [ "$status" == "printing" ]; then
     fi
 else
     if [ -e "$SWITCH" ]; then
-        text="${status^}"
+        text="${status^} "
     else
         text="$ZWSP"
     fi
