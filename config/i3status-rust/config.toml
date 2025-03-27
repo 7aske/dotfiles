@@ -27,7 +27,7 @@ bat = [
     "󰂀",
     "󰁹"
 ]
-bell-slash = " "
+bell-slash = ""
 bat_not_available = "󱉞"
 update = "󰏔"
 music_play = " "
