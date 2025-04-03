@@ -205,6 +205,8 @@ case "$mimetype" in
         if [[ "$default_mimetype" =~ .*/xml ]]; then
             cat "$path" | xmllint - --format --output - && { dump | trim; exit 5; }
             exit 1
+        elif [[ "$mimetype" = "text/x-log" ]]; then
+            head -n "$maxln" "$path" && { dump | trim; exit 5; }
         elif [[ "$default_mimetype" =~ text/.* ]]; then
             pygmentize_format=terminal
             highlight_format=ansi
