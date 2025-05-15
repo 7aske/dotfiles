@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # toggles default sound output device
-default_sink=$(pactl info | grep "Default Sink:" | cut -d ' ' -f3)
+default_sink=$(pactl get-default-sink)
 notify_timeout="1000"
 MAX_VOLUME="${MAX_VOLUME:-150}"
 
@@ -28,23 +28,8 @@ padef_toggle_focus() {
 			application_ids+=([${arr[0]}]=${arr[1]})
 			application_idx+=([${arr[0]}]=${arr[2]})
 		done <<< $(echo $line)
-	done <<< "$(pactl list sink-inputs | awk '
-		{
-			if ($1 == "Sink:") {
-				sink=$2
-			} else if ($1 == "application.process.id") {
-				pid=substr($3, 2, length($3) - 2)
-			} else if ($1 == "Sink" && $2 == "Input") {
-				idx=substr($3, 2)
-			} 
-
-			if (sink != "" && pid != "" && idx != "") { 
-				print pid " " sink " " idx
-				pid=""
-				sink=""
-				idx=""
-			}
-		}')" # outputs pid sink pairs
+    done <<< "$(pactl -fjson list sink-inputs | jq -r '.[] 
+        | "\(.properties."application.process.id") \(.sink) \(.index)"')"
 
 	declare -a sinks # sink short names for move-to
 	declare -a indices # sink indexes
@@ -55,30 +40,9 @@ padef_toggle_focus() {
 			sinks+=(${arr[1]})
 			descs+=([${arr[1]}]="${arr[@]:2}")
 		done <<< $(echo $line)
-	done <<< "$(pactl list sinks | awk '{
-		if ($1 == "Description:") {
-			desc=substr($0, length($1)+2, length($0))
-		} else if ($1 == "Name:") {
-			name=$2
-		} else if ($1 == "Sink") {
-			idx=substr($2, 2)
-		}
-
-		if (name ~ /alsa_output.usb-Generic_USB_Audio-00.HiFi__(SPDIF|Headphones)__sink/) {
-			name=""
-		}
-
-		if (desc ~ /(USB Audio S\/PDIF Output)|(USB Audio Front Headphones)/) {
-			desc=""
-		}
-
-		if (name != "" && desc != "" && idx != "") {
-			print idx " " name " " desc
-			name=""
-			desc=""
-			idx=""
-		}
-	}')" # outputs pid sink pairs
+    done <<< "$(pactl -fjson list sinks | jq -cr '.[] 
+        | select(all(.ports[]; .availability != "not available")) 
+        | "\(.index) \(.name) \(.description)"')"
 
 	# searching process trees for all related pids
 	if [ -n "$1" ]; then
@@ -126,6 +90,12 @@ padef_toggle_focus() {
 			pactl move-sink-input "${application_idx[$app]}" "${name}"
 
 			for sink in "${sinks[@]}"; do
+                if [ "$sink" == "$default_sink" ]; then
+                    output="${output}>"
+                else
+                    output="${output} "
+                fi
+
 				if [ "$sink" == "$name" ]; then
 					output="$output[x] ${descs[$sink]}\n"
 				else
@@ -150,32 +120,9 @@ padef_toggle() {
 			sinks+=(${arr[1]})
 			descs+=([${arr[1]}]="${arr[@]:2}")
 		done <<< $(echo $line)
-	done <<< "$(pactl list sinks | awk '{
-		if ($1 == "Description:") {
-			desc=substr($0, length($1)+2, length($0))
-		} else if ($1 == "Name:") {
-			name=$2
-		} else if ($1 == "Sink") {
-			idx=substr($2, 2)
-		}
-
-		if (name ~ /alsa_output.usb-Generic_USB_Audio-00.HiFi__(SPDIF|Headphones)__sink/) {
-			name=""
-		}
-
-		if (desc ~ /(USB Audio S\/PDIF Output)|(USB Audio Front Headphones)/) {
-			desc=""
-		}
-
-		if (name != "" && desc != "" && idx != "") {
-			print idx " " name " " desc
-			name=""
-			desc=""
-			idx=""
-		}
-	}')" # outputs pid sink pairs
-
-	echo ${sinks[@]}
+    done <<< "$(pactl -fjson list sinks | jq -cr '.[] 
+        | select(all(.ports[]; .availability != "not available")) 
+        | "\(.index) \(.name) \(.description)"')"
 
 	output=""
 	next_sink=-1
@@ -256,20 +203,8 @@ padef_spec_volume() {
 		while IFS=' ' read -a arr; do
 			application_idx+=([${arr[0]}]=${arr[1]})
 		done <<< $(echo $line)
-	done <<< "$(pactl list sink-inputs | awk '
-		{
-			if ($1 == "application.process.id") {
-				pid=substr($3, 2, length($3) - 2)
-			} else if ($1 == "Sink" && $2 == "Input") {
-				idx=substr($3, 2)
-			} 
-
-			if (pid != "" && idx != "") { 
-				print pid " " idx
-				pid=""
-				idx=""
-			}
-		}')" # outputs pid sink pairs
+    done <<< "$(pactl -fjson list sink-inputs | jq -r '.[] 
+        | "\(.properties."application.process.id") \(.sink) \(.index)"')"
 
 	# searching process trees for all related pids
 	if [ -n "$1" ]; then
@@ -305,7 +240,7 @@ padef_spec_volume() {
 		exit 1
 	fi
 
-	vol="$(padef_get_sink_vol "$index")"
+	vol="$(padef_get_vol "$index")"
 	vol=$((vol + ${2%%%}))
 	if (( $vol > $MAX_VOLUME )); then
 		pactl set-sink-input-volume "$index" "$MAX_VOLUME%"
@@ -313,7 +248,7 @@ padef_spec_volume() {
 		pactl set-sink-input-volume "$index" "$2"
 	fi
 	icon="audio-volume-low"
-	vol="$(padef_get_sink_vol "$index")"
+	vol="$(padef_get_vol "$index")"
 	if [ "$vol" -ge 66 ]; then
 		icon="audio-volume-high"
 	elif [ "$vol" -ge 33 ]; then
@@ -334,20 +269,8 @@ padef_focus_volume() {
 		while IFS=' ' read -a arr; do
 			application_idx+=([${arr[0]}]=${arr[1]})
 		done <<< $(echo $line)
-	done <<< "$(pactl list sink-inputs | awk '
-		{
-			if ($1 == "application.process.id") {
-				pid=substr($3, 2, length($3) - 2)
-			} else if ($1 == "Sink" && $2 == "Input") {
-				idx=substr($3, 2)
-			} 
-
-			if (pid != "" && idx != "") { 
-				print pid " " idx
-				pid=""
-				idx=""
-			}
-		}')" # outputs pid sink pairs
+    done <<< "$(pactl -fjson list sink-inputs | jq -r '.[] 
+        | "\(.properties."application.process.id") \(.index)"')"
 
 	wname="$(xdotool getwindowfocus getwindowname)"
 	wpid="$(xdotool getwindowfocus getwindowpid)"
@@ -371,7 +294,7 @@ padef_focus_volume() {
 		exit 1
 	fi
 
-	vol="$(padef_get_sink_vol "$index")"
+	vol="$(padef_get_vol "$index")"
 	vol=$((vol + ${1%%%}))
 	if (( $vol > $MAX_VOLUME )); then
 		pactl set-sink-input-volume "$index" "$MAX_VOLUME%"
@@ -379,7 +302,7 @@ padef_focus_volume() {
 		pactl set-sink-input-volume "$index" "$1"
 	fi
 	icon="audio-volume-low"
-	vol="$(padef_get_sink_vol "$index")"
+	vol="$(padef_get_vol "$index")"
 	if [ "$vol" -ge 66 ]; then
 		icon="audio-volume-high"
 	elif [ "$vol" -ge 33 ]; then
@@ -396,19 +319,12 @@ padef_focus_volume() {
 
 padef_get_vol() {
 	sink="${1:-"$default_sink"}"
-	pactl list sinks | grep -A7 "^[[:space:]]Name: $sink" | \
-		tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,'
+	pactl get-sink-volume "$1" | sed -n 's/.*: [^:]*: [^/]*\/ *\([0-9]\+\)%.*/\1/p'
 }
 
 padef_get_mic_vol() {
-	default_source=$(pactl info | grep "Default Source:" | cut -d ' ' -f3)
-	pactl list sources | grep -A7 "^[[:space:]]Name: $default_source" | \
-		tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,'
-}
-
-padef_get_sink_vol() {
-	pactl list sink-inputs | grep -A10 "^Sink Input #$1" | \
-		tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,'
+	default_source="$(pactl get-default-source)"
+	pactl get-source-volume "$default_source" | sed -n 's/.*: [^:]*: [^/]*\/ *\([0-9]\+\)%.*/\1/p'
 }
 
 padef_mute() {
