@@ -486,8 +486,8 @@ for_window [class="UltiMaker-Cura" title="Marketplace"] floating enable, move po
 for_window [class="(?i)GParted"] floating enable, border normal
 for_window [class="(?i)System-config-printer.py"] floating enable, border normal
 for_window [class="(?i)anydesk.bin"] floating enable, border normal
-for_window [class="(?i)blueman-manager"] floating enable, resize set 512 256, move position center
-for_window [class="(?i)blueman-services"] floating enable, resize set 512 256, move position center
+for_window [class="(?i)blueman-manager"] floating enable, resize set 30 ppt 60 ppt, move position center
+for_window [class="(?i)blueman-services"] floating enable, resize set 30 ppt 60 ppt, move position center
 for_window [class="(?i)cantata"] floating enable, resize set 70 ppt 70 ppt, move position center
 for_window [class="(?i)feh"] fullscreen enable
 for_window [class="(?i)gnome-calculator"] floating enable
@@ -653,7 +653,7 @@ exec_always --no-startup-id fix_xcursor
 # exec_always --no-startup-id pgrep -x $terminal || $terminal
 
 # pulseaudio (weird hack because pulseaudi doesn't seem to properly start every time)
-exec_always --no-startup-id pgrep pulseaudio || (while ! $(pulseaudio -k; pulseaudio -D); do; done)
+# exec_always --no-startup-id pgrep pulseaudio || (while ! $(pulseaudio -k; pulseaudio -D); do; done)
 # exec_always --no-startup-id pgrep pasystray  || pasystray
 
 # touchpad and keyboard config
