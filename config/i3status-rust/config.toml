@@ -15,6 +15,10 @@ icons = "awesome6"
 3d_printer_complete=""
 3d_printer_error=""
 3d_printer_cancelled="󰜺"
+keyboard = ""
+mouse = "󰍽"
+signal="󰒢"
+bluetooth = ""
 microphone = ""
 microphone_muted = ""
 headphones = "󰋋"
@@ -426,6 +430,52 @@ update = true
 [[block.click]]
 button = "right"
 cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/headset -j"
+sync = true
+update = true
+
+[[block]]
+block = "custom"
+interval = 60
+command = "~/.local/bin/statusbar/bluetooth -j"
+signal = 10
+json = true
+hide_when_empty = true
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/bluetooth -j"
+sync = true
+update = true
+[[block.click]]
+button = "middle"
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/bluetooth -j"
+sync = true
+update = true
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/bluetooth -j"
+sync = true
+update = true
+
+[[block]]
+block = "custom"
+interval = 60
+command = "~/.local/bin/statusbar/mx -j"
+signal = 10
+json = true
+hide_when_empty = true
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/mx -j"
+sync = true
+update = true
+[[block.click]]
+button = "middle"
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/mx -j"
+sync = true
+update = true
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/mx -j"
 sync = true
 update = true
 
