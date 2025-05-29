@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+BROWSER_FLAGS="${BROWSER_FLAGS:-"--new-window"}"
+
 case "$BROWSER" in
     "brave-browser" | "brave")
         SELECTED_URL="$(cat "$XDG_CONFIG_HOME/BraveSoftware/Brave-Browser/Default/Bookmarks" \
@@ -16,4 +18,4 @@ if [ -z "$SELECTED_URL" ]; then
     exit 1
 fi
 
-xdg-open "$SELECTED_URL" &>/dev/null
+"$BROWSER" $BROWSER_FLAGS "$SELECTED_URL" &>/dev/null
