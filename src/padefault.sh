@@ -204,7 +204,7 @@ padef_spec_volume() {
 			application_idx+=([${arr[0]}]=${arr[1]})
 		done <<< $(echo $line)
     done <<< "$(pactl -fjson list sink-inputs | jq -r '.[] 
-        | "\(.properties."application.process.id") \(.sink) \(.index)"')"
+        | "\(.properties."application.process.id") \(.index)"')"
 
 	# searching process trees for all related pids
 	if [ -n "$1" ]; then
