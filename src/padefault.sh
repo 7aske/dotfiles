@@ -240,7 +240,7 @@ padef_spec_volume() {
 		exit 1
 	fi
 
-	vol="$(padef_get_vol "$index")"
+	vol="$(padef_get_vol_spec "$index")"
 	vol=$((vol + ${2%%%}))
 	if (( $vol > $MAX_VOLUME )); then
 		pactl set-sink-input-volume "$index" "$MAX_VOLUME%"
@@ -248,7 +248,7 @@ padef_spec_volume() {
 		pactl set-sink-input-volume "$index" "$2"
 	fi
 	icon="audio-volume-low"
-	vol="$(padef_get_vol "$index")"
+	vol="$(padef_get_vol_spec "$index")"
 	if [ "$vol" -ge 66 ]; then
 		icon="audio-volume-high"
 	elif [ "$vol" -ge 33 ]; then
@@ -294,7 +294,7 @@ padef_focus_volume() {
 		exit 1
 	fi
 
-	vol="$(padef_get_vol "$index")"
+	vol="$(padef_get_vol_spec "$index")"
 	vol=$((vol + ${1%%%}))
 	if (( $vol > $MAX_VOLUME )); then
 		pactl set-sink-input-volume "$index" "$MAX_VOLUME%"
@@ -302,7 +302,7 @@ padef_focus_volume() {
 		pactl set-sink-input-volume "$index" "$1"
 	fi
 	icon="audio-volume-low"
-	vol="$(padef_get_vol "$index")"
+	vol="$(padef_get_vol_spec "$index")"
 	if [ "$vol" -ge 66 ]; then
 		icon="audio-volume-high"
 	elif [ "$vol" -ge 33 ]; then
@@ -320,6 +320,12 @@ padef_focus_volume() {
 padef_get_vol() {
 	sink="${1:-"$default_sink"}"
 	pactl get-sink-volume "$1" | sed -n 's/.*: [^:]*: [^/]*\/ *\([0-9]\+\)%.*/\1/p'
+}
+
+padef_get_vol_spec() {
+    pactl -fjson list sink-inputs | \
+        jq -r '.[] | select(.index == '$1') | .volume."front-left".value_percent' | \
+        sed 's/%$//'
 }
 
 padef_get_mic_vol() {
