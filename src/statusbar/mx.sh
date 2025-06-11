@@ -48,7 +48,10 @@ _output() {
     fi
 }
 
-command -v solaar > /dev/null || _output "mouse" 6 ""
+if command -v solaar > /dev/null; then
+    _output "mouse" 6 ""
+    exit 0
+fi
 
 bat_level="$(solaar show 2>/dev/null | sed -n 's/^\s*Battery: \(.*\)%.*$/\1/p' | head -n 1)"
 
