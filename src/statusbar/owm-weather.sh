@@ -3,21 +3,46 @@
 [ -e "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
 [ -e "$HOME/.config/owm.sh" ] && . "$HOME/.config/owm.sh"
 
-[ -z "$OPENWEATHERMAP_CITY_ID" ] || [ -z "$OPENWEATHERMAP_API_KEY" ] && echo "<span size='x-large'>󰼯 </span>" && exit 0
+WEATHER_CACHE="$HOME/.cache/weather.tmp"
+WEATHER_JSON="$HOME/.cache/weather.json"
+LATLON_CACHE="$HOME/.cache/latlon.tmp"
+SWITCH="$HOME/.cache/statusbar_$(basename $0)" 
+
+[ -z "$OPENWEATHERMAP_API_KEY" ] && echo "<span size='x-large'>󰼯 </span>" && exit 0
 
 [ -e "$HOME/.config/owm.sh" ] && . "$HOME/.config/owm.sh"
 
-WEATHER_CACHE="$HOME/.cache/weather.tmp"
-WEATHER_JSON="$HOME/.cache/weather.json"
-SWITCH="$HOME/.cache/statusbar_$(basename $0)" 
+if [ -z "$OPENWEATHERMAP_CITY_ID" ]; then
+    if [ -e "$LATLON_CACHE" ]; then
+        lon_lat=$(cat "$LATLON_CACHE")
+    else
+        # get current lon lat from ipinfo.io
+        #lon_lat=$(curl -s ipinfo.io/loc)
+        lon_lat=$(curl https://ipapi.co/json/ | \
+            jq -r '. | [.latitude,.longitude|tostring] | join(",")')
+        if [ -z "$lon_lat" ]; then
+            echo "<span size='x-large'>󰼯 </span>"
+            exit 0
+        fi
+        echo "$lon_lat" > "$LATLON_CACHE"
+    fi
+
+    OPENWEATHERMAP_LAT=$(echo "$lon_lat" | cut -d ',' -f 1)
+    OPENWEATHERMAP_LON=$(echo "$lon_lat" | cut -d ',' -f 2)
+fi
+
 case $BLOCK_BUTTON in
     1) [ -e "$WEATHER_CACHE" ] && notify-send -i weather -a weather -t 10000 "OpenWeatherMap" "$(cat $WEATHER_CACHE)" ;;
 	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
-    3) xdg-open "https://openweathermap.org/city/$OPENWEATHERMAP_CITY_ID" ;;
+    3) xdg-open "https://openweathermap.org/city" ;;
 esac
 
 BASE_URL="http://api.openweathermap.org/data/2.5/weather"
-URL="${BASE_URL}?id=${OPENWEATHERMAP_CITY_ID}&appid=${OPENWEATHERMAP_API_KEY}&units=metric"
+if [ -n "$OPENWEATHERMAP_LAT" ] && [ -n "$OPENWEATHERMAP_LON" ]; then
+    URL="${BASE_URL}?lat=${OPENWEATHERMAP_LAT}&lon=${OPENWEATHERMAP_LON}&appid=${OPENWEATHERMAP_API_KEY}&units=metric"
+else
+    URL="${BASE_URL}?id=${OPENWEATHERMAP_CITY_ID}&appid=${OPENWEATHERMAP_API_KEY}&units=metric"
+fi
 
 resp_code=1
 if [ -z "$BLOCK_BUTTON" ]; then
@@ -31,6 +56,9 @@ if [ -z "$BLOCK_BUTTON" ]; then
     echo "Humidity:    $(echo $response | jq -r '.main.humidity')%" >> "$WEATHER_CACHE"
     echo "Wind:        $(echo $response | jq -r '.wind.speed')m/s" >> "$WEATHER_CACHE"
     echo "Pressure:    $(echo $response | jq -r '.main.pressure')hPa" >> "$WEATHER_CACHE"
+    echo "Sunrise:     $(date -d @$(echo $response | jq -r '.sys.sunrise') +'%T')" >> "$WEATHER_CACHE"
+    echo "Sunset:      $(date -d @$(echo $response | jq -r '.sys.sunset') +'%T')" >> "$WEATHER_CACHE"
+    echo
     echo "Last update: $(date +%T)" >> "$WEATHER_CACHE"
 fi
 
