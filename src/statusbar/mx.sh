@@ -48,7 +48,7 @@ _output() {
     fi
 }
 
-if command -v solaar > /dev/null; then
+if [ -z "$(command -v solaar 2>/dev/null)" ]; then
     _output "mouse" 6 ""
     exit 0
 fi
