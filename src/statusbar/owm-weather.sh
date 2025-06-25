@@ -3,9 +3,9 @@
 [ -e "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
 [ -e "$HOME/.config/owm.sh" ] && . "$HOME/.config/owm.sh"
 
-WEATHER_CACHE="$HOME/.cache/weather.tmp"
-WEATHER_JSON="$HOME/.cache/weather.json"
-LATLON_CACHE="$HOME/.cache/latlon.tmp"
+WEATHER_CACHE="/tmp/weather.tmp"
+WEATHER_JSON="/tmp/weather.json"
+LATLON_CACHE="/tmp/latlon.tmp"
 SWITCH="$HOME/.cache/statusbar_$(basename $0)" 
 
 [ -z "$OPENWEATHERMAP_API_KEY" ] && echo "<span size='x-large'>󰼯 </span>" && exit 0
