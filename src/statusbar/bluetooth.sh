@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 SWITCH="$HOME/.cache/statusbar_$(basename $0)"
+[ -e "$HOME/.local/bin/statusbar/libbat" ] && source "$HOME/.local/bin/statusbar/libbat"
 _toggle_switch() {
     [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH"; pkill "-SIGRTMIN+${1:-'9'}" i3status-rs
 }
@@ -11,11 +12,6 @@ case $BLOCK_BUTTON in
 esac
 
 ZWSP="​"
-
-declare -a colors
-declare -a states
-colors=( "${color1:-"#BF616A"}" "${color1:-"#BF616A"}" "${theme12:-"#D08770"}" "${color2:-"#EBCB8B"}" "${color7:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" )
-states=( "Critical" "Critical" "Warning" "Warning" "Idle" "Idle" "Idle" "Idle" "Idle" "Idle" "Idle" )
 
 while getopts "j" opt; do
     case $opt in
@@ -33,22 +29,18 @@ icons[input-keyboard]=" "
 DEVICES="$(bluetoothctl devices Connected | awk '{print $2}')"
 
 _output() {
-    local color
-    local text="$3"
-    local icon
+    local text="$2"
+    local icon_override
     if [ "$json" = "true" ]; then
-        icon="${json_icons[$1]}"
-        color=${states[$2]}
-        echo '{"icon": "'$icon'", "state":"'${color:-"Idle"}'", "text":"'$text'"}';
+        icon_override="${json_icons[$1]}"
+        echo '{"icon": "'$icon_override'", "state":"'${state}'", "text":"'$text'"}';
     else
-        icon="${icons[$1]}"
-        color=${colors[$2]}
-        echo "<span color='${color:-"#5E81AC"}'>$icon $text</span>"
+        icon_override="${icons[$1]}"
+        echo "<span color='${color}'>$icon_override $text</span>"
     fi
 }
 
-bat_level=10
-num_devices=0
+bat_level=100
 OUTPUT=""
 for device in $DEVICES; do
     info="$(bluetoothctl info "$device")"
@@ -62,13 +54,16 @@ for device in $DEVICES; do
     OUTPUT+="${icons[$icon]}"
     if ! [ -e "$SWITCH" ]; then
         OUTPUT+=" $bat%"
+    else
+        OUTPUT+=" $(libbat_get_icon "$bat")"
     fi
-    _bat_level="$((bat / 10))"
-    if [ $_bat_level -lt $bat_level ]; then
-        bat_level="$_bat_level"
+
+    if [ $bat -lt $bat_level ]; then
+        bat_level="$bat"
     fi
-    num_devices=$((num_devices + 1))
 done
 
-_output "bluetooth" "$bat_level" "${OUTPUT}"
+libbat_update "$bat_level"
+
+_output "bluetooth" "${OUTPUT}"
 

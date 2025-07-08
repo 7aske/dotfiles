@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-
 SWITCH="$HOME/.cache/statusbar_$(basename $0)"
+[ -e "$HOME/.local/bin/statusbar/libbat" ] && source "$HOME/.local/bin/statusbar/libbat"
 _toggle_switch() {
     [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH"; pkill "-SIGRTMIN+${1:-'9'}" i3status-rs
 }
@@ -12,11 +12,6 @@ case $BLOCK_BUTTON in
 esac
 
 ZWSP="​"
-
-declare -a colors
-declare -a states
-colors=( "${color1:-"#BF616A"}" "${color1:-"#BF616A"}" "${theme12:-"#D08770"}" "${theme12:-"#D08770"}" "${color3:-"#EBCB8B"}" "${color3:-"#EBCB8B"}" "${color2:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" )
-states=( "Critical" "Critical" "Warning" "Warning" "Info" "Info" "Idle" "Idle" "Idle" "Idle" "Idle" )
 
 while getopts "j" opt; do
     case $opt in
@@ -30,42 +25,40 @@ json_icons[signal]="signal"
 json_icons[mouse]="mouse"
 declare -A icons
 icons[bluetooth]="󰂯"
-icons[signal]="󰒢"
+icons[signal]="󰞃"
 icons[mouse]="󰍽"
 
 _output() {
-    local color
-    local text="$3"
-    local icon
+    local text="$2"
+    local icon_override
     if [ "$json" = "true" ]; then
-        icon="${json_icons[$1]}"
-        color=${states[$2]}
-        echo '{"icon": "'$icon'", "state":"'${color:-"Idle"}'", "text":"'$text'"}';
+        icon_override="${json_icons[$1]}"
+        echo '{"icon": "'$icon_override'", "state":"'${state}'", "text":"'$text'"}';
     else
-        icon="${icons[$1]}"
-        color=${colors[$2]}
-        echo "<span color='${color:-"#5E81AC"}'>$icon $text</span>"
+        icon_override="${icons[$1]}"
+        echo "<span color='${color}'>$icon_override $text</span>"
     fi
 }
 
 if [ -z "$(command -v solaar 2>/dev/null)" ]; then
-    _output "mouse" 6 ""
+    _output "mouse" ""
     exit 0
 fi
 
-bat_level="$(solaar show 2>/dev/null | sed -n 's/^\s*Battery: \(.*\)%.*$/\1/p' | head -n 1)"
+read -r bat_level bat_state <<< "$(solaar show 2>/dev/null | sed -n 's/^\s*Battery: \(.*\)%, \(.\)\.*$/\1 \2/p' | head -n 1)"
 
-if [ -z "$bat_level" ]; then
-    _output "signal" 0 ""
+libbat_update "$bat_level" "$bat_state"
+
+if [ $? -ne 0 ]; then
+    _output "signal" "$ZWSP"
     exit 0
 fi
 
 if [ -e "$SWITCH" ]; then
-    OUTPUT="$ZWSP"
+    _output "mouse" "$icon"
 else
-    OUTPUT="$bat_level%"
+    _output "mouse" "$bat_level%"
 fi
 
-_output "mouse" "$bat_level" "${OUTPUT}"
 
 

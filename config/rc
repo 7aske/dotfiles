@@ -62,6 +62,7 @@ alias brave='_setsid brave'
 alias et='_setsid et'
 alias wps='_setsid wps'
 alias wpp='_setsid wpp'
+alias cursor='_setsid cursor'
 
 alias cls='clear -x'
 alias autoremove='sudo pacman -R $(pacman -Qdtq)'
