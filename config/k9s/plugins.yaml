@@ -1,5 +1,16 @@
 plugins:
   # See https://k9scli.io/topics/plugins/
+  sync-apps:
+    shortCut: Shift-S
+    confirm: false
+    scopes:
+      - apps
+    description: Sync a argocd apps
+    command: bash
+    background: false
+    args:
+      - -c
+      - "argocd app sync $NAME"
   raw-logs-follow:
     shortCut: Ctrl-L
     description: logs -f
