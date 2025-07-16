@@ -1,41 +1,48 @@
 [ -f  "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
 
-declare -a libbat_icons
-declare -a libbat_charging_icons
-declare -a libbat_warning_icons
-declare -a libbat_colors
-declare -a libbat_states
+red="${red:-"#BF616A"}"
+white="${white:-"#D8DEE9"}"
+green="${green:-"#A3BE8C"}"
+blue="${blue:-"#5E81AC"}"
+yellow="${yellow:-"#EBCB8B"}"
+orange="${orange:-"#D08770"}"
 
-libbat_icons=("󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹")
-libbat_charging_icons=( "󰢟" "󰢜" "󰂇" "󰂇" "󰂈" "󰢝" "󰂉" "󰢞" "󰂊" "󰂋" "󰂅" )
+declare -A libbat_icons
+declare -A libbat_charging_icons
+declare -a libbat_warning_icons
+declare -A libbat_colors
+declare -A libbat_states
+
+libbat_icons+=([0]="󰂎" [1]="󰁺" [2]="󰁻" [3]="󰁼" [4]="󰁽" [5]="󰁾" [6]="󰁿" [7]="󰂀" [8]="󰂁" [9]="󰂂" [10]="󰁹")
+libbat_charging_icons+=([0]="󰢟" [1]="󰢜" [2]="󰂇" [3]="󰂇" [4]="󰂈" [5]="󰢝" [6]="󰂉" [7]="󰢞" [8]="󰂊" [9]="󰂋" [10]="󰂅")
 libbat_warning_icons=( "  " "  " "  " " " " " " " " " " " " " " " " " )
-libbat_colors=( 
-    "${color1:-"#BF616A"}"
-    "${color1:-"#BF616A"}"
-    "${theme12:-"#D08770"}"
-    "${theme12:-"#D08770"}"
-    "${color3:-"#EBCB8B"}"
-    "${color3:-"#EBCB8B"}"
-    "${color2:-"#D8DEE9"}"
-    "${color7:-"#D8DEE9"}"
-    "${color7:-"#D8DEE9"}"
-    "${color7:-"#D8DEE9"}"
-    "${color7:-"#D8DEE9"}"
+libbat_colors+=( 
+    [0]="${red}"
+    [1]="${red}"
+    [2]="${orange}"
+    [3]="${yellow}"
+    [4]="${blue}"
+    [5]="${white}"
+    [6]="${white}"
+    [7]="${white}"
+    [8]="${white}"
+    [9]="${white}"
+    [10]="${white}"
 )
-libbat_states=( 
-    "Critical"
-    "Critical"
-    "Warning"
-    "Warning"
-    "Info"
-    "Info"
-    "Idle"
-    "Idle"
-    "Idle"
-    "Idle"
-    "Idle"
+libbat_states+=( 
+    [0]="Critical"
+    [1]="Critical"
+    [2]="Warning"
+    [3]="Warning"
+    [4]="Info"
+    [5]="Idle"
+    [6]="Idle"
+    [7]="Idle"
+    [8]="Idle"
+    [9]="Idle"
+    [10]="Idle"
 )
-libbat_charging_color="${color2:-"#A3BE8C"}"
+libbat_charging_color="$green"
 libbat_charging_state="Good"
 
 # args: capacity status
@@ -71,6 +78,6 @@ libbat_update() {
 
 libbat_get_icon() {
     local level="$1"
-    local index="$((level / 10 + 1))"
+    local index="$((level / 10))"
     echo -n "${libbat_icons[$index]}"
 }
