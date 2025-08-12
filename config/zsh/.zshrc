@@ -70,8 +70,17 @@ stty stop undef		# Disable ctrl-s to freeze terminal.
 
 # Basic auto/tab complete:
 setopt correct
-autoload -Uz compinit bashcompinit
-compinit && bashcompinit
+
+# --- Completion setup ---
+autoload -Uz compinit && compinit
+autoload -Uz bashcompinit && bashcompinit
+
+# AWS CLI v2 autocomplete
+if command -v aws_completer >/dev/null; then
+    complete -C "$(command -v aws_completer)" aws
+fi
+
+# Completion styles
 fpath+=~/.zfunc
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" menu select
 zmodload zsh/complist
@@ -166,6 +175,7 @@ function aws_profile () {
 function aws_region() {
     if [ "$1" = "-u" ]; then
         unset AWS_DEFAULT_REGION
+        unset AWS_REGION
         rm -f "$AWS_REGION_FILE"
         return
     fi
@@ -175,6 +185,7 @@ function aws_region() {
     region=$(printf '%s\n' "${REGIONS[@]}" | fzf --header="Select AWS Region")
     if [ -n "$region" ]; then
         export AWS_DEFAULT_REGION=$region
+        export AWS_REGION=$region
         echo "export AWS_DEFAULT_REGION=$region" >> "$AWS_REGION_FILE"
     fi
 }
