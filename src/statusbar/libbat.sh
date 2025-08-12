@@ -78,6 +78,11 @@ libbat_update() {
 
 libbat_get_icon() {
     local level="$1"
-    local index="$((level / 10))"
-    echo -n "${libbat_icons[$index]}"
+    if [ $level -eq 0 ]; then
+        echo -n "${libbat_icons[0]}"
+    else
+        local index="$(((level + 5) / 10))"
+        echo -n "${libbat_icons[$index]}"
+    fi
+
 }
