@@ -466,17 +466,17 @@ hide_when_empty = true
 [[block.click]]
 button = "left"
 cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/mx -j"
-sync = true
+sync = false
 update = true
 [[block.click]]
 button = "middle"
 cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/mx -j"
-sync = true
+sync = false
 update = true
 [[block.click]]
 button = "right"
 cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/mx -j"
-sync = true
+sync = false
 update = true
 
 [[block]]
