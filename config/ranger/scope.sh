@@ -30,7 +30,7 @@ maxln=200    # Stop after $maxln lines.  Can be used like ls | head -n $maxln
 
 # Find out something about the file:
 mimetype=$(xdg-mime query filetype "$path")
-default_mimetype="$(file --mime-type -Lb $path)"
+default_mimetype="$(file --mime-type -Lb "$path")"
 extension=$(/bin/echo "${path##*.}" | awk '{print tolower($0)}')
 default_size="1920x1080"
 
@@ -182,8 +182,23 @@ case "$mimetype" in
         ## catdoc: http://www.wagner.pp.ru/~vitus/software/catdoc/
         catdoc -- "${path}" && exit 5
         exit 1;;
+    */wps-office.xls)
+        ## Preview as text conversion
+        ## note: catdoc does not always work for .doc files
+        ## catdoc: http://www.wagner.pp.ru/~vitus/software/catdoc/
+        xls2csv "${path}" | head -n $maxln && exit 5
+        exit 1;;
+    */wps-office.xlsx)
+        ## Preview as text conversion
+        ## note: catdoc does not always work for .doc files
+        ## catdoc: http://www.wagner.pp.ru/~vitus/software/catdoc/
+        xlsx2csv "${path}" | head -n $maxln && exit 5
+        exit 1;;
     application/vnd.efi.*)
         iso-info -i "${path}" && exit 5
+        exit 1;;
+    application/vnd.sqlite3)
+        sqlite3 "${path}" '.schema' | highlight --syntax=sql --out-format=ansi && exit 5
         exit 1;;
     ## DOCX, ePub, FB2 (using markdown)
     ## You might want to remove "|epub" and/or "|fb2" below if you have
@@ -201,7 +216,6 @@ case "$mimetype" in
         readelf -WCa "${path}" && exit 5
         exit 1;;
     text/* | application/*)
-        echo "mimetype: $mimetype file_mimetype: $default_mimetype extension: $extension"
         if [[ "$default_mimetype" =~ .*/xml ]]; then
             cat "$path" | xmllint - --format --output - && { dump | trim; exit 5; }
             exit 1
