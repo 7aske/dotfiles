@@ -207,11 +207,11 @@ case "$mimetype" in
             exit 1
         elif [[ "$mimetype" = "text/x-log" ]]; then
             head -n "$maxln" "$path" && { dump | trim; exit 5; }
-        elif [[ "$default_mimetype" =~ text/.* ]]; then
+        elif [[ "$default_mimetype" =~ text/.* ]] || [[ "$mimetype" =~ text/.* ]]; then
             pygmentize_format=terminal
             highlight_format=ansi
             safepipe highlight --out-format=${highlight_format} "$path" && { dump | trim; exit 5; }
-            safepipe pygmentize -f ${pygmentize_format} "$path" && { dump | trim; exit 6; }
+            safepipe pygmentize -f ${pygmentize_format} "$path" && { dump | trim; exit 5; }
             exit 2
         fi ;;
     # Ascii-previews of images:
