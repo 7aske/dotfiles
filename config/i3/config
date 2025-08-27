@@ -498,6 +498,7 @@ for_window [class="(?i)gnome-tweaks"] floating enable, resize set 60 ppt 70 ppt,
 for_window [class="(?i)jetbrains-toolbox"] floating enable, sticky enable
 for_window [class="(?i)nm-connection-editor"] floating enable, border normal
 for_window [class="(?i)spotify"] floating enable, resize set 70 ppt 70 ppt, move position center
+for_window [class="com.github.th_ch.youtube_music"] floating enable, resize set 70 ppt 70 ppt, move position center
 for_window [class="(?i)sxiv"] fullscreen enable
 for_window [class="(?i)vncviewer"] move position center
 for_window [class="Arandr"] floating enable, move position center
