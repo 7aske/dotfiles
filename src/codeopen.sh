@@ -63,7 +63,7 @@ _select_project() {
     if [ "$1" == "dirty" ]; then
         PROJ="$(eval "cgs -m -sm | tac | $menu_command" | awk -v code="$CODE" '{print code "/" $1 "/" $2}')"
     else
-        SELECTED="$(eval "cgs -adi | grep -oP '^$CODE/\K.*' | $menu_command")"
+        SELECTED="$(eval "cgs -ad | grep -oP '^$CODE/\K.*' | $menu_command")"
         PROJ="$CODE/$SELECTED"
     fi
 
