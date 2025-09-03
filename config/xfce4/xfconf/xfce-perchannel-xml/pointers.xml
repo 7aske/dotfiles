@@ -1,13 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.1" encoding="UTF-8"?>
 
 <channel name="pointers" version="1.0">
   <property name="MSFT000300_06CBCE2D_Touchpad" type="empty">
     <property name="RightHanded" type="bool" value="true"/>
     <property name="ReverseScrolling" type="bool" value="true"/>
     <property name="Threshold" type="int" value="1"/>
-    <property name="Acceleration" type="double" value="7.500000"/>
+    <property name="Acceleration" type="double" value="7.5"/>
     <property name="Properties" type="empty">
       <property name="libinput_Tapping_Enabled" type="int" value="1"/>
     </property>
+  </property>
+  <property name="ELAN06FA00_04F3327E_Mouse" type="empty">
+    <property name="RightHanded" type="bool" value="true"/>
+    <property name="ReverseScrolling" type="bool" value="false"/>
+    <property name="Threshold" type="int" value="1"/>
+    <property name="Acceleration" type="double" value="5.9000000000000004"/>
   </property>
 </channel>
