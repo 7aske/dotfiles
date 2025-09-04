@@ -3,6 +3,14 @@
 # For more documentation, see http://taskwarrior.org or try 'man task', 'man task-color',
 # 'man task-sync' or 'man taskrc'
 
+uda.taskwarrior-tui.shortcuts.1=~/.local/bin/task-open
+uda.taskwarrior-tui.keyconfig.shortcut1=o
+
+uda.jiraurl.type=string
+uda.jiraurl.label=Jira URL
+uda.jiraid.type=string
+uda.jiraid.label=Jira ID
+
 include ~/.config/task/sync.taskrc
 # Here is an example of entries that use the default, override and blank values
 #   variable=foo   -- By specifying a value, this overrides the default
@@ -29,5 +37,7 @@ include /usr/share/doc/task/rc/dark-256.theme
 #include /usr/share/doc/task/rc/solarized-dark-256.theme
 #include /usr/share/doc/task/rc/solarized-light-256.theme
 #include /usr/share/doc/task/rc/no-color.theme
+uda.taskwarrior-tui.selection.bold=yes
+uda.taskwarrior-tui.selection.reverse=yes
 
 news.version=3.4.1
