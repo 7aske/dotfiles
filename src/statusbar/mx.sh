@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+KILL_SWITCH="$HOME/.cache/statusbar_$(basename $0)_kill"
 SWITCH="$HOME/.cache/statusbar_$(basename $0)"
 [ -e "$HOME/.local/bin/statusbar/libbat" ] && source "$HOME/.local/bin/statusbar/libbat"
 _toggle_switch() {
@@ -39,6 +40,8 @@ _output() {
         echo "<span color='${color}'>$icon_override $text</span>"
     fi
 }
+
+[ -e "$KILL_SWITCH" ] && _output "signal" "" && exit 0
 
 if [ -z "$(command -v solaar 2>/dev/null)" ]; then
     _output "mouse" ""

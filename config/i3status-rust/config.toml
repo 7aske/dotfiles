@@ -8,6 +8,7 @@ separator = "<span font='13'></span>"
 [icons]
 icons = "awesome6"
 [icons.overrides]
+net_wired=""
 3d_printer="󰹛"
 3d_printer_printing="󱇀"
 3d_printer_paused="󰏤"
