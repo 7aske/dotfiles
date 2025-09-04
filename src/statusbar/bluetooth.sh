@@ -6,9 +6,33 @@ _toggle_switch() {
     [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH"; pkill "-SIGRTMIN+${1:-'9'}" i3status-rs
 }
 
+declare -A json_icons
+json_icons[bluetooth]="bluetooth"
+json_icons[input-keyboard]="keyboard"
+declare -A icons
+icons[bluetooth]="󰂯"
+icons[input-keyboard]=" "
+
+_show_devices() {
+    local devices="$(bluetoothctl devices Connected | awk '{print $2}')"
+    for device in $devices; do
+        info="$(bluetoothctl info "$device")"
+        alias="$(echo "$info" | sed -n 's/^\s*Alias: \(.*\)/\1/p')"
+        connected="$(echo "$info" |  awk '$1 == "Connected:" {print $2}')"
+        icon="$(echo "$info" | awk '$1 == "Icon:" {print $2}')"
+        bat="$(echo "$info" | sed -n 's/^\s*Battery Percentage: .* (\(.*\))/\1/p')"
+        if [ -z "$bat" ]; then
+            continue
+        fi
+        echo "${icons[$icon]}|$alias|$bat%"
+    done | column -t -s '|'
+
+}
+
 case $BLOCK_BUTTON in
-    1) notify-send -a bluetooth -i bluetooth "Bluetooth Devices" "$(bluetoothctl info)" ;;
+    1) notify-send -a bluetooth -i bluetooth "Bluetooth Devices" "$(_show_devices)" ;;
     2) _toggle_switch 10 ;;
+    3) blueman-manager & ;;
 esac
 
 ZWSP="​"
@@ -18,13 +42,6 @@ while getopts "j" opt; do
         j) json=true ;;
     esac
 done
-
-declare -A json_icons
-json_icons[bluetooth]="bluetooth"
-json_icons[input-keyboard]="keyboard"
-declare -A icons
-icons[bluetooth]="󰂯"
-icons[input-keyboard]=" "
 
 DEVICES="$(bluetoothctl devices Connected | awk '{print $2}')"
 
@@ -55,7 +72,7 @@ for device in $DEVICES; do
     if ! [ -e "$SWITCH" ]; then
         OUTPUT+=" $bat%"
     else
-        OUTPUT+=" $(libbat_get_icon "$bat")"
+        OUTPUT+=" $(libbat_get_icon "$bat") "
     fi
 
     if [ $bat -lt $bat_level ]; then
