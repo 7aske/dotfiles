@@ -27,6 +27,7 @@ cached="$4"          # Path that should be used to cache image previews
 preview_images="$5"  # "True" if image previews are enabled, "False" otherwise.
 
 maxln=200    # Stop after $maxln lines.  Can be used like ls | head -n $maxln
+maxsize=$((5 * 1024 * 1024))  # Don't try to syntax highlight files larger than $maxsize bytes
 
 # Find out something about the file:
 mimetype=$(xdg-mime query filetype "$path")
@@ -144,9 +145,9 @@ case "$extension" in
     # Archive extensions:
     a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|\
     rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)
-        try als "$path" && { dump | trim; exit 0; }
-        try acat "$path" && { dump | trim; exit 3; }
-        try bsdtar -lf "$path" && { dump | trim; exit 0; }
+        als "$path" | trim && exit 3
+        acat -l "$path" | trim && exit 3
+        bsdtar -lf "$path" | trim && exit 3
         exit 1;;
     rar)
         # avoid password prompt by providing empty password
@@ -190,8 +191,7 @@ case "$mimetype" in
         exit 1;;
     */wps-office.xlsx)
         ## Preview as text conversion
-        ## note: catdoc does not always work for .doc files
-        ## catdoc: http://www.wagner.pp.ru/~vitus/software/catdoc/
+        # python-xlsx2csv
         xlsx2csv "${path}" | head -n $maxln && exit 5
         exit 1;;
     application/vnd.efi.*)
@@ -206,6 +206,7 @@ case "$mimetype" in
     *wordprocessingml.document|*/epub+zip|*/x-fictionbook+xml|*/wps-office.doc|*/wps-office.docx)
         ## Preview as markdown conversion
         pandoc -s -t markdown -- "${path}" && exit 5
+        docx2txt "$path" - | trim && exit 5
         exit 1;;
 
     application/octet-stream | application/vnd.microsoft.portable-executable)
@@ -222,6 +223,12 @@ case "$mimetype" in
         elif [[ "$mimetype" = "text/x-log" ]]; then
             head -n "$maxln" "$path" && { dump | trim; exit 5; }
         elif [[ "$default_mimetype" =~ text/.* ]] || [[ "$mimetype" =~ text/.* ]]; then
+            # check file size, don't try to syntax highlight huge files
+            if [ "$(stat -c%s "$path")" -gt "$maxsize" ]; then
+                head -n "$maxln" "$path" && { dump | trim; exit 5; }
+                exit 1
+            fi
+
             pygmentize_format=terminal
             highlight_format=ansi
             safepipe highlight --out-format=${highlight_format} "$path" && { dump | trim; exit 5; }
