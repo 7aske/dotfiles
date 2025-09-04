@@ -34,10 +34,10 @@ _output() {
     local icon_override
     if [ "$json" = "true" ]; then
         icon_override="${json_icons[$1]}"
-        echo '{"icon": "'$icon_override'", "state":"'${state}'", "text":"'$text'"}';
+        echo '{"icon": "'$icon_override'", "state":"'${state:-"Idle"}'", "text":"'$text'"}';
     else
         icon_override="${icons[$1]}"
-        echo "<span color='${color}'>$icon_override $text</span>"
+        echo "<span color='${color:-"#5E81AC"}'>$icon_override $text</span>"
     fi
 }
 
