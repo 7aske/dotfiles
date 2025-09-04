@@ -74,7 +74,7 @@ cpu = [
     "<span font='13'>󰡵</span>",
     "<span font='13'>󰡴</span>",
 ]
-tasks= "󰄵"
+tasks= "󰥪"
 
 [[block]]
 block = "music"
@@ -260,11 +260,17 @@ update = true
 block = "taskwarrior"
 interval = 60
 format = " $icon $count.eng(w:1) "
-format_singular = "$icon "
-format_everything_done = ""
+format_singular = " $icon "
+format_everything_done = " 󰄵 "
 warning_threshold = 3
 critical_threshold = 5
 data_location = "~/.config/task/taskchampion.sqlite3"
+[[block.filters]]
+name = "personal"
+filter = "+PENDING (project:'' or project:personal)"
+[[block.filters]]
+name = "work"
+filter = "+PENDING"
 [[block.click]]
 button = "left"
 cmd = "wtoggle2 -d60%x60% -T taskwarrior-tui"
