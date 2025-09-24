@@ -198,6 +198,8 @@ prompt_kubernetes() {
   fi
   local color=blue
 
+  local prpt
+  local current_ns=$(kubens -c)
   local current_ctx=$(awk '$1 == "current-context:" {
     if ($2 ~ /^".*"$/) {
       print substr($2, 2, length($2) - 2) 
@@ -214,7 +216,15 @@ prompt_kubernetes() {
     color=red
   fi
 
-  prompt_segment default $color " ${kubectx_mapping[$current_ctx]:-${current_ctx:gs/%/%%}}"
+  current_ctx=${kubectx_mapping[$current_ctx]:-${current_ctx:gs/%/%%}}
+  
+  if [[ "$current_ns" != "default" ]]; then
+    prpt=" ${current_ns}:${current_ctx}"
+  else
+    prpt=" ${current_ctx}"
+  fi
+
+  prompt_segment default $color "$prpt"
 }
 
 prompt_kubectx() {
