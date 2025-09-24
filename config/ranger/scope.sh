@@ -27,10 +27,11 @@ cached="$4"          # Path that should be used to cache image previews
 preview_images="$5"  # "True" if image previews are enabled, "False" otherwise.
 
 maxln=200    # Stop after $maxln lines.  Can be used like ls | head -n $maxln
+maxsize=$((5 * 1024 * 1024))  # Don't try to syntax highlight files larger than $maxsize bytes
 
 # Find out something about the file:
 mimetype=$(xdg-mime query filetype "$path")
-default_mimetype="$(file --mime-type -Lb $path)"
+default_mimetype="$(file --mime-type -Lb "$path")"
 extension=$(/bin/echo "${path##*.}" | awk '{print tolower($0)}')
 default_size="1920x1080"
 
@@ -99,17 +100,26 @@ if [ "$preview_images" = "True" ]; then
         # image files (unless overriden as above), but might fail for
         # unsupported types.
         image/*)
-            local orientation
-            orientation="$( identify -format '%[EXIF:Orientation]\n' -- "${path}" )"
-            ## If orientation data is present and the image actually
-            ## needs rotating ("1" means no rotation)...
-            if [[ -n "$orientation" && "$orientation" != 1 ]]; then
-                ## ...auto-rotate the image according to the EXIF data.
-                convert -- "${path}" -auto-orient "${cached}" && exit 6
-            fi
+            #local orientation
+            #local rotation
+            #orientation="$( identify -format '%[EXIF:Orientation]\n' -- "${path}" )"
+            #rotation="0"
+            ### If orientation data is present and the image actually
+            ### needs rotating ("1" means no rotation)...
+            #case "$orientation" in
+            #    3|4) rotation="180" ;;
+            #    5|6) rotation="90" ;;
+            #    7|8) rotation="270" ;;
+            #esac
 
+            #if [ "$rotation" != "0" ]; then
+            #    echo "$cached" > ~/img
+            #    ## ...auto-rotate the image according to the EXIF data.
+            #    magick -- "${path}" -rotate "$rotation" "${cached}"
+            #    exit 6
+            #fi
 
-            exit 7;;
+            exit 7 ;;
         # Image preview for video
         audio/*)
             # Get embedded thumbnail
@@ -135,9 +145,9 @@ case "$extension" in
     # Archive extensions:
     a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|\
     rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)
-        try als "$path" && { dump | trim; exit 0; }
-        try acat "$path" && { dump | trim; exit 3; }
-        try bsdtar -lf "$path" && { dump | trim; exit 0; }
+        als "$path" | trim && exit 3
+        acat -l "$path" | trim && exit 3
+        bsdtar -lf "$path" | trim && exit 3
         exit 1;;
     rar)
         # avoid password prompt by providing empty password
@@ -173,8 +183,22 @@ case "$mimetype" in
         ## catdoc: http://www.wagner.pp.ru/~vitus/software/catdoc/
         catdoc -- "${path}" && exit 5
         exit 1;;
+    */wps-office.xls)
+        ## Preview as text conversion
+        ## note: catdoc does not always work for .doc files
+        ## catdoc: http://www.wagner.pp.ru/~vitus/software/catdoc/
+        xls2csv "${path}" | head -n $maxln && exit 5
+        exit 1;;
+    */wps-office.xlsx)
+        ## Preview as text conversion
+        # python-xlsx2csv
+        xlsx2csv "${path}" | head -n $maxln && exit 5
+        exit 1;;
     application/vnd.efi.*)
         iso-info -i "${path}" && exit 5
+        exit 1;;
+    application/vnd.sqlite3)
+        sqlite3 "${path}" '.schema' | highlight --syntax=sql --out-format=ansi && exit 5
         exit 1;;
     ## DOCX, ePub, FB2 (using markdown)
     ## You might want to remove "|epub" and/or "|fb2" below if you have
@@ -182,6 +206,7 @@ case "$mimetype" in
     *wordprocessingml.document|*/epub+zip|*/x-fictionbook+xml|*/wps-office.doc|*/wps-office.docx)
         ## Preview as markdown conversion
         pandoc -s -t markdown -- "${path}" && exit 5
+        docx2txt "$path" - | trim && exit 5
         exit 1;;
 
     application/octet-stream | application/vnd.microsoft.portable-executable)
@@ -192,15 +217,22 @@ case "$mimetype" in
         readelf -WCa "${path}" && exit 5
         exit 1;;
     text/* | application/*)
-        echo "mimetype: $mimetype file_mimetype: $default_mimetype extension: $extension"
         if [[ "$default_mimetype" =~ .*/xml ]]; then
             cat "$path" | xmllint - --format --output - && { dump | trim; exit 5; }
             exit 1
-        elif [[ "$default_mimetype" =~ text/.* ]]; then
+        elif [[ "$mimetype" = "text/x-log" ]]; then
+            head -n "$maxln" "$path" && { dump | trim; exit 5; }
+        elif [[ "$default_mimetype" =~ text/.* ]] || [[ "$mimetype" =~ text/.* ]]; then
+            # check file size, don't try to syntax highlight huge files
+            if [ "$(stat -c%s "$path")" -gt "$maxsize" ]; then
+                head -n "$maxln" "$path" && { dump | trim; exit 5; }
+                exit 1
+            fi
+
             pygmentize_format=terminal
             highlight_format=ansi
             safepipe highlight --out-format=${highlight_format} "$path" && { dump | trim; exit 5; }
-            safepipe pygmentize -f ${pygmentize_format} "$path" && { dump | trim; exit 6; }
+            safepipe pygmentize -f ${pygmentize_format} "$path" && { dump | trim; exit 5; }
             exit 2
         fi ;;
     # Ascii-previews of images:

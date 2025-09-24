@@ -33,14 +33,11 @@ status=$(echo "$OUT" | sed -n 's/.*Status: \([^ ]*\).*/\1/p')
 capacity=$(echo "$OUT" | sed -n 's/.*Level: \([0-9]\+\)%/\1/p;s/BATTERY_//')
 
 if [ -n "$BLOCK_BUTTON" ] && [ -z "$capacity" ]; then
-    #notify-send -a battery -i audio-headset "Headset" "Headset not connected"
-    #if [ "$json" = "true" ]; then
-    #    _json "headphones_not_connected" "Idle"
-    #else
-    #    _span "󰟎" "#D8DEE9"
-    #fi
+    notify-send -a battery -i audio-headset "Headset" "Headset not connected"
     if [ "$json" = "true" ]; then
-        echo "{}"
+        _json "headphones_not_connected" "Idle"
+    else
+        _span "󰟎" "#D8DEE9"
     fi
     exit 0
 fi
@@ -59,13 +56,10 @@ case $BLOCK_BUTTON in
 esac
 
 if [ -z "$capacity" ]; then
-    #if [ "$json" = "true" ]; then
-    #    _json "headphones_not_connected" "Idle"
-    #else
-    #    _span "󰟎" "#D8DEE9"
-    #fi
     if [ "$json" = "true" ]; then
-        echo "{}"
+        _json "headphones_not_connected" "Idle"
+    else
+        _span "󰟎" "#D8DEE9"
     fi
     exit 0
 fi

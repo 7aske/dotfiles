@@ -28,6 +28,8 @@ export orange="${theme12}"
 export yellow="${theme13}"
 export green="${theme14}"
 export magenta="${theme15}"
+export white="${theme4}"
+export black="${theme0}"
 
 export color0="$theme1"
 export color1="$theme11"

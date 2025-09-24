@@ -34,6 +34,7 @@
 #
 # Different icons and json_colors can be set for each status type.
 
+KILL_SWITCH="$HOME/.cache/statusbar_$(basename $0)_kill"
 SWITCH="$HOME/.cache/statusbar_$(basename $0)"
 _toggle_switch() {
     [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH"; pkill "-SIGRTMIN+${1:-'9'}" i3status-rs
@@ -89,6 +90,8 @@ _output() {
         echo "<span color='$color'>$icon $text</span>"
     fi
 }
+
+[ -e "$KILL_SWITCH" ] && _output "error" "" && exit 0
 
 _format_time() {
     local formula="$1"

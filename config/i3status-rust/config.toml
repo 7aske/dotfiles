@@ -8,13 +8,18 @@ separator = "<span font='13'></span>"
 [icons]
 icons = "awesome6"
 [icons.overrides]
+net_wired=""
 3d_printer="󰹛"
 3d_printer_printing="󱇀"
 3d_printer_paused="󰏤"
 3d_printer_standby="󰐫"
 3d_printer_complete=""
 3d_printer_error=""
-3d_printer_canceled="󰜺"
+3d_printer_cancelled="󰜺"
+keyboard = ""
+mouse = "󰍽"
+signal="󰞃"
+bluetooth = ""
 microphone = ""
 microphone_muted = ""
 headphones = "󰋋"
@@ -69,6 +74,7 @@ cpu = [
     "<span font='13'>󰡵</span>",
     "<span font='13'>󰡴</span>",
 ]
+tasks= "󰥪"
 
 [[block]]
 block = "music"
@@ -250,18 +256,24 @@ update = true
 #sync = true
 #update = true
 
-#[[block]]
-#block = "taskwarrior"
-#interval = 60
-#format = "$icon $count.eng(w:1)"
-#format_singular = "$icon "
-#format_everything_done = ""
-#warning_threshold = 5
-#critical_threshold = 10
-#data_location = "~/.config/task"
-#[[block.click]]
-#button = "left"
-#cmd = "wtoggle2 -T taskwarrior-tui"
+[[block]]
+block = "taskwarrior"
+interval = 60
+format = " $icon $count.eng(w:1) "
+format_singular = " $icon "
+format_everything_done = " 󰄵 "
+warning_threshold = 3
+critical_threshold = 5
+data_location = "~/.config/task/taskchampion.sqlite3"
+[[block.filters]]
+name = "personal"
+filter = "+PENDING (project:'' or project:personal)"
+[[block.filters]]
+name = "work"
+filter = "+PENDING"
+[[block.click]]
+button = "left"
+cmd = "wtoggle2 -d60%x60% -T taskwarrior-tui"
 
 [[block]]
 block = "custom"
@@ -427,6 +439,52 @@ update = true
 button = "right"
 cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/headset -j"
 sync = true
+update = true
+
+[[block]]
+block = "custom"
+interval = 60
+command = "~/.local/bin/statusbar/bluetooth -j"
+signal = 10
+json = true
+hide_when_empty = true
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/bluetooth -j"
+sync = true
+update = true
+[[block.click]]
+button = "middle"
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/bluetooth -j"
+sync = true
+update = true
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/bluetooth -j"
+sync = true
+update = true
+
+[[block]]
+block = "custom"
+interval = 60
+command = "~/.local/bin/statusbar/mx -j"
+signal = 10
+json = true
+hide_when_empty = true
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/mx -j"
+sync = false
+update = true
+[[block.click]]
+button = "middle"
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/mx -j"
+sync = false
+update = true
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/mx -j"
+sync = false
 update = true
 
 [[block]]
