@@ -199,7 +199,6 @@ prompt_kubernetes() {
   local color=blue
 
   local prpt
-  local current_ns=$(kubens -c)
   local current_ctx=$(awk '$1 == "current-context:" {
     if ($2 ~ /^".*"$/) {
       print substr($2, 2, length($2) - 2) 
@@ -211,6 +210,7 @@ prompt_kubernetes() {
   if [[ -z "$current_ctx" ]]; then
     return
   fi
+  local current_ns=$(kubens -c)
 
   if [[ "$current_ctx" =~ ".*prod.*" ]]; then
     color=red
