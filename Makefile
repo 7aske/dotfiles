@@ -30,6 +30,7 @@ scripts-uninstall:
 add:
 	touch src/$(s).sh
 	chmod u+x src/$(s).sh
+	echo "#!/usr/bin/env bash" >> src/$(s).sh
 
 systemd:
 	cp $(SYSTEMD_INDIR)/* $(SYSTEMD_OUTDIR)/
