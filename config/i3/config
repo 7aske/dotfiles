@@ -151,12 +151,14 @@ bindsym $mod+Mod1+semicolon exec --no-startup-id rofi -dmenu -p "new session" | 
 bindsym $mod+F10           exec --no-startup-id echo 0 | dmenu -p 'screen: ' -fn '$dmenu_font' | xargs screencam -n
 bindsym $mod+Shift+F10     exec --no-startup-id BLOCK_BUTTON=1 ~/.local/bin/statusbar/rec-status
 
-set $mode_lutris games: rofi-(l)utris (L)utris (s)team
+set $mode_lutris games: rofi-(l)utris (L)utris (s)team (A)pollo (a)pollo-web
 bindsym $mod+Mod1+l mode "$mode_lutris"
 mode "$mode_lutris" {
     bindsym l       exec --no-startup-id rofi-lutris;                       mode default
     bindsym Shift+l exec --no-startup-id wtoggle2 -d 75%x75% lutris;        mode default
     bindsym s       exec --no-startup-id wtoggle2 -d 75%x75% steam-runtime; mode default
+    bindsym Shift+a exec --no-startup-id toggle-service apollo.service;     mode default
+    bindsym a       exec --no-startup-id xdg-open https://localhost:47990/config;   mode default
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode default
     bindsym Escape mode default
@@ -556,8 +558,9 @@ for_window [title="^World of Warcraft$"] layout tabbed, border none
 for_window [title="Kerbal Space Program"] layout tabbed, border none, floating disable
 for_window [class="steam_app_.*"] layout tabbed, border none, floating disable
 for_window [class="(?i)steam"] floating enable, resize set 70ppt 70ppt, move position center
+for_window [title="Steam Big Picture Mode"] floating disable, fullscreen disable
 for_window [class="(?i)epicgameslauncher.exe"] floating enable, resize set 70ppt 70ppt, move position center
-for_window [class="(?i)lutris"] floating enable, move position center
+for_window [class="(?i)lutris"] floating enable, resize set 75ppt 79ppt, move position center
 
 # virtual machines
 for_window [class="VirtualBox Machine" title="(?i)^win"] move container to workspace w
