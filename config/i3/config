@@ -558,7 +558,8 @@ for_window [title="^World of Warcraft$"] layout tabbed, border none
 for_window [title="Kerbal Space Program"] layout tabbed, border none, floating disable
 for_window [class="steam_app_.*"] layout tabbed, border none, floating disable
 for_window [class="(?i)steam"] floating enable, resize set 70ppt 70ppt, move position center
-for_window [title="Steam Big Picture Mode"] floating disable, fullscreen disable
+for_window [class="^steam$" title="Steam Big Picture Mode"] floating disable, fullscreen disable
+for_window [class="^lutris-gamepad-ui$" title="Lutris Gamepad UI"] floating disable, fullscreen disable
 for_window [class="(?i)epicgameslauncher.exe"] floating enable, resize set 70ppt 70ppt, move position center
 for_window [class="(?i)lutris"] floating enable, resize set 75ppt 79ppt, move position center
 
