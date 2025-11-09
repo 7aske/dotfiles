@@ -48,7 +48,7 @@ if [ -z "$(command -v solaar 2>/dev/null)" ]; then
     exit 0
 fi
 
-read -r bat_level bat_state <<< "$(solaar show 2>/dev/null | sed -n 's/^\s*Battery: \(.*\)%, BatteryStatus.\(RECHARGING\|DISCHARGING\)\.*$/\1 \2/;s/DISCHARGING/0/p;s/RECHARGING/1/p' | head -n 1)"
+read -r bat_level bat_state <<< "$(solaar show 2>/dev/null | sed -n 's/^\s*Battery: \(.*\)%, BatteryStatus.\(RECHARGING\|DISCHARGING\|FULL\)\.*$/\1 \2/;s/DISCHARGING/0/p;s/\(RECHARGING\|FULL\)/1/p' | head -n 1)"
 
 libbat_update "$bat_level" "$bat_state"
 
