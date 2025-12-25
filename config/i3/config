@@ -481,6 +481,7 @@ assign [title=".*Micosoft Teams.*"] $ws7
 assign [title="World of Warcraft"] g
 assign [title="Kerbal Space Program"] g
 assign [class="steam_app_.*"] g
+assign [class="steam" title="Steam Big Picture Mode"] g
 assign [class="battle.net.exe"] w
 
 # Open specific applications in floating mode
@@ -643,7 +644,7 @@ exec_always --no-startup-id nm-applet
 exec_always --no-startup-id xfce4-power-manager
 exec_always --no-startup-id xmodmap ~/.Xmodmap
 exec_always --no-startup-id flameshot
-exec_always --no-startup-id birdtray
+# exec_always --no-startup-id birdtray
 # exec_always --no-startup-id pamac-tray
 exec_always --no-startup-id pgrep udiskie || udiskie -s -f $file -a --appindicator
 exec_always --no-startup-id pgrep barrier || (sleep 3 && barrier)
