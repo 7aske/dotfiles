@@ -135,9 +135,9 @@ bindsym $mod+e       exec --no-startup-id $terminal -e $termfile
 bindsym $mod+Shift+e exec --no-startup-id $file
 bindsym $mod+w       exec --no-startup-id $browser
 bindsym $mod+Mod1+w  exec --no-startup-id browser-profile
-bindsym $mod+Ctrl+w  exec --no-startup-id bks
+bindsym $mod+Shift+w exec --no-startup-id bks
+bindsym $mod+Ctrl+w  exec --no-startup-id $browser --incognito
 bindsym $mod+Shift+v exec --no-startup-id $terminal -e $editor /tmp/$(uuidgen).txt
-bindsym $mod+Shift+w exec --no-startup-id $browser --incognito
 # 7aske-scripts
 bindsym $mod+Mod1+n         exec --no-startup-id BLOCK_BUTTON=2 ~/.local/bin/statusbar/notify-status; exec --no-startup-id pkill -SIGRTMIN+9 $status_cmd
 bindsym $mod+Shift+Mod1+n   exec --no-startup-id dunst_reload
@@ -478,7 +478,7 @@ assign [class="jetbrains-datagrip"] d
 assign [title=".*Micosoft Teams.*"] $ws7
 
 # Open games in specific workspaces
-assign [title="World of Warcraft"] g
+assign [title="^World of Warcraft$"] g
 assign [title="Kerbal Space Program"] g
 assign [class="steam_app_.*"] g
 assign [class="steam" title="Steam Big Picture Mode"] g
@@ -555,10 +555,10 @@ for_window [class="weather_floating"] floating enable, resize set 75ppt 82ppt, m
 for_window [class="tmux_floating"] floating enable, resize set 70ppt 70ppt, move position center
 
 # games
-for_window [title="^World of Warcraft$"] layout tabbed, border none
+for_window [title="^World of Warcraft$"] layout tabbed, border none, floating disable
 for_window [title="Kerbal Space Program"] layout tabbed, border none, floating disable
 for_window [class="steam_app_.*"] layout tabbed, border none, floating disable
-for_window [class="(?i)steam"] floating enable, resize set 70ppt 70ppt, move position center
+for_window [class="^steam$"] floating enable, resize set 70ppt 70ppt, move position center
 for_window [class="^steam$" title="Steam Big Picture Mode"] floating disable, fullscreen disable
 for_window [class="^lutris-gamepad-ui$" title="Lutris Gamepad UI"] floating disable, fullscreen disable
 for_window [class="(?i)epicgameslauncher.exe"] floating enable, resize set 70ppt 70ppt, move position center
