@@ -74,20 +74,35 @@ if [ "$preview_images" = "True" ]; then
             ;;
         model/*) # preview in f3d
             f3d --config=thumbnail --load-plugins=native --color=0.36,0.50,0.67 --background-color=0.18,0.20,0.25 --verbose=quiet --output="$cached" "$path" && exit 6 || exit 1 ;;
-        # Image previews for SVG files, disabled by default.
+        application/x-extension-fcstd)
+            unzip -p "$path" thumbnails/Thumbnail.png > "$cached" && exit 6 || exit 1 ;;
         image/x-fuji-raf)
            exiftool "$path" -previewimage -b  > "$cached" && exit 6 || exit 1 ;;
         image/svg+xml|image/svg)
-            rsvg-convert --keep-aspect-ratio --width "${default_size%x*}" "${path}" -o "${cached}.png" \
-                && mv "${cached}.png" "${cached}" \
-                && exit 6
-            exit 1;;
-
-        ## PDF
+           rsvg-convert --keep-aspect-ratio --width "${default_size%x*}" "${path}" -o "${cached}.png" \
+               && mv "${cached}.png" "${cached}" \
+               && exit 6
+           exit 1;;
+        # pip install matplotlib cartopy
+        application/vnd.garmin.tcx+xml)
+            python3 -c "import lxml.etree as ET, matplotlib.pyplot as plt, cartopy.crs as ccrs, cartopy.io.img_tiles as cimgt; tree=ET.parse('$path'); ns={'tcx':'http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2'}; lats,lons=[],[]; [lats.append(float(p.text)) or lons.append(float(p.getnext().text)) for p in tree.xpath('//tcx:Trackpoint/tcx:Position/tcx:LatitudeDegrees',namespaces=ns)]; t=cimgt.OSM(); ax=plt.axes(projection=t.crs); ax.add_image(t,13); pad=0.001; ax.set_extent([min(lons)-pad,max(lons)+pad,min(lats)-pad,max(lats)+pad],crs=ccrs.Geodetic()); ax.plot(lons,lats,transform=ccrs.Geodetic(),color='red',linewidth=2); plt.savefig('$cached.png',dpi=200,bbox_inches='tight')" && \
+                mv "$cached.png" "$cached" && \
+                exit 6 || exit 1 ;;
+        # pip install fitparse matplotlib cartopy
+        application/vnd.ant.fit)
+                python3 -c "import fitparse, matplotlib.pyplot as plt, cartopy.crs as ccrs, cartopy.io.img_tiles as cimgt; f=fitparse.FitFile('$path'); lats,lons=[],[]; [lats.append(r.get_value('position_lat')*(180.0/2**31)) or lons.append(r.get_value('position_long')*(180.0/2**31)) for r in f.get_messages('record') if r.get_value('position_lat') is not None and r.get_value('position_long') is not None]; t=cimgt.OSM(); ax=plt.axes(projection=t.crs); ax.add_image(t,13); pad=0.001; ax.set_extent([min(lons)-pad,max(lons)+pad,min(lats)-pad,max(lats)+pad],crs=ccrs.Geodetic()); ax.plot(lons,lats,transform=ccrs.Geodetic(),color='red',linewidth=2); plt.savefig('$cached.png',dpi=200,bbox_inches='tight')" && \
+                mv "$cached.png" "$cached" && \
+                exit 6 || exit 1 ;;
+        # pip install gpxpy matplotlib cartopy
+        application/gpx+xml)
+            python3 -c "import gpxpy, matplotlib.pyplot as plt, cartopy.crs as ccrs, cartopy.io.img_tiles as cimgt; g=gpxpy.parse(open('$path')); lats,lons=[],[]; [lats.append(p.latitude) or lons.append(p.longitude) for t in g.tracks for s in t.segments for p in s.points]; t=cimgt.OSM(); ax=plt.axes(projection=t.crs); ax.add_image(t,13); pad=0.001; ax.set_extent([min(lons)-pad,max(lons)+pad,min(lats)-pad,max(lats)+pad],crs=ccrs.Geodetic()); ax.plot(lons,lats,transform=ccrs.Geodetic(),color='red',linewidth=2); plt.savefig('$cached.png',dpi=200,bbox_inches='tight')" && \
+                mv "$cached.png" "$cached" && \
+                exit 6 || exit 1 ;;
         application/x-openscad)
             openscad  "${path}" -o "${cached}.png" \
             && mv "${cached}.png" "${cached}" \
             && exit 6 || exit 1 ;;
+        ## PDF
         application/pdf)
             pdftoppm -f 1 -l 1 \
                     -scale-to-x "${default_size%x*}" \
@@ -118,7 +133,6 @@ if [ "$preview_images" = "True" ]; then
             #    magick -- "${path}" -rotate "$rotation" "${cached}"
             #    exit 6
             #fi
-
             exit 7 ;;
         # Image preview for video
         audio/*)
@@ -133,11 +147,15 @@ if [ "$preview_images" = "True" ]; then
     esac
 
     case "$extension" in
+        fcbak)
+            unzip -p "$path" thumbnails/Thumbnail.png > "$cached" && exit 6 || exit 1 ;;
         exe)
             wrestool -x -t 14 "$path" -o "$cached"
             if [ -e "$cached" ]; then
                 exit 6
-            fi
+            else
+                file --dereference --brief -- "${path}" && exit 5
+            fi ;;
     esac
 fi
 
@@ -208,19 +226,14 @@ case "$mimetype" in
         pandoc -s -t markdown -- "${path}" && exit 5
         docx2txt "$path" - | trim && exit 5
         exit 1;;
-
-    application/octet-stream | application/vnd.microsoft.portable-executable)
-        file --dereference --brief -- "${path}" && exit 5
-        exit 1;;
-
-    application/x-executable | application/x-pie-executable | application/x-sharedlib)
+    application/x-executable|application/x-pie-executable|application/x-sharedlib)
         readelf -WCa "${path}" && exit 5
         exit 1;;
-    text/* | application/*)
+    text/*|application/*)
         if [[ "$default_mimetype" =~ .*/xml ]]; then
             cat "$path" | xmllint - --format --output - && { dump | trim; exit 5; }
             exit 1
-        elif [[ "$mimetype" = "text/x-log" ]]; then
+        elif [[ "$mimetype" = "text/x-log" ]] || [[ "$mimetype" = "application/x-mswinurl" ]]; then
             head -n "$maxln" "$path" && { dump | trim; exit 5; }
         elif [[ "$default_mimetype" =~ text/.* ]] || [[ "$mimetype" =~ text/.* ]]; then
             # check file size, don't try to syntax highlight huge files
@@ -245,6 +258,9 @@ case "$mimetype" in
         exit 1;;
 esac
 
-echo '----- File Type Classification -----' && file --dereference --brief -- "${path}" &&
-echo "mimetype: $mimetype file_mimetype: $default_mimetype extension: $extension"
-&& exit 5
+# If everytihng else failed print some useful information about the file:
+echo '----- File Type Classification -----' && \
+    echo -n "Description: " && file --dereference --brief -- "${path}" && \
+    echo "MIME type: ${mimetype}(${default_mimetype})" && \
+    echo "Extension: ${extension}" && \
+    exit 0
