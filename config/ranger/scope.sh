@@ -98,10 +98,14 @@ if [ "$preview_images" = "True" ]; then
             python3 -c "import gpxpy, matplotlib.pyplot as plt, cartopy.crs as ccrs, cartopy.io.img_tiles as cimgt; g=gpxpy.parse(open('$path')); lats,lons=[],[]; [lats.append(p.latitude) or lons.append(p.longitude) for t in g.tracks for s in t.segments for p in s.points]; t=cimgt.OSM(); ax=plt.axes(projection=t.crs); ax.add_image(t,13); pad=0.001; ax.set_extent([min(lons)-pad,max(lons)+pad,min(lats)-pad,max(lats)+pad],crs=ccrs.Geodetic()); ax.plot(lons,lats,transform=ccrs.Geodetic(),color='red',linewidth=2); plt.savefig('$cached.png',dpi=200,bbox_inches='tight')" && \
                 mv "$cached.png" "$cached" && \
                 exit 6 || exit 1 ;;
+        text/x.gcode)
+            if [[ "$default_mimetype" == "application/zip" ]]; then
+                unzip -p "$path" Metadata/thumbnail.png > "$cached" && exit 6 || exit 1
+            fi ;;
         application/x-openscad)
             openscad  "${path}" -o "${cached}.png" \
-            && mv "${cached}.png" "${cached}" \
-            && exit 6 || exit 1 ;;
+                && mv "${cached}.png" "${cached}" \
+                && exit 6 || exit 1 ;;
         ## PDF
         application/pdf)
             pdftoppm -f 1 -l 1 \
@@ -153,8 +157,6 @@ if [ "$preview_images" = "True" ]; then
             wrestool -x -t 14 "$path" -o "$cached"
             if [ -e "$cached" ]; then
                 exit 6
-            else
-                file --dereference --brief -- "${path}" && exit 5
             fi ;;
     esac
 fi
@@ -183,8 +185,12 @@ case "$extension" in
     torrent)
         try transmission-show "$path" && { dump | trim; exit 5; } || exit 1;;
     # ODT Files
+    # yay -S odt2txt
     odt|ods|odp|sxw)
         try odt2txt "$path" && { dump | trim; exit 5; } || exit 1;;
+    # Lightroom presets
+    dcp)
+        try exiftool "$path" && { dump | trim; exit 5; } || exit 1;;
     # HTML Pages:
     htm|html|xhtml)
         try w3m    -dump "$path" && { dump | trim | fmt -s -w $width; exit 4; }
@@ -199,8 +205,9 @@ case "$mimetype" in
         ## Preview as text conversion
         ## note: catdoc does not always work for .doc files
         ## catdoc: http://www.wagner.pp.ru/~vitus/software/catdoc/
-        catdoc -- "${path}" && exit 5
-        exit 1;;
+        try catdoc --  "$path" && { dump | trim | fmt -s -w $width; exit 4; }
+        try wps2txt "$path" && { dump | trim | fmt -s -w $width; exit 4; }
+        ;;
     */wps-office.xls)
         ## Preview as text conversion
         ## note: catdoc does not always work for .doc files
@@ -223,8 +230,8 @@ case "$mimetype" in
     ## uncommented other methods to preview those formats
     *wordprocessingml.document|*/epub+zip|*/x-fictionbook+xml|*/wps-office.doc|*/wps-office.docx)
         ## Preview as markdown conversion
-        pandoc -s -t markdown -- "${path}" && exit 5
         docx2txt "$path" - | trim && exit 5
+        pandoc -s -t markdown -- "${path}" && exit 5
         exit 1;;
     application/x-executable|application/x-pie-executable|application/x-sharedlib)
         readelf -WCa "${path}" && exit 5
@@ -233,9 +240,12 @@ case "$mimetype" in
         if [[ "$default_mimetype" =~ .*/xml ]]; then
             cat "$path" | xmllint - --format --output - && { dump | trim; exit 5; }
             exit 1
-        elif [[ "$mimetype" = "text/x-log" ]] || [[ "$mimetype" = "application/x-mswinurl" ]]; then
+        elif [[ "$mimetype" = "text/x-log" ]] ||
+            [[ "$mimetype" = "application/x-mswinurl" ]]; then
             head -n "$maxln" "$path" && { dump | trim; exit 5; }
-        elif [[ "$default_mimetype" =~ text/.* ]] || [[ "$mimetype" =~ text/.* ]]; then
+        elif [[ "$default_mimetype" =~ text/.* ]] || 
+            [[ "$mimetype" =~ text/.* ]] ||
+            [[ "$mimetype" = "application/x-wine-extension-ini" ]]; then
             # check file size, don't try to syntax highlight huge files
             if [ "$(stat -c%s "$path")" -gt "$maxsize" ]; then
                 head -n "$maxln" "$path" && { dump | trim; exit 5; }
