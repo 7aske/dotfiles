@@ -1,112 +1,87 @@
 #!/usr/bin/env sh
-# Give a battery name (e.g. BAT0) as an argument.
 
 SWITCH="$HOME/.cache/statusbar_$(basename $0)"
 SIDETONE="$HOME/.cache/statusbar_headset_sidetone"
 
-[ -f  "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
-[ -f  "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
 [ -e "$HOME/.local/bin/statusbar/libbat" ] && source "$HOME/.local/bin/statusbar/libbat"
+[ -e "$HOME/.local/bin/statusbar/libbar" ] && source "$HOME/.local/bin/statusbar/libbar"
 
-while getopts "j" opt; do
-    case $opt in
-        j) json=true ;;
-    esac
-done
+libbar_getopts $@
 
-shift $((OPTIND-1))
+# init libbar icons
+libbar_json_icons[headphones]="headphones"
+libbar_json_icons[headphones_not_connected]="headphones_not_connected"
+libbar_icons[headphones]="󰋋"
+libbar_icons[headphones_not_connected]="󰟎"
 
-_json() {
-    echo '{"icon": "'${1:-"$(basename $0)"}'", "state":"'${2}'", "text":"'${3}'"}';
-}
-
-_span() {
-    if [ -n "$3" ]; then
-        echo "<span size='large'>$1</span> <span color='$2'>$3</span>"
+_headset_sidetone() {
+    [ -e "$SIDETONE" ] && rm "$SIDETONE" || touch "$SIDETONE";
+    if [ -e "$SIDETONE" ]; then
+        notify-send -i audio-headset "Headset" "Sidetone disabled"
+        headsetcontrol -s 0 >/dev/null
     else
-        echo "<span size='large' color='$2'>$1 </span>"
+        notify-send -i audio-headset "Headset" "Sidetone enabled"
+        headsetcontrol -s 64 >/dev/null
     fi
 }
 
-read capacity status < <(headsetcontrol -b | awk '
+# headsetcontrol exits with code 1 where is no adapter present
+read capacity status status_text < <(headsetcontrol -b | awk '
 BEGIN {
     status_map["BATTERY_AVAILABLE"] = 0
+    status_map["BATTERY_UNAVAILABLE"] = -1
     status_map["BATTERY_CHARGING"]  = 1
+    status_text_map["BATTERY_AVAILABLE"] = "Discharging"
+    status_text_map["BATTERY_UNAVAILABLE"] = "Disconnected"
+    status_text_map["BATTERY_CHARGING"]  = "Charging"
+    capacity = -1
+    status = -1
+    status_text = "Unavailable"
+}
+$0 == "No supported device found" {
+    exit 1
 }
 
 $1 == "Level:" {
     sub(/%/, "", $2)
-    level = $2
+    capacity = $2
 }
 
 $1 == "Status:" {
     status = status_map[$2]
+    if (status == "") {
+        status = -1
+    }
+    status_text = status_text_map[$2]
+    if (status_text == "") {
+        status_text = "Disconnected"
+    }
 }
 
 END {
-    printf "%s %s", level, status
+    printf "%s %s %s", capacity, status, status_text
 }')
+if [ "$status_text" = "Unavailable" ]; then
+    libbar_output "headphones_not_connected" ""
+    exit 0
+elif [ "$status_text" = "Disconnected" ]; then
+    if [ -n "$BLOCK_BUTTON" ]; then
+        notify-send -a battery -i audio-headset "Headset" "Headset not connected"
+    fi
+    libbar_output "headphones_not_connected" "$ZWSP"
+    exit 0
+fi
 
 libbat_update "$capacity" "$status"
 
-if [ -n "$BLOCK_BUTTON" ] && [ -z "$capacity" ]; then
-    notify-send -a battery -i audio-headset "Headset" "Headset not connected"
-    if [ "$json" = "true" ]; then
-        _json "headphones_not_connected" "Idle"
-    else
-        _span "󰟎" "#D8DEE9"
-    fi
-    exit 0
-fi
-
 case $BLOCK_BUTTON in
-    1) notify-send -a battery -i battery "Battery" "$(echo "$OUT" | sed 's/BATTERY_AVAILABLE/Discharging/;s/BATTERY_CHARGING/Charging/')" ;;
-    2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
-    3) [ -e "$SIDETONE" ] && rm "$SIDETONE" || touch "$SIDETONE";
-        if [ -e "$SIDETONE" ]; then
-            notify-send -i audio-headset "Headset" "Sidetone disabled"
-            headsetcontrol -s 0 >/dev/null
-        else
-            notify-send -i audio-headset "Headset" "Sidetone enabled"
-            headsetcontrol -s 64 >/dev/null
-        fi ;;
+    1) notify-send -a battery -i "$notif_icon" "Headset Battery" "$(echo "Capacity: $capacity%\nStatus: $status_text")" ;;
+    2) libbar_toggle_switch ;;
+    3) _headset_sidetone ;;
 esac
 
-if [ -z "$capacity" ]; then
-    if [ "$json" = "true" ]; then
-        _json "headphones_not_connected" "Idle"
-    else
-        _span "󰟎" "#D8DEE9"
-    fi
-    exit 0
-fi
-
 if [ -e "$SWITCH" ]; then
-    if [ "$json" = "true" ]; then
-        if ! [ "$state" = "Critical" ]; then
-            state="Idle"
-        fi
-        if [ "$state" = "Critical" ]; then
-            color="$color0"
-        fi
-
-        _json "headphones" "$state" "<span color='$color'>$icon</span>"
-    else
-        echo "<span color='$color'>󰋋 $icon$warn</span>"
-    fi
+    libbar_output "headphones" "$icon"
 else
-    if [ "$json" = "true" ]; then
-        if ! [ "$state" = "Critical" ]; then
-            state="Idle"
-            color="$theme9"
-        fi
-        if [ "$state" = "Critical" ]; then
-            color="$color0"
-        fi
-
-        _json "headphones" "$state" "<span color='$color' rise='-1pt'>$icon $capacity%</span>"
-    else
-        echo "󰋋 <span color='$color'>$icon</span><span color='$color' rise='-1pt'> $capacity%$warn</span>"
-    fi
-
+    libbar_output "headphones" "$icon$capacity%"
 fi
