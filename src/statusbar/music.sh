@@ -47,8 +47,8 @@ case $BLOCK_BUTTON in
 		else
 			padefault volume-specific "chromium" "+5%"
 		fi
-	elif [[ "$PLAYER_ARG" =~ "spotify" ]]; then
-		padefault volume-specific "spotify" "+5%"
+	#elif [[ "$PLAYER_ARG" =~ "spotify" ]]; then
+	#	padefault volume-specific "spotify" "+5%"
 	else
 		playerctl "$PLAYER_ARG" volume "0.05+"
 		vol="$(playerctl "$PLAYER_ARG" volume)"
@@ -63,8 +63,8 @@ case $BLOCK_BUTTON in
 		else
 			padefault volume-specific "chromium" "-5%"
 		fi
-	elif [[ "$PLAYER_ARG" =~ "spotify" ]]; then
-		padefault volume-specific "spotify" "-5%"
+	#elif [[ "$PLAYER_ARG" =~ "spotify" ]]; then
+	#	padefault volume-specific "spotify" "-5%"
 	else
 		playerctl "$PLAYER_ARG" volume "0.05-"
 		vol="$(playerctl "$PLAYER_ARG" volume)"
