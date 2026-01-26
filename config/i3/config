@@ -99,8 +99,8 @@ bindsym Shift+XF86AudioRaiseVolume exec --no-startup-id BLOCK_BUTTON=4 ~/.local/
 bindsym Shift+XF86AudioLowerVolume exec --no-startup-id BLOCK_BUTTON=5 ~/.local/bin/statusbar/music; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
 bindsym Ctrl+Shift+XF86AudioRaiseVolume exec --no-startup-id padefault volume-focus +1%
 bindsym Ctrl+Shift+XF86AudioLowerVolume exec --no-startup-id padefault volume-focus -1%
-bindsym Mod1+XF86AudioRaiseVolume exec --no-startup-id padefault mic-volume +1%; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
-bindsym Mod1+XF86AudioLowerVolume exec --no-startup-id padefault mic-volume -1%; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
+bindsym Mod1+XF86AudioRaiseVolume exec --no-startup-id padefault mic-volume +5%; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
+bindsym Mod1+XF86AudioLowerVolume exec --no-startup-id padefault mic-volume -5%; exec --no-startup-id pkill -SIGRTMIN+10 $status_cmd
 
 
 #                    _ _           _   _
