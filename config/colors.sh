@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-wallpaper='/home/nik/.config/wallpaper'
+wallpaper="$HOME/.config/wallpaper"
 
 theme0="#2E3440"
 theme1="#3B4252"
@@ -47,3 +47,5 @@ export color12="$theme9"
 export color13="$theme15"
 export color14="$theme7"
 export color15="$theme6"
+
+export DOTS_COLORS_SOURCED="true"
