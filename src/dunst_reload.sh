@@ -23,6 +23,6 @@ dunst \
     -separator_color "${color4}" \
     -conf ~/.config/dunst/dunstrc &
 
-notify-send -u normal   "dunst" "dunst reloaded"
-notify-send -u critical "dunst" "dunst reloaded"
-notify-send -u low      "dunst" "dunst reloaded"
+notify-send -i notifications -u normal   "dunst" "dunst reloaded"
+notify-send -i notifications -u critical "dunst" "dunst reloaded"
+notify-send -i notifications -u low      "dunst" "dunst reloaded"

@@ -138,9 +138,10 @@
 	corner_radius=0
 
     # Paths to default icons.
-    icon_path = /usr/share/icons/ePapirus/32x32/status/:/usr/share/icons/ePapirus/64x64/devices/:/usr/share/icons/ePapirus/64x64/apps/:/usr/share/icons/ePapirus/22x22/actions/:/usr/share/icons/ePapirus/24x24/panel/
+    icon_path = /usr/share/icons/Papirus-Dark/24x24/panel/:/usr/share/icons/Papirus-Dark/32x32/status/:/usr/share/icons/Papirus-Dark/64x64/devices/:/usr/share/icons/Papirus-Dark/64x64/apps/:/usr/share/icons/Papirus-Dark/22x22/actions/:/usr/share/icons/Papirus-Dark/22x22/categories/:/usr/share/icons/Papirus-Dark/22x22/mimetypes/:/usr/share/icons/Papirus-Dark/22x22/places/:/usr/share/icons/Papirus-Dark/24x24/symbolic/actions/:/usr/share/icons/Papirus-Dark/24x24/symbolic/apps/:/usr/share/icons/Papirus-Dark/24x24/symbolic/categories/:/usr/share/icons/Papirus-Dark/24x24/symbolic/devices/:/usr/share/icons/Papirus-Dark/24x24/symbolic/emblems/:/usr/share/icons/Papirus-Dark/24x24/symbolic/mimetypes/:/usr/share/icons/Papirus-Dark/24x24/symbolic/places/:/usr/share/icons/Papirus-Dark/24x24/symbolic/status/
 
     # Limit icons size.
+    min_icon_size=32
     max_icon_size=128
 
 	mouse_left_click = do_action, close_current

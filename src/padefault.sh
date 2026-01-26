@@ -22,24 +22,27 @@ _usage() {
 
 declare -A speaker_volume_icons
 speaker_volume_icons=(
-    [high]="audio-volume-high-symbolic"
-    [medium]="audio-volume-medium-symbolic"
-    [low]="audio-volume-low-symbolic"
-    [mute]="audio-off"
+    [overamplified]="audio-volume-high-danger"
+    [high]="audio-volume-high"
+    [medium]="audio-volume-medium"
+    [low]="audio-volume-low"
+    [mute]="audio-volume-muted"
 )
 
 declare -A mic_volume_icons
 mic_volume_icons=(
-    [high]="audio-input-microphone-high"
-    [medium]="audio-input-microphone-medium"
-    [low]="audio-input-microphone-low"
-    [mute]="audio-input-microphone-muted"
+    [high]="mic-volume-high"
+    [medium]="mic-volume-medium"
+    [low]="mic-volume-low"
+    [mute]="mic-volume-muted"
 )
 
 padef_get_speaker_icon() {
     local vol="$1"
     local icon=${speaker_volume_icons[low]}
-    if [ "$vol" -ge 66 ]; then
+    if [ "$vol" -gt 100 ]; then
+        icon=${speaker_volume_icons[overamplified]}
+    elif [ "$vol" -ge 66 ]; then
         icon=${speaker_volume_icons[high]}
     elif [ "$vol" -ge 33 ]; then
         icon=${speaker_volume_icons[medium]}
@@ -386,7 +389,7 @@ pa_mute_all() {
 	local action="$(($?))"
 
     case "$target" in
-        "sink") icon="audio-volume-high-symbolic" ;;
+        "sink") icon="audio-volume-high" ;;
         "source") icon="audio-input-microphone-high" ;;
     esac
 
@@ -399,7 +402,7 @@ pa_mute_all() {
     case $action in
         1)
             case "$target" in
-                "sink") icon="audio-volume-muted-symbolic" ;;
+                "sink") icon="audio-volume-muted" ;;
                 "source") icon="audio-input-microphone-muted" ;;
             esac
             message="muted all ${target}s" ;;
