@@ -4,6 +4,7 @@
 default_sink=$(pactl get-default-sink)
 notify_timeout="1000"
 MAX_VOLUME="${MAX_VOLUME:-150}"
+MAX_MIC_VOLUME="${MAX_MIC_VOLUME:-100}"
 
 _usage() {
 	echo "usage: padefault <command> [args]"
@@ -17,6 +18,48 @@ _usage() {
 	echo "    volume [args]       sets default audio device volume"
 	echo "    mic-volume [args]   sets default audio input volume"
 	exit 0
+}
+
+declare -A speaker_volume_icons
+speaker_volume_icons=(
+    [high]="audio-volume-high-symbolic"
+    [medium]="audio-volume-medium-symbolic"
+    [low]="audio-volume-low-symbolic"
+    [mute]="audio-off"
+)
+
+declare -A mic_volume_icons
+mic_volume_icons=(
+    [high]="audio-input-microphone-high"
+    [medium]="audio-input-microphone-medium"
+    [low]="audio-input-microphone-low"
+    [mute]="audio-input-microphone-muted"
+)
+
+padef_get_speaker_icon() {
+    local vol="$1"
+    local icon=${speaker_volume_icons[low]}
+    if [ "$vol" -ge 66 ]; then
+        icon=${speaker_volume_icons[high]}
+    elif [ "$vol" -ge 33 ]; then
+        icon=${speaker_volume_icons[medium]}
+    elif [ "$vol" -eq 0 ]; then
+        icon=${speaker_volume_icons[mute]}
+    fi
+    echo $icon
+}
+
+padef_get_mic_icon() {
+    local vol="$1"
+    local icon=${mic_volume_icons[low]}
+    if [ "$vol" -ge 66 ]; then
+        icon=${mic_volume_icons[high]}
+    elif [ "$vol" -ge 33 ]; then
+        icon=${mic_volume_icons[medium]}
+    elif [ "$vol" -eq 0 ]; then
+        icon=${mic_volume_icons[mute]}
+    fi
+    echo $icon
 }
 
 padef_toggle_focus() {
@@ -45,6 +88,8 @@ padef_toggle_focus() {
         | "\(.index) \(.name) \(.description)"')"
 
 	# searching process trees for all related pids
+    local wpid
+    local wname
 	if [ -n "$1" ]; then
 		wpid="$(xdotool search --onlyvisible --name "$1" getwindowpid)"
 		if [ -z  "$wpid" ]; then
@@ -67,7 +112,11 @@ padef_toggle_focus() {
 	esac
 
 
-	output="$wname"
+    local output="$wname"
+    local next_sink
+    local index
+    local name
+    local desc
 	for app in ${!application_ids[@]}; do
 		echo $app ${application_ids[$app]} ${application_idx[$app]}
 		if [[ ! "$pid" =~ "$app" ]]; then
@@ -124,9 +173,9 @@ padef_toggle() {
         | select(all(.ports[]; .availability != "not available")) 
         | "\(.index) \(.name) \(.description)"')"
 
-	output=""
-	next_sink=-1
-	index=0
+	local output=""
+	local next_sink=-1
+	local index=0
 	for sink in ${indices[@]}; do
 		name="${sinks[$index]}"
 		if [ $default_sink == $name ]; then
@@ -135,6 +184,8 @@ padef_toggle() {
 		((index++))
 	done
 
+    local name
+    local desc
 	if [ $next_sink -ne -1 ]; then
 		name="${sinks[$next_sink]}"
 		desc="${descs[$name]}"
@@ -153,46 +204,34 @@ padef_toggle() {
 }
 
 padef_volume() {
-	vol="$(padef_get_vol "$default_sink")"
+	local vol="$(padef_get_vol "$default_sink")"
 	vol=$((vol + ${1%%%}))
 	if (( $vol > $MAX_VOLUME )); then
 		pactl set-sink-volume "$default_sink" "$MAX_VOLUME%"
+		vol=$MAX_VOLUME
 	else
 		pactl set-sink-volume "$default_sink" "$1"
 	fi
-	icon="audio-volume-low"
-	vol="$(padef_get_vol "$default_sink")"
-	if [ "$vol" -ge 66 ]; then
-		icon="audio-volume-high"
-	elif [ "$vol" -ge 33 ]; then
-		icon="audio-volume-medium"
-	elif [ "$vol" -eq 0 ]; then
-		icon="audio-off"
-	fi
+
+	#vol="$(padef_get_vol "$default_sink")"
+    local icon=$(padef_get_speaker_icon "$vol")
 	notify-send -a padefault -i $icon -h "int:value:$vol" -h "string:synchronous:volume"  "volume" " $1" -t "$notify_timeout"
 	exit 0
 }
 
 padef_mic_volume() {
-	default_source=$(pactl info | grep "Default Source:" | cut -d ' ' -f3)
-	vol="$(padef_get_mic_vol "$default_source")"
+    # TODO: replace with local default_source="$(pactl get-default-source)"
+	local default_source=$(pactl info | grep "Default Source:" | cut -d ' ' -f3)
+	local vol="$(padef_get_mic_vol "$default_source")"
 	# check only if we're increasing volume
-	if [[ "$1" = +* ]] && (( $((vol + ${1%%%})) > $MAX_VOLUME )); then
-		pactl set-source-volume "$default_source" "$MAX_VOLUME%"
-		vol=$MAX_VOLUME
+	if [[ "$1" = +* ]] && (( $((vol + ${1%%%})) > $MAX_MIC_VOLUME )); then
+        pactl set-source-volume "$default_source" "$MAX_MIC_VOLUME%"
+		vol=$MAX_MIC_VOLUME
 	else
 		pactl set-source-volume "$default_source" "$1"
 	fi
 
-	icon="audio-volume-low"
-	vol="$(padef_get_mic_vol "$default_source")"
-	if [ "$vol" -ge 66 ]; then
-		icon="audio-volume-high"
-	elif [ "$vol" -ge 33 ]; then
-		icon="audio-volume-medium"
-	elif [ "$vol" -eq 0 ]; then
-		icon="audio-off"
-	fi
+    local icon=$(padef_get_mic_icon "$vol")
 	notify-send -a padefault -i $icon -h "int:value:$vol" -h "string:synchronous:volume"  "volume" " $1" -t "$notify_timeout"
 	exit 0
 }
@@ -207,6 +246,9 @@ padef_spec_volume() {
         | "\(.properties."application.process.id") \(.index)"')"
 
 	# searching process trees for all related pids
+    local wpid
+    local wname
+
 	if [ -n "$1" ]; then
 		wpid="$(xdotool search --name "$1" getwindowpid)"
 		if [ -z  "$wpid" ]; then
@@ -223,12 +265,13 @@ padef_spec_volume() {
 
 	# fix for programs that are not direct controllers of the 
 	# sink input
+    local pid
 	case "$wname" in
 		Cantata*) pid="$(pgrep mpd)"       ;;
 		*) pid="$wpid $(pgrep -P "$wpid")";;
 	esac
 
-	index=-1
+	local index=-1
 	for app in ${!application_idx[@]}; do
 		if [[ "$pid" =~ "$app" ]]; then
 			index="${application_idx[$app]}"
@@ -240,27 +283,19 @@ padef_spec_volume() {
 		exit 1
 	fi
 
-	vol="$(padef_get_vol_spec "$index")"
+	local vol="$(padef_get_vol_spec "$index")"
 	vol=$((vol + ${2%%%}))
 	if (( $vol > $MAX_VOLUME )); then
 		pactl set-sink-input-volume "$index" "$MAX_VOLUME%"
+		vol=$MAX_VOLUME
 	else
 		pactl set-sink-input-volume "$index" "$2"
 	fi
-	icon="audio-volume-low"
-	vol="$(padef_get_vol_spec "$index")"
-	if [ "$vol" -ge 66 ]; then
-		icon="audio-volume-high"
-	elif [ "$vol" -ge 33 ]; then
-		icon="audio-volume-medium"
-	elif [ "$vol" -eq 0 ]; then
-		icon="audio-off"
-	fi
 
+    local icon=$(padef_get_speaker_icon "$vol")
 	notify-send -a padefault -i $icon -h "int:value:$vol" -h "string:synchronous:volume" \
 		"volume" "$wname" -t "$notify_timeout"
 	exit 0
-
 }
 
 padef_focus_volume() {
@@ -272,8 +307,8 @@ padef_focus_volume() {
     done <<< "$(pactl -fjson list sink-inputs | jq -r '.[] 
         | "\(.properties."application.process.id") \(.index)"')"
 
-	wname="$(xdotool getwindowfocus getwindowname)"
-	wpid="$(xdotool getwindowfocus getwindowpid)"
+	local wname="$(xdotool getwindowfocus getwindowname)"
+	local wpid="$(xdotool getwindowfocus getwindowpid)"
 
 	# fix for programs that are not direct controllers of the 
 	# sink input
@@ -282,7 +317,7 @@ padef_focus_volume() {
 		*) pid="$wpid $(pgrep -P "$wpid")";;
 	esac
 
-	index=-1
+	local index=-1
 	for app in ${!application_idx[@]}; do
 		if [[ "$pid" =~ "$app" ]]; then
 			index="${application_idx[$app]}"
@@ -294,23 +329,16 @@ padef_focus_volume() {
 		exit 1
 	fi
 
-	vol="$(padef_get_vol_spec "$index")"
+	local vol="$(padef_get_vol_spec "$index")"
 	vol=$((vol + ${1%%%}))
 	if (( $vol > $MAX_VOLUME )); then
 		pactl set-sink-input-volume "$index" "$MAX_VOLUME%"
+		vol=$MAX_VOLUME
 	else
 		pactl set-sink-input-volume "$index" "$1"
 	fi
-	icon="audio-volume-low"
-	vol="$(padef_get_vol_spec "$index")"
-	if [ "$vol" -ge 66 ]; then
-		icon="audio-volume-high"
-	elif [ "$vol" -ge 33 ]; then
-		icon="audio-volume-medium"
-	elif [ "$vol" -eq 0 ]; then
-		icon="audio-off"
-	fi
 
+    local icon=$(padef_get_speaker_icon "$vol")
 	notify-send -a padefault -i $icon -h "int:value:$vol" -h "string:synchronous:volume" \
 		"volume" "$wname" -t "$notify_timeout"
 	exit 0
@@ -329,13 +357,13 @@ padef_get_vol_spec() {
 }
 
 padef_get_mic_vol() {
-	default_source="$(pactl get-default-source)"
+	local default_source="$(pactl get-default-source)"
 	pactl get-source-volume "$default_source" | sed -n 's/.*: [^:]*: [^/]*\/ *\([0-9]\+\)%.*/\1/p'
 }
 
 padef_mute() {
 	pactl set-sink-mute "$default_sink" toggle
-	icon="audio-on"
+	local icon="audio-on"
 	if [ $(pactl list sinks | grep "Name: $default_sink" -A6 | tail -1 | awk '{print $2}')"" == "yes" ]; then
 		icon="audio-off"
 	fi
@@ -344,28 +372,40 @@ padef_mute() {
 }
 
 _is_any_muted() {
-	target="${1:-"sink"}"
-	for mute in $(pactl list "${target}s" | grep Mute | awk '{print $2}'); do
-		if [ "$mute" == "yes" ]; then
-			return 0
-		fi
-	done
-	return 1
-
+	local target="${1:-"sink"}"
+    local muted_count=$(pactl -fjson list "${target}s" | \
+        jq '[.[] | select(.mute)] | length')
+    return $((muted_count > 0 ? 0 : 1))
 }
 
 pa_mute_all() {
-	target="${1:-"sink"}"
+	local target="${1:-"sink"}"
 	_is_any_muted "$target"
-	action="$(($?))"
-	for sink in $(pactl list "${target}s" short | awk '{print $1}'); do
+	local action="$(($?))"
+
+    case "$target" in
+        "sink") icon="audio-volume-high-symbolic" ;;
+        "source") icon="audio-input-microphone-high" ;;
+    esac
+
+	for sink in $(pactl -fjson list "${target}s" | \
+        jq '.[] | select(.name | test("^.*\\.monitor$") | not) | .index'); do
 		pactl "set-${target}-mute" "$sink" $action
 	done
-	icon="audio-speakers"
-	if [ "$target" == "source" ]; then
-		icon="audio-recorder"
-	fi
-	notify-send -a padefault --hint=int:transient:1 -i "$icon" "volume" "toggle mute" -t 1000
+
+    local message
+    case $action in
+        1)
+            case "$target" in
+                "sink") icon="audio-volume-muted-symbolic" ;;
+                "source") icon="audio-input-microphone-muted" ;;
+            esac
+            message="muted all ${target}s" ;;
+        0)
+            message="unmuted all ${target}s" ;;
+    esac
+
+	notify-send -a padefault --hint=int:transient:1 -i "$icon" "volume" "$message" -t 1000
 }
 
 case "$1" in 
