@@ -106,6 +106,7 @@ padef_toggle_focus() {
 
 	# fix for programs that are not direct controllers of the 
 	# sink input
+    local pid
 	case "$wname" in
 		Cantata*) pid="$(pgrep mpd)"       ;;
 		*) pid="$wpid $(pgrep -P "$wpid")";;
@@ -312,6 +313,7 @@ padef_focus_volume() {
 
 	# fix for programs that are not direct controllers of the 
 	# sink input
+    local pid
 	case "$wname" in
 		Cantata*) pid="$(pgrep mpd)"       ;;
 		*) pid="$wpid $(pgrep -P "$wpid")";;
@@ -346,7 +348,7 @@ padef_focus_volume() {
 }
 
 padef_get_vol() {
-	sink="${1:-"$default_sink"}"
+	local sink="${1:-"$default_sink"}"
 	pactl get-sink-volume "$1" | sed -n 's/.*: [^:]*: [^/]*\/ *\([0-9]\+\)%.*/\1/p'
 }
 
