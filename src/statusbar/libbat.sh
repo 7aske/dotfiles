@@ -1,4 +1,7 @@
-[ -z "$DOTS_COLORS_SOURCED"] && [ -f  "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
+#!/usr/bin/env bash
+
+# shellcheck disable=SC1091
+[ -z "$DOTS_COLORS_SOURCED" ] && [ -f  "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
 
 red="${red:-"#BF616A"}"
 white="${white:-"#D8DEE9"}"
@@ -7,15 +10,27 @@ blue="${blue:-"#5E81AC"}"
 yellow="${yellow:-"#EBCB8B"}"
 orange="${orange:-"#D08770"}"
 
-declare -A libbat_icons
-declare -A libbat_charging_icons
-declare -A libbat_notif_icons
-declare -a libbat_warning_icons
-declare -A libbat_colors
-declare -A libbat_states
+declare -Ag libbat_icons
+declare -Ag libbat_charging_icons
+declare -Ag libbat_notif_icons
+declare -ag libbat_warning_icons
+declare -Ag libbat_colors
+declare -Ag libbat_states
+declare -g libbat_no_bat
+declare -g libbat_json_no_bat
+declare -g libbat_charging_color
+declare -g libbat_charging_state
+declare -g libbat_color # rgb color
+declare -g libbat_icon # pango icon
+declare -g libbat_charging_icon # charging true/false
+declare -g libbat_state
+declare -g libbat_warn
+declare -g libbat_json_icon
+declare -g libbat_json_charging_icon
+declare -g libbat_notif_icon
 
 libbat_no_bat="󱉞"
-libbat_no_bat_json_icon="bat_no_battery"
+libbat_json_no_bat="bat_no_bat"
 libbat_icons+=([0]="󰂎" [1]="󰁺" [2]="󰁻" [3]="󰁼" [4]="󰁽" [5]="󰁾" [6]="󰁿" [7]="󰂀" [8]="󰂁" [9]="󰂂" [10]="󰁹")
 libbat_charging_icons+=([0]="󰢟" [1]="󰢜" [2]="󰂇" [3]="󰂇" [4]="󰂈" [5]="󰢝" [6]="󰂉" [7]="󰢞" [8]="󰂊" [9]="󰂋" [10]="󰂅")
 libbat_warning_icons=( "  " "  " "  " " " " " " " " " " " " " " " " " )
@@ -62,45 +77,51 @@ libbat_states+=(
 libbat_charging_color="$green"
 libbat_charging_state="Good"
 
-# args: capacity status
-# return: color icon charging state warn json_icon json_charging_icon
+# args: capacity, status
+# sets global: libbat_icon, libbat_json_icon, libbat_notif_icon libbat_color,
+#              libbat_state, libbat_warn, libbat_charging_icon,
+#              libbat_json_charging_icon, libbat_charging
 libbat_update() {
     local capacity="$1"
+    local charging_status="${2:-0}"
 
     if [ -z "$capacity" ] || [ "$capacity" -eq -1 ]; then
-        color=${libbat_colors[0]}
-        state=${libbat_states[0]}
-        icon=${libbat_no_bat}
+        libbat_color=${libbat_colors[0]}
+        libbat_state=${libbat_states[0]}
+        libbat_icon=${libbat_no_bat}
+        libbat_json_icon="${libbat_json_no_bat}"
         return 1
     fi
 
-    local charging_status="${2:-0}"
     local bat_index=$((capacity / 10))
 
-    color=${libbat_colors[$bat_index]}
-    icon=${libbat_icons[$bat_index]}
-    charging=${libbat_charging_icons[$bat_index]}
-    state=${libbat_states[$bat_index]}
-    warn=${libbat_warning_icons[$bat_index]}
-    json_icon="bat_${bat_index}"
-    json_charging_icon="bat_charging_${bat_index}"
-    notif_icon=${libbat_notif_icons[$bat_index]}
+    export libbat_icon=${libbat_icons[$bat_index]}
+    export libbat_json_icon="bat_${bat_index}"
+    export libbat_notif_icon=${libbat_notif_icons[$bat_index]}
+
+    export libbat_color=${libbat_colors[$bat_index]}
+    export libbat_state=${libbat_states[$bat_index]}
+    export libbat_warn=${libbat_warning_icons[$bat_index]}
+
+    export libbat_charging_icon=${libbat_charging_icons[$bat_index]}
+    export libbat_json_charging_icon="bat_charging_${bat_index}"
 
     if [ "$charging_status" -eq 1 ]; then
-        color="$libbat_charging_color"
-        state="$libbat_charging_state"
-        icon=${libbat_charging_icons[$bat_index]}
-        json_icon=${json_charging_icon:-"bat_charging_${bat_index}"}
-        notif_icon="${libbat_notif_icons[$bat_index]}-charging"
+        export libbat_color="$libbat_charging_color"
+        export libbat_state="$libbat_charging_state"
+
+        export libbat_icon="${libbat_charging_icon}"
+        export libbat_json_icon="${libbat_json_charging_icon:-"bat_charging_${bat_index}"}"
+        export libbat_notif_icon="${libbat_notif_icon}-charging"
     fi
 
 }
 
 libbat_get_icon() {
     local level="$1"
-    if [ $level -eq 0 ]; then
+    if [ "$level" -eq 0 ]; then
         echo -n "${libbat_icons[0]}"
-    elif [ $level -gt 0 ]; then
+    elif [ "$level" -gt 0 ]; then
         local index="$(((level + 5) / 10))"
         echo -n "${libbat_icons[$index]}"
     else

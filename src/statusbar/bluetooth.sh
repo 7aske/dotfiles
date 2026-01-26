@@ -1,86 +1,88 @@
 #!/usr/bin/env bash
 
-SWITCH="$HOME/.cache/statusbar_$(basename $0)"
-[ -e "$HOME/.local/bin/statusbar/libbat" ] && source "$HOME/.local/bin/statusbar/libbat"
-_toggle_switch() {
-    [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH"; pkill "-SIGRTMIN+${1:-'9'}" i3status-rs
+SWITCH="$HOME/.cache/statusbar_$(basename "$0")"
+
+# shellcheck disable=SC1091
+{
+    [ -e "$HOME/.local/bin/statusbar/libbat" ] && source "$HOME/.local/bin/statusbar/libbat"
+    [ -e "$HOME/.local/bin/statusbar/libbar" ] && source "$HOME/.local/bin/statusbar/libbar"
 }
 
-declare -A json_icons
-json_icons[bluetooth]="bluetooth"
-json_icons[input-keyboard]="keyboard"
-declare -A icons
-icons[bluetooth]="󰂯"
-icons[input-keyboard]=" "
-
-_show_devices() {
-    local devices="$(bluetoothctl devices Connected | awk '{print $2}')"
-    for device in $devices; do
-        info="$(bluetoothctl info "$device")"
-        alias="$(echo "$info" | sed -n 's/^\s*Alias: \(.*\)/\1/p')"
-        connected="$(echo "$info" |  awk '$1 == "Connected:" {print $2}')"
-        icon="$(echo "$info" | awk '$1 == "Icon:" {print $2}')"
-        bat="$(echo "$info" | sed -n 's/^\s*Battery Percentage: .* (\(.*\))/\1/p')"
-        if [ -z "$bat" ]; then
-            continue
-        fi
-        echo "${icons[$icon]}|$alias|$bat%"
-    done | column -t -s '|'
-
+# shellcheck disable=SC2034
+{
+    libbar_json_icons["bluetooth"]="bluetooth"
+    libbar_json_icons["input-keyboard"]="keyboard"
+    libbar_icons["bluetooth"]="󰂯"
+    libbar_icons["input-keyboard"]=" "
 }
 
-case $BLOCK_BUTTON in
-    1) notify-send -a bluetooth -i bluetooth "Bluetooth Devices" "$(_show_devices)" ;;
-    2) _toggle_switch 10 ;;
-    3) blueman-manager & ;;
-esac
-
-ZWSP="​"
-
-while getopts "j" opt; do
-    case $opt in
-        j) json=true ;;
-    esac
-done
+libbar_getopts "$@"
 
 DEVICES="$(bluetoothctl devices Connected | awk '{print $2}')"
 
-_output() {
-    local text="$2"
-    local icon_override
-    if [ "$json" = "true" ]; then
-        icon_override="${json_icons[$1]}"
-        echo '{"icon": "'$icon_override'", "state":"'${state}'", "text":"'$text'"}';
-    else
-        icon_override="${icons[$1]}"
-        echo "<span color='${color}'>$icon_override $text</span>"
-    fi
+_bluetooth_device_info() {
+    local device="$1"
+
+    bluetoothctl info "$device" | awk '
+$1 == "Alias:" {
+    alias = substr($0, index($0,$2))
+}
+$1 == "Icon:" {
+    icon = substr($0, index($0,$2))
+}
+$1 == "Battery" && $2 == "Percentage:" {
+    battery = strtonum($3)
+}
+END {
+    printf "%s\t%s\t%d", alias, icon, battery
+}'
 }
 
-bat_level=100
-OUTPUT=""
-for device in $DEVICES; do
-    info="$(bluetoothctl info "$device")"
-    connected="$(echo "$info" |  awk '$1 == "Connected:" {print $2}')"
-    icon="$(echo "$info" | awk '$1 == "Icon:" {print $2}')"
-    bat="$(echo "$info" | sed -n 's/^\s*Battery Percentage: .* (\(.*\))/\1/p')"
-    if [ -z "$bat" ]; then
-        continue
-    fi
+_bluetooth_show_devices() {
+    for device in $DEVICES; do
+        IFS=$'\t' read -r alias icon bat < <(_bluetooth_device_info "$device")
+        if [ "$bat" -eq 0 ]; then
+            continue
+        fi
 
-    OUTPUT+="${icons[$icon]}"
-    if ! [ -e "$SWITCH" ]; then
-        OUTPUT+=" $bat%"
-    else
-        OUTPUT+=" $(libbat_get_icon "$bat") "
-    fi
+        printf "%s\t%s\t%s%%\n" "${libbar_icons[$icon]}" "$alias" "$bat"
+    done | column -t -s $'\t'
+}
 
-    if [ $bat -lt $bat_level ]; then
-        bat_level="$bat"
-    fi
-done
+case $BLOCK_BUTTON in
+    1) notify-send -a bluetooth -i bluetooth "Bluetooth Devices" "$(_bluetooth_show_devices)" ;;
+    2) libbar_toggle_switch 10 ;;
+    3) blueman-manager & ;;
+esac
 
-libbat_update "$bat_level"
+_bluetooth_output() {
+    local bat_level=100
+    local output=""
+    for device in $DEVICES; do
+        IFS=$'\t' read -r alias icon bat < <(_bluetooth_device_info "$device")
+        if [ "$bat" -eq 0 ]; then
+            continue
+        fi
 
-_output "bluetooth" "${OUTPUT}"
+        output+="${libbar_icons[$icon]}"
+        if ! [ -e "$SWITCH" ]; then
+            output+=" $bat%"
+        else
+            output+=" $(libbat_get_icon "$bat") "
+        fi
+
+        # finding the lowest bat level to output
+        if [ "$bat" -lt "$bat_level" ]; then
+            bat_level="$bat"
+        fi
+
+    done
+
+    # To update colors and icons with the lowest found bat level
+    libbat_update "$bat_level"
+
+    libbar_output "bluetooth" "$output"
+}
+
+_bluetooth_output
 

@@ -49,7 +49,7 @@ padef_get_speaker_icon() {
     elif [ "$vol" -eq 0 ]; then
         icon=${speaker_volume_icons[mute]}
     fi
-    echo $icon
+    echo "$icon"
 }
 
 padef_get_mic_icon() {
@@ -62,18 +62,30 @@ padef_get_mic_icon() {
     elif [ "$vol" -eq 0 ]; then
         icon=${mic_volume_icons[mute]}
     fi
-    echo $icon
+    echo "$icon"
+}
+
+# fix for programs that are not direct controllers of the 
+# sink input
+padef_get_fixed_pid() {
+    local pid
+    local wpid; wpid="$1"
+	case "$wname" in
+		Cantata*) pid="$(pgrep mpd)"       ;;
+		*) pid="$wpid $(pgrep -P "$wpid" | tr '\n' ' ')";;
+	esac
+
+    echo "$pid"
 }
 
 padef_toggle_focus() {
 	declare -A application_ids # application pid -> sink number
 	declare -A application_idx # application pid -> sink index
-	declare -A application_ico # application pid -> icon
 	while IFS= read -r line; do
-		while IFS=' ' read -a arr; do
-			application_ids+=([${arr[0]}]=${arr[1]})
-			application_idx+=([${arr[0]}]=${arr[2]})
-		done <<< $(echo $line)
+		while IFS=' ' read -r -a arr; do
+			application_ids+=(["${arr[0]}"]="${arr[1]}")
+			application_idx+=(["${arr[0]}"]="${arr[2]}")
+		done <<< "$line"
     done <<< "$(pactl -fjson list sink-inputs | jq -r '.[] 
         | "\(.properties."application.process.id") \(.sink) \(.index)"')"
 
@@ -81,11 +93,11 @@ padef_toggle_focus() {
 	declare -a indices # sink indexes
 	declare -A descs # sink description for notification
 	while IFS= read -r line; do
-		while IFS=' ' read -a arr; do
-			indices+=(${arr[0]})
-			sinks+=(${arr[1]})
+		while IFS=' ' read -r -a arr; do
+			indices+=("${arr[0]}")
+			sinks+=("${arr[1]}")
 			descs+=([${arr[1]}]="${arr[@]:2}")
-		done <<< $(echo $line)
+		done <<< "$line"
     done <<< "$(pactl -fjson list sinks | jq -cr '.[] 
         | select(all(.ports[]; .availability != "not available")) 
         | "\(.index) \(.name) \(.description)"')"
@@ -107,31 +119,22 @@ padef_toggle_focus() {
 		wpid="$(xdotool getwindowfocus getwindowpid)"
 	fi
 
-	# fix for programs that are not direct controllers of the 
-	# sink input
-    local pid
-	case "$wname" in
-		Cantata*) pid="$(pgrep mpd)"       ;;
-		*) pid="$wpid $(pgrep -P "$wpid")";;
-	esac
-
-
+    local pid; pid="$(padef_get_fixed_pid "$wpid")"
     local output="$wname"
     local next_sink
     local index
     local name
     local desc
-	for app in ${!application_ids[@]}; do
-		echo $app ${application_ids[$app]} ${application_idx[$app]}
-		if [[ ! "$pid" =~ "$app" ]]; then
+	for app in "${!application_ids[@]}"; do
+		if [[ ! "$pid" =~ $app ]]; then
 			continue
 		fi
 		
-		output="$output (${app})\n"
+		output+=" (${app})\n"
 		next_sink=-1
 		index=0
-		for sink in ${indices[@]}; do
-			if [ ${application_ids[$app]} -eq $sink ]; then
+		for sink in "${indices[@]}"; do
+			if [ "${application_ids[$app]}" -eq "$sink" ]; then
 				next_sink=$(((index + 1) % ${#indices[@]}))
 			fi
 			((index++))
@@ -144,15 +147,15 @@ padef_toggle_focus() {
 
 			for sink in "${sinks[@]}"; do
                 if [ "$sink" == "$default_sink" ]; then
-                    output="${output}>"
+                    output+=">"
                 else
-                    output="${output} "
+                    output+=" "
                 fi
 
 				if [ "$sink" == "$name" ]; then
-					output="$output[x] ${descs[$sink]}\n"
+					output+="[x] ${descs[$sink]}\n"
 				else
-					output="$output[ ] ${descs[$sink]}\n"
+					output+="[ ] ${descs[$sink]}\n"
 				fi
 			done
 				
@@ -168,11 +171,11 @@ padef_toggle() {
 	declare -a indices # sink indexes
 	declare -A descs # sink description for notification
 	while IFS= read -r line; do
-		while IFS=' ' read -a arr; do
-			indices+=(${arr[0]})
-			sinks+=(${arr[1]})
+		while IFS=' ' read -r -a arr; do
+			indices+=("${arr[0]}")
+			sinks+=("${arr[1]}")
 			descs+=([${arr[1]}]="${arr[@]:2}")
-		done <<< $(echo $line)
+		done <<< "$line"
     done <<< "$(pactl -fjson list sinks | jq -cr '.[] 
         | select(all(.ports[]; .availability != "not available")) 
         | "\(.index) \(.name) \(.description)"')"
@@ -180,9 +183,9 @@ padef_toggle() {
 	local output=""
 	local next_sink=-1
 	local index=0
-	for sink in ${indices[@]}; do
+	for sink in "${indices[@]}"; do
 		name="${sinks[$index]}"
-		if [ $default_sink == $name ]; then
+		if [ "$default_sink" == "$name" ]; then
 			next_sink=$(((index + 1) % ${#indices[@]}))
 		fi
 		((index++))
@@ -192,14 +195,14 @@ padef_toggle() {
     local desc
 	if [ $next_sink -ne -1 ]; then
 		name="${sinks[$next_sink]}"
-		desc="${descs[$name]}"
 		pactl set-default-sink "${name}"
 
 		for sink in "${sinks[@]}"; do
+            desc="${descs[$sink]}"
 			if [ "$sink" == "$name" ]; then
-				output="$output[x] ${descs[$sink]}\n"
+				output+="[x] ${desc}\n"
 			else
-				output="$output[ ] ${descs[$sink]}\n"
+				output+="[ ] ${desc}\n"
 			fi
 		done
 
@@ -208,44 +211,56 @@ padef_toggle() {
 }
 
 padef_volume() {
-	local vol="$(padef_get_vol "$default_sink")"
-	vol=$((vol + ${1%%%}))
-	if (( $vol > $MAX_VOLUME )); then
-		pactl set-sink-volume "$default_sink" "$MAX_VOLUME%"
+	local vol
+    # if the argument is relative add to current volume
+    if [[ "$1" =~ [+-].* ]]; then
+        vol=$(($(padef_get_vol "$default_sink") + ${1%%%}))
+    else
+        vol="${1%%%}"
+    fi
+
+	if (( "$vol" > "$MAX_VOLUME" )); then
 		vol=$MAX_VOLUME
-	else
-		pactl set-sink-volume "$default_sink" "$1"
 	fi
 
-	#vol="$(padef_get_vol "$default_sink")"
-    local icon=$(padef_get_speaker_icon "$vol")
-	notify-send -a padefault -i $icon -h "int:value:$vol" -h "string:synchronous:volume"  "volume" " $1" -t "$notify_timeout"
+    pactl set-sink-volume "$default_sink" "$vol%"
+
+    local icon; icon=$(padef_get_speaker_icon "$vol")
+	notify-send -a padefault -i "$icon" -h "int:value:$vol" -h "string:synchronous:volume"  "volume" " $1" -t "$notify_timeout"
 	exit 0
 }
 
 padef_mic_volume() {
     # TODO: replace with local default_source="$(pactl get-default-source)"
-	local default_source=$(pactl info | grep "Default Source:" | cut -d ' ' -f3)
-	local vol="$(padef_get_mic_vol "$default_source")"
-	# check only if we're increasing volume
-	if [[ "$1" = +* ]] && (( $((vol + ${1%%%})) > $MAX_MIC_VOLUME )); then
-        pactl set-source-volume "$default_source" "$MAX_MIC_VOLUME%"
+	local src; src=$(pactl info | grep "Default Source:" | cut -d ' ' -f3)
+	local vol
+    # if the argument is relative add to current volume
+    if [[ "$1" =~ [+-].* ]]; then
+        vol=$(($(padef_get_mic_vol "$src") + ${1%%%}))
+    else
+        vol="${1%%%}"
+    fi
+
+	if (( "$vol" > "$MAX_MIC_VOLUME" )); then
 		vol=$MAX_MIC_VOLUME
-	else
-		pactl set-source-volume "$default_source" "$1"
 	fi
 
-    local icon=$(padef_get_mic_icon "$vol")
-	notify-send -a padefault -i $icon -h "int:value:$vol" -h "string:synchronous:volume"  "volume" " $1" -t "$notify_timeout"
+    pactl set-source-volume "$src" "$vol%"
+
+	notify-send -a padefault \
+        -i "$(padef_get_mic_icon "$vol")" \
+        -h "int:value:$vol" \
+        -h "string:synchronous:volume" \
+        "volume" " $1" -t "$notify_timeout"
 	exit 0
 }
 
 padef_spec_volume() {
 	declare -A application_idx # application pid -> sink index
 	while IFS= read -r line; do
-		while IFS=' ' read -a arr; do
+		while IFS=' ' read -r -a arr; do
 			application_idx+=([${arr[0]}]=${arr[1]})
-		done <<< $(echo $line)
+		done <<< "$line"
     done <<< "$(pactl -fjson list sink-inputs | jq -r '.[] 
         | "\(.properties."application.process.id") \(.index)"')"
 
@@ -267,84 +282,76 @@ padef_spec_volume() {
 	fi
 
 
-	# fix for programs that are not direct controllers of the 
-	# sink input
-    local pid
-	case "$wname" in
-		Cantata*) pid="$(pgrep mpd)"       ;;
-		*) pid="$wpid $(pgrep -P "$wpid")";;
-	esac
-
+    local pid; pid="$(padef_get_fixed_pid "$wpid")"
 	local index=-1
-	for app in ${!application_idx[@]}; do
-		if [[ "$pid" =~ "$app" ]]; then
+	for app in "${!application_idx[@]}"; do
+		if [[ "$pid" =~ $app  ]]; then
 			index="${application_idx[$app]}"
 			break
 		fi
 	done
 
-	if [ $index -eq -1 ]; then
+    # not found
+	if [ "$index" -eq -1 ]; then
 		exit 1
 	fi
 
-	local vol="$(padef_get_vol_spec "$index")"
-	vol=$((vol + ${2%%%}))
-	if (( $vol > $MAX_VOLUME )); then
-		pactl set-sink-input-volume "$index" "$MAX_VOLUME%"
+	local vol
+    # if the argument is relative add to current volume
+    if [[ "$2" =~ [+-].* ]]; then
+        vol=$(($(padef_get_vol_spec "$index") + ${2%%%}))
+    else
+        vol="${2%%%}"
+    fi
+
+	if (( "$vol" > "$MAX_VOLUME" )); then
 		vol=$MAX_VOLUME
-	else
-		pactl set-sink-input-volume "$index" "$2"
 	fi
 
-    local icon=$(padef_get_speaker_icon "$vol")
-	notify-send -a padefault -i $icon -h "int:value:$vol" -h "string:synchronous:volume" \
-		"volume" "$wname" -t "$notify_timeout"
+    pactl set-sink-input-volume "$index" "$vol%"
+
+	notify-send -a padefault \
+        -i "$(padef_get_speaker_icon "$vol")" \
+        -h "int:value:$vol" -h "string:synchronous:volume" \
+        -t "$notify_timeout" \
+		"volume" "$wname $2"
 	exit 0
 }
 
 padef_focus_volume() {
 	declare -A application_idx # application pid -> sink index
 	while IFS= read -r line; do
-		while IFS=' ' read -a arr; do
+		while IFS=' ' read -r -a arr; do
 			application_idx+=([${arr[0]}]=${arr[1]})
-		done <<< $(echo $line)
+		done <<< "$line"
     done <<< "$(pactl -fjson list sink-inputs | jq -r '.[] 
         | "\(.properties."application.process.id") \(.index)"')"
 
-	local wname="$(xdotool getwindowfocus getwindowname)"
-	local wpid="$(xdotool getwindowfocus getwindowpid)"
-
-	# fix for programs that are not direct controllers of the 
-	# sink input
-    local pid
-	case "$wname" in
-		Cantata*) pid="$(pgrep mpd)"       ;;
-		*) pid="$wpid $(pgrep -P "$wpid")";;
-	esac
-
+	local wname; wname="$(xdotool getwindowfocus getwindowname)"
+	local wpid; wpid="$(xdotool getwindowfocus getwindowpid)"
+    local pid; pid="$(padef_get_fixed_pid "$wpid")"
 	local index=-1
-	for app in ${!application_idx[@]}; do
-		if [[ "$pid" =~ "$app" ]]; then
+	for app in "${!application_idx[@]}"; do
+		if [[ "$pid" =~ $app ]]; then
 			index="${application_idx[$app]}"
 			break
 		fi
 	done
 
-	if [ $index -eq -1 ]; then
+	if [ "$index" -eq -1 ]; then
 		exit 1
 	fi
 
-	local vol="$(padef_get_vol_spec "$index")"
-	vol=$((vol + ${1%%%}))
-	if (( $vol > $MAX_VOLUME )); then
+	local vol; vol=$(($(padef_get_vol_spec "$index") + ${1%%%}))
+	if (( "$vol" > "$MAX_VOLUME" )); then
 		pactl set-sink-input-volume "$index" "$MAX_VOLUME%"
 		vol=$MAX_VOLUME
 	else
 		pactl set-sink-input-volume "$index" "$1"
 	fi
 
-    local icon=$(padef_get_speaker_icon "$vol")
-	notify-send -a padefault -i $icon -h "int:value:$vol" -h "string:synchronous:volume" \
+    local icon; icon=$(padef_get_speaker_icon "$vol")
+	notify-send -a padefault -i "$icon" -h "int:value:$vol" -h "string:synchronous:volume" \
 		"volume" "$wname" -t "$notify_timeout"
 	exit 0
 
@@ -357,20 +364,22 @@ padef_get_vol() {
 
 padef_get_vol_spec() {
     pactl -fjson list sink-inputs | \
-        jq -r '.[] | select(.index == '$1') | .volume."front-left".value_percent' | \
+        jq -r '.[] | select(.index == '"$1"') | .volume."front-left".value_percent' | \
         sed 's/%$//'
 }
 
 padef_get_mic_vol() {
-	local default_source="$(pactl get-default-source)"
-	pactl get-source-volume "$default_source" | sed -n 's/.*: [^:]*: [^/]*\/ *\([0-9]\+\)%.*/\1/p'
+	local src; src="$(pactl get-default-source)"
+	pactl get-source-volume "$src" | sed -n 's/.*: [^:]*: [^/]*\/ *\([0-9]\+\)%.*/\1/p'
 }
 
 padef_mute() {
 	pactl set-sink-mute "$default_sink" toggle
-	local icon="audio-on"
-	if [ $(pactl list sinks | grep "Name: $default_sink" -A6 | tail -1 | awk '{print $2}')"" == "yes" ]; then
-		icon="audio-off"
+	local icon;
+    if [ "$(pactl -fjson list sinks | jq '.[] | select(.name == "'"$default_sink"'") | .mute')" == "true" ]; then
+		icon="audio-volume-muted"
+    else
+        icon="$(padef_get_speaker_icon "$(padef_get_vol "$default_sink")")"
 	fi
 	notify-send -a padefault -i "$icon" "volume" "toggle mute\n$default_sink" -t 1000
 	exit 0
@@ -378,7 +387,7 @@ padef_mute() {
 
 _is_any_muted() {
 	local target="${1:-"sink"}"
-    local muted_count=$(pactl -fjson list "${target}s" | \
+    local muted_count; muted_count=$(pactl -fjson list "${target}s" | \
         jq '[.[] | select(.mute)] | length')
     return $((muted_count > 0 ? 0 : 1))
 }
