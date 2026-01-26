@@ -6,8 +6,7 @@ SIDETONE="$HOME/.cache/statusbar_headset_sidetone"
 
 [ -f  "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
 [ -f  "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
-
-OUT="$(headsetcontrol -b | sed -n 's/.*\(Status\|Level\)/\1/p')"
+[ -e "$HOME/.local/bin/statusbar/libbat" ] && source "$HOME/.local/bin/statusbar/libbat"
 
 while getopts "j" opt; do
     case $opt in
@@ -29,8 +28,26 @@ _span() {
     fi
 }
 
-status=$(echo "$OUT" | sed -n 's/.*Status: \([^ ]*\).*/\1/p')
-capacity=$(echo "$OUT" | sed -n 's/.*Level: \([0-9]\+\)%/\1/p;s/BATTERY_//')
+read capacity status < <(headsetcontrol -b | awk '
+BEGIN {
+    status_map["BATTERY_AVAILABLE"] = 0
+    status_map["BATTERY_CHARGING"]  = 1
+}
+
+$1 == "Level:" {
+    sub(/%/, "", $2)
+    level = $2
+}
+
+$1 == "Status:" {
+    status = status_map[$2]
+}
+
+END {
+    printf "%s %s", level, status
+}')
+
+libbat_update "$capacity" "$status"
 
 if [ -n "$BLOCK_BUTTON" ] && [ -z "$capacity" ]; then
     notify-send -a battery -i audio-headset "Headset" "Headset not connected"
@@ -64,29 +81,6 @@ if [ -z "$capacity" ]; then
     exit 0
 fi
 
-icons=( "󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹" )
-charging_icons=( "󰢟" "󰢜" "󰂇" "󰂇" "󰂈" "󰢝" "󰂉" "󰢞" "󰂊" "󰂋" "󰂅" )
-warning_icons=( "  " "  " "  " " " " " " " " " " " " " " " " " )
-colors=( "${color1:-"#BF616A"}" "${color1:-"#BF616A"}" "${theme12:-"#D08770"}" "${theme12:-"#D08770"}" "${color3:-"#EBCB8B"}" "${color3:-"#EBCB8B"}" "${color2:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" )
-states=( "Critical" "Critical" "Warning" "Warning" "Info" "Info" "Idle" "Idle" "Idle" "Idle" "Idle" )
-
-bat_level=$(($capacity / 10))
-
-color=${colors[$bat_level]}
-icon=${icons[$bat_level]}
-charging=${charging_icons[$bat_level]}
-state=${states[$bat_level]}
-warn=${warning_icons[$bat_level]}
-json_icon="bat_${bat_level}"
-json_charging_icon="bat_charging_${bat_level}"
-
-if [ "$status" = "BATTERY_CHARGING" ]; then
-    color="${color2:-"#A3BE8C"}"
-    state="Good"
-    icon=$charging
-    json_icon=$json_charging_icon
-fi
-
 if [ -e "$SWITCH" ]; then
     if [ "$json" = "true" ]; then
         if ! [ "$state" = "Critical" ]; then
@@ -101,7 +95,6 @@ if [ -e "$SWITCH" ]; then
         echo "<span color='$color'>󰋋 $icon$warn</span>"
     fi
 else
-	capacity="$(echo "$capacity" | sed -e 's/$/%/')"
     if [ "$json" = "true" ]; then
         if ! [ "$state" = "Critical" ]; then
             state="Idle"
@@ -111,9 +104,9 @@ else
             color="$color0"
         fi
 
-        _json "headphones" "$state" "<span color='$color' rise='-1pt'>$icon $capacity</span>"
+        _json "headphones" "$state" "<span color='$color' rise='-1pt'>$icon $capacity%</span>"
     else
-        echo "󰋋 <span color='$color'>$icon</span><span color='$color' rise='-1pt'> $capacity$warn</span>"
+        echo "󰋋 <span color='$color'>$icon</span><span color='$color' rise='-1pt'> $capacity%$warn</span>"
     fi
 
 fi
