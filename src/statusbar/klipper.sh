@@ -34,69 +34,55 @@
 #
 # Different icons and json_colors can be set for each status type.
 
-KILL_SWITCH="$HOME/.cache/statusbar_$(basename $0)_kill"
-SWITCH="$HOME/.cache/statusbar_$(basename $0)"
-_toggle_switch() {
-    [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH"; pkill "-SIGRTMIN+${1:-'9'}" i3status-rs
-}
-ZWSP="​"
+SWITCH="$HOME/.cache/statusbar_$(basename "$0")"
+KLIPPER_NOTIFY_THRESHOLD="${KLIPPER_NOTIFY_THRESHOLD:-5}"
 
-while getopts "j" opt; do
-    case $opt in
-        j) json=true ;;
-    esac
-done
-
-declare -A json_icons
-json_icons[printing]="3d_printer_printing"
-json_icons[paused]="3d_printer_paused"
-json_icons[standby]="3d_printer_standby"
-json_icons[complete]="3d_printer_complete"
-json_icons[error]="3d_printer_error"
-json_icons[cancelled]="3d_printer_cancelled"
-declare -A icons
-icons[printing]="󱇀"
-icons[paused]="󰏤"
-icons[standby]="󰐫"
-icons[complete]=""
-icons[error]=""
-icons[cancelled]="󰜺"
-declare -A json_colors
-json_colors[printing]="Warning"
-json_colors[paused]="Warning"
-json_colors[standby]="Idle"
-json_colors[complete]="Good"
-json_colors[error]="Critical"
-json_colors[cancelled]="Idle"
-declare -A colors
-colors[printing]="#EBCB8B"
-colors[paused]="#EBCB8B"
-colors[standby]="#5E81AC"
-colors[complete]="#A3BE8C"
-colors[error]="#BF616A"
-colors[cancelled]="#5E81AC"
-
-_output() {
-    local color
-    local text="$2"
-    local icon
-    if [ "$json" = "true" ]; then
-        color="${json_colors[$1]}"
-        icon="${json_icons[$1]}"
-        echo '{"icon": "'$icon'", "state":"'${color:-"Idle"}'", "text":"'$text'"}';
-    else
-        color="${colors[$1]}"
-        icon="${icons[$1]}"
-        echo "<span color='$color'>$icon $text</span>"
-    fi
+# shellcheck disable=SC1091
+{
+    [ -e "$HOME/.local/bin/statusbar/libbar" ] && source "$HOME/.local/bin/statusbar/libbar"
 }
 
-[ -e "$KILL_SWITCH" ] && _output "error" "" && exit 0
+libbar_getopts "$@"
+shift $((OPTIND-1))
+libbar_kill_switch "$(basename "$0")"
+#libbar_required_commands bc curl jq notify-send xdg-open
+libbar_required_env_vars KLIPPER_HOST
 
-_format_time() {
+# shellcheck disable=SC2034
+{
+    libbar_json_icons["printing"]="3d_printer_printing"
+    libbar_json_icons["paused"]="3d_printer_paused"
+    libbar_json_icons["standby"]="3d_printer_standby"
+    libbar_json_icons["complete"]="3d_printer_complete"
+    libbar_json_icons["error"]="3d_printer_error"
+    libbar_json_icons["cancelled"]="3d_printer_cancelled"
+
+    libbar_icons["printing"]="󱇀"
+    libbar_icons["paused"]="󰏤"
+    libbar_icons["standby"]="󰐫"
+    libbar_icons["complete"]=""
+    libbar_icons["error"]=""
+    libbar_icons["cancelled"]="󰜺"
+
+    libbar_json_colors["printing"]="Warning"
+    libbar_json_colors["paused"]="Warning"
+    libbar_json_colors["standby"]="Idle"
+    libbar_json_colors["complete"]="Good"
+    libbar_json_colors["error"]="Critical"
+    libbar_json_colors["cancelled"]="Idle"
+
+    libbar_colors["printing"]="#EBCB8B"
+    libbar_colors["paused"]="#EBCB8B"
+    libbar_colors["standby"]="#5E81AC"
+    libbar_colors["complete"]="#A3BE8C"
+    libbar_colors["error"]="#BF616A"
+    libbar_colors["cancelled"]="#5E81AC"
+}
+
+klipper_format_time() {
     local formula="$1"
     local suffix="$2"
-    local val="$(bc <<< "$formula")"
+    local val; val="$(bc <<< "$formula")"
 
     if [ -z "$val" ] || [ "$val" -eq 0 ]; then
         echo ""
@@ -105,18 +91,11 @@ _format_time() {
     fi
 }
 
-KLIPPER_NOTIFY_THRESHOLD="${KLIPPER_NOTIFY_THRESHOLD:-5}"
-
-if [ -z "$KLIPPER_HOST" ]; then 
-    _output "error" ""
-    exit 0
-fi
-
-progress=$(curl -s $KLIPPER_HOST/printer/objects/query?display_status | jq -r '.result.status.display_status.progress')
-print_stats=$(curl -s $KLIPPER_HOST/printer/objects/query?print_stats | jq -r '.result.status.print_stats')
+progress=$(curl -s "$KLIPPER_HOST/printer/objects/query?display_status" | jq -r '.result.status.display_status.progress')
+print_stats=$(curl -s "$KLIPPER_HOST/printer/objects/query?print_stats" | jq -r '.result.status.print_stats')
 
 if [ -z "$progress" ] || [ -z "$print_stats" ]; then
-    _output "error" ""
+    libbar_output "error" ""
     exit 0
 fi
 
@@ -132,37 +111,41 @@ else
     remaining_duration="0"
 fi
 
-remaining_hours="$(_format_time "scale=0;$remaining_duration/3600" "h")"
-remaining_minutes="$(_format_time "scale=0;($remaining_duration%3600)/60" "m")"
-print_hours="$(_format_time "scale=0;$print_duration/3600" "h")"
-print_minutes="$(_format_time "scale=0;(${print_duration}%3600)/60" "m")"
+remaining_hours="$(klipper_format_time "scale=0;$remaining_duration/3600" "h")"
+remaining_minutes="$(klipper_format_time "scale=0;($remaining_duration%3600)/60" "m")"
+print_hours="$(klipper_format_time "scale=0;$print_duration/3600" "h")"
+print_minutes="$(klipper_format_time "scale=0;(${print_duration}%3600)/60" "m")"
 
-_notify_progress() {
-    local body
+klipper_notify_progress() {
     local title="$filename"
     local args=""
+    local escaped_filename
+    local thumbnail
+    local body
     if [ -n "$filename" ]; then
-        local escaped_filename="$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$filename")"
-        local thumbnail="$(curl -s "$KLIPPER_HOST/server/files/thumbnails?filename=$escaped_filename" \
+        escaped_filename="$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$filename")"
+        thumbnail="$(curl -s "$KLIPPER_HOST/server/files/thumbnails?filename=$escaped_filename" \
             | jq -r '.result | max_by(.width) | .thumbnail_path' \
-            | xargs -I% perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' '%')"
-        [ -e "$thumbnail" ] || curl -s "$KLIPPER_HOST/server/files/gcodes/$thumbnail" > "/tmp/$thumbnail"
+            | xargs -I% perl -MURI::Escape -e "print uri_escape(\$ARGV[0]);" '%')"
+        if ! [ -e "$thumbnail" ]; then
+            curl -s "$KLIPPER_HOST/server/files/gcodes/$thumbnail" > "/tmp/$thumbnail"
+        fi
         body="$(cat << EOF
 Duration: ${print_hours} ${print_minutes}
 Remaining: ${remaining_hours} ${remaining_minutes}
 Progress: ${percent%.*}% 
 EOF
 )"
-        args="-h int:value:$percent"
+        read -ra args <<< "-h int:value:$percent"
     else
         title="Klipper"
         body="No print job"
     fi
 
-    local answ="$(notify-send -i "/tmp/$thumbnail" \
+    local answ; answ="$(notify-send -i "/tmp/$thumbnail" \
         -A "open=Open klipper"  \
         -A "open=Open klipper"  \
-        $args \
+        "${args[@]}" \
         "$title" "$body")"
     case "$answ" in
         "open") xdg-open "$KLIPPER_HOST" ;;
@@ -181,14 +164,14 @@ fi
 if [ "$(printf "%0.f > (%.0f + $KLIPPER_NOTIFY_THRESHOLD)\n" "$percent" "$last_percentage" | bc -l)" -eq "1" ] && [ "$status" = "printing" ]; then
     echo "$percent" > "$tmpfile"
     if [ -z "$BLOCK_BUTTON" ]; then
-        _notify_progress &
+        klipper_notify_progress &
     fi
 fi
 
 case $BLOCK_BUTTON in 
-    1) xdg-open $KLIPPER_HOST ;;
-    2) _toggle_switch ;;
-    3) _notify_progress &;;
+    1) xdg-open "$KLIPPER_HOST" ;;
+    2) libbar_toggle_switch ;;
+    3) klipper_notify_progress & ;;
 esac
 
 if [ "$status" == "printing" ]; then
@@ -205,4 +188,4 @@ else
     fi
 fi
 
-_output "$status" "$text"
+libbar_output "$status" "$text"

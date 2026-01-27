@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-KILL_SWITCH="$HOME/.cache/statusbar_$(basename "$0")_kill"
 SWITCH="$HOME/.cache/statusbar_$(basename "$0")"
 
 # shellcheck disable=SC1091
@@ -9,12 +8,11 @@ SWITCH="$HOME/.cache/statusbar_$(basename "$0")"
     [ -e "$HOME/.local/bin/statusbar/libbar" ] && source "$HOME/.local/bin/statusbar/libbar"
 }
 
+
 case $BLOCK_BUTTON in
     1) solaar ;;
     2) libbar_toggle_switch 10 ;;
 esac
-
-libbar_getopts "$@"
 
 # shellcheck disable=SC2034
 {
@@ -26,12 +24,12 @@ libbar_getopts "$@"
     libbar_icons["mouse"]="󰍽"
 }
 
-if [ -e "$KILL_SWITCH" ] || [ -z "$(command -v solaar 2>/dev/null)" ]; then
-    libbar_output "mouse" ""
-    exit 0
-fi
+libbar_getopts "$@"
+shift $((OPTIND-1))
+libbar_kill_switch "$(basename "$0")"
+libbar_required_commands solaar
 
-read -r capacity charging <<< "$(solaar show 2>/dev/null | sed -n 's/^\s*Battery: \(.*\)%, BatteryStatus.\(RECHARGING\|DISCHARGING\|FULL\)\.*$/\1 \2/;s/DISCHARGING/0/p;s/\(RECHARGING\|FULL\)/1/p' | head -n 1)"
+read -r capacity charging <<< "$(solaar show 2>/dev/null | sed -n 's/^\s*Battery: \(.*\)%, BatteryStatus.\(RECHARGING\|DISCHARGING\|FULL\)\.*$/\1 \2/;s/DISCHARGING/discharging/p;s/\(RECHARGING\|FULL\)/charging/p' | head -n 1)"
 
 if ! libbat_update "$capacity" "$charging"; then
     libbar_output "signal" "$ZWSP"

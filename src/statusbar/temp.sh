@@ -1,72 +1,81 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-SWITCH="$HOME/.cache/statusbar_$(basename $0)" 
+SWITCH="$HOME/.cache/statusbar_$(basename "$0")" 
 
-[ -e "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh" 
+# shellcheck disable=SC1091,SC3046
+{
+    [ -e "$HOME/.local/bin/statusbar/libbar" ] && source "$HOME/.local/bin/statusbar/libbar"
+}
+
+libbar_getopts "$@"
+shift $((OPTIND-1))
+libbar_kill_switch "$(basename "$0")"
+libbar_required_commands sensors
+
+# shellcheck disable=SC2034,SC2154
+{
+    libbar_json_icons["temp_1"]="temp_1"
+    libbar_icons["temp_1"]=""
+    libbar_colors["temp_1"]="$color7"
+    libbar_json_colors["temp_1"]="Idle"
+
+    libbar_json_icons["temp_2"]="temp_2"
+    libbar_icons["temp_2"]=""
+    libbar_colors["temp_2"]="$theme15"
+    libbar_json_colors["temp_2"]="Idle"
+
+    libbar_json_icons["temp_3"]="temp_3"
+    libbar_icons["temp_3"]=""
+    libbar_colors["temp_3"]="$theme13"
+    libbar_json_colors["temp_3"]="Info"
+
+    libbar_json_icons["temp_4"]="temp_4"
+    libbar_icons["temp_4"]=""
+    libbar_colors["temp_4"]="$theme12"
+    libbar_json_colors["temp_4"]="Warning"
+
+    libbar_json_icons["temp_5"]="temp_5"
+    libbar_icons["temp_5"]=""
+    libbar_colors["temp_5"]="$theme11"
+    libbar_json_colors["temp_5"]="Critical"
+}
 
 case $BLOCK_BUTTON in
 	1) notify-send "CPU hogs" "$(ps axch -o cmd:15,%cpu --sort=-%cpu | head)" ;;
-	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
+	2) libbar_toggle_switch ;;
 esac
 
-while getopts "j" opt; do
-    case $opt in
-        j) json=true ;;
-    esac
-done
+read -r temp temp_val <<< "$(sensors | awk '
+    {
+        if ($0 ~ /Package id 0:/) {
+            temp = substr($4, 2)
+            temp_val = substr(temp, 1, length(temp)-4)
+            exit
+        } else if ($0 ~ /Tdie|Tctl/) {
+            temp = substr($2, 2)
+            temp_val = substr(temp, 1, length(temp)-4)
+            exit
+        }
+    }
+    END {
+        print temp, temp_val
+    }
+')"
 
-_json() {
-    echo '{"icon": "'${1:-"$(basename $0)"}'", "state":"'${2}'", "text":"'${3}'"}';
-}
-
-_span() {
-    if [ -n "$3" ]; then
-        echo "<span size='large'>$1</span> <span color='$2'>$3</span>"
-    else
-        echo "<span size='large' color='$2'>$1 </span>"
-    fi
-}
-
-temp="$(sensors | awk '/Package id 0:/{print substr($4, 2)} /Tdie|Tctl/{print substr($2, 2)}')"
-temp_val="$(echo $temp | awk '{print substr($0, 1, length($0)-4)}')"
-
-color="$color7"
 if [ "$temp_val" -ge 70 ]; then
-	color="$theme11"
-    icon=""
-    state="Critical"
-    json_icon='temp_5'
+    icon='temp_5'
 elif [ "$temp_val" -ge 60 ]; then
-	color="$theme12"
-    icon=""
-    state="Warning"
-    json_icon='temp_4'
+    icon='temp_4'
 elif [ "$temp_val" -ge 50 ]; then
-	color="$theme13"
-    icon=""
-    state="Info"
-    json_icon='temp_3'
+    icon='temp_3'
 elif [ "$temp_val" -ge 40 ]; then
-	color="$theme15"
-    icon=""
-    state="Idle"
-    json_icon='temp_2'
+    icon='temp_2'
 else
-    icon=""
-    state="Idle"
-    json_icon='temp_1'
+    icon='temp_1'
 fi
 
 if [ -e "$SWITCH" ]; then
-    if [ -n "$json" ]; then
-        _json "$json_icon" "$state"
-    else
-        _span "$icon" "$color"
-    fi
+    libbar_output "$icon" "$ZWSP"
 else
-    if [ -n "$json" ]; then
-        _json "$json_icon" "$state" "$temp"
-    else
-        _span "$icon" "$color" "$temp"
-    fi
+    libbar_output "$icon" "$temp"
 fi

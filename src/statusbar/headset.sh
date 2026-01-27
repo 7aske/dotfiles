@@ -10,6 +10,7 @@ SIDETONE="$HOME/.cache/statusbar_headset_sidetone"
 }
 
 libbar_getopts "$@"
+shift $((OPTIND-1))
 
 # shellcheck disable=SC2034
 {
@@ -35,17 +36,16 @@ _headset_sidetone() {
 }
 
 # headsetcontrol exits with code 1 where is no adapter present
-read -r capacity status status_text < <(headsetcontrol -b | awk '
+read -r capacity status < <(headsetcontrol -b | awk '
 BEGIN {
-    status_map["BATTERY_AVAILABLE"] = 0
-    status_map["BATTERY_UNAVAILABLE"] = -1
-    status_map["BATTERY_CHARGING"]  = 1
+    status_map["BATTERY_AVAILABLE"] = "discharging"
+    status_map["BATTERY_UNAVAILABLE"] = "disconnected"
+    status_map["BATTERY_CHARGING"]  = "charging"
     status_text_map["BATTERY_AVAILABLE"] = "Discharging"
     status_text_map["BATTERY_UNAVAILABLE"] = "Disconnected"
     status_text_map["BATTERY_CHARGING"]  = "Charging"
     capacity = -1
-    status = -1
-    status_text = "Unavailable"
+    status = "unknown"
 }
 $0 == "No supported device found" {
     exit 1
@@ -59,22 +59,20 @@ $1 == "Level:" {
 $1 == "Status:" {
     status = status_map[$2]
     if (status == "") {
-        status = -1
-    }
-    status_text = status_text_map[$2]
-    if (status_text == "") {
-        status_text = "Disconnected"
+        status = "unknown"
     }
 }
 
 END {
-    printf "%s %s %s", capacity, status, status_text
+    printf "%s %s", capacity, status
 }')
 
-if [ "$status_text" = "Unavailable" ]; then
+echo "$capacity $status" >&2
+
+if [ "$status" == "unknown" ]; then
     libbar_output "headphones_not_connected" ""
     exit 0
-elif [ "$status_text" = "Disconnected" ]; then
+elif [ "$status" == "disconnected" ]; then
     if [ -n "$BLOCK_BUTTON" ]; then
         notify-send -a battery -i audio-headset "Headset" "Headset not connected"
     fi
@@ -88,7 +86,7 @@ libbat_update "$capacity" "$status"
 
 # shellcheck disable=SC2154
 case $BLOCK_BUTTON in
-    1) notify-send -a battery -i "$libbat_notif_icon" "Headset Battery" "Capacity: $capacity%\nStatus: $status_text" ;;
+    1) notify-send -a battery -i "$libbat_notif_icon" "Headset Battery" "Capacity: $capacity%\nStatus: $status" ;;
     2) libbar_toggle_switch ;;
     3) _headset_sidetone ;;
 esac

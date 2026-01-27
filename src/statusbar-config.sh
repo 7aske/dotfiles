@@ -4,15 +4,20 @@ STATUSBAR_DIR="$HOME/.local/bin/statusbar"
 
 STATUSBAR_FILE="$HOME/.cache/statusbar"
 
-module="$(dir -1 "$STATUSBAR_DIR" | rofi -dmenu -i -p "Toggle statusbar module")"
+module="$(for m in $(dir -1 "$STATUSBAR_DIR"); do
+    if grep -E 'KILL_SWITCH|libbar_kill_switch' "$STATUSBAR_DIR/$m" &> /dev/null; then
+        echo "$m"
+    fi
+done | rofi -dmenu -i -p "Toggle statusbar module")"
+
 
 if [ -n "$module" ]; then
-    KLILL_FILE="$STATUSBAR_FILE"_"$module"_kill
+    KILL_FILE="$STATUSBAR_FILE"_"$module"_kill
 
-    if [ -e "$KLILL_FILE" ]; then
-        rm "$KLILL_FILE"
+    if [ -e "$KILL_FILE" ]; then
+        rm "$KILL_FILE"
     else
-        touch "$KLILL_FILE"
+        touch "$KILL_FILE"
     fi
     i3-msg restart
 fi

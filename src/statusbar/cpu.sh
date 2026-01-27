@@ -1,15 +1,14 @@
 #!/usr/bin/env sh
 
-SWITCH="$HOME/.cache/statusbar_$(basename $0)" 
+SWITCH="$HOME/.cache/statusbar_$(basename "$0")" 
 
 case $BLOCK_BUTTON in
 	1) notify-send -i cpu "CPU hogs" "$(ps axch -o cmd:15,%cpu --sort=-%cpu | head)" ;;
-	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
+	2) if [ -e "$SWITCH" ]; then rm "$SWITCH"; else touch "$SWITCH"; fi ;;
 	3) wtoggle2 -T htop 2>/dev/null 1>/dev/null ;;
 esac
 
 cpu_usage="$(mpstat 1 1 | grep 'Average:' | awk '{printf "%d", ((100 - $12))}')"
-
 
 if [ "$cpu_usage" -ge 75 ]; then
     icon="󰡴"

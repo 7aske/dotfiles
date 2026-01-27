@@ -1,104 +1,59 @@
 #!/usr/bin/env sh
 # Give a battery name (e.g. BAT0) as an argument.
 
-SWITCH="$HOME/.cache/statusbar_$(basename $0)"
+SWITCH="$HOME/.cache/statusbar_$(basename "$0")"
 
-[ -f  "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
-[ -f  "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
+# shellcheck disable=SC1091
+{
+    [ -e "$HOME/.local/bin/statusbar/libbar" ] && . "$HOME/.local/bin/statusbar/libbar"
+    [ -e "$HOME/.local/bin/statusbar/libbat" ] && . "$HOME/.local/bin/statusbar/libbat"
+}
 
 while getopts "b:j" opt; do
     case $opt in
-        j) json=true ;;
+        j) export json=true ;;
         b) battery="$OPTARG" ;;
+        *) echo "Invalid option: -$OPTARG" >&2 ;;
     esac
 done
-
 shift $((OPTIND-1))
 
-_json() {
-    echo '{"icon": "'${1:-"$(basename $0)"}'", "state":"'${2}'", "text":"'${3}'"}';
-}
+libbar_kill_switch "$(basename "$0")"
+# batconv is a script to automate battery conservation mode toggling
+libbar_required_commands acpi batconv
 
-_span() {
-    if [ -n "$3" ]; then
-        echo "<span size='large'>$1</span> <span color='$2'>$3</span>"
-    else
-        echo "<span size='large' color='$2'>$1 </span>"
-    fi
-}
+# shellcheck disable=SC2034
+#{
+#}
 
 [ -z "$battery" ] && battery="$(dir -1 /sys/class/power_supply | grep -E BAT\? | sed 1q)"
 
 if ! [ -e "/sys/class/power_supply/$battery/status" ]; then
-    if [ $json = true ]; then
-        _json "bat_not_available" "Critical"
-    else
-        _span "󱉞" "#BF616A"
-    fi
-    exit
+    # shellcheck disable=SC2154
+    libbar_output "bat_not_available" "$ZWSP" "Critical" "${red}"
+    exit 1
 fi
 
-status=$(cat /sys/class/power_supply/"$battery"/status)
-capacity=$(cat /sys/class/power_supply/"$battery"/capacity) || exit
+capacity=$(cat /sys/class/power_supply/"$battery"/capacity) || exit 1
+status="$(cat /sys/class/power_supply/"$battery"/status | sed -e "s/,//;s/Discharging/discharging/;s/Not [Cc]harging/not_charging/;s/Charging/charging/;s/Unknown/unknown/;s/Full/full/;s/ 0*/ /g;s/ :/ /g")"
+conservation_mode="$(cat /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode 2>/dev/null || echo "0")"
 
 case $BLOCK_BUTTON in
-    1) if [ "$status" = "Not charging" ]; then
+    1) if [ "$status" = "not_charging" ]; then
         notify-send -a battery -i battery "Battery" "$status: $capacity%"
     else
         duration=$(acpi | awk '$4 != "0%," {print substr($5, 0, length($5) - 3)}')
-        notify-send -a battery -i battery "Battery" "$([ "$status" = "Charging" ] && printf "Until charged" || printf "Remaining"): $duration"
+        notify-send -a battery -i battery "Battery" "$([ "$status" = "charging" ] && printf "Until charged" || printf "Remaining"): $duration"
     fi ;;
-	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
+	2) libbar_toggle_switch 9 ;;
     3) pkexec batconv >/dev/null 2>&1 ;;
 esac
 
-icons=( "󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹" )
-charging_icons=( "󰢟" "󰢜" "󰂇" "󰂇" "󰂈" "󰢝" "󰂉" "󰢞" "󰂊" "󰂋" "󰂅" )
-warning_icons=( "  " "  " "  " " " " " " " " " " " " " " " " " )
-colors=( "${color1:-"#BF616A"}" "${color1:-"#BF616A"}" "${theme12:-"#D08770"}" "${theme12:-"#D08770"}" "${color3:-"#EBCB8B"}" "${color3:-"#EBCB8B"}" "${color3:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" "${color7:-"#D8DEE9"}" )
-states=( "Critical" "Critical" "Warning" "Warning" "Info" "Info" "Idle" "Idle" "Idle" "Idle" "Idle" )
-
-bat_level=$(($capacity / 10))
-
-color=${colors[$bat_level]}
-icon=${icons[$bat_level]}
-charging=${charging_icons[$bat_level]}
-state=${states[$bat_level]}
-warn=${warning_icons[$bat_level]}
-json_icon="bat_${bat_level}"
-json_charging_icon="bat_charging_${bat_level}"
-
-if [ "$status" = "Charging" ]; then
-    color="${color2:-"#A3BE8C"}"
-    state="Good"
-    icon=$charging
-    $json_icon=$json_charging_icon
-fi
-
-icon="$(echo "$status" | sed -e "s/,//;s/Discharging/$icon/;s/Not [Cc]harging/󰚦/;s/Charging/$charging/;s/Unknown/󰂑/;s/Full//;s/ 0*/ /g;s/ :/ /g")"
-
-setting=/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode
-saver_state=$(cat $setting)
-
-if [ $saver_state -eq 1 ] && [ "$status" != "Discharging" ]; then
-    icon=""
-    json_icon="bat_saver"
-fi
-
+libbat_update "$capacity" "$status" "$conservation_mode"
 
 if [ -e "$SWITCH" ]; then
-    if [ $json = true ]; then
-        _json "$json_icon" "$state"
-    else
-        echo "<span color='$color'>$icon</span><span color='$color' rise='-1pt'>$warn</span>"
-    fi
+    # shellcheck disable=SC2154
+    libbar_output "$libbat_json_icon" "$ZWSP$libbat_warn" "$libbat_state" "$libbat_color"
 else
-	capacity="$(echo "$capacity" | sed -e 's/$/%/')"
-
-    if [ $json = true ]; then
-        _json "$json_icon" "$state" "$capacity"
-    else
-        echo "$icon<span color='$color' rise='-1pt'> $capacity</span><span color='$color' rise='-1pt'>$warnsaver_icon</span>"
-    fi
-
+    libbar_output "$libbat_json_icon" " $capacity%$libbat_warn" "$libbat_state" "$libbat_color"
 fi

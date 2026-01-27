@@ -1,48 +1,40 @@
 #!/usr/bin/env sh
 
-ICON='󰊢'
-
-SWITCH="$HOME/.cache/statusbar_$(basename $0)" 
+SWITCH="$HOME/.cache/statusbar_$(basename "$0")" 
 
 [ -z "$CODE" ] && return 1
-[ -f  "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
-[ -f  "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
+
+# shellcheck disable=SC1091,SC3046
+{
+    [ -e "$HOME/.local/bin/statusbar/libbar" ] && source "$HOME/.local/bin/statusbar/libbar"
+}
+
+# shellcheck disable=SC2034
+{
+    libbar_json_icons["cgs"]="cgs"
+    libbar_icons["cgs"]="󰊢"
+}
 
 case $BLOCK_BUTTON in
     1) 
-		if [ $(dunstctl is-paused) = true ]; then
+		if [ "$(dunstctl is-paused)" = true ]; then
 			cgs | awk -F ' ' '{for(i=1;i<=NF;i++){print $i}}' | \
 				zenity --list \
 				--column Lang \
 				--column Name \
 				--column Branch \
 				--class=STATUSBAR_POPUP \
-				--title="rgs"
+				--title="rgs" \
 				--text="Dirty repositories:"
 		else 
 			notify-send -i git "Repositories" "$(cgs -mb)"
 		fi ;;
-	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
+	2) libbar_toggle_switch 7 ;;
     3) notify-send -i git "Repositories" "$(cgs -F)" ;;
 esac
 
-while getopts "j" opt; do
-    case $opt in
-        j) json=true ;;
-    esac
-done
-
-_json() {
-    echo '{"icon": "'${1}'", "state":"'${2:-"Idle"}'", "text":"'${3}'"}';
-}
-
-_span() {
-    if [ -n "$3" ]; then
-        echo "<span size='large'>$1</span> <span color='$2'>$3</span>"
-    else
-        echo "<span size='large' color='$2'>$1 </span>"
-    fi
-}
+libbar_getopts "$@"
+shift $((OPTIND-1))
 
 repos="$(/usr/bin/cgs -b | wc -l)"
 
@@ -60,26 +52,15 @@ else
 	color="${color7:-"#ffffff"}"
 fi
 
-if [ $repos -eq 0 ]; then
-    if [ "$json" = true ]; then
-        _json "" "" ""
-    fi
-
+if [ "$repos" -eq 0 ]; then
+    libbar_output "cgs" ""
 	exit 0
 fi
 
 if [ -e "$SWITCH" ]; then
-    if [ "$json" = true ]; then
-        _json "" "$state" "$ICON"
-    else
-        _span "$ICON" "$color"
-    fi
+    libbar_output "cgs" "$ZWSP" "$state" "$color"
 else
-    if [ "$json" = true ]; then
-        _json "cgs" "$state" "$repos"
-    else
-        _span "$ICON" "$color" "$repos"
-    fi
+    libbar_output "cgs" "$repos" "$state" "$color"
 fi
 
 

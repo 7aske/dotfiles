@@ -17,6 +17,7 @@ SWITCH="$HOME/.cache/statusbar_$(basename "$0")"
 }
 
 libbar_getopts "$@"
+shift $((OPTIND-1))
 
 DEVICES="$(bluetoothctl devices Connected | awk '{print $2}')"
 

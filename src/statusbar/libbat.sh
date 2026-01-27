@@ -17,7 +17,10 @@ declare -ag libbat_warning_icons
 declare -Ag libbat_colors
 declare -Ag libbat_states
 declare -g libbat_no_bat
-declare -g libbat_json_no_bat
+declare -g libbat_saver
+declare -g libbat_json_bat_not_available
+declare -g libbat_json_saver
+declare -g libbat_notif_saver
 declare -g libbat_charging_color
 declare -g libbat_charging_state
 declare -g libbat_color # rgb color
@@ -30,7 +33,10 @@ declare -g libbat_json_charging_icon
 declare -g libbat_notif_icon
 
 libbat_no_bat="󱉞"
-libbat_json_no_bat="bat_no_bat"
+libbat_json_bat_not_available="bat_not_available"
+libbat_saver=""
+libbat_json_saver="bat_saver"
+libbat_notif_saver="battery"
 libbat_icons+=([0]="󰂎" [1]="󰁺" [2]="󰁻" [3]="󰁼" [4]="󰁽" [5]="󰁾" [6]="󰁿" [7]="󰂀" [8]="󰂁" [9]="󰂂" [10]="󰁹")
 libbat_charging_icons+=([0]="󰢟" [1]="󰢜" [2]="󰂇" [3]="󰂇" [4]="󰂈" [5]="󰢝" [6]="󰂉" [7]="󰢞" [8]="󰂊" [9]="󰂋" [10]="󰂅")
 libbat_warning_icons=( "  " "  " "  " " " " " " " " " " " " " " " " " )
@@ -83,13 +89,14 @@ libbat_charging_state="Good"
 #              libbat_json_charging_icon, libbat_charging
 libbat_update() {
     local capacity="$1"
-    local charging_status="${2:-0}"
+    local charging_status="${2:-"discharging"}"
+    local saver_state="${3:-0}"
 
     if [ -z "$capacity" ] || [ "$capacity" -eq -1 ]; then
         libbat_color=${libbat_colors[0]}
         libbat_state=${libbat_states[0]}
         libbat_icon=${libbat_no_bat}
-        libbat_json_icon="${libbat_json_no_bat}"
+        libbat_json_icon="${libbat_json_bat_not_available}"
         return 1
     fi
 
@@ -106,13 +113,22 @@ libbat_update() {
     export libbat_charging_icon=${libbat_charging_icons[$bat_index]}
     export libbat_json_charging_icon="bat_charging_${bat_index}"
 
-    if [ "$charging_status" -eq 1 ]; then
+    if [ "$charging_status" == "charging" ]; then
         export libbat_color="$libbat_charging_color"
         export libbat_state="$libbat_charging_state"
 
         export libbat_icon="${libbat_charging_icon}"
         export libbat_json_icon="${libbat_json_charging_icon:-"bat_charging_${bat_index}"}"
         export libbat_notif_icon="${libbat_notif_icon}-charging"
+    fi
+
+    if [ "$saver_state" -eq 1 ] && [ "$charging_status" != "discharging" ] && [ "$charging_status" != "charging" ]; then
+        export libbat_color="$blue"
+        export libbat_state="Idle"
+
+        export libbat_json_icon="${libbat_json_saver}"
+        export libbat_icon="${libbat_saver}"
+        export libbat_notif_icon="${libbat_notif_saver}"
     fi
 
 }

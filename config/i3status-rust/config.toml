@@ -16,6 +16,7 @@ net_wired=""
 3d_printer_complete=""
 3d_printer_error=""
 3d_printer_cancelled="󰜺"
+error=""
 keyboard = ""
 mouse = "󰍽"
 signal="󰞃"
@@ -216,23 +217,24 @@ action = "toggle_format"
 
 [[block]]
 block = "custom"
-command = "~/.local/bin/statusbar/disk"
-interval = 60
+command = "~/.local/bin/statusbar/disk -j /"
+interval = 600
 signal = 9
 hide_when_empty = true
+json = true
 [[block.click]]
 button = "left"
-cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/disk"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/disk -j /"
 sync = true
 update = true
 [[block.click]]
 button = "middle"
-cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/disk"
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/disk -j /"
 sync = true
 update = true
 [[block.click]]
 button = "right"
-cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/disk"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/disk -j /"
 sync = true
 update = true
 
@@ -328,9 +330,10 @@ update = true
 [[block]]
 block = "custom"
 interval = 60
-command = "~/.local/bin/statusbar/packages"
+command = "~/.local/bin/statusbar/packages -j"
 format = ""
 hide_when_empty = true
+signal = 8
 
 [[block]]
 block = "privacy"
@@ -495,7 +498,7 @@ command = "~/.local/bin/statusbar/battery -j"
 signal = 9
 json = true
 if_command = "ls /sys/class/power_supply/*"
-format = "$icon $text"
+format = "$icon$text"
 [[block.click]]
 button = "left"
 cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/battery -j"
@@ -514,7 +517,7 @@ update = true
 
 [[block]]
 block = "keyboard_layout"
-driver = "setxkbmap"
+driver = "xkbevent"
 interval = 15
 format = "$layout "
 signal = 9
