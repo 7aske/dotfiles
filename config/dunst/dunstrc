@@ -188,3 +188,6 @@
 	body = ".*[Dd]obro( nam)? do[sš]l?[ai].*"
 	skip_display = yes
 
+[weather]
+    appname = weather
+    min_icon_size=128
