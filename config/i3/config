@@ -215,6 +215,9 @@ bindsym $mod+Shift+F12 exec --no-startup-id autorandr --change && nitrogen --res
 bindsym $mod+Home exec --no-startup-id idasen stand
 bindsym $mod+End  exec --no-startup-id idasen sit
 
+bindsym $mod+y       exec --no-startup-id screenlayout
+bindsym $mod+Shift+y exec --no-startup-id screenlayout layout.sh
+
 # layout toggling mode
 set $mode_codeopen codeopen: (t)erm (n)vim (v)scode (i)dea (c)lion (g)oland lazy(G)it (p)ycharm (w)ebstorm (s)studio (r)ider (j)etbrains
 bindsym $mod+o mode "$mode_codeopen"
