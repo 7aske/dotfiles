@@ -1,6 +1,4 @@
 #compdef ccheck
 
-# Auto-generated completion for ccheck
-
 _arguments \
-  '*::arg:_default'
+  '*:code directory to check:_files -/'

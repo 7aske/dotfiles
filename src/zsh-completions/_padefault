@@ -2,26 +2,26 @@
 
 local -a commands
 commands=(
-  'volume-specific:set volume of specific application'
-  'vs:alias for volume-specific'
-  'volume-focus:set volume of focused window'
-  'vf:alias for volume-focus'
-  'toggle-focus:cycle focused window audio device'
-  'tf:alias for toggle-focus'
-  'toggle:cycle default audio device'
-  't:alias for toggle'
-  'volume:set default audio device volume'
-  'vol:alias for volume'
-  'v:alias for volume'
-  'mic-volume:set default audio input volume'
-  'mv:alias for mic-volume'
-  'mute:toggle mute on default device'
-  'm:alias for mute'
-  'mute-all:toggle mute on all outputs'
-  'ma:alias for mute-all'
-  'mute-all-src:toggle mute on all inputs'
-  'mas:alias for mute-all-src'
-  'help:show help'
+  'volume-specific:set volume for specific application'
+  'vs:set volume for specific application (alias)'
+  'volume-focus:set volume for focused window'
+  'vf:set volume for focused window (alias)'
+  'toggle-focus:cycle audio device for focused window'
+  'tf:cycle audio device for focused window (alias)'
+  'toggle:cycle default audio output device'
+  't:cycle default audio output device (alias)'
+  'volume:set default audio output volume'
+  'vol:set default audio output volume (alias)'
+  'v:set default audio output volume (alias)'
+  'mic-volume:set default microphone input volume'
+  'mv:set default microphone input volume (alias)'
+  'mute:toggle mute on default output device'
+  'm:toggle mute on default output device (alias)'
+  'mute-all:toggle mute on all output devices'
+  'ma:toggle mute on all output devices (alias)'
+  'mute-all-src:toggle mute on all input devices'
+  'mas:toggle mute on all input devices (alias)'
+  'help:display help information'
 )
 
 _arguments \
@@ -30,6 +30,6 @@ _arguments \
 
 case $state in
   command)
-    _describe 'command' commands
+    _describe 'padefault command' commands
     ;;
 esac

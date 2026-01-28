@@ -1,4 +1,12 @@
 #compdef i3exit
 
 _arguments \
-  '1:action:(lock logout switch_user suspend hibernate reboot shutdown)'
+  '1:exit action:((
+    lock\:"lock the screen"
+    logout\:"log out of current session"
+    switch_user\:"switch to different user"
+    suspend\:"suspend system to RAM"
+    hibernate\:"hibernate system to disk"
+    reboot\:"reboot the system"
+    shutdown\:"power off the system"
+  ))'

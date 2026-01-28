@@ -1,6 +1,6 @@
 #compdef zooms
 
 _arguments \
-  '-a[absolute value]' \
-  '-l[list current]' \
-  '*:zoom value:'
+  '-a[set absolute zoom value]' \
+  '-l[list current zoom level]' \
+  '*:zoom value (percentage):'

@@ -1,4 +1,7 @@
 #compdef patoggle
 
 _arguments \
-  '1:target:(sinks sources)'
+  '1:audio device type:((
+    sinks\:"toggle all audio output devices"
+    sources\:"toggle all audio input devices"
+  ))'

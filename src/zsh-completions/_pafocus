@@ -1,3 +1,3 @@
 #compdef pafocus
 
-_message 'interactive menu/no arguments required'
+_message 'set audio focus/routing for applications'

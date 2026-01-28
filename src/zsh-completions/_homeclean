@@ -1,6 +1,3 @@
 #compdef homeclean
 
-# Auto-generated completion for homeclean
-
-_arguments \
-  '*::arg:_default'
+_message 'clean home directory - remove temporary files and caches'

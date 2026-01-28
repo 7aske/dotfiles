@@ -1,4 +1,4 @@
 #compdef google-search
 
 _arguments \
-  '*:search terms:'
+  '*:search terms (opens in default browser):'

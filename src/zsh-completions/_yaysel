@@ -1,3 +1,3 @@
 #compdef yaysel
 
-_message 'interactive menu/no arguments required'
+_message 'interactive yay/AUR package selector'

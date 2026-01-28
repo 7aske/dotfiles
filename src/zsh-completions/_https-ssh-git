@@ -1,6 +1,3 @@
 #compdef https-ssh-git
 
-# Auto-generated completion for https-ssh-git
-
-_arguments \
-  '*::arg:_default'
+_message 'convert git remote URL between HTTPS and SSH formats'

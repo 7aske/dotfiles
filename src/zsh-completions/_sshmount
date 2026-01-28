@@ -1,5 +1,5 @@
 #compdef sshmount
 
 _arguments \
-  '1:remote host:_ssh_hosts' \
-  '2:mount point:_files -/'
+  '1:remote host (user@host\:path):_ssh_hosts' \
+  '2:local mount point:_files -/'

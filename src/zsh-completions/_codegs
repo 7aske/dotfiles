@@ -1,6 +1,3 @@
 #compdef codegs
 
-# Auto-generated completion for codegs
-
-_arguments \
-  '*::arg:_default'
+_message 'code grep/search - search through code repositories'

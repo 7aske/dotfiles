@@ -1,5 +1,14 @@
 #compdef hdmi
 
 _arguments \
-  '1:state:(on off)' \
-  '2:mode:(same-as left-of right-of above below)'
+  '1:monitor state:((
+    on\:"enable external monitor"
+    off\:"disable external monitor"
+  ))' \
+  '2:xrandr positioning mode:((
+    same-as\:"mirror primary display"
+    left-of\:"position left of primary"
+    right-of\:"position right of primary"
+    above\:"position above primary"
+    below\:"position below primary"
+  ))'

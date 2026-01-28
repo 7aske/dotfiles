@@ -4,7 +4,7 @@
 _toggle-service() {
   local -a services
   services=(${(f)"$(systemctl --user list-units --all --full --no-legend --no-pager --plain | awk '{print $1}')"})
-  _describe 'service' services
+  _describe 'systemd user service' services
 }
 
 _toggle-service

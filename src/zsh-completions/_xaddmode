@@ -1,6 +1,3 @@
 #compdef xaddmode
 
-# Auto-generated completion for xaddmode
-
-_arguments \
-  '*::arg:_default'
+_message 'add custom display mode using xrandr'

@@ -1,6 +1,4 @@
 #compdef codeopen
 
-# Auto-generated completion for codeopen
-
 _arguments \
-  '*::arg:_default'
+  '*:repository or project to open:_files -/'

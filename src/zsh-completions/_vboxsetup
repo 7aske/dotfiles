@@ -1,12 +1,12 @@
 #compdef vboxsetup
 
 _arguments \
-  '-h[show help]' \
-  '-D[VRDE]:setting:(on off)' \
-  '-m[memory]:memory:' \
-  '-s[disk size]:size:' \
-  '-c[CPUs]:cpus:' \
-  '-p[vram]:vram:' \
-  '-P[port]:port:' \
-  '1:vm name:' \
-  '2:iso path:_files -g "*.iso"'
+  '-h[show help and usage information]' \
+  '-D[enable/disable VRDE (remote desktop)]:setting:(on off)' \
+  '-m[set RAM memory in MB]:memory:' \
+  '-s[set virtual disk size]:size:' \
+  '-c[set number of CPUs]:cpus:' \
+  '-p[set video RAM in MB]:vram:' \
+  '-P[set VRDE port number]:port:' \
+  '1:VM name:' \
+  '2:ISO file path:_files -g "*.iso"'

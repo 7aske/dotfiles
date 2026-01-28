@@ -1,4 +1,4 @@
 #compdef hex2rgb
 
 _arguments \
-  '1:hex color code:'
+  '1:hexadecimal color code (e.g. #FF5733):'

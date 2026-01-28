@@ -1,6 +1,3 @@
 #compdef codepull
 
-# Auto-generated completion for codepull
-
-_arguments \
-  '*::arg:_default'
+_message 'pull updates for all git repositories in code directory'

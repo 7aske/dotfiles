@@ -1,3 +1,3 @@
 #compdef getmicvol
 
-_message 'interactive menu/no arguments required'
+_message 'get current microphone volume level'

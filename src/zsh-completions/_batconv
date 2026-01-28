@@ -1,4 +1,15 @@
 #compdef batconv
 
+_batconv_states() {
+  local -a opts
+  opts=(
+    "on:enable battery conservation mode (limit charge to 80%)"
+    "off:disable battery conservation mode (charge to 100%)"
+    "1:enable battery conservation mode"
+    "0:disable battery conservation mode"
+  )
+  _describe 'battery conservation mode' opts
+}
+
 _arguments \
-  '1:state:(on off 1 0)'
+  '1:state:_batconv_states'

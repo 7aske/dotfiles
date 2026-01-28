@@ -1,11 +1,3 @@
 #compdef gitwatch
 
-_arguments \
-  '-$[option $]' \
-  '-O[option O]' \
-  '-P[option P]' \
-  '-T[option T]' \
-  '-S[option S]' \
-  '-T[option T]' \
-  '-R[option R]' \
-  '*::arg:_files'
+_message 'watch git repository for changes and auto-commit'

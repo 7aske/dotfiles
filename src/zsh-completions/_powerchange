@@ -1,3 +1,3 @@
 #compdef powerchange
 
-_message 'ACPI power change listener (no arguments)'
+_message 'ACPI power change listener - monitors AC adapter events and sends notifications'

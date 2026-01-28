@@ -1,8 +1,19 @@
 #compdef rcode
 
+_repos() {
+    local cur
+    cur="${words[CURRENT]}"
+
+    # Use _files with a custom root directory
+    # - / expands to absolute paths, here we map ~/mydir as root
+    _files -W $CODE -/ -g '*'
+}
+
 _arguments \
-  '-h[show help]' \
-  '-p[port]:port:' \
-  '-s[sync]:mode:' \
-  '-d[directory]:directory:_files -/' \
-  '*::arguments:'
+  '1:action:(push pull)' \
+  '2:remote:_ssh_hosts' \
+  '3:repo:_repos' \
+  '-h[show help and usage information]' \
+  '-p[specify port number for server]:port:' \
+  '-s[source]:source:_files' \
+  '-d[destination]:destination:_files -/'

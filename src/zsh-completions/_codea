@@ -1,6 +1,6 @@
 #compdef codea
 
 _arguments \
-  '-h[flag]' \
-  '-d[option]:arg:' \
+  '-h[show help and usage information]' \
+  '-d[specify project directory]:directory:_files -/' \
   '*::arguments:_files'

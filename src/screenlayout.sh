@@ -1,14 +1,5 @@
 #!/usr/bin/env bash
 
-autocomplete() {
-    local cur_word="${COMP_WORDS[COMP_CWORD]}"
-    local layouts
-    layouts=$(find "$HOME/.screenlayout" -type f -name "*.sh" -printf "%f\n")
-    COMPREPLY=($(compgen -W "$layouts" -- "$cur_word"))
-}
-complete -F autocomplete screenlayout
-
-
 SCREENLAYOUT_DIR="$HOME/.screenlayout"
 
 if [ -n "$1" ]; then

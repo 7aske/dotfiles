@@ -81,9 +81,9 @@ compinit
 
 # --- Completion behavior ---
 zmodload zsh/complist
-
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu select
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*:*:*:*:descriptions' format '%F{magenta}-- %d --%f'
 
 setopt completealiases
 setopt globdots

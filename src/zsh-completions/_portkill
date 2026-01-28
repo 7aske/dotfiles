@@ -1,3 +1,3 @@
 #compdef portkill
 
-_message 'interactive menu/no arguments required'
+_message 'interactive port selector - lists listening ports via dmenu and kills selected process'

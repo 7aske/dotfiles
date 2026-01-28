@@ -1,3 +1,3 @@
 #compdef i3shell
 
-_message 'interactive menu/no arguments required'
+_message 'open i3 shell/scratchpad terminal'

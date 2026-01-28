@@ -1,6 +1,10 @@
 #compdef mkuni
 
 _arguments \
-  '-p[print name only]' \
-  '1:type:(dz v p)' \
-  '2:number:'
+  '-p[print directory name without creating]' \
+  '1:assignment type:((
+    dz\:"domaci zadatak (homework)"
+    v\:"vezba (exercise)"
+    p\:"projekat (project)"
+  ))' \
+  '2:assignment number:'

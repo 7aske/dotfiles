@@ -4,7 +4,7 @@ local layout_dir="$HOME/.screenlayout"
 
 if [[ -d $layout_dir ]]; then
   _arguments \
-    "1:screen layout:($(
+    "1:screen layout configuration:($(
       for f in $layout_dir/*.sh(.N); do
         print -r -- ${f:t}
       done

@@ -1,6 +1,3 @@
 #compdef tasksync
 
-# Auto-generated completion for tasksync
-
-_arguments \
-  '*::arg:_default'
+_message 'sync Taskwarrior tasks with remote server'

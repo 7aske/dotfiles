@@ -1,7 +1,6 @@
 #compdef kblang
 
 _arguments \
-  '-h[show help]' \
-  '-l[layout]:layout:' \
-  '-t[toggle]' \
-  '*::arguments:'
+  '-h[show help and usage information]' \
+  '-l[set keyboard layout]:layout:' \
+  '-t[toggle between configured layouts]'

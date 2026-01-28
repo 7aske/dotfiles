@@ -1,6 +1,3 @@
 #compdef pgupgrade
 
-# Auto-generated completion for pgupgrade
-
-_arguments \
-  '*::arg:_default'
+_message 'upgrade PostgreSQL database cluster'

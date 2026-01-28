@@ -1,5 +1,5 @@
 #compdef wtoggle
 
 _arguments \
-  '-c[command]:command:_command_names' \
-  '*::arguments:'
+  '-c[specify command to toggle]:command:_command_names' \
+  '*::command arguments:'

@@ -1,6 +1,3 @@
 #compdef create-posts
 
-# Auto-generated completion for create-posts
-
-_arguments \
-  '*::arg:_default'
+_message 'create blog/social media posts from template'

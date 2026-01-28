@@ -1,5 +1,5 @@
 #compdef codeclean
 
 _arguments \
-  '-f[force]' \
-  '*:directory:_files -/'
+  '-f[force clean without confirmation]' \
+  '*:directory to clean:_files -/'

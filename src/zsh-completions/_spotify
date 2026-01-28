@@ -1,3 +1,3 @@
 #compdef spotify
 
-_message 'interactive menu/no arguments required'
+_message 'Spotify launcher with ad-blocker integration'

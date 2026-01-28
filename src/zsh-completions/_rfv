@@ -1,3 +1,3 @@
 #compdef rfv
 
-_message 'interactive menu/no arguments required'
+_message 'interactive file search'

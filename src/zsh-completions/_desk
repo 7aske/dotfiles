@@ -1,5 +1,13 @@
 #compdef desk
 
 _arguments \
-  '1:command:(move-to stand sit mon mon-last down up)' \
-  '2:amount:'
+  '1:desk command:((
+    move-to\:"move desk to custom height via dmenu"
+    stand\:"move desk to standing position"
+    sit\:"move desk to sitting position"
+    mon\:"monitor desk height changes"
+    mon-last\:"show last height from monitor log"
+    down\:"move desk down by specified amount"
+    up\:"move desk up by specified amount"
+  ))' \
+  '2:amount in mm (for up/down commands):'

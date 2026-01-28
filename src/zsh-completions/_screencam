@@ -1,8 +1,8 @@
 #compdef screencam
 
 _arguments \
-  '-f[fps]:fps:(15 30 60)' \
-  '-n[screen number]:number:' \
-  '-d[video device]:device:_files -g "/dev/video*"' \
-  '-h[show help]' \
-  '1:screen name:'
+  '-f[set frames per second]:fps:(15 30 60)' \
+  '-n[select screen by number]:number:' \
+  '-d[specify video loopback device]:device:_files -g "/dev/video*"' \
+  '-h[show help and usage information]' \
+  '1:screen name or pattern:'

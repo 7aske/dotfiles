@@ -1,5 +1,5 @@
 #compdef pavol
 
 _arguments \
-  '1:program name:' \
-  '2:volume level:'
+  '1:application name or process:' \
+  '2:volume level (percentage or +/- adjustment):'

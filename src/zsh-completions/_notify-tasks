@@ -1,6 +1,3 @@
 #compdef notify-tasks
 
-# Auto-generated completion for notify-tasks
-
-_arguments \
-  '*::arg:_default'
+_message 'send notifications for pending Taskwarrior tasks'

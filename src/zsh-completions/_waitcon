@@ -1,3 +1,3 @@
 #compdef waitcon
 
-_message 'interactive menu/no arguments required'
+_message 'wait for network connection before proceeding'

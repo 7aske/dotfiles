@@ -1,7 +1,7 @@
 #compdef codesync
 
 _arguments \
-  '-h[show help]' \
-  '-H[hard reset]:commit:' \
-  '-e[exclude]:path:_files' \
-  '*::arguments:'
+  '-h[show help and usage information]' \
+  '-H[perform hard reset to commit]:commit:' \
+  '-e[exclude path from sync]:path:_files' \
+  '*::repository path:_files -/'

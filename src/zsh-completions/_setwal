@@ -1,9 +1,9 @@
 #compdef setwal
 
 _arguments \
-  '-h[show help]' \
-  '-r[random wallpaper]' \
-  '-R[reload only]' \
-  '-l[last wallpaper]' \
-  '-w[wallpaper path]:wallpaper:_files -g "*.{jpg,jpeg,png,gif}"' \
+  '-h[show help and usage information]' \
+  '-r[select random wallpaper from collection]' \
+  '-R[reload current wallpaper settings only]' \
+  '-l[restore last used wallpaper]' \
+  '-w[specify wallpaper file path]:wallpaper:_files -g "*.{jpg,jpeg,png,gif,bmp}"' \
   '*::arguments:'

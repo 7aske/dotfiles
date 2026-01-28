@@ -1,7 +1,7 @@
 #compdef crypto
 
 _arguments \
-  '-t[ticker]:ticker:' \
-  '-f[from currency]:currency:' \
-  '-l[list mode]' \
+  '-t[specify cryptocurrency ticker symbol]:ticker:' \
+  '-f[specify source currency]:currency:' \
+  '-l[list available cryptocurrencies]' \
   '*::arguments:'

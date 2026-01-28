@@ -1,7 +1,63 @@
 #compdef kubepf
 
+_kubectl_contexts() {
+    local -a contexts
+    contexts=($(kubectl config get-contexts -o name 2>/dev/null))
+    _describe 'context' contexts
+}
+
+_kubectl_namespaces() {
+    # list all namespaces
+    local -a namespaces
+    namespaces=($(kubectl get ns -o jsonpath='{.items[*].metadata.name}'))
+    _describe 'namespace' namespaces
+}
+
+_kubectl_pods() {
+    local cur ns
+    cur="${words[CURRENT]}"
+    
+    # If user specified a namespace via -n or second argument
+    # Try to detect it
+    for i in "${(@)words}"; do
+        if [[ $i == "-n" ]]; then
+            ns="${words[$((CURRENT+1))]}"
+        fi
+    done
+    
+    local -a pods
+    if [[ -n "$ns" ]]; then
+        pods=($(kubectl get pods -n "$ns" -o jsonpath='{.items[*].metadata.name}'))
+    else
+        pods=($(kubectl get pods --all-namespaces -o jsonpath='{.items[*].metadata.name}'))
+    fi
+
+    _describe 'pod' pods
+}
+
+_kubectl_deployments() {
+    local cur ns
+    cur="${words[CURRENT]}"
+    
+    for i in "${(@)words}"; do
+        if [[ $i == "-n" ]]; then
+            ns="${words[$((CURRENT+1))]}"
+        fi
+    done
+
+    local -a deploys
+    if [[ -n "$ns" ]]; then
+        deploys=($(kubectl get deployments -n "$ns" -o jsonpath='{.items[*].metadata.name}'))
+    else
+        deploys=($(kubectl get deployments --all-namespaces -o jsonpath='{.items[*].metadata.name}'))
+    fi
+
+    _describe 'deployment' deploys
+}
+
+
 _arguments \
-  '-c[context]:context:' \
-  '-n[namespace]:namespace:' \
-  '-d[deployment]:deployment:' \
-  '-p[port]:port:'
+  '-c[specify kubectl context]:context:_kubectl_contexts' \
+  '-n[specify namespace]:namespace:_kubectl_namespaces' \
+  '-d[specify deployment name]:deployment:_kubectl_deployments' \
+  '-p[specify port to forward]:port:' \

@@ -1,7 +1,7 @@
 #compdef yup
 
 _arguments \
-  '-u[update]' \
-  '-r[remove orphans]' \
-  '-c[clean cache]' \
-  '-l[list updates]'
+  '-u[update all packages]' \
+  '-r[remove orphaned packages]' \
+  '-c[clean package cache]' \
+  '-l[list available updates]'

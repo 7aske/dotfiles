@@ -1,4 +1,3 @@
 #compdef pused
 
-_arguments \
-  '1:port:'
+_message 'show PulseAudio device usage/routing'

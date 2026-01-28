@@ -1,5 +1,11 @@
 #compdef pad-image
 
 _arguments \
-  '1:image or directory:_files' \
-  '2:color:(white black red green blue)'
+  '1:image file or directory:_files' \
+  '2:padding color:((
+    white\:"use white padding"
+    black\:"use black padding"
+    red\:"use red padding"
+    green\:"use green padding"
+    blue\:"use blue padding"
+  ))'
