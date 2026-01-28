@@ -1,0 +1,7 @@
+#compdef crypto
+
+_arguments \
+  '-t[ticker]:ticker:' \
+  '-f[from currency]:currency:' \
+  '-l[list mode]' \
+  '*::arguments:'

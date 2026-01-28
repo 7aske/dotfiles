@@ -1,0 +1,3 @@
+#compdef pacsel
+
+_message 'interactive menu/no arguments required'

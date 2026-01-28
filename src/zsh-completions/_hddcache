@@ -1,0 +1,7 @@
+#compdef hddcache
+
+# Auto-generated completion for hddcache
+
+# See script for usage details
+_arguments \
+  '*::arg:_default'

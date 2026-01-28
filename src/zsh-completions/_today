@@ -1,0 +1,3 @@
+#compdef today
+
+_message 'interactive menu/no arguments required'

@@ -1,0 +1,4 @@
+#compdef patoggle
+
+_arguments \
+  '1:target:(sinks sources)'

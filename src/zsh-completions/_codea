@@ -1,0 +1,6 @@
+#compdef codea
+
+_arguments \
+  '-h[flag]' \
+  '-d[option]:arg:' \
+  '*::arguments:_files'

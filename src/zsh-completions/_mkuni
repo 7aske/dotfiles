@@ -1,0 +1,6 @@
+#compdef mkuni
+
+_arguments \
+  '-p[print name only]' \
+  '1:type:(dz v p)' \
+  '2:number:'

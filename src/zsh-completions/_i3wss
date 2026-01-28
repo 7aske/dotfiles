@@ -1,0 +1,4 @@
+#compdef i3wss
+
+_arguments \
+  '1:action:(move move-switch)'

@@ -1,0 +1,3 @@
+#compdef wolsel
+
+_message 'interactive menu/no arguments required'

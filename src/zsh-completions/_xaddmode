@@ -1,0 +1,6 @@
+#compdef xaddmode
+
+# Auto-generated completion for xaddmode
+
+_arguments \
+  '*::arg:_default'

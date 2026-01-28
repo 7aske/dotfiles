@@ -1,0 +1,6 @@
+#compdef codepull
+
+# Auto-generated completion for codepull
+
+_arguments \
+  '*::arg:_default'

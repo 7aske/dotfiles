@@ -1,0 +1,17 @@
+#compdef wtoggle2
+
+_arguments \
+  '-a[anchor]:anchor:(top-left top-center top-right center-left center-center center-right bottom-left bottom-center bottom-right tl tc tr cl cc cr bl bc br)' \
+  '-d[dimensions]:size:' \
+  '-f[fullscreen]' \
+  '-h[show help]' \
+  '-m[animation from edge]:edge:(top left bottom right t l b r)' \
+  '-o[terminal options]:options:' \
+  '-p[position]:position:' \
+  '-s[screen]:screen:' \
+  '-t[disable toggle]' \
+  '-T[use terminal]' \
+  '-v[verbose]' \
+  '-V[version]' \
+  '-w[wait for keypress]' \
+  '*:command:'

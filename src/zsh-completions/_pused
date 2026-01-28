@@ -1,0 +1,4 @@
+#compdef pused
+
+_arguments \
+  '1:port:'

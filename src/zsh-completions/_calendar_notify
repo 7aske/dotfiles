@@ -1,0 +1,3 @@
+#compdef calendar_notify
+
+_message 'interactive menu/no arguments required'

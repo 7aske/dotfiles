@@ -1,0 +1,12 @@
+#compdef vboxsetup
+
+_arguments \
+  '-h[show help]' \
+  '-D[VRDE]:setting:(on off)' \
+  '-m[memory]:memory:' \
+  '-s[disk size]:size:' \
+  '-c[CPUs]:cpus:' \
+  '-p[vram]:vram:' \
+  '-P[port]:port:' \
+  '1:vm name:' \
+  '2:iso path:_files -g "*.iso"'

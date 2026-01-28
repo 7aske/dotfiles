@@ -1,0 +1,7 @@
+#compdef yup
+
+_arguments \
+  '-u[update]' \
+  '-r[remove orphans]' \
+  '-c[clean cache]' \
+  '-l[list updates]'

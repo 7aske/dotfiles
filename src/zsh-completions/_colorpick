@@ -1,0 +1,3 @@
+#compdef colorpick
+
+_message 'interactive menu/no arguments required'

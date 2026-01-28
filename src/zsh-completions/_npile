@@ -1,0 +1,3 @@
+#compdef npile
+
+_message 'interactive menu/no arguments required'

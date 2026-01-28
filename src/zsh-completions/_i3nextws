@@ -1,0 +1,3 @@
+#compdef i3nextws
+
+_message 'interactive menu/no arguments required'

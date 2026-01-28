@@ -1,0 +1,3 @@
+#compdef books
+
+_message 'interactive menu/no arguments required'

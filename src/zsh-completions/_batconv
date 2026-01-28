@@ -1,0 +1,4 @@
+#compdef batconv
+
+_arguments \
+  '1:state:(on off 1 0)'

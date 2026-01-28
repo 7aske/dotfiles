@@ -1,0 +1,3 @@
+#compdef powerchange
+
+_message 'ACPI power change listener (no arguments)'

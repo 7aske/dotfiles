@@ -1,0 +1,4 @@
+#compdef ffcat
+
+_arguments \
+  '*:video files:_files -g "*.{mp4,mkv,avi,mov,flv,webm,ts,mpeg}"'

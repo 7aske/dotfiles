@@ -1,0 +1,21 @@
+#compdef startup
+
+local -a commands
+commands=(
+  'stop:stop a startup program'
+  'start:start a startup program'
+  'restart:restart a startup program'
+  'add:add a new startup program'
+  'remove:remove a startup program'
+  'list:list all startup programs'
+)
+
+_arguments \
+  '1:command:->command' \
+  '2::program:'
+
+case $state in
+  command)
+    _describe 'command' commands
+    ;;
+esac

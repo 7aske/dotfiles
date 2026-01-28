@@ -1,0 +1,7 @@
+#compdef kubepf
+
+_arguments \
+  '-c[context]:context:' \
+  '-n[namespace]:namespace:' \
+  '-d[deployment]:deployment:' \
+  '-p[port]:port:'

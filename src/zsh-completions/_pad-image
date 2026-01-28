@@ -1,0 +1,5 @@
+#compdef pad-image
+
+_arguments \
+  '1:image or directory:_files' \
+  '2:color:(white black red green blue)'

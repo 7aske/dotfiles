@@ -1,0 +1,6 @@
+#compdef tasksync
+
+# Auto-generated completion for tasksync
+
+_arguments \
+  '*::arg:_default'

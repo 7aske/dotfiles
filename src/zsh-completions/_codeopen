@@ -1,0 +1,6 @@
+#compdef codeopen
+
+# Auto-generated completion for codeopen
+
+_arguments \
+  '*::arg:_default'

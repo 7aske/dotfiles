@@ -1,0 +1,3 @@
+#compdef dunst_reload
+
+_message 'interactive menu/no arguments required'

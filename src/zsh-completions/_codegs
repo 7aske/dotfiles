@@ -1,0 +1,6 @@
+#compdef codegs
+
+# Auto-generated completion for codegs
+
+_arguments \
+  '*::arg:_default'

@@ -1,0 +1,8 @@
+#compdef screencam
+
+_arguments \
+  '-f[fps]:fps:(15 30 60)' \
+  '-n[screen number]:number:' \
+  '-d[video device]:device:_files -g "/dev/video*"' \
+  '-h[show help]' \
+  '1:screen name:'

@@ -1,0 +1,5 @@
+#compdef repoinit
+
+_arguments \
+  '1:repository name:' \
+  '2:repository description:'

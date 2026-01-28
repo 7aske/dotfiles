@@ -1,0 +1,6 @@
+#compdef zooms
+
+_arguments \
+  '-a[absolute value]' \
+  '-l[list current]' \
+  '*:zoom value:'

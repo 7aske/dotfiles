@@ -1,0 +1,7 @@
+#compdef kblang
+
+_arguments \
+  '-h[show help]' \
+  '-l[layout]:layout:' \
+  '-t[toggle]' \
+  '*::arguments:'

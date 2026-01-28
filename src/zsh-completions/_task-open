@@ -1,0 +1,4 @@
+#compdef task-open
+
+_arguments \
+  '1:task uuid:'

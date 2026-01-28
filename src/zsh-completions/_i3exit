@@ -1,0 +1,4 @@
+#compdef i3exit
+
+_arguments \
+  '1:action:(lock logout switch_user suspend hibernate reboot shutdown)'

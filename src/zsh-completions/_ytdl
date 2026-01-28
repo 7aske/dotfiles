@@ -1,0 +1,5 @@
+#compdef ytdl
+
+_arguments \
+  '1:url or search:' \
+  '*::options:'

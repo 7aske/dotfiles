@@ -1,0 +1,5 @@
+#compdef pavol
+
+_arguments \
+  '1:program name:' \
+  '2:volume level:'

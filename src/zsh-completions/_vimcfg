@@ -1,0 +1,8 @@
+#compdef vimcfg
+
+_arguments \
+  '-e[edit /etc files]' \
+  '-H[include home directory files]' \
+  '-c[include .config directory files]' \
+  '-s[include scripts directory files]' \
+  '-h[show help]'

@@ -1,0 +1,6 @@
+#compdef kubemetrics-total
+
+# Auto-generated completion for kubemetrics-total
+
+_arguments \
+  '*::arg:_default'

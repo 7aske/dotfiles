@@ -1,0 +1,11 @@
+#compdef gitwatch
+
+_arguments \
+  '-$[option $]' \
+  '-O[option O]' \
+  '-P[option P]' \
+  '-T[option T]' \
+  '-S[option S]' \
+  '-T[option T]' \
+  '-R[option R]' \
+  '*::arg:_files'

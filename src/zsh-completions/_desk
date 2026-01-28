@@ -1,0 +1,5 @@
+#compdef desk
+
+_arguments \
+  '1:command:(move-to stand sit mon mon-last down up)' \
+  '2:amount:'

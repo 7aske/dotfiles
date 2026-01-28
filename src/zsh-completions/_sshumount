@@ -1,0 +1,4 @@
+#compdef sshumount
+
+_arguments \
+  '1:mount point:_files -/'

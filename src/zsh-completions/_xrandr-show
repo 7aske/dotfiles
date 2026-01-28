@@ -1,0 +1,3 @@
+#compdef xrandr-show
+
+_message 'interactive menu/no arguments required'

@@ -1,0 +1,3 @@
+#compdef set-java
+
+_message 'interactive Java version selector (no arguments)'

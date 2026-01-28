@@ -1,0 +1,4 @@
+#compdef google-search
+
+_arguments \
+  '*:search terms:'

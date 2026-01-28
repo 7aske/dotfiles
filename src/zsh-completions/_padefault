@@ -1,0 +1,35 @@
+#compdef padefault
+
+local -a commands
+commands=(
+  'volume-specific:set volume of specific application'
+  'vs:alias for volume-specific'
+  'volume-focus:set volume of focused window'
+  'vf:alias for volume-focus'
+  'toggle-focus:cycle focused window audio device'
+  'tf:alias for toggle-focus'
+  'toggle:cycle default audio device'
+  't:alias for toggle'
+  'volume:set default audio device volume'
+  'vol:alias for volume'
+  'v:alias for volume'
+  'mic-volume:set default audio input volume'
+  'mv:alias for mic-volume'
+  'mute:toggle mute on default device'
+  'm:alias for mute'
+  'mute-all:toggle mute on all outputs'
+  'ma:alias for mute-all'
+  'mute-all-src:toggle mute on all inputs'
+  'mas:alias for mute-all-src'
+  'help:show help'
+)
+
+_arguments \
+  '1:command:->command' \
+  '*::arg:->args'
+
+case $state in
+  command)
+    _describe 'command' commands
+    ;;
+esac

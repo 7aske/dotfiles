@@ -1,0 +1,3 @@
+#compdef cpurgb
+
+_message 'sets CPU RGB based on usage (no arguments)'

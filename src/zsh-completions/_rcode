@@ -1,0 +1,8 @@
+#compdef rcode
+
+_arguments \
+  '-h[show help]' \
+  '-p[port]:port:' \
+  '-s[sync]:mode:' \
+  '-d[directory]:directory:_files -/' \
+  '*::arguments:'

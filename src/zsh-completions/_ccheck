@@ -1,0 +1,6 @@
+#compdef ccheck
+
+# Auto-generated completion for ccheck
+
+_arguments \
+  '*::arg:_default'

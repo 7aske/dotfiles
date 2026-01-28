@@ -1,0 +1,6 @@
+#compdef homeclean
+
+# Auto-generated completion for homeclean
+
+_arguments \
+  '*::arg:_default'
