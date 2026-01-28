@@ -125,7 +125,6 @@ interval = 600
 button = "left"
 cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/owm-weather"
 sync = true
-update = true
 [[block.click]]
 button = "middle"
 cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/owm-weather"

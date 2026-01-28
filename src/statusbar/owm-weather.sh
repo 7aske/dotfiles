@@ -155,7 +155,7 @@ read -r temperature weather_icon < <(
     jq -r '[(.main.temp | round), .weather[0].icon] | @tsv' <<< "$response"
 )
 
-output="<span size='large' color='${COLORS["$weather_icon"]}'>${ICONS["$weather_icon"]} </span>"
+output="<span size='large' color='${COLORS["$weather_icon"]}'>${ICONS["$weather_icon"]}</span>"
 if ! [ -e "$SWITCH" ]; then
     output="$temperature<span size='large'></span> $output"
 fi

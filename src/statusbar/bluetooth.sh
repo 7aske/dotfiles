@@ -67,9 +67,9 @@ _bluetooth_output() {
 
         output+="${libbar_icons[$icon]}"
         if ! [ -e "$SWITCH" ]; then
-            output+=" $bat%"
+            output+="$bat%"
         else
-            output+=" $(libbat_get_icon "$bat") "
+            output+="$(libbat_get_icon "$bat") "
         fi
 
         # finding the lowest bat level to output
@@ -78,6 +78,7 @@ _bluetooth_output() {
         fi
 
     done
+    output="${output%% }"  # remove trailing space
 
     # To update colors and icons with the lowest found bat level
     libbat_update "$bat_level"
