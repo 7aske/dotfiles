@@ -1,24 +1,29 @@
 #!/usr/bin/env zsh
 
-HISTFILE=~/.cache/zsh/history
-ADOTDIR=~/.config/antigen
-AWS_REGION_FILE="$HOME/.aws_region"
-AWS_PROFILE_FILE="$HOME/.aws_profile"
-AWS_CONFIG_FILE="$HOME/.aws/config"
+typeset -g HISTFILE=~/.cache/zsh/history
+typeset -g ADOTDIR=~/.config/antigen
+typeset -g AWS_REGION_FILE="$HOME/.aws_region"
+typeset -g AWS_PROFILE_FILE="$HOME/.aws_profile"
+typeset -g AWS_CONFIG_FILE="$HOME/.aws/config"
 
-istty() {
-	case $(tty) in 
-		(/dev/tty[1-9]) return 0;; 
-		(*) return 1;;
-	esac
+setopt sharehistory
+setopt hist_ignore_dups
+setopt hist_ignore_space
+setopt hist_reduce_blanks
+setopt inc_append_history
+
+is_console_tty() {
+  [[ $(tty) == /dev/tty[1-9] ]]
 }
+cursor_beam()  { echo -ne '\e[6 q' }
+cursor_block() { echo -ne '\e[2 q' }
 
-[ -e "$AWS_PROFILE_FILE" ] && source "$AWS_PROFILE_FILE"
-[ -e "$AWS_REGION_FILE" ] && source "$AWS_REGION_FILE"
-
-[ -e ~/.config/zsh/antigen.zsh ] && source ~/.config/zsh/antigen.zsh
+[[ -r $AWS_PROFILE_FILE ]] && source $AWS_PROFILE_FILE
+[[ -r $AWS_REGION_FILE  ]] && source $AWS_REGION_FILE
+[[ -r ~/.config/zsh/antigen.zsh ]] && source ~/.config/zsh/antigen.zsh
 
 antigen use oh-my-zsh
+
 antigen bundle ael-code/zsh-colored-man-pages
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
@@ -44,16 +49,15 @@ antigen bundle npm
 antigen bundle pip
 antigen bundle rust
 antigen bundle virtualenv
-antigen bundle emoji
 antigen bundle MichaelAquilina/zsh-you-should-use
 if [ -x "$(command -v notify-send 2>/dev/null)" ]; then
 	antigen bundle MichaelAquilina/zsh-auto-notify
 fi
 
-if ! (( $(istty) )); then
-	[ -e ~/.config/zsh/agnoster-custom.zsh-theme ] && source ~/.config/zsh/agnoster-custom.zsh-theme
+if is_console_tty; then
+  antigen theme risto
 else
-	antigen theme risto
+  [[ -r ~/.config/zsh/agnoster-custom.zsh-theme ]] && source ~/.config/zsh/agnoster-custom.zsh-theme
 fi
 
 antigen apply
@@ -62,66 +66,68 @@ export AUTO_NOTIFY_THRESHOLD=20
 
 [ -e ~/.config/rc ] && source ~/.config/rc
 
-#RPROMPT="%B%(?.%F{green}%?.%F{red}%?)%f%b"
-#PROMPT="%B%{$fg[red]%}%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%1~%{$fg[red]%}%{$reset_color%} \$vcs_info_msg_0_%(!.#.λ)%b "
-
 setopt autocd		# Automatically cd into typed directory.
 stty stop undef		# Disable ctrl-s to freeze terminal.
 
 # Basic auto/tab complete:
 setopt correct
 
-# --- Completion setup ---
-autoload -Uz compinit && compinit
-autoload -Uz bashcompinit && bashcompinit
+# --- Completion paths ---
+fpath=(~/.zsh/completions $fpath)
 
-# AWS CLI v2 autocomplete
-if command -v aws_completer >/dev/null; then
-    complete -C "$(command -v aws_completer)" aws
-fi
+# --- Init completion system ---
+autoload -Uz compinit
+compinit
 
-# Completion styles
-fpath+=~/.zfunc
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" menu select
+# --- Completion behavior ---
 zmodload zsh/complist
+
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu select
+
 setopt completealiases
-_comp_options+=(globdots)		# Include hidden files.
-COMPLETION_WAITING_DOTS="true"
+setopt globdots
+
+COMPLETION_WAITING_DOTS=true
 
 # vi mode
 bindkey -v
 export KEYTIMEOUT=1
 
 # Use vim keys in tab complete menu:
-bindkey -M menuselect 'h' vi-backward-char
-bindkey -M menuselect 'k' vi-up-line-or-history
-bindkey -M menuselect 'l' vi-forward-char
-bindkey -M menuselect 'j' vi-down-line-or-history
-bindkey -v '^?' backward-delete-char
+bindkey -M menuselect h vi-backward-char
+bindkey -M menuselect j vi-down-line-or-history
+bindkey -M menuselect k vi-up-line-or-history
+bindkey -M menuselect l vi-forward-char
+bindkey '^?' backward-delete-char
+bindkey '^H' backward-delete-char
+bindkey -M viins '^[[A' history-substring-search-up
+bindkey -M viins '^[[B' history-substring-search-down
 
 # Change cursor shape for different vi modes.
-function zle-keymap-select {
-  if [[ ${KEYMAP} == vicmd ]] ||
-     [[ $1 = 'block' ]]; then
-    echo -ne '\e[2 q'
-  elif [[ ${KEYMAP} == main ]] ||
-       [[ ${KEYMAP} == viins ]] ||
-       [[ ${KEYMAP} = '' ]] ||
-       [[ $1 = 'beam' ]]; then
-    echo -ne '\e[6 q'
-  fi
+zle-keymap-select() {
+  case $KEYMAP in
+    vicmd) cursor_block ;;
+    *)     cursor_beam ;;
+  esac
 }
 zle -N zle-keymap-select
-zle-line-init() {
-    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
-    echo -ne "\e[6 q"
+
+function zle-line-init() {
+  zle -K viins
+  cursor_beam
 }
 zle -N zle-line-init
-echo -ne '\e[6 q' # Use beam shape cursor on startup.
-preexec() { echo -ne '\e[6 q' ;} # Use beam shape cursor for each new prompt.
 
 # change dir using FZF
-bindkey -s '^f' 'cd "$(dirname "$(fzf --bind "ctrl-e:execute(vim {})" --preview  "bat --color=always {}" --preview-window "up,60%,border-bottom,+{2}+3/3,~3")")"\n'
+function fzf-cd() {
+  local dir
+  dir=$(fzf --preview 'bat --color=always {}' \
+            --bind 'ctrl-e:execute(vim {})') || return
+  cd -- "${dir:h}"
+}
+zle -N fzf-cd
+bindkey '^f' fzf-cd
 
 bindkey '^[[P' delete-char
 
@@ -137,7 +143,7 @@ bindkey -s '^s' 'git status\n'
 bindkey -s '^y' 'yay\n'
 
 # ctrl+space
-bindkey '^ ' autosuggest-accept
+bindkey '^@' autosuggest-accept
 bindkey '^r' history-incremental-search-backward
 
 alias dockerhost="export DOCKER_HOST=\$(docker context inspect \$(docker context show) | jq -r '.[0].Endpoints.docker.Host')"
@@ -163,8 +169,9 @@ function aws_profile () {
         return
     fi
 
-    local PROFILES=($(cat "$AWS_CONFIG_FILE" | grep profile | awk '{print substr($2, 1, length($2)-1)}'))
-        
+    local PROFILES=(${${(f)"$(grep '^\[profile ' $AWS_CONFIG_FILE)"}#\[profile })
+    PROFILES=(${PROFILES%\]}) 
+
     profile=$(printf '%s\n' "${PROFILES[@]}" | fzf --header="Select AWS Profile")
     if [ -n "$profile" ]; then
         export AWS_PROFILE=$profile
@@ -180,7 +187,7 @@ function aws_region() {
         return
     fi
 
-    local REGIONS=($(cat "$AWS_CONFIG_FILE" | grep region | awk '{print $3}' | sort | uniq))
+    local REGIONS=(${(u)${(f)"$(grep region $AWS_CONFIG_FILE | awk '{print $3}')"}})
 
     region=$(printf '%s\n' "${REGIONS[@]}" | fzf --header="Select AWS Region")
     if [ -n "$region" ]; then
@@ -189,6 +196,3 @@ function aws_region() {
         echo "export AWS_DEFAULT_REGION=$region" >> "$AWS_REGION_FILE"
     fi
 }
-
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
