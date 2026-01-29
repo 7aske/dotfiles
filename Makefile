@@ -1,200 +1,147 @@
-OUTDIR=~/.local/bin
-INDIR=src
-STATUS_OUTDIR=~/.local/bin/statusbar
-STATUS_INDIR=src/statusbar
-SYSTEMD_INDIR=src/systemd
-SYSTEMD_OUTDIR=~/.config/systemd/user
-PACMAN_HOOKS_INDIR=etc/pacman.d/hooks
-PACMAN_HOOKS_OUTDIR=/etc/pacman.d/hooks
+# ----------------------------
+# Config
+# ----------------------------
 
-ifeq (uninstall,$(firstword $(MAKECMDGOALS)))
-  ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-  $(eval $(ARGS):;@:)
+DRYRUN ?= 0
+
+ifeq ($(DRYRUN),1)
+	RUN := echo
+else
+	RUN :=
 endif
 
-default_recipe: scripts-install
+BIN_DIR          := ~/.local/bin
+SRC_DIR          := src
 
-.PHONY: install
-install: scripts-install dotfiles-install
+STATUS_DIR       := statusbar
+SYSTEMD_DIR      := systemd
 
-.PHONY: scripts-install
+SYSTEMD_OUTDIR   := ~/.config/systemd/user
+PACMAN_HOOKS_SRC := etc/pacman.d/hooks
+PACMAN_HOOKS_DST := /etc/pacman.d/hooks
+
+
+# ----------------------------
+# Uninstall arg passthrough
+# ----------------------------
+
+ifeq (uninstall,$(firstword $(MAKECMDGOALS)))
+ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+$(eval $(ARGS):;@:)
+endif
+
+default: install
+
+# ----------------------------
+# Script install / uninstall
+# ----------------------------
+
+SCRIPT_PAIRS := \
+	$(SRC_DIR) $(BIN_DIR) \
+	$(SRC_DIR)/$(STATUS_DIR) $(BIN_DIR)/$(STATUS_DIR)
+
+.PHONY: scripts-install scripts-uninstall
+
 scripts-install:
-	./install.sh $(INDIR) $(OUTDIR)
-	./install.sh $(STATUS_INDIR) $(STATUS_OUTDIR)
-
-.PHONY: scripts-uninstall
-scripts-uninstall:
-	./uninstall.sh $(INDIR) $(OUTDIR)
-	./uninstall.sh $(STATUS_INDIR) $(STATUS_OUTDIR)
-
-add:
-	touch src/$(s).sh
-	chmod u+x src/$(s).sh
-	echo "#!/usr/bin/env bash" >> src/$(s).sh
-
-systemd:
-	cp $(SYSTEMD_INDIR)/* $(SYSTEMD_OUTDIR)/
-
-pacman-hooks:
-	for file in $(PACMAN_HOOKS_INDIR)/*; do \
-		envsubst < $$file | sudo tee $(PACMAN_HOOKS_OUTDIR)/$$(basename $$file); \
+	@set -- $(SCRIPT_PAIRS); \
+	while [ $$# -gt 0 ]; do \
+		$(RUN) ./install.sh $$1 $$2; \
+		shift 2; \
 	done
 
-.PHONY: dotfiles-install
-dotfiles-install: albert \
-	bspwm \
-	sxhkd \
-	conky \
-	colors.sh \
-	dunst \
-	i3 \
-	i3blocks \
-	i3status-rust \
-	i3status \
-	kitty \
-	mpd \
-	nano \
-	neofetch \
-	newsboat \
-	nvim \
-	ranger \
-	rofi \
-	sxiv \
-	tmux \
-	vscode \
-	wal \
-	xfce4 \
-	compton \
-	picom \
-	zsh \
-	zathura \
-	xmodmap \
-	profile \
-	xprofile \
-	bashrc \
-	rc \
-	xresources \
-	ideavim \
-	imwheel \
-	qtile \
-	k9s
+scripts-uninstall:
+	@set -- $(SCRIPT_PAIRS); \
+	while [ $$# -gt 0 ]; do \
+		$(RUN) ./uninstall.sh $$1 $$2; \
+		shift 2; \
+	done
 
-albert:
-	./mklink albert
+COMPLETIONS := rgs
 
-bspwm:
-	./mklink bspwm
+.PHONY: $(COMPLETIONS)
+$(COMPLETIONS):
+	$(RUN) ./complete.sh $@
 
-sxhkd:
-	./mklink sxhkd
+# ----------------------------
+# Dotfiles (generic)
+# ----------------------------
 
-conky:
-	./mklink conky
+DOTFILES := \
+	albert bspwm sxhkd conky colors.sh dunst i3 i3blocks \
+	i3status-rust i3status kitty mpd nano neofetch newsboat \
+	nvim ranger rofi sxiv wal xfce4 compton picom zathura \
+	rc Xresources task taskrc qtile k9s
 
-colors.sh:
-	./mklink colors.sh
+.PHONY: $(DOTFILES)
+$(DOTFILES):
+	$(RUN) ./mklink $@
 
-dunst:
-	./mklink dunst
 
-i3:
-	./mklink i3
-
-i3blocks:
-	./mklink i3blocks
-
-i3status-rust:
-	./mklink i3status-rust
-
-i3status:
-	./mklink i3status
-
-kitty:
-	./mklink kitty
-
-mpd:
-	./mklink mpd
-
-nano:
-	./mklink nano
-
-neofetch:
-	./mklink neofetch
-
-newsboat:
-	./mklink newsboat
-
-nvim:
-	./mklink nvim
-
-ranger:
-	./mklink ranger
-
-rofi:
-	./mklink rofi
-
-sxiv:
-	./mklink sxiv
+# ----------------------------
+# Dotfiles (special cases)
+# ----------------------------
 
 tmux:
-	./mklink tmux
-	ln -sf "${HOME}/.config/tmux/.tmux.conf" "${HOME}/.tmux.conf"
+	$(RUN) ./mklink tmux
+	$(RUN) ln -sf "${HOME}/.config/tmux/.tmux.conf" "${HOME}/.tmux.conf"
 
 vscode:
-	mkdir -p "${HOME}/.config/VSCodium/User/"
-	./mklink "VSCodium/User/settings.json"
-	./mklink "VSCodium/User/keybindings.json"
-
-wal:
-	./mklink wal
-
-xfce4:
-	./mklink xfce4
-
-compton:
-	./mklink compton
-	./mklink picom
-
-picom: compton
+	$(RUN) mkdir -p "${HOME}/.config/VSCodium/User"
+	$(RUN) ./mklink "VSCodium/User/settings.json"
+	$(RUN) ./mklink "VSCodium/User/keybindings.json"
 
 zsh:
-	./mklink zsh
-	mkdir -p ${HOME}/.cache/zsh
-	ln -sf "${HOME}/.config/zsh/.zshrc" "${HOME}/.zshrc"
-
-zathura:
-	./mklink zathura
+	$(RUN) ./mklink zsh
+	$(RUN) mkdir -p "${HOME}/.cache/zsh"
+	$(RUN) ln -sf "${HOME}/.config/zsh/.zshrc" "${HOME}/.zshrc"
 
 xmodmap:
-	ln -sf "$(shell pwd)/.Xmodmap" "${HOME}/.Xmodmap"
-
-profile:
-	./mksource .profile
-
-xprofile:
-	./mksource .xprofile
-
-bashrc:
-	./mksource .bashrc
-
-rc:
-	./mklink rc
-
-xresources:
-	./mklink Xresources
+	$(RUN) ln -sf "$(PWD)/.Xmodmap" "${HOME}/.Xmodmap"
 
 ideavim:
-	ln -sf "$(shell pwd)/.ideavimrc" "${HOME}/.ideavimrc"
+	$(RUN) ln -sf "$(PWD)/.ideavimrc" "${HOME}/.ideavimrc"
 
 imwheel:
-	ln -sf "$(shell pwd)/.imwheelrc" "${HOME}/.imwheelrc"
+	$(RUN) ln -sf "$(PWD)/.imwheelrc" "${HOME}/.imwheelrc"
 
-task:
-	./mklink task
-	./mklink taskrc
 
-qtile:
-	./mklink qtile
+# ----------------------------
+# Source-based dotfiles
+# ----------------------------
 
-k9s:
-	./mklink k9s
+SOURCES := profile xprofile bashrc
+
+.PHONY: $(SOURCES)
+$(SOURCES):
+	$(RUN) ./mksource .$@
+
+
+# ----------------------------
+# systemd & pacman hooks
+# ----------------------------
+
+systemd:
+	$(RUN) cp $(SYSTEMD_DIR)/* $(SYSTEMD_OUTDIR)/
+
+pacman-hooks:
+	@for f in $(PACMAN_HOOKS_SRC)/*; do \
+		$(RUN) sh -c 'envsubst < "$$1" | sudo tee "$(PACMAN_HOOKS_DST)/$$(basename "$$1")"' _ $$f; \
+	done
+
+
+# ----------------------------
+# Aggregate targets
+# ----------------------------
+
+.PHONY: default install dotfiles-install
+
+install: scripts-install dotfiles-install completions-install
+
+completions-install: \
+	$(COMPLETIONS)
+
+dotfiles-install: \
+	$(DOTFILES) \
+	tmux vscode zsh \
+	$(SOURCES) \
+	xmodmap ideavim imwheel

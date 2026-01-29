@@ -1,0 +1,61 @@
+#compdef rgs
+
+_rgs() {
+  local context state state_descr line
+  typeset -A opt_args
+
+  # resolve CODE directory (CLI > env > default)
+  local code_dir
+  code_dir=${opt_args[--code]:-${opt_args[-c]:-${CODE:-$HOME/.local/src}}}
+
+  # --- helper completions ----------------------------------------------------
+
+  _rgs_profiles() {
+    local coderc=${XDG_CONFIG_HOME:-$HOME/.config}/coderc
+    [[ -f $coderc ]] || return
+    # assume INI/TOML-like [profile] sections
+    sed -n 's/^\[\(.*\)\]/\1/p' "$coderc" 2>/dev/null \
+      | _describe -t profiles profile
+  }
+
+  _rgs_repos() {
+    [[ -d $code_dir ]] || return
+    _path_files -W "$code_dir" -/ -q
+  }
+
+_rgs_sort() {
+  _values 'sort key' \
+    'ahead-behind[ahead behind status]' \
+    'directory[directory]' \
+    'modifications[modifications]' \
+    'time[time]'
+}
+  # ---------------- e-----------------------------------------------------------
+
+  _arguments -s -S \
+    '(- *)'{-h,--help}'[print help information]' \
+    '(- *)'{-V,--version}'[print version information]' \
+    {-a,--all}'[show both clean and dirty repositories]' \
+    {-b,--branches}'[show remote branch ahead/behind status (assumes -m)]' \
+    {-d,--dir}'[show all repository directories (disables -t and -m)]' \
+    {-e,--exit}'[exit on first non-zero ahead/behind diff]' \
+    {-F,--ff}'[also fast-forward default branch]' \
+    {-f,--fetch}'[also fetch from origin]' \
+    {-m,--mod}'[show modifications or ahead/behind status]' \
+    {-i,--no-ignore}'[do not read .codeignore file]' \
+    {-n,--notify}'[send OS notification on non-zero diff]' \
+    {-C,--print-code}'[print CODE variable]' \
+    {-t,--time}'[show execution time]' \
+    {-v,--verbose}'[print additional information]' \
+    {-c,--code}'[override CODE variable]:code directory:_directories' \
+    {-D,--depth}'[project search recursive depth]:depth:(1 2 3 4 5 6 7 8 9 10)' \
+    {-p,--profile}'[load profile configuration from coderc]:profile:_rgs_profiles' \
+    {-w,--watch}'[repositories to watch]:repository:_rgs_repos' \
+    {-s,--sort}'[sort output]:sort key:_rgs_sort' \
+    {-j,--jobs}'[number of threads]:threads:_numbers' \
+    {-T,--timeout}'[timeout between fetches (seconds)]:seconds:_numbers' \
+    '*:: :->args'
+}
+
+_rgs
+

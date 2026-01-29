@@ -1,4 +1,13 @@
 #compdef codeopen
 
-_arguments \
-  '*:repository or project to open:_files -/'
+_codeopen() {
+  local context state state_descr line
+  typeset -A opt_arguments
+
+  _arguments \
+    '-h:print help information:' \
+    '-t:open types:(term vscode vim jetbrains idea pycharm clion studio goland webstorm rider)' \
+    '-m:menus:(dmenu rofi)' \
+}
+
+_codeopen
