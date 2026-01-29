@@ -162,37 +162,60 @@ function toggle-autocomplete {
     fi
 }
 
-function aws_profile () {
-    if [ "$1" = "-u" ]; then
+function aws_profile() {
+    local profile region
+
+    # unset
+    if [[ $1 == -u ]]; then
         unset AWS_PROFILE
         rm -f "$AWS_PROFILE_FILE"
+        aws_region -u
         return
     fi
 
-    local PROFILES=(${${(f)"$(grep '^\[profile ' $AWS_CONFIG_FILE)"}#\[profile })
-    PROFILES=(${PROFILES%\]}) 
-
-    profile=$(printf '%s\n' "${PROFILES[@]}" | fzf --header="Select AWS Profile")
-    if [ -n "$profile" ]; then
-        export AWS_PROFILE=$profile
-        echo "export AWS_PROFILE=$profile" > "$AWS_PROFILE_FILE"
+    # profile provided or selected
+    if [[ -n $1 ]]; then
+        profile=$1
+    else
+        profile=$(
+            sed -n 's/^\[profile \(.*\)\]/\1/p' "$AWS_CONFIG_FILE" |
+            fzf --header="Select AWS Profile"
+        )
     fi
+
+    [[ -z $profile ]] && return
+
+    export AWS_PROFILE=$profile
+    echo "export AWS_PROFILE=$profile" > "$AWS_PROFILE_FILE"
+
+    region=$(aws configure get region)
+    aws_region "$region"
 }
 
 function aws_region() {
-    if [ "$1" = "-u" ]; then
-        unset AWS_DEFAULT_REGION
-        unset AWS_REGION
+    local region
+
+    # unset
+    if [[ $1 == -u ]]; then
+        unset AWS_DEFAULT_REGION AWS_REGION
         rm -f "$AWS_REGION_FILE"
         return
     fi
 
-    local REGIONS=(${(u)${(f)"$(grep region $AWS_CONFIG_FILE | awk '{print $3}')"}})
-
-    region=$(printf '%s\n' "${REGIONS[@]}" | fzf --header="Select AWS Region")
-    if [ -n "$region" ]; then
-        export AWS_DEFAULT_REGION=$region
-        export AWS_REGION=$region
-        echo "export AWS_DEFAULT_REGION=$region" >> "$AWS_REGION_FILE"
+    # region provided or selected
+    if [[ -n $1 ]]; then
+        region=$1
+    else
+        region=$(
+            awk '/region/ {print $3}' "$AWS_CONFIG_FILE" |
+            sort -u |
+            fzf --header="Select AWS Region"
+        )
     fi
+
+    [[ -z $region ]] && return
+
+    export AWS_DEFAULT_REGION=$region
+    export AWS_REGION=$region
+    echo "export AWS_DEFAULT_REGION=$region" > "$AWS_REGION_FILE"
 }
