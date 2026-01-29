@@ -70,7 +70,7 @@ DOTFILES := \
 	albert bspwm sxhkd conky colors.sh dunst i3 i3blocks \
 	i3status-rust i3status kitty mpd nano neofetch newsboat \
 	nvim ranger rofi sxiv wal xfce4 compton picom zathura \
-	rc Xresources task taskrc qtile k9s
+	rc Xresources taskrc qtile k9s
 
 .PHONY: $(DOTFILES)
 $(DOTFILES):
