@@ -3,6 +3,14 @@
 export QT_STYLE_OVERRIDE="qt5ct-style"
 export QT_QPA_PLATFORMTHEME="qt5ct"
 
+run_bg() {
+    echo "running in bg: $*"
+	"$@" >/dev/null 2>&1 &
+}
+run_bg_if_not_running() {
+    pgrep -f "$1" >/dev/null || run_bg "$@"
+}
+
 profile="$HOME/.profile"
 xresources="$HOME/.Xresources"
 configxresources="$HOME/.config/Xresources"
