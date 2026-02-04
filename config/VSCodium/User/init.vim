@@ -1,0 +1,70 @@
+" Basic
+let mapleader=" "
+set backspace=indent,eol,start
+set colorcolumn=80
+set cursorline
+set encoding=utf-8
+set hlsearch
+set noexpandtab tabstop=4 shiftwidth=4
+set noshowmode
+set nowrap
+set nu rnu
+set showcmd
+set smartcase
+set smartindent
+set scrolloff=8
+" Do incremental searching.
+set incsearch
+" Don't use Ex mode, use Q for formatting.
+map Q gq
+
+" Plugins
+set surround
+set matchup
+set tabular
+set highlightedyank
+let g:highlightedyank_highlight_duration = '250'
+let g:highlightedyank_highlight_color = 'rgba(163, 190, 140, 155)'
+
+"" Copy to clipboard
+"vnoremap <leader>y   "+y
+"nnoremap <leader>Y   "+yg_
+"nnoremap <leader>y   "+y
+"nnoremap <leader>yy  "+yy
+"
+"" Paste from clipboard
+"nnoremap <leader>p    "+p
+"nnoremap <leader>P    "+P
+"vnoremap <leader>p    "+p
+"vnoremap <leader>P    "+P
+"
+""nmap gf             <Action>(GotoFile)
+"map  <C-p>          <Action>(GotoFile)
+"map  <leader>b      <Action>(ToggleLineBreakpoint)
+"map  <leader>gN     <Action>(VcsShowPrevChangeMarker)
+"map  <leader>ga     <Action>(Annotate)
+"map  <leader>gn     <Action>(VcsShowNextChangeMarker)
+"map  <leader>gu     <Action>(Vcs.RollbackChangedLines)
+"map  <S-Space>      <Action>(GotoNextError)
+"nmap <c-n>          <Action>(SelectNextOccurrence)
+"nmap <c-w>q         <Action>(CloseEditor)
+"nmap <c-w>Q         <Action>(CloseAllEditorsButActive)
+"nmap <leader>G      <Action>(Generate)
+"map  <leader>R      <Action>(RefactoringMenu)
+"nmap <leader>a      <Action>(ShowIntentionActions)
+"nmap <leader>gd     <Action>(QuickJavaDoc)
+"nmap <leader>r      <Action>(RenameElement)
+"vmap <c-r>          <Action>(Replace)
+"nmap <leader>S      dWWPBB
+"nmap gD             <Action>(GotoImplementation)
+"nmap g[             <Action>(GotoPreviousError)
+"nmap g]             <Action>(GotoNextError)
+"nmap gd             <Action>(GotoDeclaration)
+"nmap gt             <Action>(GotoTest)
+"nmap gs             <Action>(GotoSuperMethod)
+
+"command Goya        action ToggleDistractionFreeMode
+"command W           action Switcher
+"command Diff        action LocalHistory.ShowHistory
+"command Gdiffb      action Vcs.ShowHistoryForBlock
+"command Wrap        action EditorToggleUseSoftWraps

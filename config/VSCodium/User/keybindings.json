@@ -29,6 +29,16 @@
         "command": "cursorWordPartLeftSelect"
     },
     {
+        "key": "ctrl+alt+left",
+        "command": "workbench.action.previousEditor",
+        "when": "editorFocus"
+    },
+    {
+        "key": "ctrl+alt+right",
+        "command": "workbench.action.nextEditor",
+        "when": "editorFocus"
+    },
+    {
         "key": "ctrl+w",
         "command": "-workbench.action.closeWindow",
         "when": "!editorIsOpen && !multipleEditorGroups"
@@ -80,7 +90,13 @@
     },
     {
         "key": "alt+1",
-        "command": "workbench.action.toggleSidebarVisibility"
+        "command": "workbench.files.action.focusFilesExplorer",
+        "when": "(!filesExplorerFocus && !sideBarFocus) || (!filesExplorerFocus && sideBarFocus)"
+    },
+    {
+        "key": "alt+1",
+        "command": "workbench.action.closeSidebar",
+        "when": "sideBarFocus"
     },
     {
         "key": "ctrl+b",
@@ -92,7 +108,13 @@
     },
     {
         "key": "alt+3",
-        "command": "workbench.action.terminal.toggleTerminal"
+        "command": "workbench.action.terminal.toggleTerminal",
+        "when": "!terminalFocus"
+    },
+    {
+        "key": "alt+3",
+        "command": "workbench.action.terminal.toggleTerminal",
+        "when": "terminalFocus"
     },
     {
         "key": "ctrl+`",
@@ -164,10 +186,6 @@
         "when": "activeEditorGroupEmpty && multipleEditorGroups"
     },
     {
-        "key": "ctrl+w",
-        "command": "expand_region"
-    },
-    {
         "key": "ctrl+r",
         "command": "-workbench.action.quickOpenNavigateNextInRecentFilesPicker",
         "when": "inQuickOpen && inRecentFilesPicker"
@@ -175,14 +193,6 @@
     {
         "key": "ctrl+r",
         "command": "-workbench.action.openRecent"
-    },
-    {
-        "key": "ctrl+r",
-        "command": "editor.action.startFindReplaceAction"
-    },
-    {
-        "key": "ctrl+h",
-        "command": "-editor.action.startFindReplaceAction"
     },
     {
         "key": "ctrl+alt+enter",
@@ -330,5 +340,29 @@
         "key": "ctrl+e",
         "command": "-workbench.action.quickOpenNavigateNextInFilePicker",
         "when": "inFilesPicker && inQuickOpen"
+    },
+    {
+        "key": "ctrl+e",
+        "command": "-workbench.action.quickOpenNavigateNextInFilePicker",
+        "when": "inFilesPicker && inQuickOpen"
+    },
+    {
+        "key": "ctrl+h",
+        "command": "-editor.action.startFindReplaceAction",
+        "when": "editorFocus || editorIsOpen"
+    },
+    {
+        "key": "alt+g",
+        "command": "workbench.action.terminal.sendSequence",
+        "args": {
+            "text": "setsid xfce4-terminal --fullscreen -e lazygit\n"
+        }
+    },
+    {
+        "key": "alt+v",
+        "command": "workbench.action.terminal.sendSequence",
+        "args": {
+            "text": "setsid glab repo view -w\n"
+        }
     }
 ]

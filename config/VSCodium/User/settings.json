@@ -1,17 +1,25 @@
 {
+    "arduino.defaultBaudRate": 9600,
     "arduino.path": "/opt/arduino-1.8.10",
     "breadcrumbs.enabled": true,
-    "editor.cursorhCaretAnimation": true,
     "editor.cursorBlinking": "solid",
     "editor.cursorStyle": "block",
     "editor.fontFamily": "Fira Code Medium",
+    "editor.fontLigatures": true,
     "editor.fontSize": 16,
     "editor.fontWeight": "400",
-    "editor.fontLigatures": true,
+    "editor.lineNumbers": "relative",
+    "editor.minimap.enabled": false,
     "editor.multiCursorModifier": "ctrlCmd",
     "editor.suggestSelection": "first",
     "editor.tabSize": 4,
     "explorer.confirmDelete": false,
+    "extensions.autoUpdate": true,
+    "problems.decorations.enabled": false,
+    "extensions.experimental.affinity": {
+        "vscodevim.vim": 1
+    },
+    "files.autoSave": "onFocusChange",
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,
@@ -20,14 +28,61 @@
         "**/.DS_Store": true,
         "**/node_modules": true,
     },
-    "terminal.integrated.fontFamily": "Fira Code",
-    "terminal.integrated.shell.windows": "bash.exe",
-    "terminal.integrated.fontSize": 14,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "liveSassCompile.settings.generateMap": false,
+    "search.mode": "newEditor",
+    "shellcheck.customArgs": ["-x"],
+    "terminal.integrated.allowChords": false,
     "terminal.integrated.cursorBlinking": false,
-    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "terminal.integrated.fontFamily": "Fira Code",
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.shell.windows": "bash.exe",
+    "vim.cursorStylePerMode.insert": "line",
+    "vim.enableNeovim": true,
+    "vim.highlightedyank.color": "#A3BE8C",
+    "vim.highlightedyank.enable": true,
+    "vim.hlsearch": true,
+    "vim.incsearch": true,
+    "vim.leader": " ",
+    "vim.smartcase": true,
+    "vim.surround": true,
+    "vim.useCtrlKeys": true,
+    "vim.useSystemClipboard": true,
+    "vim.vimrc.enable": true,
+    "vim.vimrc.path": "/home/nik/.config/Code/User/init.vim",
+    "vim.handleKeys": {
+        "<C-r>": true,
+        "<C-w>": true,
+        "<C-p>": false,
+    },
+    "vim.insertModeKeyBindings": [
+        {
+            "before": ["<leader>", "e"],
+            "commands": ["workbench.view.explorer"]
+        },
+        {
+            "before": ["<leader>", "<leader>"],
+            "commands": ["workbench.action.showCommands"]
+        }
+    ],
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": ["<leader>", "e"],
+            "commands": ["workbench.view.explorer"]
+        },
+        {
+            "before": ["<leader>", "<leader>"],
+            "commands": ["workbench.action.showCommands"]
+        },
+        {
+            "before": ["C-w", "q"],
+            "commands": ["workbench.action.closeActiveEditor"]
+        }
+    ],
+    "window.openFilesInNewWindow": "off",
     "window.title": "${dirty}${rootName}${separator}${activeEditorShort}",
     "window.titleBarStyle": "custom",
-    "window.openFilesInNewWindow": "off",
+    "window.zoomLevel": 0,
     "workbench.colorTheme": "Nord",
     "workbench.iconTheme": "material-icon-theme",
     "workbench.sideBar.location": "left",
@@ -36,19 +91,4 @@
         "statusBar.noFolderBackground": "#343434",
         "statusBar.background": "#232323",
     },
-    "liveSassCompile.settings.generateMap": false,
-    "python.jediEnabled": false,
-    "window.zoomLevel": 0,
-    "extensions.autoUpdate": true,
-    "[cpp]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools"
-    },
-    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4, ColumnLimit: 0}",
-    "arduino.defaultBaudRate": 9600,
-    "shellcheck.customArgs": ["-x"],
-    "vim.vimrc.enable": true,
-    "vim.vimrc.path": "~/.config/nvim/init.vim",
-    "vim.cursorStylePerMode.insert": "line",
-    "vim.leader": " ",
-    "vim.surround": true
 }

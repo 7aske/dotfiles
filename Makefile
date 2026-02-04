@@ -89,6 +89,23 @@ vscode:
 	$(RUN) mkdir -p "${HOME}/.config/VSCodium/User"
 	$(RUN) ./mklink "VSCodium/User/settings.json"
 	$(RUN) ./mklink "VSCodium/User/keybindings.json"
+	$(RUN) mkdir -p "${HOME}/.config/Code/User"
+	$(RUN) ./mklink "Code/User/settings.json"
+	$(RUN) ./mklink "Code/User/keybindings.json"
+	$(RUN) ./mklink "Code/User/init.vim"
+
+VSCODE_EXTENSIONS := arcticicestudio.nord-visual-studio-code \
+	github.copilot \
+	github.copilot-chat \
+	ms-azuretools.vscode-containers \
+	ms-vscode-remote.remote-containers \
+	ms-vscode.makefile-tools \
+	timonwong.shellcheck \
+	vscodevim.vim
+vscode-ext:
+	@for ext in $(VSCODE_EXTENSIONS); do \
+		$(RUN) /usr/bin/code --install-extension $$ext || $(RUN) /usr/bin/codium --install-extension $$ext; \
+	done
 
 zsh:
 	$(RUN) ./mklink zsh
