@@ -162,3 +162,15 @@ dotfiles-install: \
 	tmux vscode zsh \
 	$(SOURCES) \
 	xmodmap ideavim imwheel
+
+add:
+	echo '#!/usr/bin/env sh' > $(SRC_DIR)/$(s).sh
+	chmod +x $(SRC_DIR)/$(s).sh
+
+.ONESHELL:
+add-comp-zsh:
+	cat <<EOF > $(SRC_DIR)/zsh-completions/_$(s)
+	#compdef $(s) 
+	_arguments "1[arg]"
+	EOF
+	chmod +x $(SRC_DIR)/zsh-completions/_$(s)

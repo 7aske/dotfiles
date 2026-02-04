@@ -1,0 +1,5 @@
+#compdef localsend-notify
+
+_arguments \
+  '-k[kill existing process]' \
+  '-h[display help information]'
