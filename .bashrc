@@ -1,1 +1,1 @@
-.config/rc
+config/rc
