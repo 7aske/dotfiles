@@ -120,14 +120,20 @@ function zle-line-init() {
 zle -N zle-line-init
 
 # change dir using FZF
-function fzf-cd() {
-  local dir
-  dir=$(fzf --preview 'bat --color=always {}' \
-            --bind 'ctrl-e:execute(vim {})') || return
-  cd -- "${dir:h}"
+fzf-cd() {
+  local file
+
+  file=$(fzf \
+    --preview 'bat --color=always {} 2>/dev/null || ls -la --color=always {}' \
+    --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
+    --bind 'ctrl-e:execute(vim {})'
+  ) || return
+
+  cd -- "${file:h}"
 }
-zle -N fzf-cd
-bindkey '^f' fzf-cd
+bindkey -s '^f' 'fzf-cd\n'
+# script from dotfiles
+bindkey -s '^[f' 'fzf-rg\n'
 
 bindkey '^[[P' delete-char
 

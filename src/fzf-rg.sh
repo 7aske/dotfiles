@@ -4,6 +4,7 @@ rm -f /tmp/rg-fzf-{r,f}
 RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
 INITIAL_QUERY="${*:-}"
 fzf --ansi --disabled --query "$INITIAL_QUERY" \
+    --bind 'ctrl-e:execute(vim {})' \
     --bind "start:reload:$RG_PREFIX {q}" \
     --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
     --bind 'ctrl-t:transform:[[ ! $FZF_PROMPT =~ ripgrep ]] &&
