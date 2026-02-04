@@ -5,7 +5,7 @@ export QT_QPA_PLATFORMTHEME="qt5ct"
 
 run_bg() {
     echo "running in bg: $*"
-	"$@" >/dev/null 2>&1 &
+    (eval "$@") &
 }
 run_bg_if_not_running() {
     pgrep -f "$1" >/dev/null || run_bg "$@"
