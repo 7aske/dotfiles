@@ -52,46 +52,54 @@ libbar_required_env_vars KLIPPER_HOST
 {
     libbar_json_icons["printing"]="3d_printer_printing"
     libbar_json_icons["paused"]="3d_printer_paused"
+    libbar_json_icons["error"]="3d_printer_error"
     libbar_json_icons["standby"]="3d_printer_standby"
     libbar_json_icons["complete"]="3d_printer_complete"
-    libbar_json_icons["error"]="3d_printer_error"
     libbar_json_icons["cancelled"]="3d_printer_cancelled"
 
     libbar_icons["printing"]="󱇀"
     libbar_icons["paused"]="󰏤"
+    libbar_icons["error"]=""
     libbar_icons["standby"]="󰐫"
     libbar_icons["complete"]=""
-    libbar_icons["error"]=""
     libbar_icons["cancelled"]="󰜺"
 
-    libbar_json_colors["printing"]="Warning"
+    libbar_json_colors["printing"]="Good"
     libbar_json_colors["paused"]="Warning"
-    libbar_json_colors["standby"]="Idle"
-    libbar_json_colors["complete"]="Good"
     libbar_json_colors["error"]="Critical"
+    libbar_json_colors["standby"]="Idle"
+    libbar_json_colors["complete"]="Idle"
     libbar_json_colors["cancelled"]="Idle"
 
-    libbar_colors["printing"]="#EBCB8B"
-    libbar_colors["paused"]="#EBCB8B"
-    libbar_colors["standby"]="#5E81AC"
-    libbar_colors["complete"]="#A3BE8C"
-    libbar_colors["error"]="#BF616A"
-    libbar_colors["cancelled"]="#5E81AC"
+    libbar_colors["printing"]="$green"
+    libbar_colors["paused"]="$yellow"
+    libbar_colors["error"]="$red"
+    libbar_colors["standby"]="$background"
+    libbar_colors["complete"]="$background"
+    libbar_colors["cancelled"]="$background"
 }
 
 klipper_format_time() {
-    local formula="$1"
-    local suffix="$2"
-    local val; val="$(bc <<< "$formula")"
+    local seconds="$1"
+    local unit="$2"
+    local formula val
 
-    if [ -z "$val" ] || [ "$val" -eq 0 ]; then
-        echo ""
-    else
-        echo "${val}${suffix}"
-    fi
+    case "$unit" in
+        h) formula="$seconds/3600" ;;
+        m) formula="($seconds%3600)/60" ;;
+        *) return 1 ;;
+    esac
+
+    val="$(bc <<< "scale=0; $formula")"
+
+    (( val > 0 )) && printf '%s%s\n' "$val" "$unit"
 }
 
-progress=$(curl -s "$KLIPPER_HOST/printer/objects/query?display_status" | jq -r '.result.status.display_status.progress')
+read -r progress percent < <(curl -s "$KLIPPER_HOST/printer/objects/query?display_status" | jq -r '
+[
+    .result.status.display_status.progress,
+    .result.status.display_status.progress * 100
+] | @tsv')
 print_stats=$(curl -s "$KLIPPER_HOST/printer/objects/query?print_stats" | jq -r '.result.status.print_stats')
 
 if [ -z "$progress" ] || [ -z "$print_stats" ]; then
@@ -99,22 +107,29 @@ if [ -z "$progress" ] || [ -z "$print_stats" ]; then
     exit 0
 fi
 
-print_duration="$(jq -r '.print_duration' <<< "$print_stats")"
-filename="$(jq -r '.filename' <<< "$print_stats")"
-status="$(jq -r '.state' <<< "$print_stats")"
+read -r print_duration filename status total_layer current_layer < <(
+  jq -r '
+    [
+      .print_duration,
+      .filename,
+      .state,
+      .info.total_layer,
+      .info.current_layer
+    ] | @tsv
+  ' <<< "$print_stats"
+)
 tmpfile="/tmp/$filename"
 
-percent="$(bc <<< "$progress * 100")"
 if [ "$(bc <<< "$progress==0||$print_duration==0")" -eq 0 ]; then
     remaining_duration="$(bc <<< "($print_duration/$progress-$print_duration)")"
 else
     remaining_duration="0"
 fi
 
-remaining_hours="$(klipper_format_time "scale=0;$remaining_duration/3600" "h")"
-remaining_minutes="$(klipper_format_time "scale=0;($remaining_duration%3600)/60" "m")"
-print_hours="$(klipper_format_time "scale=0;$print_duration/3600" "h")"
-print_minutes="$(klipper_format_time "scale=0;(${print_duration}%3600)/60" "m")"
+remaining_hours="$(klipper_format_time "$remaining_duration" h)"
+remaining_minutes="$(klipper_format_time "$remaining_duration" m)"
+print_hours="$(klipper_format_time "$print_duration" h)"
+print_minutes="$(klipper_format_time "$print_duration" m)"
 
 klipper_notify_progress() {
     local title="$filename"
@@ -131,9 +146,10 @@ klipper_notify_progress() {
             curl -s "$KLIPPER_HOST/server/files/gcodes/$thumbnail" > "/tmp/$thumbnail"
         fi
         body="$(cat << EOF
-Duration: ${print_hours} ${print_minutes}
+Duration:  ${print_hours} ${print_minutes}
 Remaining: ${remaining_hours} ${remaining_minutes}
-Progress: ${percent%.*}% 
+Progress:  ${percent%.*}%
+Layers:    ${current_layer}/${total_layer}
 EOF
 )"
         read -ra args <<< "-h int:value:$percent"
@@ -143,7 +159,6 @@ EOF
     fi
 
     local answ; answ="$(notify-send -i "/tmp/$thumbnail" \
-        -A "open=Open klipper"  \
         -A "open=Open klipper"  \
         "${args[@]}" \
         "$title" "$body")"
@@ -169,20 +184,20 @@ if [ "$(printf "%0.f > (%.0f + $KLIPPER_NOTIFY_THRESHOLD)\n" "$percent" "$last_p
 fi
 
 case $BLOCK_BUTTON in 
-    1) xdg-open "$KLIPPER_HOST" ;;
+    1) klipper_notify_progress & ;;
     2) libbar_toggle_switch ;;
-    3) klipper_notify_progress & ;;
+    3) xdg-open "$KLIPPER_HOST" ;;
 esac
 
 if [ "$status" == "printing" ]; then
     if [ -e "$SWITCH" ]; then
-        text="$(printf "%.0f%% %s%s " "$percent" "$remaining_hours" "$remaining_minutes")"
+        text="$(printf "%.0f%% %s%s %d/%d " "$percent" "$remaining_hours" "$remaining_minutes" "$current_layer" "$total_layer")"
     else
         text="$(printf "%.0f%% " "$percent")"
     fi
 else
     if [ -e "$SWITCH" ]; then
-        text="${status^} "
+        text="${status^} ($print_hours$print_minutes) "
     else
         text="$ZWSP"
     fi
