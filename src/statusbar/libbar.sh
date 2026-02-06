@@ -72,8 +72,9 @@ libbar_toggle_switch() {
         rm "$SWITCH" 
     else 
         touch "$SWITCH"
-        pkill "-SIGRTMIN+${1:-'9'}" i3status-rs
     fi
+
+    pkill -SIGRTMIN+"${1:-9}" i3status-rs
 }
 
 libbar_required_env_vars() {
