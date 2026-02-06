@@ -48,16 +48,18 @@ libbar_kill_switch "$(basename "$0")"
 #libbar_required_commands bc curl jq notify-send xdg-open
 libbar_required_env_vars KLIPPER_HOST
 
-# shellcheck disable=SC2034
+# shellcheck disable=SC2034,SC2154
 {
     libbar_json_icons["printing"]="3d_printer_printing"
+    libbar_json_icons["heating"]="3d_printer_heating"
     libbar_json_icons["paused"]="3d_printer_paused"
     libbar_json_icons["error"]="3d_printer_error"
     libbar_json_icons["standby"]="3d_printer_standby"
     libbar_json_icons["complete"]="3d_printer_complete"
     libbar_json_icons["cancelled"]="3d_printer_cancelled"
 
-    libbar_icons["printing"]="󱇀"
+    libbar_icons["printing"]="󰑤"
+    libbar_icons["heating"]="󱢸"
     libbar_icons["paused"]="󰏤"
     libbar_icons["error"]=""
     libbar_icons["standby"]="󰐫"
@@ -65,6 +67,7 @@ libbar_required_env_vars KLIPPER_HOST
     libbar_icons["cancelled"]="󰜺"
 
     libbar_json_colors["printing"]="Good"
+    libbar_json_colors["heating"]="Warning"
     libbar_json_colors["paused"]="Warning"
     libbar_json_colors["error"]="Critical"
     libbar_json_colors["standby"]="Idle"
@@ -72,6 +75,7 @@ libbar_required_env_vars KLIPPER_HOST
     libbar_json_colors["cancelled"]="Idle"
 
     libbar_colors["printing"]="$green"
+    libbar_colors["heating"]="$green"
     libbar_colors["paused"]="$yellow"
     libbar_colors["error"]="$red"
     libbar_colors["standby"]="$background"
@@ -83,6 +87,9 @@ klipper_format_time() {
     local seconds="$1"
     local unit="$2"
     local formula val
+    if [ -z "$seconds" ] || [ -z "$unit" ]; then
+        echo ""
+    fi
 
     case "$unit" in
         h) formula="$seconds/3600" ;;
@@ -92,39 +99,52 @@ klipper_format_time() {
 
     val="$(bc <<< "scale=0; $formula")"
 
-    (( val > 0 )) && printf '%s%s\n' "$val" "$unit"
+    (( val > 0 )) && printf '%s%s\n' "$val" "$unit" || echo ""
 }
 
-read -r progress percent < <(curl -s "$KLIPPER_HOST/printer/objects/query?display_status" | jq -r '
+read -r temperature \
+    target \
+    can_extrude \
+    bed_temperature \
+    bed_target \
+    progress percent \
+    print_duration \
+    filename \
+    status \
+    total_layer \
+    current_layer \
+    remaining_duration \
+< <(curl -s "$KLIPPER_HOST/printer/objects/query?extruder&heater_bed&display_status&print_stats" | jq -r '.result.status | 
 [
-    .result.status.display_status.progress,
-    .result.status.display_status.progress * 100
+    (.extruder.temperature | round),
+    (.extruder.target | round),
+    .extruder.can_extrude,
+    (.heater_bed.temperature | round),
+    (.heater_bed.target | round),
+    .display_status.progress,
+    .display_status.progress * 100,
+    .print_stats.print_duration,
+    .print_stats.filename,
+    .print_stats.state,
+    .print_stats.info.total_layer,
+    .print_stats.info.current_layer,
+    if (.display_status.progress != null and .print_stats.print_duration != null)
+    then (.print_stats.print_duration / .display_status.progress - .print_stats.print_duration)
+    else 0
+    end
 ] | @tsv')
-print_stats=$(curl -s "$KLIPPER_HOST/printer/objects/query?print_stats" | jq -r '.result.status.print_stats')
 
-if [ -z "$progress" ] || [ -z "$print_stats" ]; then
+if [ -z "$progress" ]; then
     libbar_output "error" ""
     exit 0
 fi
 
-read -r print_duration filename status total_layer current_layer < <(
-  jq -r '
-    [
-      .print_duration,
-      .filename,
-      .state,
-      .info.total_layer,
-      .info.current_layer
-    ] | @tsv
-  ' <<< "$print_stats"
-)
-tmpfile="/tmp/$filename"
-
-if [ "$(bc <<< "$progress==0||$print_duration==0")" -eq 0 ]; then
-    remaining_duration="$(bc <<< "($print_duration/$progress-$print_duration)")"
-else
-    remaining_duration="0"
+if [ "$status" == "printing" ] && [ "$can_extrude" == "false" ] &&
+    { [ "$temperature" -lt "$target" ] ||
+        [ "$bed_temperature" -lt "$bed_target" ]; }; then
+    status="heating"
 fi
+tmpfile="/tmp/$filename"
 
 remaining_hours="$(klipper_format_time "$remaining_duration" h)"
 remaining_minutes="$(klipper_format_time "$remaining_duration" m)"
@@ -189,18 +209,22 @@ case $BLOCK_BUTTON in
     3) xdg-open "$KLIPPER_HOST" ;;
 esac
 
-if [ "$status" == "printing" ]; then
-    if [ -e "$SWITCH" ]; then
-        text="$(printf "%.0f%% %s%s %d/%d " "$percent" "$remaining_hours" "$remaining_minutes" "$current_layer" "$total_layer")"
-    else
-        text="$(printf "%.0f%% " "$percent")"
-    fi
+if [ "$status" == "heating" ]; then
+    long_text="$(printf "%d/%d %d/%d " "$temperature" "$target" "$bed_temperature" "$bed_target")"
+    short_text="$(printf "%d %d " "$temperature" "$bed_temperature")"
+elif [ "$status" == "printing" ]; then
+    long_text="$(printf "%.0f%% %s%s %d/%d " "$percent" "$remaining_hours" "$remaining_minutes" "$current_layer" "$total_layer")"
+    short_text="$(printf "%.0f%% " "$percent")"
+elif [ "$status" == "complete" ]; then
+    long_text="${status^} ($print_hours$print_minutes) "
+    short_text="$ZWSP"
 else
-    if [ -e "$SWITCH" ]; then
-        text="${status^} ($print_hours$print_minutes) "
-    else
-        text="$ZWSP"
-    fi
+    long_text="${status^} "
+    short_text="$ZWSP"
 fi
 
-libbar_output "$status" "$text"
+if [ -e "$SWITCH" ]; then
+    libbar_output "$status" "$long_text"
+else
+    libbar_output "$status" "$short_text"
+fi
