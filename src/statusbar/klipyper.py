@@ -65,23 +65,7 @@ if not KLIPPER_HOST:
     json_print(icon="error", state="error", text="KLIPPER_HOST env var not set")
 KLIPPER_WS = os.environ.get("KLIPPER_WS") if os.environ.get("KLIPPER_WS") else f"wss://{KLIPPER_HOST.lstrip('https://').rstrip('/')}/websocket"
 
-
-class PrintStats(dict):
-    state: str = "standby"
-    print_duration: int = 0
-    total_duration: int = 0
-    filename: str = ""
-    info: dict = {}
-
-    def update(self, data: dict):
-        for key in ["state", "print_duration", "total_duration", "filename"]:
-            if key in data:
-                setattr(self, key, data[key])
-        if "info" in data:
-            self.info.update(data["info"])
-
-
-print_stats = PrintStats()
+print_stats = {}
 display_status = {}
 heater_bed = {}
 extruder = {}
@@ -242,9 +226,7 @@ def get_temperatures():
 async def klipper_output():
     extruder_can_extrude, extruder_temp, extruder_target, bed_temp, bed_target = get_temperatures()
     progress, percent, remaining_time, print_time, current_layer, total_layer = get_formatted_data()
-    state = print_stats.state
-
-    print(f"State: {state}, Extruder: {extruder_temp}/{extruder_target}, Bed: {bed_temp}/{bed_target}, Progress: {percent}%, Remaining: {remaining_time}, Print time: {print_time}", flush=True)
+    state = print_stats.get("state", "standby")
 
     if state == "heating":
         long_text = f"{extruder_temp}/{extruder_target} {bed_temp}/{bed_target} "
@@ -330,7 +312,9 @@ def process_data(obj):
         display_status.update(obj["display_status"])
 
     if "print_stats" in obj and obj["print_stats"] is not None:
-        print_stats.update(obj["print_stats"])
+        print_stats.update({k: v for k, v in obj["print_stats"].items() if k != "info"})
+        if "info" in obj["print_stats"]:
+            print_stats.setdefault("info", {}).update(obj["print_stats"]["info"])
 
     if "heater_bed" in obj and obj["heater_bed"] is not None:
         heater_bed.update(obj["heater_bed"])
