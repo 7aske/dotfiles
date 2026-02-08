@@ -96,27 +96,45 @@ action = "volume_down"
 
 [[block]]
 block = "custom"
-command = "~/.local/bin/statusbar/klipper -j"
-interval = 60
+command = "~/.local/bin/statusbar/klipyper"
+persistent = true
 json = true
 format =" $icon $text"
 hide_when_empty = true
 signal=9
 [[block.click]]
 button = "left"
-cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/klipper -j"
-sync = true
-update = true
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/klipyper"
 [[block.click]]
 button = "middle"
-cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/klipper -j"
-sync = true
-update = true
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/klipyper"
 [[block.click]]
 button = "right"
-cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/klipper -j"
-sync = true
-update = true
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/klipyper"
+
+#[[block]]
+#block = "custom"
+#command = "~/.local/bin/statusbar/klipper -j"
+#interval = 60
+#json = true
+#format =" $icon $text"
+#hide_when_empty = true
+#signal=9
+#[[block.click]]
+#button = "left"
+#cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/klipper -j"
+#sync = true
+#update = true
+#[[block.click]]
+#button = "middle"
+#cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/klipper -j"
+#sync = true
+#update = true
+#[[block.click]]
+#button = "right"
+#cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/klipper -j"
+#sync = true
+#update = true
 
 [[block]]
 block = "custom"
