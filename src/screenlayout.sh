@@ -13,5 +13,5 @@ if [ -z "$LAYOUT" ]; then
     exit 1
 fi
 
-notify-send -a screenlayout -i display -t 1000 "Screenlayout" "Applying screen layout: $LAYOUT"
+notify-send -a screenlayout -i display -t 2000 "Screenlayout" "Applying screen layout: $LAYOUT"
 bash "$SCREENLAYOUT_DIR/$LAYOUT.sh"
