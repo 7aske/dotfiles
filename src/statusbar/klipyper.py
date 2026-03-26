@@ -91,12 +91,20 @@ class Notifier:
             return
 
         self.last_progress = progress
-        await self.notify()
+        await self.notify_async()
 
-    async def notify(self):
+    async def notify_async(self):
         await self.notify_func()
 
+    def notify(self):
+        asyncio.create_task(self.notify_async())
+
     def reset(self):
+        self.last_progress = 0
+
+    def reset_if_completed(self, status):
+        if status != "complete":
+            return
         self.last_progress = 0
 
 
@@ -160,7 +168,7 @@ class PrintStats:
     def layers_formatted(self) -> str:
         if not self.has_layers_info:
             return ""
-        return f"{self.current_layer}/{self.total_layer}"
+        return f"{self.current_layer + 1}/{self.total_layer}"
 
     @property
     def escaped_filename(self) -> str:
@@ -172,45 +180,43 @@ class PrintStats:
         return self.message if self.message else self.state.capitalize()
 
     @property
-    def is_complete(self) -> bool:
-        return self.state == "complete" or self.progress == 1.0
+    def is_running(self) -> bool:
+        return self.state == "printing" \
+            or self.state == "paused"
 
     def set_state(self, new_state: str):
         if self.state != new_state:
             self.old_state = self.state
             self.state = new_state
-            print(f"State changed to {self.state}, from {self.old_state}")
             for subscriber in self.subscribers:
                 subscriber(self.state, self.old_state)
 
     @property
     def state_message(self):
+        def status_and_message(status):
+            return status + f" ({self.message})\n\n" if self.message else "\n\n"
+
         body = ""
         if self.state == "heating":
             t = f"{temps.extruder_formatted_long} {temps.bed_formatted_long}"
-            body += f"Heating\n\nTemps: {t}\n"
+            body += status_and_message("Heating")
+            body += f"Temps: {t}\n"
         elif self.state == "printing":
-            body += f"Printing\n\nProgress: {self.percent_progress:.0f}%\n"
+            body += status_and_message("Printing")
+            body += f"Progress: {self.percent_progress:.0f}%\n"
         elif self.state == "complete":
-            body += "Print complete\n\n"
+            body += status_and_message("Print complete")
         elif self.state == "error":
-            body += "Print error"
-            if self.message:
-                body += f" ({self.message})\n\n"
-            else:
-                body += "\n\n"
+            body += status_and_message("Print error")
         elif self.state == "paused":
-            body += "Print paused"
-            if self.message:
-                body += f" ({self.message})\n\n"
-            else:
-                body += "\n\n"
+            body += status_and_message("Print paused")
         elif self.state == "cancelled":
-            body += "Print cancelled\n\n"
+            body += status_and_message("Print cancelled")
         else:
-            body += self.state.capitalize() + "\n\n"
+            body += status_and_message(self.state.capitalize())
 
-        body += f"Duration: {self.print_time_formatted}\n"
+        if stats.print_duration > 0:
+            body += f"Duration: {self.print_time_formatted}\n"
         if stats.remaining_duration > 0:
             body += f"Remaining: {self.remaining_time_formatted}\n"
         if self.has_layers_info:
@@ -241,7 +247,7 @@ class TemperatureInfo:
         if "target" in new_data:
             self.bed_target = new_data["target"]
 
-    def _is_within_percent(self, temp, target, percent=None, tolerance=None):
+    def _is_within(self, temp, target, percent=None, tolerance=None):
         if percent is not None:
             tolerance = target * percent / 100
         if tolerance is None:
@@ -253,19 +259,24 @@ class TemperatureInfo:
         return self.extruder_can_extrude
 
     @property
-    def is_heating(self) -> bool:
-        if self.can_extrude:
-            return False  # if can extrude, we are not heating - sort of
+    def is_heating(self):
+        return self.is_bed_heating or self.is_extruder_heating
 
-        is_extruder_heating = not self._is_within_percent(
-            self.extruder_temperature, self.extruder_target, percent=5)
+    @property
+    def is_heated(self):
+        return not self.is_heating
 
-        is_bed_heating = not self._is_within_percent(
-            self.bed_temperature, self.bed_target, percent=5)
+    @property
+    def is_bed_heating(self):
+        tolerance = 3
+        return self.bed_target > 0 and \
+            self.bed_target - self.bed_temperature > tolerance
 
-        # we report heating only if the target is set
-        return (self.extruder_target > 0 and is_extruder_heating) \
-            or (self.bed_target > 0 and is_bed_heating)
+    @property
+    def is_extruder_heating(self):
+        tolerance = 3
+        return self.extruder_target > 0 and \
+            self.extruder_target - self.extruder_temperature > tolerance
 
     @property
     def extruder_formatted_short(self):
@@ -293,13 +304,14 @@ ZWSP = "\u200b"  # zero-width space
 async def klipper_fetch_initial_data():
     import requests
 
-    objects = ["display_status", "print_stats"]
+    objects = ["extruder", "heater_bed", "display_status", "print_stats"]
     url = f"{KLIPPER_HOST}/printer/objects/query?" + "&".join(objects)
     response = requests.get(url, verify=False)
-    data = response.json()
-    for key in objects:
-        if key in data.get("result", {}).get("status", {}):
-            process_data({key: data["result"]["status"][key]})
+    status = response.json().get("result", {}).get("status", {})
+    for key in reversed(objects):
+        if key in status:
+            data = status[key]
+            process_data({key: data})
 
 
 async def klipper_get_webcam_image():
@@ -350,9 +362,37 @@ def klipper_get_thumbnail():
     return thumbnail_path
 
 
-async def klipper_notify_progress():
-    await klipper_fetch_initial_data()  # ensure we have the latest data before notifying
+async def klipper_notify_error(message):
+    await klipper_notify(message, icon="dialog-error")
 
+
+async def klipper_notify(message, icon=None):
+    title = "Klipper"
+    body = message
+
+    args = [
+        title,
+        body,
+    ]
+    if icon:
+        args.insert(0, "-i")
+        args.insert(1, icon)
+
+    proc = await asyncio.create_subprocess_exec(
+        "notify-send",
+        *args,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.DEVNULL,
+        start_new_session=True  # critical: fully detach
+    )
+
+    try:
+        proc.communicate()  # we don't care about the result
+    except Exception:
+        pass
+
+
+async def klipper_notify_progress():
     thumbnail_path = klipper_get_thumbnail()
 
     title = "Klipper"
@@ -368,7 +408,7 @@ async def klipper_notify_progress():
     if thumbnail_path:
         args.extend(["-i", thumbnail_path])
     # if it is not complete we add a small progress bar
-    if not stats.is_complete:
+    if stats.is_running:
         args.extend(["-h", f"int:value:{stats.percent_progress};max:100"])
 
     proc = await asyncio.create_subprocess_exec(
@@ -403,20 +443,28 @@ def format_duration(seconds: int | None) -> str:
         return f"{int(seconds)}s"
     hours = int(seconds // 3600)
     minutes = int((seconds % 3600) // 60)
-    return f"{hours}h " if hours else "" + (f"{minutes}m" if minutes else "")
+    output = ""
+    if hours > 0:
+        output += f"{hours}h"
+    if minutes > 0:
+        output += f"{minutes}m"
+    return output.strip()
 
 
 async def klipper_output():
     if stats.state == "heating":
         long_text = f"{temps.extruder_formatted_long} {temps.bed_formatted_long} "
+        if stats.message:
+            long_text = f"{stats.message} " + long_text
         short_text = f"{temps.extruder_formatted_short} {temps.bed_formatted_short} "
     elif stats.state == "printing":
-        long_text = (
-            f"{stats.percent_progress:.0f}% "
-            f"{stats.remaining_time_formatted} "
-        )
-        if stats.current_layer and stats.total_layer and not stats.is_complete:
+        long_text = f"{stats.percent_progress:.0f}% "
+        if stats.remaining_duration > 0:
+            long_text += f"{stats.remaining_time_formatted} "
+        if stats.current_layer and stats.total_layer:
             long_text += f"{stats.layers_formatted} "
+        if stats.message:
+            long_text = f"{stats.message} " + long_text
         short_text = f"{stats.percent_progress:.0f}% "
 
     elif stats.state == "complete":
@@ -430,56 +478,64 @@ async def klipper_output():
 
 
 async def handle_websocket():
-    async with websockets.connect(KLIPPER_WS, ssl=ssl_ctx) as ws:
-        # fetch initial data
-        await ws.send(json.dumps({
-            "jsonrpc": "2.0",
-            "method": "printer.objects.query",
-            "params": {
-                "objects": {
-                    "heater_bed": ["temperature", "target"],
-                    "extruder": ["temperature", "target", "can_extrude"],
-                    "display_status": ["message", "progress"],
-                    "print_stats": ["state",
-                                    "print_duration",
-                                    "total_duration",
-                                    "filename", "info"]
-                }
-            },
-            "id": 1
-        }))
+    # we subscribe to these objects to get real-time updates
+    # but we also fetch their initial state on startup
+    objects = {
+        "heater_bed": ["temperature", "target"],
+        "extruder": ["temperature", "target", "can_extrude"],
+        "display_status": ["message", "progress"],
+        "print_stats": ["state",
+                        "print_duration",
+                        "total_duration",
+                        "filename", "info"]
+    }
+    while True:
+        try:
+            async with websockets.connect(KLIPPER_WS, ssl=ssl_ctx) as ws:
+                # fetch initial data
+                await ws.send(json.dumps({
+                    "jsonrpc": "2.0",
+                    "method": "printer.objects.query",
+                    "params": {
+                        "objects": objects,
+                    },
+                    "id": 1
+                }))
 
-        # subscribe to print_stats
-        await ws.send(json.dumps({
-            "jsonrpc": "2.0",
-            "method": "printer.objects.subscribe",
-            "params": {
-                "objects": {
-                    "heater_bed": ["temperature", "target"],
-                    "extruder": ["temperature", "target", "can_extrude"],
-                    "display_status": ["message", "progress"],
-                    "print_stats": ["state",
-                                    "print_duration",
-                                    "total_duration",
-                                    "filename",
-                                    "info"]
-                }
-            },
-            "id": 2
-        }))
+                # subscribe to print_stats
+                await ws.send(json.dumps({
+                    "jsonrpc": "2.0",
+                    "method": "printer.objects.subscribe",
+                    "params": {
+                        "objects": objects,
+                    },
+                    "id": 2
+                }))
 
-        # receive updates forever
-        async for message in ws:
-            data = json.loads(message)
+                # receive updates forever
+                async for message in ws:
+                    data = json.loads(message)
 
-            if data.get("method") == "notify_status_update":
-                for obj in data["params"]:
-                    if isinstance(obj, dict):
-                        process_data(obj)
-            elif "result" in data and "status" in data["result"]:
-                process_data(data["result"]["status"])
+                    if data.get("method") == "notify_status_update":
+                        for obj in data["params"]:
+                            if isinstance(obj, dict):
+                                process_data(obj)
+                    elif "result" in data and "status" in data["result"]:
+                        process_data(data["result"]["status"])
 
-            await notifier.notify_checked(stats.progress)
+                    await notifier.notify_checked(stats.progress)
+        except (websockets.exceptions.ConnectionClosedError, ConnectionRefusedError) as e:
+            message = f"Websocket connection error: {e}. Retrying in 5 seconds."
+            klipper_notify_error(message)
+            await asyncio.sleep(5)
+        except OSError as e:
+            message = f"Network error: {e}. Retrying in 5 seconds."
+            klipper_notify_error(message)
+            await asyncio.sleep(5)
+        except Exception as e:
+            message = f"An unexpected error occurred: {e}. Retrying in 5 seconds."
+            klipper_notify_error(message)
+            await asyncio.sleep(5)
 
 
 def process_data(obj):
@@ -505,15 +561,13 @@ def process_data(obj):
 def check_temps_and_update_state():
     if temps.is_heating and stats.state != "heating":
         stats.update({"state": "heating"})
-    elif not temps.is_heating and stats.state == "heating":
+    elif temps.is_heated and stats.state == "heating":
         stats.update({"state": stats.old_state})
 
 
 async def main_loop(args):
-    stats.on_state_change(lambda new, old:
-                          asyncio.create_task(notifier.notify()))
-    stats.on_state_change(lambda new, old: notifier.reset()
-                          if new == "completed" else None)
+    stats.on_state_change(lambda new, _: notifier.notify())
+    stats.on_state_change(lambda new, _: notifier.reset_if_completed(new))
     asyncio.create_task(handle_websocket())
     while True:
         await klipper_output()
@@ -532,7 +586,8 @@ async def main():
     args = args_parser.parse_args()
 
     if block_button == "1":
-        await notifier.notify()  # show notification immediately on click
+        await klipper_fetch_initial_data()  # ensure we have the latest data
+        await notifier.notify_async()  # show notification immediately on click
     elif block_button == "2":
         if os.path.exists(SWITCH_FILE):
             os.remove(SWITCH_FILE)
