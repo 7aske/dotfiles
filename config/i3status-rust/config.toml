@@ -409,6 +409,7 @@ block = "sound"
 signal = 10
 max_vol = 130
 headphones_indicator = true
+driver = "pulseaudio"
 [block.theme_overrides]
 warning_bg = { link = "critical_bg" }
 [[block.click]]
@@ -428,6 +429,7 @@ block = "sound"
 signal = 10
 device_kind = "source"
 max_vol = 100
+driver = "pulseaudio"
 [block.theme_overrides]
 warning_bg = { link = "critical_bg" }
 [[block.click]]

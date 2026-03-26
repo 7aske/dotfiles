@@ -484,6 +484,7 @@ assign [title=".*Micosoft Teams.*"] $ws7
 assign [title="^World of Warcraft$"] g
 assign [title="Kerbal Space Program"] g
 assign [class="steam_app_.*"] g
+assign [class="Godot_Engine"] g
 assign [class="steam" title="Steam Big Picture Mode"] g
 assign [class="battle.net.exe"] w
 
