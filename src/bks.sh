@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-BROWSER_FLAGS="${BROWSER_FLAGS:-"--new-window"}"
-
-
 _brave_bks() {
     local flags="$XDG_CONFIG_HOME/brave-flags.conf"
 
@@ -30,4 +27,4 @@ if [ -z "$SELECTED_URL" ]; then
     exit 1
 fi
 
-"$BROWSER" $BROWSER_FLAGS "$SELECTED_URL" &>/dev/null
+"$BROWSER" "$SELECTED_URL" &>/dev/null
