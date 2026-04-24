@@ -200,6 +200,7 @@ function aws_profile() {
 
 function aws_region() {
     local region
+    local section
 
     # unset
     if [[ $1 == -u ]]; then
@@ -212,8 +213,18 @@ function aws_region() {
     if [[ -n $1 ]]; then
         region=$1
     else
+        section="profile $AWS_PROFILE"
         region=$(
-            awk '/region/ {print $3}' "$AWS_CONFIG_FILE" |
+             awk -F' *= *' -v section="[$section]" '
+        $0 == section { in_section=1; next }
+        /^\[.*\]/ { in_section=0 }
+        in_section && $1 == "regions" {
+            gsub(/[[:space:]]*,[[:space:]]*/, "\n", $2)
+            gsub(/[[:space:]]+/, "\n", $2)
+            print $2
+            exit
+        }
+    ' "$AWS_CONFIG_FILE" 2>/dev/null |
             sort -u |
             fzf --header="Select AWS Region"
         )
