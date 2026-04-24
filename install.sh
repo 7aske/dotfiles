@@ -9,7 +9,7 @@ usage() {
 
 [ ! -e "$2" ] && mkdir -p "$2"
 
-for f in "$1"/*.sh; do
+for f in "$1"/*.{sh,py}; do
     base=$(basename "$f"  | cut -d "." -f 1)
     
     cp -v "$f" "$2/$base" || echo "error: unable to copy $f to $2"
