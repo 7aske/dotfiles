@@ -59,12 +59,13 @@ PROJ=""
 
 
 _select_project() {
+    local code="$(cgs -C)"
     # use grep to remove $CODE prefix
     if [ "$1" == "dirty" ]; then
-        PROJ="$(eval "cgs -m -sm | tac | $menu_command" | awk -v code="$CODE" '{print code "/" $1 "/" $2}')"
+        PROJ="$(eval "cgs -m -sm | tac | $menu_command" | awk -v code="$code" '{print code "/" $1 "/" $2}')"
     else
-        SELECTED="$(eval "cgs -ad | grep -oP '^$CODE/\K.*' | $menu_command")"
-        PROJ="$CODE/$SELECTED"
+        SELECTED="$(eval "cgs -ad | grep -oP '^$code/\K.*' | $menu_command")"
+        PROJ="$code/$SELECTED"
     fi
 
     if [ ! -e "$PROJ" ]; then
