@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+#zmodload zsh/zprof
+
 typeset -g HISTFILE=~/.cache/zsh/history
 typeset -g ADOTDIR=~/.config/antigen
 typeset -g AWS_REGION_FILE="$HOME/.aws_region"
@@ -35,7 +37,6 @@ antigen bundle command-not-found
 antigen bundle direnv
 antigen bundle docker
 antigen bundle docker-compose
-antigen bundle emoji
 antigen bundle fd
 antigen bundle gitignore
 antigen bundle gradle
@@ -236,3 +237,5 @@ function aws_region() {
     export AWS_REGION=$region
     echo "export AWS_DEFAULT_REGION=$region" > "$AWS_REGION_FILE"
 }
+
+#zprof

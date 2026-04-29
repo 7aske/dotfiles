@@ -12,15 +12,6 @@
 # uses changed in 2012, and older versions will display incorrectly,
 # in confusing ways.
 #
-# In addition, I recommend the
-# [Solarized theme](https://github.com/altercation/solarized/) and, if you're
-# using it on Mac OS X, [iTerm 2](https://iterm2.com/) over Terminal.app -
-# it has significantly better color fidelity.
-#
-# If using with "light" variant of the Solarized color schema, set
-# SOLARIZED_THEME variable to "light". If you don't specify, we'll assume
-# you're using the "dark" variant.
-#
 # # Goals
 #
 # The aim of this theme is to only show you *relevant* information. Like most
@@ -33,13 +24,12 @@
 ### Segment drawing
 # A few utility functions to make it easy and re-usable to draw segmented prompts
 
-autoload -U colors && colors	# Load colors
-CURRENT_BG='NONE'
+autoload -Uz colors && colors	# Load colors
+autoload -Uz vcs_info
+setopt PROMPT_SUBST
 
-case ${SOLARIZED_THEME:-dark} in
-    light) CURRENT_FG='white';;
-    *)     CURRENT_FG='black';;
-esac
+CURRENT_BG='NONE'
+CURRENT_FG='black'
 
 export ZSH_THEME_AWS_PROFILE_PREFIX=" "
 export ZSH_THEME_AWS_PROFILE_SUFFIX=""
@@ -68,16 +58,23 @@ export SHOW_AWS_PROMPT=false
 # Takes two arguments, background and foreground. Both can be omitted,
 # rendering default background/foreground.
 prompt_segment() {
-  local bg fg
-  [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
-  [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
-  if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
-    echo -n " %{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%} "
+  local bg_color fg_color content
+  bg_color="$1"
+  fg_color="$2"
+  content="$3"
+
+  # If we are starting a new segment after one already exists
+  if [[ $CURRENT_BG != 'NONE' && $bg_color != $CURRENT_BG ]]; then
+    # The separator's Foreground is the PREVIOUS background
+    # The separator's Background is the NEW background
+    echo -n "%{%K{$bg_color}%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{%F{$fg_color}%} "
   else
-    echo -n "%{$bg%}%{$fg%} "
+    # First segment or same color
+    echo -n "%{%K{$bg_color}%F{$fg_color}%} "
   fi
-  CURRENT_BG=$1
-  [[ -n $3 ]] && echo -n $3
+
+  CURRENT_BG=$bg_color
+  [[ -n $content ]] && echo -n "$content "
 }
 
 ### Prompt components
@@ -139,8 +136,6 @@ prompt_git() {
       mode=" >R>"
     fi
 
-    setopt promptsubst
-    autoload -Uz vcs_info
 		precmd() { vcs_info }
 
     zstyle ':vcs_info:*' enable git
@@ -279,13 +274,14 @@ prompt_aws2() {
 
 # End the prompt, closing any open segments
 prompt_end() {
-  if [[ -n $CURRENT_BG ]]; then
+  if [[ -n $CURRENT_BG && $CURRENT_BG != 'NONE' ]]; then
+    # Draw the final arrow using the last background color
     echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
   else
     echo -n "%{%k%}"
   fi
   echo -n "%{%f%b%}"
-  CURRENT_BG=''
+  CURRENT_BG='NONE' # Reset for the next time the prompt is built
 }
 
 ## Main prompt
