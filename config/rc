@@ -172,7 +172,7 @@ if [ -n "$FZF_CODE" ]; then
 		fi
 
 		if [ $# -eq 1 ]; then
-			MATCH="$(fd . "$_CODE" -d 2 -L -t d | fzf -f "$1" | head -1)"
+			MATCH="$(cgs -ad | fzf -f "$1" | head -1)"
 		elif [ $# -eq 2 ]; then
 			MATCH="$(fd . "$_CODE/$1" -d 2 -L -t d | fzf -f "$2" | head -1)"
 		fi
@@ -195,7 +195,7 @@ else
 			if [ -d "$_CODE/$1" ]; then
 				builtin cd "$_CODE/$1" && ls
 			else
-				cdir="$(find "$_CODE" -maxdepth 2 -name "*$1*" | sed -n '1p')"
+				cdir="$(cgs -ad | grep -E ".*$1.*" | sed -n '1p')"
 				[ -d "$cdir" ] && builtin cd "$cdir" && ls
 			fi
 		elif [ $# -eq 2 ]; then
