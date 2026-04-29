@@ -6,10 +6,66 @@
 uda.taskwarrior-tui.shortcuts.1=~/.local/bin/task-open
 uda.taskwarrior-tui.keyconfig.shortcut1=o
 
+# Bugwarrior UDAs
+uda.gitlabtitle.type=string
+uda.gitlabtitle.label=Gitlab Title
+uda.gitlabdescription.type=string
+uda.gitlabdescription.label=Gitlab Description
+uda.gitlabcreatedon.type=date
+uda.gitlabcreatedon.label=Gitlab Created
+uda.gitlabupdatedat.type=date
+uda.gitlabupdatedat.label=Gitlab Updated
+uda.gitlabduedate.type=date
+uda.gitlabduedate.label=Gitlab Due Date
+uda.gitlabmilestone.type=string
+uda.gitlabmilestone.label=Gitlab Milestone
+uda.gitlaburl.type=string
+uda.gitlaburl.label=Gitlab URL
+uda.gitlabrepo.type=string
+uda.gitlabrepo.label=Gitlab Repo Slug
+uda.gitlabtype.type=string
+uda.gitlabtype.label=Gitlab Type
+uda.gitlabnumber.type=string
+uda.gitlabnumber.label=Gitlab Issue/MR #
+uda.gitlabstate.type=string
+uda.gitlabstate.label=Gitlab Issue/MR State
+uda.gitlabupvotes.type=numeric
+uda.gitlabupvotes.label=Gitlab Upvotes
+uda.gitlabdownvotes.type=numeric
+uda.gitlabdownvotes.label=Gitlab Downvotes
+uda.gitlabwip.type=numeric
+uda.gitlabwip.label=Gitlab MR Work-In-Progress Flag
+uda.gitlabauthor.type=string
+uda.gitlabauthor.label=Gitlab Author
+uda.gitlabassignee.type=string
+uda.gitlabassignee.label=Gitlab Assignee
+uda.gitlabnamespace.type=string
+uda.gitlabnamespace.label=Gitlab Namespace
+uda.gitlabweight.type=numeric
+uda.gitlabweight.label=Gitlab Weight
+uda.jiraissuetype.type=string
+uda.jiraissuetype.label=Issue Type
+uda.jirasummary.type=string
+uda.jirasummary.label=Jira Summary
 uda.jiraurl.type=string
 uda.jiraurl.label=Jira URL
+uda.jiradescription.type=string
+uda.jiradescription.label=Jira Description
 uda.jiraid.type=string
-uda.jiraid.label=Jira ID
+uda.jiraid.label=Jira Issue ID
+uda.jiraestimate.type=numeric
+uda.jiraestimate.label=Estimate
+uda.jirafixversion.type=string
+uda.jirafixversion.label=Fix Version
+uda.jiracreatedts.type=date
+uda.jiracreatedts.label=Created At
+uda.jirastatus.type=string
+uda.jirastatus.label=Jira Status
+uda.jirasubtasks.type=string
+uda.jirasubtasks.label=Jira Subtasks
+uda.jiraparent.type=string
+uda.jiraparent.label=Jira Parent
+# END Bugwarrior UDAs
 
 include ~/.config/task/sync.taskrc
 # Here is an example of entries that use the default, override and blank values
@@ -22,22 +78,74 @@ include ~/.config/task/sync.taskrc
 # Files
 data.location=/home/nik/.config/task
 
-# Color theme (uncomment one to use)
-#include /usr/share/doc/task/rc/light-16.theme
-#include /usr/share/doc/task/rc/light-256.theme
-#include /usr/share/doc/task/rc/dark-16.theme
-include /usr/share/doc/task/rc/dark-256.theme
-#include /usr/share/doc/task/rc/dark-red-256.theme
-#include /usr/share/doc/task/rc/dark-green-256.theme
-#include /usr/share/doc/task/rc/dark-blue-256.theme
-#include /usr/share/doc/task/rc/dark-violets-256.theme
-#include /usr/share/doc/task/rc/dark-yellow-green.theme
-#include /usr/share/doc/task/rc/dark-gray-256.theme
-#include /usr/share/doc/task/rc/dark-gray-blue-256.theme
-#include /usr/share/doc/task/rc/solarized-dark-256.theme
-#include /usr/share/doc/task/rc/solarized-light-256.theme
-#include /usr/share/doc/task/rc/no-color.theme
+color.blocked=magenta on black
+color.blocking=black on magenta
+color.active=green on black
+color.active=green on black
+color.tagged=
+color.project.none=
+color.due=red
+color.due.today=bold red on black
+color.overdue=bold red
+color.completed=grey3
+color.deleted=grey3
+color.recurring=cyan
+color.until=magenta
+
+color.uda.priority.H=bold red
+color.uda.priority.M=yellow
+color.uda.priority.L=cyan
+
+color.header=bold black
+color.footnote=grey3 on magenta
+color.warning=bold yellow
+color.error=bold red
+color.debug=green
+
+color.summary.bar=black on green
+color.summary.background=on black
+
+color.calendar.today=cyan on black
+color.calendar.due=black on green
+color.calendar.due.today=bold black on magenta
+color.calendar.overdue=bold black on red
+color.calendar.weekend=grey3
+color.calendar.holiday=magenta on black
+color.calendar.weeknumber=black on grey3
+
+color.history.add=on red
+color.history.done=black on green
+color.history.delete=black on yellow
+
+color.burndown.pending=on red
+color.burndown.started=black on yellow
+color.burndown.done=black on green
+
+color.label=bold blue
+color.label.sort=bold magenta
+color.alternate=on black
+
+color.sync.added=green
+color.sync.changed=yellow
+color.sync.rejected=red
+
+color.tag.next=rgb440
+color.undo.after=green
+color.undo.before=red
+color.calendar.scheduled=rgb013 on white
+
 uda.taskwarrior-tui.selection.bold=yes
 uda.taskwarrior-tui.selection.reverse=yes
+uda.taskwarrior-tui.selection.dim=yes
+uda.taskwarrior-tui.tabs.change-focus-rotate=yes
+uda.taskwarrior-tui.style.calendar.today=black on green
+uda.taskwarrior-tui.task-report.use-alternate-style=false
+uda.taskwarrior-tui.mark.indicator=󰄵
+uda.taskwarrior-tui.unmark.indicator=󰄱
+uda.taskwarrior-tui.selection.indicator=󰙏
+uda.taskwarrior-tui.mark-selection.indicator=󰄲
+uda.taskwarrior-tui.unmark-selection.indicator=󰄱
+
+rule.precedence.color=deleted,completed,active,keyword.,tag.,project.,overdue,scheduled,due.today,due,blocked,blocking,recurring,priority,uda.,tagged
 
 news.version=3.4.1
