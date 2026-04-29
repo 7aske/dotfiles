@@ -1,42 +1,60 @@
-#define nord0  #2E3440
-#define nord1  #3B4252
-#define nord2  #434C5E
-#define nord3  #4C566A
-#define nord4  #D8DEE9
-#define nord5  #E5E9F0
-#define nord6  #ECEFF4
-#define nord7  #8FBCBB
-#define nord8  #88C0D0
-#define nord9  #81A1C1
-#define nord10 #5E81AC
-#define nord11 #BF616A
-#define nord12 #D08770
-#define nord13 #EBCB8B
-#define nord14 #A3BE8C
-#define nord15 #B48EAD
+! -----------------------------------------------------------------------------
+! NORD CORE DEFINITIONS
+! -----------------------------------------------------------------------------
+#define nord0          #2e3440
+#define nord1          #3b4252
+#define nord2          #434c5e
+#define nord3          #4c566a
+#define nord4          #d8dee9
+#define nord5          #e5e9f0
+#define nord6          #eceff4
+#define nord7          #8fbcbb
+#define nord8          #88c0d0
+#define nord9          #81a1c1
+#define nord10         #5e81ac
+#define nord11         #bf616a
+#define nord12         #d08770
+#define nord13         #ebcb8b
+#define nord14         #a3be8c
+#define nord15         #b48ead
 
+! -----------------------------------------------------------------------------
+! CUSTOM NORD "BRIGHTS" (Manually balanced for distinction)
+! -----------------------------------------------------------------------------
+#define nord11_bright  #d0878e
+#define nord13_bright  #f2e2c5
+#define nord14_bright  #b1d196
+#define nord15_bright  #c1a5bf
+
+! -----------------------------------------------------------------------------
+! TERMINAL ASSIGNMENTS
+! -----------------------------------------------------------------------------
 *.foreground:   nord4
 *.background:   nord0
 *.cursorColor:  nord4
+
+! Regular Colors
+*.color0:       nord1
+*.color1:       nord11
+*.color2:       nord14
+*.color3:       nord13
+*.color4:       nord10
+*.color5:       nord15
+*.color6:       nord8
+*.color7:       nord5
+
+! Bright Colors
+*.color8:       nord3
+*.color9:       nord11_bright
+*.color10:      nord14_bright
+*.color11:      nord13_bright
+*.color12:      nord9
+*.color13:      nord15_bright
+*.color14:      nord7
+*.color15:      nord6
+
 *fading: 35
 *fadeColor: nord3
-
-*.color0:  nord1
-*.color1:  nord11
-*.color2:  nord14
-*.color3:  nord13
-*.color4:  nord9
-*.color5:  nord15
-*.color6:  nord8
-*.color7:  nord5
-*.color8:  nord3
-*.color9:  nord11
-*.color10: nord14
-*.color11: nord13
-*.color12: nord9
-*.color13: nord15
-*.color14: nord7
-*.color15: nord6
 
 *.antialias:           true
 *.hinting:             true
