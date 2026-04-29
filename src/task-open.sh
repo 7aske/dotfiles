@@ -8,14 +8,23 @@ if [ -z "$TASK_UUID" ]; then
   exit 1
 fi
 
-# Extract annotations of the task
-ANNOTATION_COUNT="$(task _get rc.verbose=nothing "$TASK_UUID".annotations.count)"
-for i in $(seq 1 "$ANNOTATION_COUNT"); do
+JIRA_URL="$(task _get rc.verbose=nothing "$TASK_UUID".jiraurl)"
+GITLABURL="$(task _get rc.verbose=nothing "$TASK_UUID".gitlaburl)"
+if [ -n "$JIRA_URL" ]; then
+  URL="$JIRA_URL"
+elif [ -n "$GITLABURL" ]; then
+  URL="$GITLABURL"
+else
+  # Extract annotations of the task
+  ANNOTATION_COUNT="$(task _get rc.verbose=nothing "$TASK_UUID".annotations.count)"
+  for i in $(seq 1 "$ANNOTATION_COUNT"); do
   ANNOTATIONS+=$(task _get rc.verbose=nothing "$TASK_UUID".annotations.$i.description)
-done
+  done
 
-# Look for the first URL
-URL=$(echo "$ANNOTATIONS" | grep -Eo 'https?://[^ ]+' | head -n1)
+  # Look for the first URL
+  URL=$(echo "$ANNOTATIONS" | grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*" | tac | head -n1)
+fi
+
 
 if [ -z "$URL" ]; then
   notify-send "task-open" "No URL found in annotations for task $TASK_UUID"
