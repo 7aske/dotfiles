@@ -29,7 +29,7 @@ autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' get-revision true
 zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' stagedstr '✚ '
+zstyle ':vcs_info:*' stagedstr '󱇬 '
 #zstyle ':vcs_info:*' unstagedstr "±${uncommited} "
 zstyle ':vcs_info:*' formats '%u%c%m'
 zstyle ':vcs_info:*' actionformats '%u%c%m'
@@ -46,7 +46,6 @@ export ZSH_THEME_AWS_PROFILE_SUFFIX=""
 export ZSH_THEME_AWS_REGION_PREFIX=""
 export ZSH_THEME_AWS_REGION_SUFFIX=""
 export SHOW_AWS_PROMPT=false
-padding=" "
 
 # Special Powerline characters
 
@@ -85,7 +84,7 @@ prompt_segment() {
   fi
 
   CURRENT_BG=$bg_color
-  [[ -n $content ]] && echo -n "${padding}$content${padding}"
+  [[ -n $content ]] && echo -n "$content"
 }
 
 ### Prompt components
@@ -105,7 +104,7 @@ prompt_context() {
 		background=magenta
   fi
 
-	prompt_segment $background $foreground $prompt
+	prompt_segment $background $foreground " $prompt "
 }
 
 +vi-git-check() {
@@ -125,9 +124,9 @@ prompt_context() {
         
         if (( vcs_info_unstaged_count )); then
             # We overwrite the 'unstaged' variable in the hook_com hash
-            hook_com[unstaged]="±${vcs_info_unstaged_count}${padding}"
+            hook_com[unstaged]="±${vcs_info_unstaged_count} "
         else
-            hook_com[unstaged]="${padding}"
+            hook_com[unstaged]=" "
         fi
     fi
 }
@@ -174,7 +173,7 @@ prompt_git() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue $CURRENT_FG '%1~'
+  prompt_segment blue $CURRENT_FG " %1~ "
 }
 
 # Virtualenv: current working virtualenv
@@ -194,7 +193,7 @@ prompt_status() {
   local -a symbols job
 	job=${#jobstates}
 
-  symbols+="%{%F{red}%}%(?..%(130?.✘ .%B%?%b))"
+    symbols+="%{%F{red}%}%(?..%(130?.✘ .%B%?%b))"
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}󱐋"
   [[ -n "$RANGER_LEVEL" ]] && symbols+="%{%F{yellow}%} "
   [[ $job -gt 0 ]] && symbols+="%{%F{cyan}%}$job  "
