@@ -31,8 +31,8 @@ zstyle ':vcs_info:*' get-revision true
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' stagedstr '✚ '
 #zstyle ':vcs_info:*' unstagedstr "±${uncommited} "
-zstyle ':vcs_info:*' formats ' %u%c%m'
-zstyle ':vcs_info:*' actionformats ' %u%c%m'
+zstyle ':vcs_info:*' formats '%u%c%m'
+zstyle ':vcs_info:*' actionformats '%u%c%m'
 zstyle ':vcs_info:git*+set-message:*' hooks git-check
 precmd() { vcs_info }
 vcs_info_unstaged_count=0
@@ -46,6 +46,7 @@ export ZSH_THEME_AWS_PROFILE_SUFFIX=""
 export ZSH_THEME_AWS_REGION_PREFIX=""
 export ZSH_THEME_AWS_REGION_SUFFIX=""
 export SHOW_AWS_PROMPT=false
+padding=" "
 
 # Special Powerline characters
 
@@ -77,14 +78,14 @@ prompt_segment() {
   if [[ $CURRENT_BG != 'NONE' && $bg_color != $CURRENT_BG ]]; then
     # The separator's Foreground is the PREVIOUS background
     # The separator's Background is the NEW background
-    echo -n "%{%K{$bg_color}%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{%F{$fg_color}%} "
+    echo -n "%{%K{$bg_color}%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{%F{$fg_color}%}"
   else
     # First segment or same color
-    echo -n "%{%K{$bg_color}%F{$fg_color}%} "
+    echo -n "%{%K{$bg_color}%F{$fg_color}%}"
   fi
 
   CURRENT_BG=$bg_color
-  [[ -n $content ]] && echo -n "$content "
+  [[ -n $content ]] && echo -n "${padding}$content${padding}"
 }
 
 ### Prompt components
@@ -124,9 +125,9 @@ prompt_context() {
         
         if (( vcs_info_unstaged_count )); then
             # We overwrite the 'unstaged' variable in the hook_com hash
-            hook_com[unstaged]="±${vcs_info_unstaged_count} "
+            hook_com[unstaged]="±${vcs_info_unstaged_count}${padding}"
         else
-            hook_com[unstaged]=""
+            hook_com[unstaged]="${padding}"
         fi
     fi
 }
@@ -167,7 +168,7 @@ prompt_git() {
       mode=" >R>"
     fi
 
-		echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
+		echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%%}${mode}"
   fi
 }
 
@@ -193,7 +194,7 @@ prompt_status() {
   local -a symbols job
 	job=${#jobstates}
 
-  symbols+="%{%F{red}%}%(?..%(130?.✘.%B%?%b))"
+  symbols+="%{%F{red}%}%(?..%(130?.✘ .%B%?%b))"
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}󱐋"
   [[ -n "$RANGER_LEVEL" ]] && symbols+="%{%F{yellow}%} "
   [[ $job -gt 0 ]] && symbols+="%{%F{cyan}%}$job  "
@@ -260,6 +261,7 @@ prompt_kubectx() {
 }
 
 prompt_aws() {
+  (( $+commands[aws] )) || return
   local aws_profile="$AWS_PROFILE"
   local color=yellow
   
@@ -273,6 +275,7 @@ prompt_aws() {
 }
 
 prompt_aws2() {
+  (( $+commands[aws] )) || return
   local aws_profile="$AWS_PROFILE"
   local _aws_to_show
   local region="${AWS_REGION:-${AWS_DEFAULT_REGION:-$AWS_PROFILE_REGION}}"
