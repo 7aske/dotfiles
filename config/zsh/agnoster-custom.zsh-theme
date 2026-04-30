@@ -26,6 +26,16 @@
 
 autoload -Uz colors && colors	# Load colors
 autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:*' get-revision true
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' stagedstr '✚ '
+#zstyle ':vcs_info:*' unstagedstr "±${uncommited} "
+zstyle ':vcs_info:*' formats ' %u%c%m'
+zstyle ':vcs_info:*' actionformats ' %u%c%m'
+zstyle ':vcs_info:git*+set-message:*' hooks git-check
+precmd() { vcs_info }
+vcs_info_unstaged_count=0
 setopt PROMPT_SUBST
 
 CURRENT_BG='NONE'
@@ -97,12 +107,32 @@ prompt_context() {
 	prompt_segment $background $foreground $prompt
 }
 
-evil_git_num_untracked_files() {
-  expr `git status --porcelain 2>/dev/null| grep "^??" | wc -l` 
++vi-git-check() {
+  local unpushed unpulled
+    if [[ "$1" == "0" ]]; then
+        unpushed=$(git log --oneline @{u}.. 2> /dev/null | wc -l)
+        if (( unpushed )); then
+          hook_com[misc]+="$unpushed"
+        fi
+        unpulled=$(git log --oneline ..@{u} 2> /dev/null | wc -l)
+        if (( unpulled )); then
+          hook_com[misc]+="$unpulled"
+        fi
+
+        # Count unstaged files (files modified but not added)
+        vcs_info_unstaged_count=$(evil_git_uncommited)
+        
+        if (( vcs_info_unstaged_count )); then
+            # We overwrite the 'unstaged' variable in the hook_com hash
+            hook_com[unstaged]="±${vcs_info_unstaged_count} "
+        else
+            hook_com[unstaged]=""
+        fi
+    fi
 }
 
 evil_git_uncommited() {
-	expr $(git status --porcelain 2>/dev/null| grep -E "^(M| M)" | wc -l)
+  expr $(git diff --name-only 2>/dev/null | wc -l | tr -d ' ')
 }
 
 # Git: branch/detached head, dirty status
@@ -116,13 +146,14 @@ prompt_git() {
     local LC_ALL="" LC_CTYPE="en_US.UTF-8"
     PL_BRANCH_CHAR=$'\ue0a0'         # 
   }
-  local ref dirty mode repo_path uncommited
+  local ref dirty mode repo_path
 
    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    repo_path=$(git rev-parse --git-dir 2>/dev/null)
-		uncommited=$(evil_git_uncommited)
+    #repo_path=$(git rev-parse --git-dir 2>/dev/null)
+    repo_path="${hook_com[base]}"
+    echo -n "${repo_path}"
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
-		if (( $uncommited )); then
+		if (( vcs_info_unstaged_count )); then
       prompt_segment yellow black
     else
       prompt_segment green $CURRENT_FG
@@ -136,16 +167,6 @@ prompt_git() {
       mode=" >R>"
     fi
 
-		precmd() { vcs_info }
-
-    zstyle ':vcs_info:*' enable git
-    zstyle ':vcs_info:*' get-revision true
-    zstyle ':vcs_info:*' check-for-changes true
-    zstyle ':vcs_info:*' stagedstr '✚ '
-    zstyle ':vcs_info:*' unstagedstr "±${uncommited} "
-    zstyle ':vcs_info:*' formats ' %u%c '
-    zstyle ':vcs_info:*' actionformats ' %u%c '
-    vcs_info
 		echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
   fi
 }
