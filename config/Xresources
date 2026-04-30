@@ -67,6 +67,6 @@
 *.reverseVideo:        on
 *.selectToClipboard:   false
 
-*.font:	               Fira Code:size=16:antialias=true:autohint=true;
+*.font:	               Fira Code:size=12:antialias=true:autohint=true;
 *.alpha:               0.9
 Xcursor.theme:         capitaine-cursors-light
