@@ -80,6 +80,10 @@ cpu = [
 tasks= "󰥪"
 
 [[block]]
+block = "scratchpad"
+format = "$icon$count.eng(range:1..)"
+
+[[block]]
 block = "music"
 format = " $icon {$title.str(max_w:20,rot_interval:0.5) $prev $play $next|}"
 format_alt = " $icon $prev $play $next"
