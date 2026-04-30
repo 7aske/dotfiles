@@ -97,6 +97,7 @@ action = "volume_down"
 [[block]]
 block = "custom"
 command = "~/.local/bin/statusbar/klipyper"
+if_command = "! [ -e .cache/statusbar_klipper_kill ]"
 persistent = true
 json = true
 format =" $icon $text"
