@@ -537,15 +537,10 @@ sync = true
 update = true
 
 [[block]]
-block = "keyboard_layout"
-driver = "xkbevent"
+command = "~/.local/bin/statusbar/layout"
+block = "custom"
 interval = 15
-format = "$layout "
 signal = 9
-[block.mappings]
-"us (N/A)" = "EN"
-"rs (latin)" = "SR"
-"rs (N/A)" = "ЋИР"
 [[block.click]]
 button = "left"
 cmd = "kblang -l us,rs-latin,rs -t"
