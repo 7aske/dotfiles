@@ -1,5 +1,24 @@
 #!/usr/bin/env sh
 
+_show_help() {
+    echo "Usage: ${0##*/} [-kh]"
+    echo "  -h    Show this help message"
+    echo "  -n    Print notification examples"
+    exit 0
+}
+
+while getopts "nh" opt; do
+    case $opt in
+        h) echo "Usage: ${0##*/} [-kh]"
+           echo "  -h    Show this help message"
+           exit 0 ;;
+        n) notify=true ;;
+        *) _show_help ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+
 killall dunst
 
 [ -f  "$HOME/.config/colors.sh" ] && . "$HOME/.config/colors.sh"
@@ -23,6 +42,8 @@ dunst \
     -separator_color "${color4}" \
     -conf ~/.config/dunst/dunstrc &
 
-notify-send -i notifications -u normal   "dunst" "dunst reloaded"
-notify-send -i notifications -u critical "dunst" "dunst reloaded"
-notify-send -i notifications -u low      "dunst" "dunst reloaded"
+if [ "$notify" = true ]; then
+    notify-send -i notifications -u normal   "dunst" "dunst reloaded"
+    notify-send -i notifications -u critical "dunst" "dunst reloaded"
+    notify-send -i notifications -u low      "dunst" "dunst reloaded"
+fi
