@@ -5,7 +5,7 @@ SWITCH="$HOME/.cache/statusbar_$(basename $0)"
 case $BLOCK_BUTTON in
 	1) notify-send -i device_mem "Memory hogs" "$(smem -Hkar | head)" ;;
 	2) [ -e "$SWITCH" ] && rm "$SWITCH" || touch "$SWITCH" ;;
-	3) wtoggle2 -T htop ;;
+	3) wtoggle2 -T htop --sort-key PERCENT_MEM ;;
 esac
 
 declare -a FREE
