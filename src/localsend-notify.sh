@@ -44,8 +44,6 @@ while ! [ -e "$LOCALSEND_FILE" ]; do
     sleep 10
 done
 
-notify-send -u normal -i localsend_app "LocalSend" "Monitoring for incoming files"
-
 while IFS= read -r line; do
     if [[ "$line" =~ Destination\ Directory:.* ]]; then
         localsend_dest_dir="$(echo "$line" | awk '
