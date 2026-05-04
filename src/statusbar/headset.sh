@@ -67,8 +67,6 @@ END {
     printf "%s %s", capacity, status
 }')
 
-echo "$capacity $status" >&2
-
 if [ "$status" == "unknown" ]; then
     libbar_output "headphones_not_connected" ""
     exit 0

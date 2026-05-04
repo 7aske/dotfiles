@@ -422,7 +422,7 @@ update = true
 
 [[block]]
 block = "privacy"
-format = " {$icon_audio |}{$icon_audio_sink  |}{$icon_video  |}{$icon_webcam  |}{$icon_unknown  |}"
+format = "{ $icon_audio |}{ $icon_audio_sink |}{ $icon_video |}{ $icon_webcam |}{ $icon_unknown |}"
 [[block.driver]]
 name = "v4l"
 [[block.driver]]
