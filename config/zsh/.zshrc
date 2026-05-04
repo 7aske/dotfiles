@@ -125,9 +125,15 @@ fzf-cd() {
   local file
 
   file=$(fzf \
+    --scheme=path \
+    --algo=v2 \
+    --smart-case \
+    --tiebreak=begin,length \
     --preview 'bat --color=always {} 2>/dev/null || ls -la --color=always {}' \
     --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
-    --bind 'ctrl-e:execute(vim {})'
+    --header 'Select a directory to cd into. (ctrl+e) open vim (ctrl+y) copy' \
+    --bind 'ctrl-e:execute(vim {})' \
+    --bind 'ctrl-y:execute(echo {} | xargs realpath | sed "s|^|file://|" | xclip -i -selection clipboard -t text/uri-list && notify-send "Copied to clipboard" "{}")' \
   ) || return
 
   cd -- "${file:h}"
@@ -141,8 +147,8 @@ bindkey '^[[P' delete-char
 # Edit line in vim with ctrl-e:
 autoload edit-command-line; zle -N edit-command-line
 bindkey '^e' edit-command-line
-bindkey -s '^o' 'codeopen\n'
-bindkey -s '^g' 'chgs\n'
+bindkey -s '^o' 'codeopen -t term\n'
+bindkey -s '^g' 'codeopen -t term -g\n'
 bindkey -s '^v' 'vicfg -H -c -s\n'
 bindkey -s '^p' 'git pull\n'
 bindkey -s '^u' 'git push\n'
