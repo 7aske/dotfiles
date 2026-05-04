@@ -30,7 +30,7 @@ case $BLOCK_BUTTON in
 			notify-send -i git "Repositories" "$(cgs -mb)"
 		fi ;;
 	2) libbar_toggle_switch 7 ;;
-    3) notify-send -i git "Repositories" "$(cgs -F)" ;;
+    3) i3-msg "exec --no-startup-id setsid -f codeopen -t lazygit -m rofi -g" >/dev/null 2>&1 ;;
 esac
 
 libbar_getopts "$@"
