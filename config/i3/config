@@ -39,6 +39,7 @@ set $gaps_inner  20
 set $gaps_outer  0
 set $border_size 2
 set $status_cmd  /usr/bin/i3status-rs
+set $codeopen_menu rofi
 
 # set terminal commands
 set $terminal   $TERMINAL
@@ -219,42 +220,42 @@ bindsym $mod+y       exec --no-startup-id screenlayout
 bindsym $mod+Shift+y exec --no-startup-id screenlayout layout.sh
 
 # layout toggling mode
-set $mode_codeopen codeopen: (t)erm (n)vim (v)scode (i)dea (c)lion (g)oland lazy(G)it (p)ycharm (w)ebstorm (s)studio (r)ider (j)etbrains
+set $mode_codeopen codeopen: (t)erm (C)ursor (n)vim (v)scode (i)dea (c)lion (g)oland lazy(G)it (p)ycharm (w)ebstorm (s)studio (r)ider (j)etbrains
 bindsym $mod+o mode "$mode_codeopen"
-set $codeopen_menu rofi
 mode "$mode_codeopen" {
-    bindsym t exec --no-startup-id codeopen -m $codeopen_menu -t term; mode default
-    bindsym v exec --no-startup-id codeopen -m $codeopen_menu -t vscode; mode default
-    bindsym n exec --no-startup-id codeopen -m $codeopen_menu -t vim; mode default
-    bindsym i exec --no-startup-id codeopen -m $codeopen_menu -t idea; mode default
-    bindsym c exec --no-startup-id codeopen -m $codeopen_menu -t clion; mode default
-    bindsym g exec --no-startup-id codeopen -m $codeopen_menu -t goland; mode default
-    bindsym p exec --no-startup-id codeopen -m $codeopen_menu -t pycharm; mode default
-    bindsym w exec --no-startup-id codeopen -m $codeopen_menu -t webstorm; mode default
-    bindsym s exec --no-startup-id codeopen -m $codeopen_menu -t studio; mode default
-    bindsym r exec --no-startup-id codeopen -m $codeopen_menu -t rider; mode default
-    bindsym j exec --no-startup-id codeopen -m $codeopen_menu -t jetbrains; mode default
-
-    bindsym Shift+g exec --no-startup-id codeopen -m $codeopen_menu lazygit; mode default
+    bindsym t       exec --no-startup-id codeopen -m $codeopen_menu -t term;      mode default
+    bindsym v       exec --no-startup-id codeopen -m $codeopen_menu -t vscode;    mode default
+    bindsym n       exec --no-startup-id codeopen -m $codeopen_menu -t vim;       mode default
+    bindsym i       exec --no-startup-id codeopen -m $codeopen_menu -t idea;      mode default
+    bindsym c       exec --no-startup-id codeopen -m $codeopen_menu -t clion;     mode default
+    bindsym Shift+c exec --no-startup-id codeopen -m $codeopen_menu -t cursor;    mode default
+    bindsym g       exec --no-startup-id codeopen -m $codeopen_menu -t goland;    mode default
+    bindsym p       exec --no-startup-id codeopen -m $codeopen_menu -t pycharm;   mode default
+    bindsym w       exec --no-startup-id codeopen -m $codeopen_menu -t webstorm;  mode default
+    bindsym s       exec --no-startup-id codeopen -m $codeopen_menu -t studio;    mode default
+    bindsym r       exec --no-startup-id codeopen -m $codeopen_menu -t rider;     mode default
+    bindsym j       exec --no-startup-id codeopen -m $codeopen_menu -t jetbrains; mode default
+    bindsym Shift+g exec --no-startup-id codeopen -m $codeopen_menu -t lazygit;   mode default
 
     # exit codeopen mode: "Enter" or "Escape"
     bindsym Return mode default
     bindsym Escape mode default
 }
 
-set $mode_ide open: (i)dea (c)lion (g)oland (p)ycharm (w)ebstorm (s)studio (r)ider (d)atagrip
+set $mode_ide open: (i)dea (C)ursor (c)lion (g)oland (p)ycharm (w)ebstorm (s)studio (r)ider (d)atagrip
 bindsym $mod+Shift+o mode "$mode_ide"
 mode "$mode_ide" {
     # set default desktop layout <stacking|tabbed>
-    bindsym v exec --no-startup-id vscodium; mode default
-    bindsym i exec --no-startup-id idea; mode default
-    bindsym c exec --no-startup-id clion; mode default
-    bindsym g exec --no-startup-id goland; mode default
-    bindsym p exec --no-startup-id pycharm; mode default
-    bindsym w exec --no-startup-id webstorm; mode default
-    bindsym s exec --no-startup-id studio; mode default
-    bindsym r exec --no-startup-id rider; mode default
-    bindsym d exec --no-startup-id datagrip; mode default
+    bindsym v       exec --no-startup-id vscodium; mode default
+    bindsym i       exec --no-startup-id idea;     mode default
+    bindsym Shift+c exec --no-startup-id cursor;   mode default
+    bindsym c       exec --no-startup-id clion;    mode default
+    bindsym g       exec --no-startup-id goland;   mode default
+    bindsym p       exec --no-startup-id pycharm;  mode default
+    bindsym w       exec --no-startup-id webstorm; mode default
+    bindsym s       exec --no-startup-id studio;   mode default
+    bindsym r       exec --no-startup-id rider;    mode default
+    bindsym d       exec --no-startup-id datagrip; mode default
 
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode default
