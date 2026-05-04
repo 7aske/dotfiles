@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
 
-prog="$(basename $0)"
+prog="$(basename "$0")"
 find_flags="-maxdepth 1 -type f"
 find_cmd="find"
-cfg_dir="$(find ${CODE_DOTFILES:-$CODE/sh/dotfiles} -maxdepth 3 -type f)"
+_code_dotfiles="${CODE_DOTFILES:-$CODE/sh/dotfiles}"
+files="$(git -C "$_code_dotfiles" ls-files | xargs -I{} echo "$_code_dotfiles/{}")"
 
 while getopts ":hHecs" opt; do
     case $opt in
@@ -19,32 +20,26 @@ done
 
 shift $((OPTIND - 1))
 
-#case "$1" in
-#    "--etc")  find_cmd="sudo find "; cfg_dir="/etc" ;;
-#    "--home") find_flags=" -maxdepth 1 -type f"; cfg_dir="$HOME" ;;
-#    "--config") find_flags=" -maxdepth 2 -type f"; cfg_dir="$HOME/.config" ;;
-#    "--scripts") find_flags=" -maxdepth 1 -type f"; cfg_dir="$HOME/.local/bin/scripts" ;;
-#    *) cfg_dir="${CODE_DOTFILES:-$CODE/sh/dotfiles}" ;;
-#esac
-
 [ -z "$EDITOR" ] &&  echo "$prog: EDITOR env variable not set" && exit 1
-#[ ! -d "$cfg_dir" ] && echo "$prog: $cfg_dir: no such file or directory" && exit 1
-files="$($find_cmd $cfg_dir $find_flags)"
+files="$files$($find_cmd $cfg_dir $find_flags)"
 
 
 if [ ! -t 1 ]; then
-	config_file="$(echo $files | sed 's/\ /\n/g' | grep -v ".git" | rofi -dmenu )"
+	config_file="$(echo "$files" | sed 's/\ /\n/g' | grep -v ".git" | rofi -dmenu)"
 else
-	config_file="$(echo $files | sed 's/\ /\n/g' | grep -v ".git" | fzf --cycle --reverse )"
+	config_file="$(echo "$files" | sed 's/\ /\n/g' | grep -v ".git" | fzf --cycle --reverse --preview 'bat --style=numbers --color=always --line-range :100 {}' --preview-window=bottom:60%)"
+fi
+
+if [ -z "$config_file" ]; then
+    exit 0
 fi
 
 git_root=""
-if git -C "$(basename $config_file)" rev-parse --is-inside-work-tree &>/dev/null; then
-    git_root="$(git -C $(basename $config_file) rev-parse --show-toplevel)"
+if git -C "$(basename "$config_file")" rev-parse --is-inside-work-tree &>/dev/null; then
+    git_root="$(git -C "$(basename "$config_file")" rev-parse --show-toplevel)"
 fi
 
-[ -z "$config_file" ] && exit 0
-[ -w "$config_file" ] && 
+[ ! -w "$config_file" ] && exit 1
 
 cmd="$EDITOR $config_file"
 [ ! -w "$config_file" ] && cmd="sudo $EDITOR $config_file"

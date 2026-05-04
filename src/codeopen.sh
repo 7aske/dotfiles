@@ -9,7 +9,7 @@
 _code="$(cgs -C)"
 
 export FZF_DEFAULT_OPTS="
---preview 'git -c color.status=always -C \"$_code\"/{} status --short; git -c color.status=always -C \"$_code\"/{} diff --color=always --staged'
+--preview 'git -c color.status=always -C \"$_code\"/{} status --short; git -c color.status=always -C \"$_code\"/{} diff --color=always HEAD'
 --bind 'ctrl-e:execute('$TERMFILE' \"$_code\"/{})'
 --bind 'ctrl-r:execute(git -C \"$_code\"/{} reset --hard HEAD)'
 --bind 'ctrl-p:execute(git -C \"$_code\"/{} pull)'
