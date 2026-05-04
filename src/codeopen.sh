@@ -3,26 +3,31 @@
 . "$HOME/.profile"
 
 [ -e "$HOME/.profile" ] && . "$HOME/.profile"
-[ -z "$CODE" ] && CODE="$(cgs -C)"
 [ -z "$(command -v cgs)" ] && echo "cgs: not found" && exit 1
 [ -z "$(command -v fzf)" ] && echo "fzf: not found" && exit 1
 
+_code="$(cgs -C)"
+
 export FZF_DEFAULT_OPTS="
---preview 'git -c color.status=always -C \"$CODE\"/{} status'
---bind 'ctrl-e:execute('$TERMFILE' \"$CODE\"/{})'
---bind 'ctrl-g:execute(cd \"$CODE\"/{} && lazygit)'
---header \"Select a project to open. (Ctrl-e) $TERMFILE or (Ctrl-g) lazygit\"
---preview-window 'up,60%,border-bottom,+{2}+3/3,~3'
+--preview 'git -c color.status=always -C \"$_code\"/{} status --short; git -c color.status=always -C \"$_code\"/{} diff --color=always --staged'
+--bind 'ctrl-e:execute('$TERMFILE' \"$_code\"/{})'
+--bind 'ctrl-r:execute(git -C \"$_code\"/{} reset --hard HEAD)'
+--bind 'ctrl-p:execute(git -C \"$_code\"/{} pull)'
+--bind 'ctrl-g:execute(cd \"$_code\"/{} && lazygit)'
+--header \"Select a project to open. (Ctrl-e) $TERMFILE (Ctrl-g) lazygit (Ctrl-l) git clean (Ctrl-p) git pull\"
+--preview-window 'right,70%,border-left,+{2}+3/3,~3'
 --reverse --cycle
 "
 
 available_types=("term" "cursor" "vim" "vscode" "jetbrains" "idea" "pycharm" "clion" "studio" "goland" "webstorm" "rider")
-available_menus=("dmenu" "rofi")
+available_menus=("dmenu" "rofi" "fzf")
 
 _usage() {
-    echo -e "usage: codeopen -[tm]"
+    echo -e "usage: codeopen -[htmg]"
+    echo -e "\t-h          show this help message and exit"
     echo -e "\t-t <type>   available types: ${available_types[*]}"
     echo -e "\t-m <menu>   available menus: ${available_menus[*]}"
+    echo -e "\t-g          show only dirty repos"
 }
 
 dirty=false
@@ -69,16 +74,13 @@ fi
 PROJ=""
 
 _select_project() {
-    local code;
-    code="$(cgs -C)"
-
-    # use grep to remove $CODE prefix
+    # use grep to remove $_code prefix
     if [ $dirty = true ]; then
-        SELECTED="$(eval "cgs -md -sm | grep -oP '^$code/\K.*' | $menu_command")"
+        SELECTED="$(eval "cgs -md -sm | grep -oP '^$_code/\K.*' | $menu_command")"
     else
-        SELECTED="$(eval "cgs -ad | grep -oP '^$code/\K.*' | $menu_command")"
+        SELECTED="$(eval "cgs -ad | grep -oP '^$_code/\K.*' | $menu_command")"
     fi
-        PROJ="$code/$SELECTED"
+        PROJ="$_code/$SELECTED"
 
     if [ ! -e "$PROJ" ]; then
         exit 0
@@ -96,9 +98,10 @@ _select_project() {
 _open_term() {
     if [ -t 1 ]; then
         if [ -n "$1" ]; then
-            cd "$PROJ" && $1
+            cd "$PROJ" || exit 1
+            exec $1
         else
-            cd "$PROJ"
+            cd "$PROJ" || exit 1
             exec $SHELL
         fi
     else

@@ -1,14 +1,11 @@
 #compdef codeopen
 
 _codeopen() {
-  local context state state_descr line
-  typeset -A opt_arguments
-
   _arguments \
     '-h[print help information]' \
     '-g[list only dirty repos]' \
-    '-t[open types]:type:(term vscode vim jetbrains idea pycharm clion studio goland webstorm rider)' \
-    '-m[menus]:menu:(dmenu rofi)' \
+    '-t[open types (default: term)]:type:(term vscode vim jetbrains idea pycharm clion studio goland webstorm rider)' \
+    '-m[menus (default: fzf)]:menu:(dmenu rofi fzf)' \
 }
 
 _codeopen
