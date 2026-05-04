@@ -1,15 +1,25 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 [ -z "$CODE" ] && echo "'CODE' not set" && exit 0
 
-FORCE=0
+interactive=false
+dry_run=false
 
-while getopts ":f" ARG; do
+_usage() {
+    echo "Usage: $0 [-iD]"
+    echo "  --interactive, -i  Interactive mode. Will ask for confirmation before deleting each folder."
+    echo "  --dry-run, -D      Dry run mode. Will show which folders would be deleted without actually deleting them."
+    exit 2
+}
+
+while [[ "$#" -gt 0 ]]; do
+    ARG="$1"
 	case $ARG in
-		f) FORCE=1 ;;
-		:) echo "codesync: -$arg requires and argument"
-			exit 2;;
+		-i|--interactive) interactive=true; shift ;;
+        -D|--dry-run) dry_run=true; shift ;;
+        *) echo "Unknown option: -$ARG"; _usage ;;
 	esac
+    shift
 done
 
 FOLDERS="$(find "$CODE" -type d \
@@ -24,25 +34,25 @@ FOLDERS="$(find "$CODE" -type d \
 		-name build               -prune \
 	\) -a \! \
 	\(\
-		-path $CODE/work\*         -prune -o\
-		-path \*/lib/\*           -prune -o\
-		-path \*nvim/plugged\*    -prune -o\
-		-path \*nvim.old/plugged\*    -prune -o\
-		-path \*neovim\*          -prune   \
+		-path "$CODE/work\*"        -prune -o\
+		-path \*/lib/\*            -prune -o\
+		-path \*nvim/plugged\*     -prune -o\
+		-path \*nvim.old/plugged\* -prune -o\
+		-path \*neovim\*           -prune   \
 	\) -prune -printf "%p\n")"
 
 SAVED=0
 for F in $FOLDERS; do 
-	echo $F
-	POSSIBLY_SAVED=$(du -sb $F | awk '{ print $1 }')
-	if [ -w "$F" ] && ( [ -O "$F" ] || [ -G "$F" ] ); then
-		if [ "$(basename "$F")" == "__pycache__" ] || (( $FORCE )); then
-			rm -rf "$F"
-		else
-			rm -rI "$F"
-		fi
-	fi
-	if [ ! -e "$F" ]; then
+	echo "$F"
+	POSSIBLY_SAVED=$(du -sb "$F" | awk '{ print $1 }')
+    if [ $dry_run != true ] && [ -w "$F" ] && [ -x "$F" ]; then
+        if [ "$(basename "$F")" == "__pycache__" ] || [ $interactive != true ]; then
+            rm -rf "$F"
+        else
+            rm -rI "$F"
+        fi
+    fi
+	if [ ! -e "$F" ] || [ $dry_run == true ]; then
 		SAVED=$((SAVED + POSSIBLY_SAVED))
 	fi
 done

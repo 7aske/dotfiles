@@ -5,9 +5,10 @@ _codeopen() {
   typeset -A opt_arguments
 
   _arguments \
-    '-h:print help information:' \
-    '-t:open types:(term vscode vim jetbrains idea pycharm clion studio goland webstorm rider)' \
-    '-m:menus:(dmenu rofi)' \
+    '-h[print help information]' \
+    '-g[list only dirty repos]' \
+    '-t[open types]:type:(term vscode vim jetbrains idea pycharm clion studio goland webstorm rider)' \
+    '-m[menus]:menu:(dmenu rofi)' \
 }
 
 _codeopen

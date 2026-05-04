@@ -1,3 +1,0 @@
-#compdef codegs
-
-_message 'code grep/search - search through code repositories'

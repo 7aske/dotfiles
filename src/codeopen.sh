@@ -3,11 +3,20 @@
 . "$HOME/.profile"
 
 [ -e "$HOME/.profile" ] && . "$HOME/.profile"
-[ -z "$CODE" ] && echo "'CODE' env not set" && exit 1
+[ -z "$CODE" ] && CODE="$(cgs -C)"
 [ -z "$(command -v cgs)" ] && echo "cgs: not found" && exit 1
 [ -z "$(command -v fzf)" ] && echo "fzf: not found" && exit 1
 
-available_types=("term" "vscode" "vim" "jetbrains" "idea" "pycharm" "clion" "studio" "goland" "webstorm" "rider")
+export FZF_DEFAULT_OPTS="
+--preview 'git -c color.status=always -C \"$CODE\"/{} status'
+--bind 'ctrl-e:execute('$TERMFILE' \"$CODE\"/{})'
+--bind 'ctrl-g:execute(cd \"$CODE\"/{} && lazygit)'
+--header \"Select a project to open. (Ctrl-e) $TERMFILE or (Ctrl-g) lazygit\"
+--preview-window 'up,60%,border-bottom,+{2}+3/3,~3'
+--reverse --cycle
+"
+
+available_types=("term" "cursor" "vim" "vscode" "jetbrains" "idea" "pycharm" "clion" "studio" "goland" "webstorm" "rider")
 available_menus=("dmenu" "rofi")
 
 _usage() {
@@ -16,11 +25,10 @@ _usage() {
     echo -e "\t-m <menu>   available menus: ${available_menus[*]}"
 }
 
-# list of arguments expected in the input
-optstring="hm:t:"
-
-while getopts ${optstring} arg; do
+dirty=false
+while getopts "hm:t:g" arg; do
     case ${arg} in
+    g) dirty=true ;;
     h)
         _usage
         exit 0
@@ -48,25 +56,29 @@ elif [ "$MENU" = "rofi" ]; then
 fi
 
 if [ -z "$TYPE" ]; then
-    if [ -n "$1" ]; then
-        TYPE="$1"
-    else
-        TYPE="$(echo ${available_types[*]} | tr ' ' '\n' | $menu_command)"
-    fi
+    _args="$FZF_DEFAULT_OPTS"
+    FZF_DEFAULT_OPTS=""
+    TYPE="$(echo ${available_types[*]} | tr ' ' '\n' | $menu_command)"
+    FZF_DEFAULT_OPTS="$_args"
+fi
+
+if [ -z "$TYPE" ]; then
+    exit 1
 fi
 
 PROJ=""
 
-
 _select_project() {
-    local code="$(cgs -C)"
+    local code;
+    code="$(cgs -C)"
+
     # use grep to remove $CODE prefix
-    if [ "$1" == "dirty" ]; then
-        PROJ="$(eval "cgs -m -sm | tac | $menu_command" | awk -v code="$code" '{print code "/" $1 "/" $2}')"
+    if [ $dirty = true ]; then
+        SELECTED="$(eval "cgs -md -sm | grep -oP '^$code/\K.*' | $menu_command")"
     else
         SELECTED="$(eval "cgs -ad | grep -oP '^$code/\K.*' | $menu_command")"
-        PROJ="$code/$SELECTED"
     fi
+        PROJ="$code/$SELECTED"
 
     if [ ! -e "$PROJ" ]; then
         exit 0
@@ -76,7 +88,7 @@ _select_project() {
         PROJ="$(readlink -f "$PROJ")"
     fi
     
-    if ! ( git -C "$PROJ" rev-parse HEAD 2>&1 >/dev/null ); then
+    if ! ( git -C "$PROJ" rev-parse HEAD >/dev/null 2>&1); then
         exit 1
     fi
 }
@@ -158,7 +170,7 @@ _open_jetbrains() {
 }
 
 _open_lazygit() {
-    _select_project dirty
+    _select_project
 
     if [ -x "$(command -v lazygit)" ]; then
         _open_term lazygit
@@ -183,5 +195,5 @@ case "$TYPE" in
     "rider") _open_jetbrains rider ;;
     "studio" | "android") _open_jetbrains studio ;;
     "lazygit") _open_lazygit ;;
-    *) _select_project; _open_term $TYPE ;;
+    *) _select_project; _open_term;;
 esac
