@@ -8,11 +8,33 @@ typeset -g AWS_REGION_FILE="$HOME/.aws_region"
 typeset -g AWS_PROFILE_FILE="$HOME/.aws_profile"
 typeset -g AWS_CONFIG_FILE="$HOME/.aws/config"
 
+# --- Completion paths ---
+fpath=(~/.zsh/completions $fpath)
+
+# --- Init completion system ---
+autoload -Uz compinit
+compinit
+
+COMPLETION_WAITING_DOTS="%{%F{red}  %f%}"
+
+# --- Completion behavior ---
+zmodload zsh/complist
+zstyle ':completion:*' menu select
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*:*:*:*:descriptions' format '%F{magenta}-- %d --%f'
+
+setopt correct
 setopt sharehistory
 setopt hist_ignore_dups
 setopt hist_ignore_space
 setopt hist_reduce_blanks
 setopt inc_append_history
+setopt completealiases
+setopt globdots
+setopt autocd		# Automatically cd into typed directory.
+stty stop undef		# Disable ctrl-s to freeze terminal.
+
+export AUTO_NOTIFY_THRESHOLD=20
 
 is_console_tty() {
   [[ $(tty) == /dev/tty[1-9] ]]
@@ -26,10 +48,11 @@ cursor_block() { echo -ne '\e[2 q' }
 
 antigen use oh-my-zsh
 
-antigen bundle ael-code/zsh-colored-man-pages
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
 
+antigen bundle fzf
+antigen bundle git
 antigen bundle argocd
 antigen bundle aws
 antigen bundle colored-man-pages
@@ -63,33 +86,7 @@ fi
 
 antigen apply
 
-export AUTO_NOTIFY_THRESHOLD=20
-
 [ -e ~/.config/rc ] && source ~/.config/rc
-
-setopt autocd		# Automatically cd into typed directory.
-stty stop undef		# Disable ctrl-s to freeze terminal.
-
-# Basic auto/tab complete:
-setopt correct
-
-# --- Completion paths ---
-fpath=(~/.zsh/completions $fpath)
-
-# --- Init completion system ---
-autoload -Uz compinit
-compinit
-
-# --- Completion behavior ---
-zmodload zsh/complist
-zstyle ':completion:*' menu select
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*:*:*:*:descriptions' format '%F{magenta}-- %d --%f'
-
-setopt completealiases
-setopt globdots
-
-COMPLETION_WAITING_DOTS=true
 
 # vi mode
 bindkey -v
@@ -139,25 +136,32 @@ fzf-cd() {
   cd -- "${file:h}"
 }
 bindkey -s '^f' 'fzf-cd\n'
-# script from dotfiles
-bindkey -s '^[f' 'fzf-rg\n'
+
+_kb_fzf_rg() { fzf-rg; }
+zle -N _kb_fzf_rg
+bindkey '^s' _kb_fzf_rg
 
 bindkey '^[[P' delete-char
 
 # Edit line in vim with ctrl-e:
-autoload edit-command-line; zle -N edit-command-line
+autoload edit-command-line
+zle -N edit-command-line
 bindkey '^e' edit-command-line
-bindkey -s '^o' 'codeopen -t term\n'
-bindkey -s '^g' 'codeopen -t term -g\n'
-bindkey -s '^v' 'vicfg -H -c -s\n'
-bindkey -s '^p' 'git pull\n'
-bindkey -s '^u' 'git push\n'
-bindkey -s '^s' 'git status\n'
-bindkey -s '^y' 'yay\n'
+
+_kb_codeopen() { codeopen -t term "$@"; }
+bindkey -s '^o' '_kb_codeopen\n'
+
+_kb_codeopen_g() { codeopen -t term -g "$@"; }
+bindkey -s '^g' '_kb_codeopen_g\n'
+
+_kb_vicfg() { vicfg -c; }
+zle -N _kb_vicfg
+bindkey '^v' _kb_vicfg
 
 # ctrl+space
 bindkey '^@' autosuggest-accept
-bindkey '^r' history-incremental-search-backward
+# handled by fzf
+#bindkey '^r' history-incremental-search-backward
 
 alias dockerhost="export DOCKER_HOST=\$(docker context inspect \$(docker context show) | jq -r '.[0].Endpoints.docker.Host')"
 

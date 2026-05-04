@@ -16,29 +16,6 @@ fi
 # | (_| | | |_ 
 #  \__, |_|\__|
 #  |___/       
-GIT_USER="7aske"
-GIT_URL="git@github.com:/$GIT_USER"
-gclone()  { git clone "$GIT_URL/$1";       }
-gcommit() { git add .; git commit -m "$1"; }
-gadd()    { git add $@;                    }
-gdiff()   { git diff $@;                   }
-greset()  { git reset --hard HEAD;         }
-gdry()    { git commit --branch --dry-run; }
-gpush()   { git push $@;                   }
-gpull()   { git pull $@;                   }
-gsl()     { git status --long $@;          }
-gss()     { git status -s $@;              }
-gst()     { git stash $@;                  }
-gsta()    { git stash apply $@;            }
-gstp()    { git stash pop $@;              }
-gsts()    { git stash show $@;             }
-gfet()    { git fetch $@;                  }
-glog()    { git log --graph $@;            }
-gremote() { git remote -v $@;              }
-gco()     { git checkout $@;               }
-gammend() { git commit --amend $@;         }
-gsw()     { git switch $@;                 }
-lg()      { lazygit $@; }
 
 #       _ _                     
 #  __ _| (_) __ _ ___  ___  ___ 
@@ -63,15 +40,16 @@ alias et='_setsid et'
 alias wps='_setsid wps'
 alias wpp='_setsid wpp'
 alias cursor='_setsid cursor'
+alias lg='lazygit'
 
 alias cls='clear -x'
 alias autoremove='sudo pacman -R $(pacman -Qdtq)'
 alias hl='history | fzf --tac |  sed "s/^ *[0-9]* *//" | xclip -selection clipboard'
-alias v='nvim'
 alias vim='nvim'
+alias v='vim'
 alias n='nano'
 alias o='xdg-open'
-alias z='zathura'
+alias zt='zathura'
 alias s='systemctl'
 alias e="$TERMFILE"
 function c { /usr/bin/code $@; }
