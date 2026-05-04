@@ -4,6 +4,7 @@ icons_format = "{icon}"
 theme = "nord-dark"
 [theme.overrides]
 separator = "<span font='13'></span>"
+#end_separator =  "<span font='13'>|</span>"
 
 [icons]
 icons = "awesome6"
@@ -81,7 +82,7 @@ tasks= "󰥪"
 
 [[block]]
 block = "scratchpad"
-format = "$icon$count.eng(range:1..)"
+format = "$icon$count.eng(range:1..)|"
 
 [[block]]
 block = "music"
@@ -101,7 +102,7 @@ action = "volume_down"
 [[block]]
 block = "custom"
 command = "~/.local/bin/statusbar/klipyper"
-if_command = "! [ -e .cache/statusbar_klipper_kill ]"
+if_command = '[ ! -e .cache/statusbar_klipper_kill ] && [ "$(curl -sSfl $KLIPPER_HOST/server/info | jq -r .result.klippy_state)" != "shutdown" ]'
 persistent = true
 json = true
 format =" $icon $text"
@@ -160,36 +161,6 @@ cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/owm-weather"
 sync = true
 update = true
 
-#[[block]]
-#block = "weather"
-#autolocate = true
-#format = " $icon $temp "
-#format_alt = " $icon "
-#[block.service]
-#name = "openweathermap"
-
-[[block]]
-block = "cpu"
-info_cpu = 20
-warning_cpu = 50
-critical_cpu = 90
-interval = 1
-format_alt = "$icon <span rise='1pt'>$utilization</span>"
-format= "$icon "
-[[block.click]]
-button = "left"
-cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/cpu"
-sync = true
-update = true
-[[block.click]]
-button = "middle"
-action = "toggle_format"
-[[block.click]]
-button = "right"
-cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/cpu"
-sync = true
-update = true
-
 [[block]]
 block = "custom"
 command = "~/.local/bin/statusbar/temp -j"
@@ -212,11 +183,32 @@ cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/temp -j"
 sync = true
 update = true
 
+[[block]]
+block = "cpu"
+info_cpu = 20
+warning_cpu = 50
+critical_cpu = 90
+interval = 1
+format_alt = "$icon $utilization.bar(w:1,v:true)"
+format= "$icon "
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/cpu"
+sync = true
+update = true
+[[block.click]]
+button = "middle"
+action = "toggle_format"
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/cpu"
+sync = true
+update = true
 
 [[block]]
 block = "memory"
 format = "$icon "
-format_alt = " $icon $mem_used.eng(prefix:Mi)/$mem_total.eng(prefix:Mi) "
+format_alt = "$icon $mem_used_percents.bar(w:1,v:true) "
 warning_mem = 50
 critical_mem = 80
 [[block.click]]
@@ -286,8 +278,8 @@ update = true
 block = "taskwarrior"
 interval = 60
 format = " $icon $count.eng(w:1) "
-format_singular = " $icon "
-format_everything_done = " 󰄵 "
+format_singular = "$icon"
+format_everything_done = "󰄵 "
 warning_threshold = 3
 critical_threshold = 5
 data_location = "~/.config/task/taskchampion.sqlite3"
@@ -327,7 +319,7 @@ update = true
 [[block]]
 block = "packages"
 package_manager = ["pacman", "aur"]
-format = " $icon $total.eng(w:2) "
+format = " $icon$total.eng(w:2) "
 format_up_to_date = ""
 error_interval = 300
 aur_command = "yay -Qua"
@@ -359,102 +351,13 @@ hide_when_empty = true
 signal = 8
 
 [[block]]
-block = "privacy"
-format = "{ $icon_audio |}{ $icon_audio_sink  |}{ $icon_video  |}{ $icon_webcam  |}{ $icon_unknown  |}"
-[[block.driver]]
-name = "v4l"
-[[block.driver]]
-name = "pipewire"
-exclude_input = ["openrgb"]
-display = "nickname"
-
-#[[block]]
-#block = "custom"
-#interval = 60
-#command = "~/.local/bin/statusbar/services"
-#hide_when_empty = true
-#[[block.click]]
-#button = "left"
-#cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/services"
-
-#[[block]]
-#block = "custom"
-#interval = 60
-#command = "~/.local/bin/statusbar/mic-status"
-#hide_when_empty = true
-#signal = 10
-#merge_with_next = true
-#[[block.click]]
-#button = "left"
-#cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/mic-status"
-#sync = true
-#update = true
-#[[block.click]]
-#button = "middle"
-#cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/mic-status"
-#sync = true
-#update = true
-#[[block.click]]
-#button = "right"
-#cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/mic-status"
-#sync = true
-#update = true
-#[[block.click]]
-#button = "up"
-#cmd = "BLOCK_BUTTON=4 ~/.local/bin/statusbar/mic-status"
-#sync = true
-#update = true
-#[[block.click]]
-#button = "down"
-#cmd = "BLOCK_BUTTON=5 ~/.local/bin/statusbar/mic-status"
-#sync = true
-#update = true
-
-[[block]]
-block = "sound"
-signal = 10
-max_vol = 130
-headphones_indicator = true
-driver = "pulseaudio"
-[block.theme_overrides]
-warning_bg = { link = "critical_bg" }
-[[block.click]]
-button = "left"
-cmd = "wtoggle2 pavucontrol"
-[[block.click]]
-button = "middle"
-cmd = "padefault ma"
-sync = true
-update = true
-[[block.click]]
-button = "right"
-cmd = "padefault toggle"
-
-[[block]]
-block = "sound"
-signal = 10
-device_kind = "source"
-max_vol = 100
-driver = "pulseaudio"
-[block.theme_overrides]
-warning_bg = { link = "critical_bg" }
-[[block.click]]
-button = "left"
-cmd = "wtoggle2 pavucontrol -t 4"
-[[block.click]]
-button = "middle"
-action = "toggle_mute"
-[[block.click]]
-button = "right"
-cmd = "padefault toggle"
-
-[[block]]
 block = "custom"
 interval = 60
 command = "~/.local/bin/statusbar/headset -j"
 signal = 10
 json = true
 hide_when_empty = true
+if_command = '[ -n "$(command -v headsetcontrol)" ]'
 [[block.click]]
 button = "left"
 cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/headset -j"
@@ -516,6 +419,56 @@ button = "right"
 cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/mx -j"
 sync = false
 update = true
+
+[[block]]
+block = "privacy"
+format = " {$icon_audio |}{$icon_audio_sink  |}{$icon_video  |}{$icon_webcam  |}{$icon_unknown  |}"
+[[block.driver]]
+name = "v4l"
+[[block.driver]]
+name = "pipewire"
+exclude_input = ["openrgb"]
+display = "nickname"
+[block.theme_overrides]
+warning_bg = "#B48EAD"
+
+[[block]]
+block = "sound"
+signal = 10
+max_vol = 100
+headphones_indicator = true
+format = " $icon {$volume.bar(w:1,v:true)|} "
+[block.theme_overrides]
+warning_bg = { link = "critical_bg" }
+[[block.click]]
+button = "left"
+cmd = "wtoggle2 pavucontrol"
+[[block.click]]
+button = "middle"
+cmd = "padefault ma"
+sync = true
+update = true
+[[block.click]]
+button = "right"
+cmd = "padefault toggle"
+
+[[block]]
+block = "sound"
+signal = 10
+device_kind = "source"
+max_vol = 100
+format = " $icon {$volume.bar(w:1,v:true)|} "
+[block.theme_overrides]
+warning_bg = { link = "critical_bg" }
+[[block.click]]
+button = "left"
+cmd = "wtoggle2 pavucontrol -t 4"
+[[block.click]]
+button = "middle"
+action = "toggle_mute"
+[[block.click]]
+button = "right"
+cmd = "padefault toggle"
 
 [[block]]
 block = "custom"
