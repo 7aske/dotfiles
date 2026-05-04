@@ -101,7 +101,6 @@ alias lcl='builtin cd $HOME/.local&& ls'
 alias lcls='builtin cd $HOME/.local/bin/scripts&& ls'
 alias lclb='builtin cd $HOME/.local/bin&& ls'
 alias tmp='builtin cd $HOME/.local/tmp&& ls'
-alias chgs='cd "$(codegs)" && echo -e "\ngit status -s\n"; git status -s'
 alias vicfg='vimcfg'
 alias srcvenv='source venv/bin/activate'
 # misc
@@ -166,46 +165,81 @@ if [ -n "$FZF_CODE" ]; then
 		if [ -z "$_CODE" ]; then
 			_CODE="$CODE"
 		fi
+
 		if [ $# -eq 0 ]; then
 			builtin cd "$_CODE" && ls
 			return 0
 		fi
 
 		if [ $# -eq 1 ]; then
-			MATCH="$(cgs -ad | fzf -f "$1" | head -1)"
+            if [ -d "$_CODE/$1" ]; then
+                MATCH="$_CODE/$1"
+            else
+                MATCH="$(cgs -ad | fzf -f "$1" | head -1)"
+            fi
 		elif [ $# -eq 2 ]; then
-			MATCH="$(fd . "$_CODE/$1" -d 2 -L -t d | fzf -f "$2" | head -1)"
+            if [ ! -d  "$_CODE/$1" ]; then 
+                return 1
+            fi
+
+			if [ -d "$_CODE/$1/$2" ]; then
+				MATCH="$_CODE/$1/$2"
+			else
+                MATCH="$(fd . "$_CODE/$1" -d 2 -L -t d | fzf -f "$2" | head -1)"
+            fi
 		fi
 
-		if [ -z "$MATCH" ]; then
+		if [ -z "$MATCH" ] && [ -d "$MATCH" ]; then
 			return 1
 		fi
 
 		builtin cd "$MATCH" && ls
 	}
+    
+    if [[ "$SHELL" == *"zsh"* ]]; then
+        _code() {
+            _arguments \
+                '1:repo:_files -/ -W '"'$(cgs -C)'"'' \
+                '2:repo:_files -/ -W '"$(cgs -C)/${words[2]}"''
+        }
+        compdef _code code
+    fi
+
 else
 	function code() {
 		_CODE="$(cgs -C)"
 		if [ -z "$_CODE" ]; then
 			_CODE="$CODE"
 		fi
+
 		if [ $# -eq 0 ]; then
-				builtin cd "$_CODE" && ls
-		elif [ $# -eq 1 ]; then
+            builtin cd "$_CODE" && ls
+            return 0
+        fi
+
+        if [ $# -eq 1 ]; then
 			if [ -d "$_CODE/$1" ]; then
-				builtin cd "$_CODE/$1" && ls
+				MATCH="$_CODE/$1"
 			else
-				cdir="$(cgs -ad | grep -E ".*$1.*" | sed -n '1p')"
-				[ -d "$cdir" ] && builtin cd "$cdir" && ls
+				MATCH="$(cgs -ad | grep -E ".*$1.*" | sed -n '1p')"
 			fi
 		elif [ $# -eq 2 ]; then
+            if [ ! -d  "$_CODE/$1" ]; then 
+                return 1
+            fi
+
 			if [ -d "$_CODE/$1/$2" ]; then
-				builtin cd "$_CODE/$1/$2" && ls
+				MATCH="$_CODE/$1/$2"
 			else
-				cdir="$(find "$_CODE/$1" -maxdepth 1 -name "*$2*" | sed -n '1p')"
-				[ -d "$cdir" ] && builtin cd "$cdir" && ls
+				MATCH="$(find "$_CODE/$1" -maxdepth 1 -name "*$2*" | sed -n '1p')"
 			fi
 		fi
+
+		if [ -z "$MATCH" ] && [ -d "$MATCH" ]; then
+			return 1
+		fi
+
+		builtin cd "$MATCH" && ls
 	}
 fi
 
