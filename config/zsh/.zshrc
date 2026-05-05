@@ -154,9 +154,9 @@ bindkey -s '^o' '_kb_codeopen\n'
 _kb_codeopen_g() { codeopen -t term -g "$@"; }
 bindkey -s '^g' '_kb_codeopen_g\n'
 
-_kb_vicfg() { vicfg -c; }
-zle -N _kb_vicfg
-bindkey '^v' _kb_vicfg
+_kb_vimcfg() { vimcfg -c; }
+zle -N _kb_vimcfg
+bindkey '^v' _kb_vimcfg
 
 # ctrl+space
 bindkey '^@' autosuggest-accept

@@ -319,7 +319,7 @@ update = true
 [[block]]
 block = "packages"
 package_manager = ["pacman", "aur"]
-format = " $icon$total.eng(w:2) "
+format = " $icon $total.eng(w:2) "
 format_up_to_date = ""
 error_interval = 300
 aur_command = "yay -Qua"
