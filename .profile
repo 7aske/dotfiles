@@ -1,7 +1,7 @@
 # [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
 export CODE="$HOME/.local/src"
-export CODE_DOTFILES="$CODE/sh/dotfiles"
+export CODE_DOTFILES="${CODE_DOTFILES:-"$CODE/sh/dotfiles"}"
 export PROFILE_SOURCED=$USER
 
 # Default programs
