@@ -12,8 +12,10 @@ SWITCH="$HOME/.cache/statusbar_$(basename "$0")"
 {
     libbar_json_icons["bluetooth"]="bluetooth"
     libbar_json_icons["input-keyboard"]="keyboard"
+    libbar_json_icons["input-gaming"]="gamepad"
     libbar_icons["bluetooth"]="󰂯"
     libbar_icons["input-keyboard"]=" "
+    libbar_icons["input-gaming"]=" "
 }
 
 libbar_getopts "$@"
