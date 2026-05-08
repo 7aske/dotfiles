@@ -4,7 +4,7 @@ _codeopen() {
   _arguments \
     '-h[print help information]' \
     '-g[list only dirty repos]' \
-    '-t[open types (default: term)]:type:(term vscode vim jetbrains idea pycharm clion studio goland webstorm rider)' \
+    '-t[open types (default: term)]:type:(term vscode agent cursor vim jetbrains idea pycharm clion studio goland webstorm rider)' \
     '-m[menus (default: fzf)]:menu:(dmenu rofi fzf)' \
 }
 

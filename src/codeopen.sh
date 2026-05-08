@@ -19,7 +19,7 @@ export FZF_DEFAULT_OPTS="
 --reverse --cycle
 "
 
-available_types=("term" "cursor" "vim" "vscode" "jetbrains" "idea" "pycharm" "clion" "studio" "goland" "webstorm" "rider")
+available_types=("term" "agent" "cursor" "vim" "vscode" "jetbrains" "idea" "pycharm" "clion" "studio" "goland" "webstorm" "rider")
 available_menus=("dmenu" "rofi" "fzf")
 
 _usage() {
@@ -128,11 +128,53 @@ _open_vscode() {
     else
         errmsg="vscodium: command not found\ncode-insiders: command not found\ncode: command not found"
         echo -e "$errmsg"
-        notify-send "codeopen" "$errmsg"
+        notify-send -i system-error "codeopen" "$errmsg"
         exit 1
     fi
     notify-send -i code "codeopen" "opening $PROJ"
     $CMD "$PROJ"
+}
+
+_open_cursor() {
+    _select_project
+    if [ -x "$(command -v cursor)" ]; then
+        CMD="cursor"
+    else
+        errmsg="cursor: command not found"
+        echo -e "$errmsg"
+        notify-send -i system-error "codeopen" "$errmsg"
+        exit 1
+    fi
+
+    notify-send -i code "codeopen" "opening $PROJ"
+    $CMD "$PROJ"
+}
+
+_open_agent() {
+    _select_project
+    local session_name
+
+    if [ -x "$(command -v agent)" ]; then
+        CMD="agent"
+    elif [ -x "$(command -v cursor-agent)" ]; then
+        CMD="cursor-agent"
+    else
+        errmsg="agent: comand not found\ncursor-agent: command not found"
+        echo -e "$errmsg"
+        notify-send -i system-error "codeopen" "$errmsg"
+        exit 1
+    fi
+
+    session_name="agent-$(basename "$PROJ")"
+
+    if tmux has-session -t "$session_name" 2>/dev/null; then
+        notify-send -i terminal "codeopen" "attaching to existing session for $PROJ"
+    else
+        notify-send -i terminal "codeopen" "opening $PROJ"
+        tmux new-session -d -s "$session_name" -c "$PROJ" agent || return 1
+    fi
+
+    $TERMINAL -d "$PROJ" -e tmux attach-session -t "$session_name"
 }
 
 _open_vim() {
@@ -145,7 +187,7 @@ _open_vim() {
     else
         errmsg="nvim: command not found\nnvim: command not found"
         echo -e "$errmsg"
-        notify-send "codeopen" "$errmsg"
+        notify-send -i system-error "codeopen" "$errmsg"
         exit 1
     fi
 
@@ -187,6 +229,8 @@ _open_lazygit() {
 
 case "$TYPE" in
     "term") _select_project; _open_term ;;
+    "cursor") _open_cursor ;;
+    "agent") _open_agent ;;
     "vscode") _open_vscode ;;
     "vim") _open_vim ;;
     "jetbrains") _open_jetbrains ;;

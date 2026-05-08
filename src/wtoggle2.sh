@@ -28,7 +28,7 @@ print_help() {
 	printf '               Negative values can be used as well. Default is 0,0\n'
 	printf ' -s <screen>   Screen identifier, as listed in xrandr. Falls back to primary screen.\n'
 	printf ' -t            Disable window toggle.\n'
-    printf ' -T            Use the terminal to launch the command - defaults to \$TERMINAL variable ('$TERMINAL').\n'
+    printf ' -T            Use the terminal to launch the command - defaults to $TERMINAL variable ('$TERMINAL').\n'
 	printf ' -v            Verbose, for debugging.\n'
 	printf ' -V            Print version information.\n'
 	printf ' -w            Hides the cursor and waits for keypress before closing the\n'
@@ -121,32 +121,7 @@ ensure_screen() {
 }
 
 get_focused_monitor() {
-    # Get the active window's geometry using xdotool
-    active_window=$(xdotool getactivewindow)
-    window_geometry=$(xdotool getwindowgeometry --shell "$active_window")
-
-    # Extract window position
-    window_x=$(echo "$window_geometry" | grep '^X=' | cut -d= -f2)
-    window_y=$(echo "$window_geometry" | grep '^Y=' | cut -d= -f2)
-
-    # Get monitor information from xrandr
-    monitor_info=$(xrandr --query | grep ' connected')
-
-    # Check which monitor the window belongs to
-    while IFS= read -r line; do
-        monitor_name=$(echo "$line" | awk '{print $1}')
-        monitor_geometry=$(echo "$line" | grep -o '[0-9]\+x[0-9]\++[0-9]\++[0-9]\+')
-        IFS='x+'
-        read -r monitor_width monitor_height monitor_x monitor_y <<< "$monitor_geometry"
-
-        if (( window_x >= monitor_x && window_x < monitor_x + monitor_width )) &&
-           (( window_y >= monitor_y && window_y < monitor_y + monitor_height )); then
-            echo "$monitor_name"
-            return
-        fi
-    done <<< "$monitor_info"
-
-	xrandr | sed -n 's/^\(\S\+\).*primary.*$/\1/p'
+    i3-msg -t get_workspaces | jq -r '.[] | select(.focused) | .output'
 }
 
 parse_dimensions() {
@@ -223,7 +198,7 @@ start_and_save_wid_and_pid() {
 	fi
 
 	debug 'Launching command' "$command"
-	window_id=$(printf '0x%08x\n' "$(i3-msg -q "exec --no-startup-id \"$command\"" && i3-msg -t subscribe '[ "window" ]' | sed -n 's/.*"window":\([0-9]\+\).*/\1/p')")
+	window_id=$(printf '0x%08x\n' "$(i3-msg -q "exec --no-startup-id \"$command\"" && i3-msg -t subscribe '[ "window" ]' | jq -r 'select(.change == "new" and .container.window_properties.class != "i3-scratchpad") | .container.window' | head -n1)")
 	if [ -z "$window_id" ]; then
 		printf 'Can not find window with id %s\n' "$window_id" >&2
 		rm -f "$wid_file"
