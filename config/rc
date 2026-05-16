@@ -264,3 +264,25 @@ if [ -n "$BASH" ]; then
     # bind 'set keymap vi-insert'
 
 fi
+
+function tmux-agent() {
+    local cmd
+    local session_name
+
+    cmd="$1"
+    session_name="agent-$(basename "$PWD")"
+    
+    case "$cmd" in
+        "a"|"attach") 
+            tmux attach-session -t "$session_name" || return 1
+            ;;
+        *) 
+            tmux new-session -d -s "$session_name" -c "$PWD" agent || return 1
+            printf "Created tmux session '%s' for agent\nAttach with tmux -a '%s' or tmux-agent a\n" "$session_name" "$session_name"
+            ;;
+    esac
+}
+
+function ask() {
+    agent --sandbox enabled --trust --print --mode ask "$@" | glow
+}
