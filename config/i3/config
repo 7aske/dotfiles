@@ -40,10 +40,14 @@ set $gaps_outer  0
 set $border_size 2
 set $status_cmd  /usr/bin/i3status-rs
 set $codeopen_menu rofi
+set $agent cursor-agent
+set $chat https://claude.ai
 
 # set terminal commands
 set $terminal   $TERMINAL
+set $temrminal_floating $TERMINAL -c tmux_floating
 set $terminal2  kitty
+set $terminal2_floating kitty --override background_opacity=1 --class tmux_floating
 
 
 # sound&music                _  ___                       _
@@ -145,8 +149,8 @@ bindsym $mod+Shift+Mod1+n   exec --no-startup-id dunst_reload
 bindsym $mod+n              exec --no-startup-id dunstctl context
 bindsym $mod+Ctrl+n         exec --no-startup-id dunstctl close
 bindsym $mod+Shift+n        exec --no-startup-id dunstctl history-pop
-bindsym $mod+semicolon      exec --no-startup-id tmux list-sessions | cut -d: -f1 | rofi -dmenu -p session | xargs -I% -r $terminal -c tmux_floating -e tmux a -t "%"
-bindsym $mod+Mod1+semicolon exec --no-startup-id rofi -dmenu -p "new session" | xargs -I% -r $terminal -c tmux_floating tmux new -s "%"
+bindsym $mod+semicolon      exec --no-startup-id tmux list-sessions | cut -d: -f1 | rofi -dmenu -p session | xargs -I% -r $terminal2_floating tmux a -t "%"
+bindsym $mod+Mod1+semicolon exec --no-startup-id rofi -dmenu -p "new session" | xargs -I% -r $terminal2_floating tmux new -s "%"
 
 # 7aske-scripts
 bindsym $mod+F10           exec --no-startup-id echo 0 | dmenu -p 'screen: ' -fn '$dmenu_font' | xargs screencam -n
@@ -219,8 +223,11 @@ bindsym $mod+End  exec --no-startup-id idasen sit
 bindsym $mod+y       exec --no-startup-id screenlayout
 bindsym $mod+Shift+y exec --no-startup-id screenlayout layout.sh
 
+bindsym $mod+i exec --no-startup-id wtoggle2 -d 75%x75% "$terminal2_floating fzf-agent"
+bindsym $mod+Shift+i exec --no-startup-id wtoggle2 -d 75%x75% "$browser --app=$chat"
+
 # layout toggling mode
-set $mode_codeopen codeopen: (t)erm (C)ursor (n)vim (v)scode (i)dea (c)lion (g)oland lazy(G)it (p)ycharm (w)ebstorm (s)studio (r)ider (j)etbrains
+set $mode_codeopen codeopen: (t)erm (C)ursor (a)gent (n)vim (v)scode (i)dea (c)lion (g)oland lazy(G)it (p)ycharm (w)ebstorm (s)studio (r)ider (j)etbrains
 bindsym $mod+o mode "$mode_codeopen"
 mode "$mode_codeopen" {
     bindsym t       exec --no-startup-id codeopen -m $codeopen_menu -t term;      mode default
@@ -229,6 +236,7 @@ mode "$mode_codeopen" {
     bindsym i       exec --no-startup-id codeopen -m $codeopen_menu -t idea;      mode default
     bindsym c       exec --no-startup-id codeopen -m $codeopen_menu -t clion;     mode default
     bindsym Shift+c exec --no-startup-id codeopen -m $codeopen_menu -t cursor;    mode default
+    bindsym a       exec --no-startup-id codeopen -m $codeopen_menu -t agent;     mode default
     bindsym g       exec --no-startup-id codeopen -m $codeopen_menu -t goland;    mode default
     bindsym p       exec --no-startup-id codeopen -m $codeopen_menu -t pycharm;   mode default
     bindsym w       exec --no-startup-id codeopen -m $codeopen_menu -t webstorm;  mode default
@@ -242,13 +250,14 @@ mode "$mode_codeopen" {
     bindsym Escape mode default
 }
 
-set $mode_ide open: (i)dea (C)ursor (c)lion (g)oland (p)ycharm (w)ebstorm (s)studio (r)ider (d)atagrip
+set $mode_ide open: (i)dea (C)ursor (a)gent (c)lion (g)oland (p)ycharm (w)ebstorm (s)studio (r)ider (d)atagrip
 bindsym $mod+Shift+o mode "$mode_ide"
 mode "$mode_ide" {
     # set default desktop layout <stacking|tabbed>
     bindsym v       exec --no-startup-id vscodium; mode default
     bindsym i       exec --no-startup-id idea;     mode default
     bindsym Shift+c exec --no-startup-id cursor;   mode default
+    bindsym a       exec --no-startup-id kitty -d ~/.agent $agent; mode default
     bindsym c       exec --no-startup-id clion;    mode default
     bindsym g       exec --no-startup-id goland;   mode default
     bindsym p       exec --no-startup-id pycharm;  mode default
@@ -593,9 +602,9 @@ bindsym $mod+F4 exec --no-startup-id i3-layout-manager
 
 # create and move windows to arbitrarily named workspaces
 # 7aske-scripts
-bindsym $mod+i       exec --no-startup-id i3wss
-bindsym $mod+Ctrl+i  exec --no-startup-id i3wss move
-bindsym $mod+Shift+i exec --no-startup-id i3wss move-switch
+#bindsym $mod+i       exec --no-startup-id i3wss
+#bindsym $mod+Ctrl+i  exec --no-startup-id i3wss move
+#bindsym $mod+Shift+i exec --no-startup-id i3wss move-switch
 bindsym $mod+s       exec --no-startup-id "xinp -f $dmenu_font -l 1 -p 'workspace: ' -F 'workspace %s' --i3"
 bindsym $mod+Ctrl+s  exec --no-startup-id "xinp -f $dmenu_font -l 1 -p 'workspace: ' -F 'move container to workspace %s' --i3"
 bindsym $mod+Shift+s exec --no-startup-id "xinp -f $dmenu_font -l 1 -p 'workspace: ' -F 'move container to workspace %s, workspace %s' --i3"
