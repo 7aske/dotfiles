@@ -198,7 +198,7 @@ start_and_save_wid_and_pid() {
 	fi
 
 	debug 'Launching command' "$command"
-	window_id=$(printf '0x%08x\n' "$(i3-msg -q "exec --no-startup-id \"$command\"" && i3-msg -t subscribe '[ "window" ]' | jq -r 'select(.change == "new" and .container.window_properties.class != "i3-scratchpad") | .container.window' | head -n1)")
+	window_id=$(printf '0x%08x\n' "$(i3-msg -q "exec --no-startup-id \"$command\"" && i3-msg -t subscribe '[ "window" ]' | jq -r '.container.window')")
 	if [ -z "$window_id" ]; then
 		printf 'Can not find window with id %s\n' "$window_id" >&2
 		rm -f "$wid_file"
