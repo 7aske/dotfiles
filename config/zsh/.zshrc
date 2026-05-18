@@ -137,6 +137,17 @@ fzf-cd() {
 }
 bindkey -s '^f' 'fzf-cd\n'
 
+function _as_widget() {
+  local cmd
+  cmd=$(alias | fzf --query="$BUFFER" --no-info --no-border --highlight-line \
+    --color='bg+:#3c3836,hl:yellow,hl+:yellow' --height 10 \
+    | cut -d= -f2- | tr -d "'")
+  [[ -n "$cmd" ]] && BUFFER="$cmd" && CURSOR=${#BUFFER}
+  zle redisplay
+}
+zle -N _as_widget
+bindkey '^A' _as_widget
+
 _kb_fzf_rg() { fzf-rg; }
 zle -N _kb_fzf_rg
 bindkey '^s' _kb_fzf_rg
@@ -162,8 +173,6 @@ bindkey '^v' _kb_vimcfg
 bindkey '^@' autosuggest-accept
 # handled by fzf
 #bindkey '^r' history-incremental-search-backward
-
-alias dockerhost="export DOCKER_HOST=\$(docker context inspect \$(docker context show) | jq -r '.[0].Endpoints.docker.Host')"
 
 # pidswallow
 [ -n "$DISPLAY" ]  && command -v xdo >/dev/null 2>&1 && xdo id > /tmp/term-wid-"$$"

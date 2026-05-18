@@ -81,6 +81,7 @@ alias lclb='builtin cd $HOME/.local/bin&& ls'
 alias tmp='builtin cd $HOME/.local/tmp&& ls'
 alias vicfg='vimcfg'
 alias srcvenv='source venv/bin/activate'
+alias dockerhost="export DOCKER_HOST=\$(docker context inspect \$(docker context show) | jq -r '.[0].Endpoints.docker.Host')"
 # misc
 alias tmux='tmux -f "$HOME/.config/tmux/.tmux.conf"'
 # ls
