@@ -5,6 +5,8 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=check-deps-lib.sh
+. "$ROOT/check-deps-lib.sh"
 CONF="${ARCH_DEPS_CONF:-$ROOT/arch-deps.conf}"
 INSTALL=false
 QUIET=false
@@ -124,6 +126,7 @@ declare -a MISSING_REPO=()
 declare -a MISSING_AUR=()
 declare -a LINES=()
 seen_pkg=()
+missing_idx=0
 
 while IFS= read -r line || [ -n "$line" ]; do
 	line="${line%%#*}"
@@ -154,19 +157,20 @@ while IFS= read -r line || [ -n "$line" ]; do
 
 	if $installed; then
 		$LIST_INSTALLED || continue
-		status=" [installed]"
+		LINES+=("$(_format_arch_dep_line 0 "$pkg" "$cmd" "$desc" 0 1)")
 	else
 		if $PKG_REPO; then
 			MISSING_REPO+=("$PKG_NAME")
 		else
 			MISSING_AUR+=("$PKG_NAME")
 		fi
-		status=""
+		missing_idx=$((missing_idx + 1))
+		MISSING_ORDER+=("$PKG_NAME")
+		aur_flag=0
+		$PKG_REPO || aur_flag=1
+		LINES+=("$(_format_arch_dep_line "$missing_idx" "$pkg" "$cmd" "$desc" \
+			"$aur_flag" 0)")
 	fi
-
-	repo_tag=""
-	$PKG_REPO || repo_tag=" [AUR]"
-	LINES+=("    ${pkg} [${cmd}]: ${desc}${repo_tag}${status}")
 done <"$CONF"
 
 missing_count=$((${#MISSING_REPO[@]} + ${#MISSING_AUR[@]}))
@@ -180,18 +184,18 @@ if [ "$missing_count" -eq 0 ]; then
 	exit 0
 fi
 
-echo "Optional dependencies for dotfiles:"
-printf '%s\n' "${LINES[@]}"
+_deps_print_heading 'Optional dependencies for dotfiles:'
+printf '%b\n' "${LINES[@]}"
 
 echo
-echo "$missing_count package(s) from this list are not installed."
+_deps_print_summary "$missing_count"
 if ! $HAS_GUI; then
 	echo "(GUI-only dependencies omitted on this headless host.)"
 fi
 
 _install_repo() {
 	[ ${#MISSING_REPO[@]} -eq 0 ] && return 0
-	echo "Installing: ${MISSING_REPO[*]}"
+	printf 'Installing: %b\n' "$(_color_pkg_names "${MISSING_REPO[@]}")"
 	if [ -n "${DRYRUN:-}" ] && [ "$DRYRUN" != "0" ]; then
 		echo "  (dry-run) sudo pacman -S --needed --noconfirm ${MISSING_REPO[*]}"
 		return 0
@@ -205,7 +209,7 @@ _install_aur() {
 		echo "AUR packages not installed (install yay to use --install): ${MISSING_AUR[*]}" >&2
 		return 1
 	fi
-	echo "Installing (AUR): ${MISSING_AUR[*]}"
+	printf 'Installing %s(AUR)%s: %b\n' "$C_AUR" "$C0" "$(_color_pkg_names "${MISSING_AUR[@]}")"
 	if [ -n "${DRYRUN:-}" ] && [ "$DRYRUN" != "0" ]; then
 		echo "  (dry-run) yay -S --needed --noconfirm ${MISSING_AUR[*]}"
 		return 0
@@ -229,6 +233,9 @@ read -r reply
 case "$reply" in
 	[yY]|[yY][eE][sS])
 		INSTALL=true
+		_prompt_ignore_pkgs
+		_filter_ignored MISSING_REPO
+		_filter_ignored MISSING_AUR
 		_install_repo
 		_install_aur
 		;;

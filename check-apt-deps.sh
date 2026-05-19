@@ -5,6 +5,8 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=check-deps-lib.sh
+. "$ROOT/check-deps-lib.sh"
 CONF="${APT_DEPS_CONF:-$ROOT/apt-deps.conf}"
 INSTALL=false
 QUIET=false
@@ -114,6 +116,7 @@ _has_gui && HAS_GUI=true
 declare -a MISSING_PKGS=()
 declare -a LINES=()
 seen_pkg=()
+missing_idx=0
 
 while IFS= read -r line || [ -n "$line" ]; do
 	line="${line%%#*}"
@@ -142,13 +145,13 @@ while IFS= read -r line || [ -n "$line" ]; do
 
 	if $installed; then
 		$LIST_INSTALLED || continue
-		status=" [installed]"
+		LINES+=("$(_format_apt_dep_line 0 "$pkg" "$cmd" "$desc" 1)")
 	else
 		MISSING_PKGS+=("$pkg")
-		status=""
+		missing_idx=$((missing_idx + 1))
+		MISSING_ORDER+=("$pkg")
+		LINES+=("$(_format_apt_dep_line "$missing_idx" "$pkg" "$cmd" "$desc" 0)")
 	fi
-
-	LINES+=("    ${pkg} [${cmd}]: ${desc}${status}")
 done <"$CONF"
 
 missing_count=${#MISSING_PKGS[@]}
@@ -162,18 +165,18 @@ if [ "$missing_count" -eq 0 ]; then
 	exit 0
 fi
 
-echo "Optional dependencies for dotfiles:"
-printf '%s\n' "${LINES[@]}"
+_deps_print_heading 'Optional dependencies for dotfiles:'
+printf '%b\n' "${LINES[@]}"
 
 echo
-echo "$missing_count package(s) from this list are not installed."
+_deps_print_summary "$missing_count"
 if ! $HAS_GUI; then
 	echo "(GUI-only dependencies omitted on this headless host.)"
 fi
 
 _install_pkgs() {
 	[ ${#MISSING_PKGS[@]} -eq 0 ] && return 0
-	echo "Installing: ${MISSING_PKGS[*]}"
+	printf 'Installing: %b\n' "$(_color_pkg_names "${MISSING_PKGS[@]}")"
 	if [ -n "${DRYRUN:-}" ] && [ "$DRYRUN" != "0" ]; then
 		echo "  (dry-run) sudo apt-get install -y ${MISSING_PKGS[*]}"
 		return 0
@@ -197,6 +200,8 @@ read -r reply
 case "$reply" in
 	[yY]|[yY][eE][sS])
 		INSTALL=true
+		_prompt_ignore_pkgs
+		_filter_ignored MISSING_PKGS
 		_install_pkgs
 		;;
 	*)
