@@ -152,7 +152,19 @@ pacman-hooks:
 
 .PHONY: default install dotfiles-install
 
-install: scripts-install dotfiles-install completions-install
+install: scripts-install dotfiles-install completions-install check-deps
+
+# check-deps.sh dispatches to check-arch-deps.sh or check-apt-deps.sh via /etc/os-release
+
+.PHONY: check-deps check-arch-deps install-deps
+
+check-deps:
+	@DRYRUN=$(DRYRUN) ./check-deps.sh --non-interactive
+
+check-arch-deps: check-deps
+
+install-deps:
+	@DRYRUN=$(DRYRUN) ./check-deps.sh --install
 
 completions-install: \
 	$(COMPLETIONS)
