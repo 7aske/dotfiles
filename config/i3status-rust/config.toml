@@ -39,7 +39,7 @@ bat = [
 ]
 bell-slash = ""
 bat_not_available = "󱉞"
-update = "󰏔"
+update = "󰮯"
 music_play = " "
 music_pause = " "
 music_next = " "
@@ -118,30 +118,6 @@ cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/klipyper"
 [[block.click]]
 button = "right"
 cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/klipyper"
-
-#[[block]]
-#block = "custom"
-#command = "~/.local/bin/statusbar/klipper -j"
-#interval = 60
-#json = true
-#format =" $icon $text"
-#hide_when_empty = true
-#signal=9
-#[[block.click]]
-#button = "left"
-#cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/klipper -j"
-#sync = true
-#update = true
-#[[block.click]]
-#button = "middle"
-#cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/klipper -j"
-#sync = true
-#update = true
-#[[block.click]]
-#button = "right"
-#cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/klipper -j"
-#sync = true
-#update = true
 
 [[block]]
 block = "custom"
@@ -254,27 +230,6 @@ cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/disk -j /"
 sync = true
 update = true
 
-#[[block]]
-#block = "custom"
-#command = "~/.local/bin/statusbar/newsboat -j"
-#interval = 60
-#json = true
-#[[block.click]]
-#button = "left"
-#cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/newsboat -j"
-#sync = true
-#update = true
-#[[block.click]]
-#button = "middle"
-#cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/newsboat -j"
-#sync = true
-#update = true
-#[[block.click]]
-#button = "right"
-#cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/newsboat -j"
-#sync = true
-#update = true
-
 [[block]]
 block = "taskwarrior"
 interval = 60
@@ -297,7 +252,7 @@ cmd = "wtoggle2 -d60%x60% -T taskwarrior-tui"
 [[block]]
 block = "custom"
 command = "~/.local/bin/statusbar/cgs -j"
-interval = 60
+interval = 600
 json = true
 hide_when_empty = true
 signal = 7
@@ -320,7 +275,7 @@ update = true
 [[block]]
 block = "packages"
 package_manager = ["pacman", "aur"]
-format = " $icon $total.eng(w:2) "
+format = "$icon $total.eng(w:2)"
 format_up_to_date = ""
 error_interval = 300
 aur_command = "yay -Qua"
@@ -341,15 +296,6 @@ button = "right"
 cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/packages"
 sync = true
 update = true
-
-# To trigger notifications
-[[block]]
-block = "custom"
-interval = 60
-command = "~/.local/bin/statusbar/packages -j"
-format = ""
-hide_when_empty = true
-signal = 8
 
 [[block]]
 block = "custom"
@@ -400,7 +346,7 @@ update = true
 
 [[block]]
 block = "custom"
-interval = 60
+interval = 300
 command = "~/.local/bin/statusbar/mx -j"
 signal = 10
 json = true
@@ -521,15 +467,15 @@ button = "right"
 cmd = "dunstctl close-all"
 
 [[block]]
-block = "custom"
-command = "~/.local/bin/statusbar/clock"
+block = "time"
 interval = 1
+format = " $timestamp.datetime(f:'%H:%M:%S') "
 [[block.click]]
 button = "left"
-cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/clock"
+cmd = "notify-send -i date 'Current date' \"$(date +'%A %d %B %Y')\""
 [[block.click]]
 button = "middle"
-cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/clock"
+action = "toggle_format"
 [[block.click]]
 button = "right"
 cmd = "wtoggle2 -T calcurse"

@@ -18,15 +18,7 @@ libbar_required_commands yup notify-send i3-msg dunstctl zenity
     libbar_json_icons["packages"]="update"
 }
 
-tempfile="/tmp/yup_prev"
 count="$(yup -c)"
-
-prev_count="$(cat "$tempfile" || echo 0)"
-
-if [ "$prev_count" -lt "$count" ]; then
-	notify-send -i package -u low "updates available" "$(yup -l)"
-fi
-echo "$count" > "$tempfile"
 
 do_update(){
 	i3-msg "exec --no-startup-id setsid -f $TERMINAL -c floating -e yup" 2>/dev/null 1>/dev/null
@@ -46,7 +38,7 @@ case "$BLOCK_BUTTON" in
 		else 
 			notify-send -i package -u low "updates available" "$(yup -l)"
 		fi ;;
-	2) libbar_toggle_switch 8 ;;
+	2) libbar_toggle_switch 1 ;;
 	3) do_update ;;
 esac 2>/dev/null 1>/dev/null
 
