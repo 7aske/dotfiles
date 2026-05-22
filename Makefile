@@ -16,9 +16,12 @@ SRC_DIR          := src
 STATUS_DIR       := statusbar
 SYSTEMD_DIR      := systemd
 
-SYSTEMD_OUTDIR   := ~/.config/systemd/user
+SYSTEMD_OUTDIR   := $(HOME)/.config/systemd/user
 PACMAN_HOOKS_SRC := etc/pacman.d/hooks
 PACMAN_HOOKS_DST := /etc/pacman.d/hooks
+
+LOCALSEND_HOOKS_SRC := src/localsend/hooks
+LOCALSEND_HOOKS_DST := $(HOME)/.config/localsend/hooks
 
 
 # ----------------------------
@@ -49,11 +52,27 @@ scripts-install:
 		shift 2; \
 	done
 
-scripts-uninstall:
+scripts-uninstall: localsend-hooks-uninstall
 	@set -- $(SCRIPT_PAIRS); \
 	while [ $$# -gt 0 ]; do \
 		$(RUN) ./uninstall.sh $$1 $$2; \
 		shift 2; \
+	done
+
+.PHONY: localsend-hooks localsend-hooks-uninstall
+localsend-hooks:
+	@mkdir -p "$(LOCALSEND_HOOKS_DST)"
+	@for f in $(LOCALSEND_HOOKS_SRC)/*; do \
+		[ -f "$$f" ] || continue; \
+		$(RUN) cp -v "$$f" "$(LOCALSEND_HOOKS_DST)/$$(basename "$$f")"; \
+		$(RUN) chmod u+x "$(LOCALSEND_HOOKS_DST)/$$(basename "$$f")"; \
+	done
+
+localsend-hooks-uninstall:
+	@for f in $(LOCALSEND_HOOKS_SRC)/*; do \
+		[ -f "$$f" ] || continue; \
+		h="$(LOCALSEND_HOOKS_DST)/$$(basename "$$f")"; \
+		[ -f "$$h" ] && $(RUN) rm -v "$$h"; \
 	done
 
 COMPLETIONS := rgs
@@ -152,7 +171,7 @@ pacman-hooks:
 
 .PHONY: default install dotfiles-install
 
-install: scripts-install dotfiles-install completions-install check-deps
+install: scripts-install localsend-hooks dotfiles-install completions-install check-deps
 
 # check-deps.sh dispatches to check-arch-deps.sh or check-apt-deps.sh via /etc/os-release
 

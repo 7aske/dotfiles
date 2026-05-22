@@ -1,6 +1,25 @@
 #!/usr/bin/env bash
+#
+# Watches LocalSend logs and shows desktop notifications for received files.
+#
+# Hooks (~/.localsend/hooks)
+# -------------------------
+# After a file is saved, every executable in ~/.localsend/hooks is run in the
+# background. Install example hooks with: make localsend-hooks
+#
+# Each hook is invoked as:
+#   hook <full_path>
+#
+#   $1  absolute path to the saved file
+#
+# Hooks should exit 0 when they intentionally skip a file (e.g. wrong extension).
+# Non-zero exit codes are logged but do not affect other hooks or notifications.
+# Only the hook decides whether a file is relevant — all hooks are always called.
+#
+# Example: src/localsend/hooks/strava-upload.sh (credentials in ~/.strava)
 
 LOCALSEND_FILE="/tmp/localsend"
+LOCALSEND_HOOKS_DIR="${HOME}/.config/localsend/hooks"
 LCKFILE="/tmp/${0##*/}.lck"
 PIDFILE="/tmp/${0##*/}.pid"
 
@@ -17,6 +36,22 @@ _kill_existing_instance() {
         kill -TERM -- -"$(cat "$PIDFILE")"
     fi
     exit 0
+}
+
+_run_localsend_hooks() {
+    local file_path=$1
+    local hook
+
+    [ -d "$LOCALSEND_HOOKS_DIR" ] || return 0
+
+    for hook in "$LOCALSEND_HOOKS_DIR"/*; do
+        [ -f "$hook" ] && [ -x "$hook" ] || continue
+        (
+            if ! "$hook" "$file_path"; then
+                echo "Hook failed (${hook##*/}): ${file_path}" >&2
+            fi
+        ) &
+    done
 }
 
 while getopts "kh" opt; do
@@ -62,6 +97,7 @@ while IFS= read -r line; do
             print substr(a[2], 1, length(a[2])-1)
         }')"
         echo "Received file: $file_name"
+        _run_localsend_hooks "${localsend_dest_dir}/${file_name}"
 
         action="$(notify-send -u normal -i localsend_app "LocalSend" "Received file: $file_name" -A "folder=Open folder($localsend_dest_dir)" -A "file=Open file($file_name)")"
         if [[ "$action" == "folder" ]]; then
