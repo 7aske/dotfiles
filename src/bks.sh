@@ -27,4 +27,11 @@ if [ -z "$SELECTED_URL" ]; then
     exit 1
 fi
 
-"$BROWSER" "$SELECTED_URL" &>/dev/null
+FLAGS="--new-window"
+window_pid="$(xdotool getactivewindow getwindowpid)"
+
+if [ "$BROWSER" = "$(cat /proc/"$window_pid"/comm)" ]; then
+    FLAGS=""
+fi
+
+"$BROWSER" $FLAGS "$SELECTED_URL" &>/dev/null
