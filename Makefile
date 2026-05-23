@@ -93,7 +93,7 @@ DOTFILES := \
 
 .PHONY: $(DOTFILES)
 $(DOTFILES):
-	$(RUN) ./mklink $@
+	$(RUN) ./util/mklink.sh $@
 
 
 # ----------------------------
@@ -101,17 +101,17 @@ $(DOTFILES):
 # ----------------------------
 
 tmux:
-	$(RUN) ./mklink tmux
+	$(RUN) ./util/mklink.sh tmux
 	$(RUN) ln -sf "${HOME}/.config/tmux/.tmux.conf" "${HOME}/.tmux.conf"
 
 vscode:
 	$(RUN) mkdir -p "${HOME}/.config/VSCodium/User"
-	$(RUN) ./mklink "VSCodium/User/settings.json"
-	$(RUN) ./mklink "VSCodium/User/keybindings.json"
+	$(RUN) ./util/mklink.sh "VSCodium/User/settings.json"
+	$(RUN) ./util/mklink.sh "VSCodium/User/keybindings.json"
 	$(RUN) mkdir -p "${HOME}/.config/Code/User"
-	$(RUN) ./mklink "Code/User/settings.json"
-	$(RUN) ./mklink "Code/User/keybindings.json"
-	$(RUN) ./mklink "Code/User/init.vim"
+	$(RUN) ./util/mklink.sh "Code/User/settings.json"
+	$(RUN) ./util/mklink.sh "Code/User/keybindings.json"
+	$(RUN) ./util/mklink.sh "Code/User/init.vim"
 
 VSCODE_EXTENSIONS := arcticicestudio.nord-visual-studio-code \
 	github.copilot \
@@ -127,7 +127,7 @@ vscode-ext:
 	done
 
 zsh:
-	$(RUN) ./mklink zsh
+	$(RUN) ./util/mklink.sh zsh
 	$(RUN) mkdir -p "${HOME}/.cache/zsh"
 	$(RUN) ln -sf "${HOME}/.config/zsh/.zshrc" "${HOME}/.zshrc"
 
@@ -149,7 +149,7 @@ SOURCES := profile xprofile bashrc
 
 .PHONY: $(SOURCES)
 $(SOURCES):
-	$(RUN) ./mksource .$@
+	$(RUN) ./util/mksource.sh .$@
 
 
 # ----------------------------
@@ -173,7 +173,7 @@ pacman-hooks:
 
 install: scripts-install localsend-hooks dotfiles-install completions-install check-deps
 
-# check-deps.sh dispatches to check-arch-deps.sh or check-apt-deps.sh via /etc/os-release
+# check-deps.sh dispatches to .deps/check-arch-deps.sh or .deps/check-apt-deps.sh via /etc/os-release
 
 .PHONY: check-deps check-arch-deps install-deps
 

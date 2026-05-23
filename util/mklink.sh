@@ -2,9 +2,11 @@
 
 prog="$(basename $0 .sh)"
 
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
 [ ! -e "$HOME/.config" ] && mkdir "$HOME/.config"
 
-src="$(pwd)/config/$1"
+src="$REPO_ROOT/config/$1"
 dest="$HOME/.config/$1"
 
 if [ ! -e "$(dirname $dest)" ]; then
