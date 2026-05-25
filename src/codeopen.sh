@@ -154,12 +154,10 @@ _open_agent() {
     _select_project
     local session_name
 
-    if [ -x "$(command -v agent)" ]; then
-        CMD="agent"
-    elif [ -x "$(command -v cursor-agent)" ]; then
-        CMD="cursor-agent"
+    if [ -x "$(command -v $AGENT)" ]; then
+        CMD="$AGENT"
     else
-        errmsg="agent: comand not found\ncursor-agent: command not found"
+        errmsg="$AGENT: comand not found"
         echo -e "$errmsg"
         notify-send -i system-error "codeopen" "$errmsg"
         exit 1
@@ -171,7 +169,7 @@ _open_agent() {
         notify-send -i terminal "codeopen" "attaching to existing session for $PROJ"
     else
         notify-send -i terminal "codeopen" "opening $PROJ"
-        tmux new-session -d -s "$session_name" -c "$PROJ" agent || return 1
+        tmux new-session -d -s "$session_name" -c "$PROJ" $AGENT || return 1
     fi
 
     $TERMINAL -d "$PROJ" -e tmux attach-session -t "$session_name"

@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
 
-agent="agent"
-
 sessions="$({ tmux ls -F#S; echo 'agent-default'; } | grep --color=none 'agent-' | sort | uniq)"
 
 # if only one session is found, attach to it
@@ -16,7 +14,7 @@ if [ -z "$session" ]; then
 fi
 
 if ! tmux has-session -t "$session" 2>/dev/null; then
-    tmux new -s "$session" -d -c "$HOME/.agent" "$agent"
+    tmux new -s "$session" -d -c "$HOME/.agent" "$AGENT"
 fi
 
 tmux a -t "$session"

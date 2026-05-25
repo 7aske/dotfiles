@@ -284,6 +284,13 @@ function tmux-agent() {
     esac
 }
 
+function agent() {
+    $AGENT "$*"
+}
+
 function ask() {
-    agent --sandbox enabled --trust --print --mode ask "$@" | glow
+    case $AGENT in
+        claude) claude --print "$*"  | glow ;;
+        cursor-agent) cursor-agent --sandbox enabled --trust --print --mode ask "$*" | glow ;;
+    esac
 }
