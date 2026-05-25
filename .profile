@@ -14,6 +14,8 @@ export PLAYER="spotify"
 export TERMINAL="st"
 export TERMINAL_LAUNCH="$TERMINAL -e"
 export MAIL="thunderbird"
+export AGENT="cursor"
+export CHAT="claude-desktop"
 
 # task
 export TASKDATA="$HOME/.config/task"

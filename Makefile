@@ -16,9 +16,12 @@ SRC_DIR          := src
 STATUS_DIR       := statusbar
 SYSTEMD_DIR      := systemd
 
-SYSTEMD_OUTDIR   := ~/.config/systemd/user
+SYSTEMD_OUTDIR   := $(HOME)/.config/systemd/user
 PACMAN_HOOKS_SRC := etc/pacman.d/hooks
 PACMAN_HOOKS_DST := /etc/pacman.d/hooks
+
+LOCALSEND_HOOKS_SRC := src/localsend/hooks
+LOCALSEND_HOOKS_DST := $(HOME)/.config/localsend/hooks
 
 
 # ----------------------------
@@ -49,11 +52,27 @@ scripts-install:
 		shift 2; \
 	done
 
-scripts-uninstall:
+scripts-uninstall: localsend-hooks-uninstall
 	@set -- $(SCRIPT_PAIRS); \
 	while [ $$# -gt 0 ]; do \
 		$(RUN) ./uninstall.sh $$1 $$2; \
 		shift 2; \
+	done
+
+.PHONY: localsend-hooks localsend-hooks-uninstall
+localsend-hooks:
+	@mkdir -p "$(LOCALSEND_HOOKS_DST)"
+	@for f in $(LOCALSEND_HOOKS_SRC)/*; do \
+		[ -f "$$f" ] || continue; \
+		$(RUN) cp -v "$$f" "$(LOCALSEND_HOOKS_DST)/$$(basename "$$f")"; \
+		$(RUN) chmod u+x "$(LOCALSEND_HOOKS_DST)/$$(basename "$$f")"; \
+	done
+
+localsend-hooks-uninstall:
+	@for f in $(LOCALSEND_HOOKS_SRC)/*; do \
+		[ -f "$$f" ] || continue; \
+		h="$(LOCALSEND_HOOKS_DST)/$$(basename "$$f")"; \
+		[ -f "$$h" ] && $(RUN) rm -v "$$h"; \
 	done
 
 COMPLETIONS := rgs
@@ -74,7 +93,7 @@ DOTFILES := \
 
 .PHONY: $(DOTFILES)
 $(DOTFILES):
-	$(RUN) ./mklink $@
+	$(RUN) ./util/mklink.sh $@
 
 
 # ----------------------------
@@ -82,17 +101,17 @@ $(DOTFILES):
 # ----------------------------
 
 tmux:
-	$(RUN) ./mklink tmux
+	$(RUN) ./util/mklink.sh tmux
 	$(RUN) ln -sf "${HOME}/.config/tmux/.tmux.conf" "${HOME}/.tmux.conf"
 
 vscode:
 	$(RUN) mkdir -p "${HOME}/.config/VSCodium/User"
-	$(RUN) ./mklink "VSCodium/User/settings.json"
-	$(RUN) ./mklink "VSCodium/User/keybindings.json"
+	$(RUN) ./util/mklink.sh "VSCodium/User/settings.json"
+	$(RUN) ./util/mklink.sh "VSCodium/User/keybindings.json"
 	$(RUN) mkdir -p "${HOME}/.config/Code/User"
-	$(RUN) ./mklink "Code/User/settings.json"
-	$(RUN) ./mklink "Code/User/keybindings.json"
-	$(RUN) ./mklink "Code/User/init.vim"
+	$(RUN) ./util/mklink.sh "Code/User/settings.json"
+	$(RUN) ./util/mklink.sh "Code/User/keybindings.json"
+	$(RUN) ./util/mklink.sh "Code/User/init.vim"
 
 VSCODE_EXTENSIONS := arcticicestudio.nord-visual-studio-code \
 	github.copilot \
@@ -108,7 +127,7 @@ vscode-ext:
 	done
 
 zsh:
-	$(RUN) ./mklink zsh
+	$(RUN) ./util/mklink.sh zsh
 	$(RUN) mkdir -p "${HOME}/.cache/zsh"
 	$(RUN) ln -sf "${HOME}/.config/zsh/.zshrc" "${HOME}/.zshrc"
 
@@ -130,7 +149,7 @@ SOURCES := profile xprofile bashrc
 
 .PHONY: $(SOURCES)
 $(SOURCES):
-	$(RUN) ./mksource .$@
+	$(RUN) ./util/mksource.sh .$@
 
 
 # ----------------------------
@@ -152,9 +171,9 @@ pacman-hooks:
 
 .PHONY: default install dotfiles-install
 
-install: scripts-install dotfiles-install completions-install check-deps
+install: scripts-install localsend-hooks dotfiles-install completions-install check-deps
 
-# check-deps.sh dispatches to check-arch-deps.sh or check-apt-deps.sh via /etc/os-release
+# check-deps.sh dispatches to .deps/check-arch-deps.sh or .deps/check-apt-deps.sh via /etc/os-release
 
 .PHONY: check-deps check-arch-deps install-deps
 
