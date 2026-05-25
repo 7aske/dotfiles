@@ -2,7 +2,14 @@
 
 agent="agent"
 
-session="$({ tmux ls -F#S; echo 'agent-default'; } | grep --color=none 'agent-' | sort | uniq | fzf --prompt 'Agent session: ')"
+sessions="$({ tmux ls -F#S; echo 'agent-default'; } | grep --color=none 'agent-' | sort | uniq)"
+
+# if only one session is found, attach to it
+if [ "$(echo "$sessions" | wc -l)" -eq 1 ]; then
+    session="$sessions"
+else
+    session="$(echo "$sessions" | fzf --prompt 'Agent session: ')"
+fi
 
 if [ -z "$session" ]; then
     exit 1
