@@ -161,7 +161,7 @@ bindsym $mod+Mod1+l mode "$mode_lutris"
 mode "$mode_lutris" {
     bindsym l       exec --no-startup-id rofi-lutris;                       mode default
     bindsym Shift+l exec --no-startup-id wtoggle2 -d 75%x75% lutris;        mode default
-    bindsym s       exec --no-startup-id wtoggle2 -d 75%x75% steam-runtime; mode default
+    bindsym s       exec --no-startup-id wtoggle2 -d 75%x75% steam;         mode default
     bindsym Shift+a exec --no-startup-id toggle-service apollo.service;     mode default
     bindsym a       exec --no-startup-id xdg-open https://localhost:47990/config;   mode default
     # exit system mode: "Enter" or "Escape"
