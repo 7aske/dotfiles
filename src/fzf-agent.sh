@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
 
-agent="agent"
-
 sessions="$({ tmux ls -F#S; echo 'agent-default'; } | grep --color=none 'agent-' | sort | uniq)"
 
 # if only one session is found, attach to it
