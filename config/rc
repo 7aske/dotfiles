@@ -278,7 +278,7 @@ function tmux-agent() {
             tmux attach-session -t "$session_name" || return 1
             ;;
         *) 
-            tmux new-session -d -s "$session_name" -c "$PWD" agent || return 1
+            tmux new-session -d -s "$session_name" -c "$PWD" "$AGENT" || return 1
             printf "Created tmux session '%s' for agent\nAttach with tmux -a '%s' or tmux-agent a\n" "$session_name" "$session_name"
             ;;
     esac
