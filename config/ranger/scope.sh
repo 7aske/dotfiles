@@ -49,8 +49,12 @@ trim() { head -n "$maxln"; }
 # wraps highlight to treat exit code 141 (killed by SIGPIPE) as success
 safepipe() { "$@"; test $? = 0 -o $? = 141; }
 
+is_ssh_session() {                                                        
+    [[ -n "${SSH_CONNECTION:-}" || -n "${SSH_CLIENT:-}" ]]                  
+}
+
 # Image previews, if enabled in ranger.
-if [ "$preview_images" = "True" ]; then
+if [ "$preview_images" = "True" ] && ! is_ssh_session; then
     case "$mimetype" in
         ## Font
         application/font*|application/*opentype)
@@ -250,6 +254,7 @@ case "$mimetype" in
             head -n "$maxln" "$path" && { dump | trim; exit 5; }
         elif [[ "$default_mimetype" =~ text/.* ]] || 
             [[ "$mimetype" =~ text/.* ]] ||
+            [[ "$mimetype" =~ tsx ]] ||
             [[ "$mimetype" = "application/x-wine-extension-ini" ]]; then
             # check file size, don't try to syntax highlight huge files
             if [ "$(stat -c%s "$path")" -gt "$maxsize" ]; then
