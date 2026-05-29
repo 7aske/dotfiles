@@ -294,3 +294,9 @@ function ask() {
         cursor-agent) cursor-agent --sandbox enabled --trust --print --mode ask "$*" | glow ;;
     esac
 }
+
+function tg_bot_chatid() {
+    local token
+    token="$1"
+    curl -s "https://api.telegram.org/bot$token/getUpdates" | jq -r '.result.[0].message.chat.id'
+}
