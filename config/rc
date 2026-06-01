@@ -275,6 +275,9 @@ function tmux-agent() {
     
     case "$cmd" in
         "a"|"attach") 
+            if ! tmux has-session -t "$session_name" 2>/dev/null; then
+                tmux new-session -d -s "$session_name" -c "$PWD" "$AGENT" || return 1
+            fi
             tmux attach-session -t "$session_name" || return 1
             ;;
         *) 

@@ -254,7 +254,7 @@ case "$mimetype" in
             head -n "$maxln" "$path" && { dump | trim; exit 5; }
         elif [[ "$default_mimetype" =~ text/.* ]] || 
             [[ "$mimetype" =~ text/.* ]] ||
-            [[ "$mimetype" =~ tsx ]] ||
+            [[ "$extension" =~ tsx ]] ||
             [[ "$mimetype" = "application/x-wine-extension-ini" ]]; then
             # check file size, don't try to syntax highlight huge files
             if [ "$(stat -c%s "$path")" -gt "$maxsize" ]; then
