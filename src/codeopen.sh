@@ -90,7 +90,7 @@ _select_project() {
         PROJ="$(readlink -f "$PROJ")"
     fi
     
-    if ! ( git -C "$PROJ" rev-parse HEAD >/dev/null 2>&1); then
+    if ! ( git -C "$PROJ" rev-parse --is-inside-work-tree >/dev/null 2>&1); then
         exit 1
     fi
 }
