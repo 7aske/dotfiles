@@ -560,6 +560,7 @@ for_window [class="zoom" title="Chat"] floating disable
 for_window [class="zoom" title="Zoom Meeting"] floating disable
 for_window [class="zoom" title="Zoom - Free Account"] floating disable
 for_window [title="LocalSend"] floating enable, move position center
+for_window [class="flameshot"] floating enable, move position center, border none
 
 # utility
 for_window [class="floating_popup"] floating enable, resize set 70ppt 70ppt, move position center
