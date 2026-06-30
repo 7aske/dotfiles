@@ -45,7 +45,7 @@ set $chat          $CHAT
 
 # set terminal commands
 set $terminal   $TERMINAL
-set $temrminal_floating $TERMINAL -c floating
+set $terminal_floating $TERMINAL -c floating
 set $terminal2  kitty
 set $terminal2_floating kitty --override background_opacity=1 --class floating
 

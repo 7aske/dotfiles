@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+[ -e "$HOME/.profile" ] && . "$HOME/.profile"
+
 sessions="$({ tmux ls -F#S; echo 'agent-default'; } | grep --color=none 'agent-' | sort | uniq)"
 
 # if only one session is found, attach to it
