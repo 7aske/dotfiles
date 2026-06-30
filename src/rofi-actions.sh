@@ -4,7 +4,7 @@
 # Add new entries as "Label|command" lines below.
 
 declare -a actions=(
-    # statusbar / i3
+    # configuration
     " Toggle statusbar widgets|statusbar-config"
     " Toggle i3 bar|i3-msg bar mode toggle"
     " Reload i3|i3-msg reload"
@@ -52,6 +52,9 @@ declare -a actions=(
     "󱈹 Desk: set height|desk move-to"
 
     # utilities
+    "󰚰 System update|$TERMINAL -c floating -e yay -Syyu"
+    "󰒍 Update mirrorlist|$TERMINAL -c floating -e sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist"
+    " Task manager|$TERMINAL -c floating -e sh -c 'if command -v btop >/dev/null 2>&1; then exec btop; else exec htop; fi'"
     " Color picker|colorpick"
     " Kill port process|portkill"
     "󰃭 Today's agenda|today"
