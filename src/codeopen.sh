@@ -31,9 +31,11 @@ _usage() {
 }
 
 dirty=false
-while getopts "hm:t:g" arg; do
+class=""
+while getopts "hc:m:t:g" arg; do
     case ${arg} in
     g) dirty=true ;;
+    c) class="$OPTARG" ;;
     h)
         _usage
         exit 0
@@ -108,10 +110,16 @@ _open_term() {
         if [ "$TERMINAL" = "st" ]; then
             # 7aske 'st' build with '-d' option to chdir at start
             notify-send -i terminal "codeopen" "opening $PROJ in $TERMINAL" &
-            $TERMINAL -d "$PROJ" $([ -n "$1" ] && echo "-e $1")
+            if [ -n "$class" ]; then
+                _class="-c $class"
+            fi
+            $TERMINAL "$_class" -d "$PROJ" "$([ -n "$1" ] && echo "-e $1")"
         else
             notify-send -i terminal "codeopen" "opening $PROJ in $TERMINAL" &
-            $TERMINAL -cd "$PROJ" $([ -n "$1" ] && echo "-e $1")
+            if [ -n "$class" ]; then
+                _class="--class $class"
+            fi
+            $TERMINAL "$_class" -cd "$PROJ" "$([ -n "$1" ] && echo "-e $1")"
         fi
     fi
 }
