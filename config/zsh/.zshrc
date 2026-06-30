@@ -165,7 +165,7 @@ bindkey -s '^o' '_kb_codeopen\n'
 _kb_codeopen_g() { codeopen -t term -g "$@"; }
 bindkey -s '^g' '_kb_codeopen_g\n'
 
-_kb_vimcfg() { vimcfg -c; }
+_kb_vimcfg() { vimcfg; }
 zle -N _kb_vimcfg
 bindkey '^v' _kb_vimcfg
 

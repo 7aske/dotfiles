@@ -113,13 +113,13 @@ _open_term() {
             if [ -n "$class" ]; then
                 _class="-c $class"
             fi
-            $TERMINAL "$_class" -d "$PROJ" "$([ -n "$1" ] && echo "-e $1")"
+            $TERMINAL "$_class" -d "$PROJ" $([ -n "$1" ] && echo "-e $1")
         else
             notify-send -i terminal "codeopen" "opening $PROJ in $TERMINAL" &
             if [ -n "$class" ]; then
                 _class="--class $class"
             fi
-            $TERMINAL "$_class" -cd "$PROJ" "$([ -n "$1" ] && echo "-e $1")"
+            $TERMINAL "$_class" -cd "$PROJ" $([ -n "$1" ] && echo "-e $1")
         fi
     fi
 }

@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+# Rofi action menu: pick an item, run its command.
+# Add new entries as "Label|command" lines below.
+
+declare -a actions=(
+    # statusbar / i3
+    " Toggle statusbar widgets|statusbar-config"
+    " Toggle i3 bar|i3-msg bar mode toggle"
+    " Reload i3|i3-msg reload"
+    " Restart i3|i3-msg restart"
+    "󱕷 Config i3|$TERMINAL -c floating -e $EDITOR $HOME/.config/i3/config"
+    "󱍱 Config |vimcfg -c -F"
+    " Config system|vimcfg -e -F"
+    "󱙨 Config dotfiles|vimcfg  -F"
+
+    # capture / clipboard
+    "󰹑 Screenshot (gui)|flameshot gui"
+    "󰹑 Screenshot (full)|flameshot full"
+    "󰅌 Clipboard history|clipmenu"
+    "󱘝 Clear clipboard history|clipdel -d '.*'"
+
+    # homelab
+    "󰟐 Home Assistant|xdg-open https://ha.home.local/dashboard-dashboard/0"
+    "󰐫 3D Printer|xdg-open https://ha.home.local/dashboard-dashboard/0"
+
+    # input / display
+    " Toggle keyboard layout|kblang -l us,rs-latin,rs -t"
+    "󰨇 Screen layout|screenlayout"
+    "󰸉 Wallpaper picker|setwal"
+    " Random wallpaper|setwal -R"
+
+    # audio / network / bluetooth
+    " Audio control|pavucontrol"
+    "󱡫 Toggle default sink|padefault toggle"
+    " Network connections|nm-connection-editor"
+    "󰂯 Bluetooth manager|blueman-manager"
+
+    # notifications
+    "󰎟 Dismiss notification|dunstctl close"
+    " Notification history|dunstctl history-pop"
+    " Toggle notifications|dunstctl set-paused toggle"
+
+    # apps / launchers
+    " Game launcher|rofi-lutris"
+    " Bookmarks|bks"
+    " Browser profile|browser-profile"
+
+    # standing desk
+    "󱈹 Desk: stand|idasen stand"
+    "󱈹 Desk: sit|idasen sit"
+    "󱈹 Desk: set height|desk move-to"
+
+    # utilities
+    " Color picker|colorpick"
+    " Kill port process|portkill"
+    "󰃭 Today's agenda|today"
+    "󰀠 Wake on LAN|wolsel"
+    "󰝳 Reset USB controllers|usb-reload"
+    "󰌏 Unstuck mod keys|xdotool keyup Shift_L Shift_R Control_L Control_R Alt_L Alt_R Super_L Super_R Hyper_L Hyper_R Caps_Lock 204 205 206 207"
+
+    # session / power
+    "󰌾 Lock screen|i3exit lock"
+    "󰒲 Suspend|i3exit suspend"
+    "󰗽 Logout|i3exit logout"
+    "󱄌 Reboot|i3exit reboot"
+    "⏻ Shutdown|i3exit shutdown"
+)
+
+menu="rofi -dmenu -i -p Actions"
+if [ -t 1 ]; then
+    menu="fzf"
+fi
+
+choice=$(printf '%s\n' "${actions[@]}" | cut -d'|' -f1 | $menu) || exit 0
+[ -z "$choice" ] && exit 0
+
+for entry in "${actions[@]}"; do
+    label=${entry%%|*}
+    cmd=${entry#*|}
+    if [ "$label" = "$choice" ]; then
+        exec sh -c "$cmd"
+    fi
+done

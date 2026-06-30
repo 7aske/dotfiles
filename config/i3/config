@@ -118,6 +118,7 @@ bindsym $mod+Return          exec --no-startup-id $terminal
 bindsym $mod+BackSpace       exec --no-startup-id wtoggle2 -d 75%x75% $terminal
 bindsym $mod+Shift+Return    exec --no-startup-id $terminal2
 bindsym $mod+a               exec --no-startup-id rofi -show run
+bindsym $mod+Shift+a         exec --no-startup-id rofi-actions
 bindsym $mod+d               exec --no-startup-id rofi -show drun
 bindsym $mod+Shift+semicolon exec --no-startup-id dmenu_run -p ":" -f -b -fn '$dmenu_font'
 bindsym $mod+grave           exec --no-startup-id wtoggle2 -T htop
@@ -126,10 +127,10 @@ bindsym $mod+grave           exec --no-startup-id wtoggle2 -T htop
 bindsym $mod+Ctrl+c mode "$mode_config"
 set $mode_config list config files to open: (e)tc (h)ome (c)onfig (d)dotfiles
 mode "$mode_config" {
-    bindsym e exec --no-startup-id vimcfg --etc ;   mode default
-    bindsym h exec --no-startup-id vimcfg --home;   mode default
-    bindsym c exec --no-startup-id vimcfg --config; mode default
-    bindsym d exec --no-startup-id vimcfg;          mode default
+    bindsym e exec --no-startup-id vimcfg -e -F; mode default
+    bindsym h exec --no-startup-id vimcfg -H -F; mode default
+    bindsym c exec --no-startup-id vimcfg -c -F; mode default
+    bindsym d exec --no-startup-id vimcfg -F;    mode default
 
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode default
