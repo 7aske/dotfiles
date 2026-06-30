@@ -9,6 +9,7 @@ if [ "$USER" != "$PROFILE_SOURCED" ]; then
 	[ -e "$HOME/.profile" ] && . "$HOME/.profile"
 fi
 [ -f "$HOME/.cache/wal/colors.sh" ] && . "$HOME/.cache/wal/colors.sh"
+export LS_COLORS="$LS_COLORS:*.FCBak=02:"
 
 #        _ _   
 #   __ _(_) |_ 
