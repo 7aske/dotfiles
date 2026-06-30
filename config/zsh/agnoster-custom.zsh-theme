@@ -45,6 +45,7 @@ export ZSH_THEME_AWS_PROFILE_PREFIX=" "
 export ZSH_THEME_AWS_PROFILE_SUFFIX=""
 export ZSH_THEME_AWS_REGION_PREFIX=""
 export ZSH_THEME_AWS_REGION_SUFFIX=""
+export ZSH_THEME_AWS_DIVIDER=":"
 export SHOW_AWS_PROMPT=false
 
 # Special Powerline characters
@@ -193,11 +194,18 @@ prompt_status() {
   local -a symbols job
 	job=${#jobstates}
 
-    symbols+="%{%F{red}%}%(?..%(130?.✘ .%B%?%b))"
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}󱐋"
   [[ -n "$RANGER_LEVEL" ]] && symbols+="%{%F{yellow}%} "
-  [[ $job -gt 0 ]] && symbols+="%{%F{cyan}%}$job  "
-  [[ -n "$symbols" ]] && prompt_segment default default "$symbols%f"
+  [[ $job -gt 0 ]] && symbols+="%{%F{cyan}%}$job "
+  symbols+="%{%F{red}%}%(?..%(130?.✘.%B%?%b))"
+
+  if [[ -n "$symbols" ]]; then 
+    # if this is not the only output add space to separate from previous segment
+    if [[ -n "$CURRENT_BG" && $CURRENT_BG != 'NONE' ]]; then
+      echo -n " "
+    fi
+    prompt_segment default default "$symbols%f"
+  fi
 }
 
 prompt_docker() {
