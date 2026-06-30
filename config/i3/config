@@ -45,9 +45,9 @@ set $chat          $CHAT
 
 # set terminal commands
 set $terminal   $TERMINAL
-set $temrminal_floating $TERMINAL -c tmux_floating
+set $temrminal_floating $TERMINAL -c floating
 set $terminal2  kitty
-set $terminal2_floating kitty --override background_opacity=1 --class tmux_floating
+set $terminal2_floating kitty --override background_opacity=1 --class floating
 
 
 # sound&music                _  ___                       _
@@ -270,6 +270,8 @@ mode "$mode_ide" {
     bindsym Return mode default
     bindsym Escape mode default
 }
+
+bindsym $mod+Mod1+o exec --no-startup-id codeopen -m rofi -g -t lazygit -c lazygit_flt
 
 #                    _             _   _
 #  _ __   __ ___   _(_) __ _  __ _| |_(_) ___  _ __
@@ -566,9 +568,7 @@ for_window [class="flameshot"] floating enable, move position center, border non
 for_window [class="floating_popup"] floating enable, resize set 70ppt 70ppt, move position center
 for_window [class="STATUSBAR_POPUP"] floating enable, resize set 20ppt 40ppt, move position center
 for_window [class="fullscreen"] fullscreen enable
-for_window [class="newsboat_float"] floating enable, resize set 70ppt 70ppt, move position center
-for_window [class="weather_floating"] floating enable, resize set 75ppt 82ppt, move position center
-for_window [class="tmux_floating"] floating enable, resize set 70ppt 70ppt, move position center
+for_window [class="lazygit_flt"] floating enable, resize set 90ppt 90ppt, move position center
 
 # games
 for_window [title="^World of Warcraft$"] layout tabbed, border none, floating disable
