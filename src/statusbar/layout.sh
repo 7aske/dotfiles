@@ -7,7 +7,7 @@ declare -A kb_mapping=(
 )
 
 case $BLOCK_BUTTON in
-	1) notify-send -i keyboard "Keyboard Layout" "Toggle" && kblang -l us,rs-latin,rs -t ;;
+	1) kblang -l us,rs-latin,rs -t ;;
 	3) notify-send -i keyboard "Keyboard Layout" "$(setxkbmap -query)" ;;
 esac
 

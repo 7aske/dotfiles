@@ -448,9 +448,12 @@ interval = 15
 signal = 9
 [[block.click]]
 button = "left"
-cmd = "kblang -l us,rs-latin,rs -t"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/layout"
 sync = true
 update = true
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/layout"
 
 [[block]]
 block = "notify"

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 declare -a variants
-declare -a variant_keys
 
 if [ -n "$KBLANG_VARIANTS" ]; then
     IFS=',' read -r -a variants <<< "$KBLANG_VARIANTS"
@@ -30,7 +29,6 @@ if $toggle; then
     selected_variant="$(setxkbmap -query | grep variant | awk '{print $2}')"
 	length="${#variants[@]}"
 	index=-1
-	current="${variants[@]}"
 	for i in "${!variants[@]}"; do
 		index=$(($index + 1))
         IFS='-' read -r lay var <<< "${variants[$i]}"
@@ -56,12 +54,13 @@ if [ -z "$variant" ]; then
     variant="$(cat <(echo " ") <(echo "${variants[@]}" | tr ' ' '\n' | awk -F'-' '{print $2}' | sort | uniq) <(localectl list-x11-keymap-variants "$layout") | dmenu -fn 'Fira Code-10' -p "$layout:")"
 fi
 
+notify_args="-i keyboard -t 1000 -u low -e -h string:x-canonical-private-synchronous:kblang-notification"
 if [ -n "$variant" ] && [ "$variant" != " " ]; then
 	setxkbmap -layout "$layout" -variant "$variant"
-    notify-send -i keyboard -t 500 "Keyboard Layout" "$layout $variant"
+    notify-send $notify_args "Keyboard Layout" "${layout^^} ${variant^}"
 else
 	setxkbmap -layout "$layout"
-    notify-send -i keyboard -t 500 "Keyboard Layout" "$layout"
+    notify-send $notify_args "Keyboard Layout" "${layout^^}"
 fi
 
 [ -f "$HOME/.Xmodmap" ] && xmodmap "$HOME/.Xmodmap"
