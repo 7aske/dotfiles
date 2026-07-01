@@ -2,7 +2,7 @@
 
 DNS_SERVER="pioneer.local"
 
-menu="rofi -dmenu"
+menu="rofi -dmenu -p device"
 if [ -t 1 ]; then
     menu="fzf"
 fi

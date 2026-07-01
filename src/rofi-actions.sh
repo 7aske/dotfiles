@@ -3,6 +3,10 @@
 # Rofi action menu: pick an item, run its command.
 # Add new entries as "Label|command" lines below.
 
+ROFI_ACTIONS_RC="${ROFI_ACTIONS_RC:-$HOME/.config/rofiactionsrc}"
+[ -f "$ROFI_ACTIONS_RC" ] && readarray -t more_actions < <(grep -Ev '(^$)|(^[ \t]*#.*$)' "$ROFI_ACTIONS_RC" | envsubst)
+
+
 declare -a actions=(
     # configuration
     " Toggle statusbar widgets|statusbar-config"
@@ -46,11 +50,6 @@ declare -a actions=(
     " Bookmarks|bks"
     " Browser profile|browser-profile"
 
-    # standing desk
-    "󱈹 Desk: stand|idasen stand"
-    "󱈹 Desk: sit|idasen sit"
-    "󱈹 Desk: set height|desk move-to"
-
     # utilities
     "󰚰 System update|$TERMINAL -c floating -e yay -Syyu"
     "󰒍 Update mirrorlist|$TERMINAL -c floating -e sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist"
@@ -69,6 +68,9 @@ declare -a actions=(
     "󱄌 Reboot|i3exit reboot"
     "⏻ Shutdown|i3exit shutdown"
 )
+if [ ${#more_actions[@]} -gt 0 ]; then
+    actions+=("${more_actions[@]}")
+fi
 
 menu="rofi -dmenu -i -p Actions"
 if [ -t 1 ]; then
