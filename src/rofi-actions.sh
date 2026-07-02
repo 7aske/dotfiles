@@ -14,7 +14,7 @@ declare -a actions=(
     " Reload i3|i3-msg reload"
     " Restart i3|i3-msg restart"
     "󱕷 Config i3|$TERMINAL -c floating -e $EDITOR $HOME/.config/i3/config"
-    "󱍱 Config |vimcfg -c -F"
+    "󱍱 Config|vimcfg -c -F"
     " Config system|vimcfg -e -F"
     "󱙨 Config dotfiles|vimcfg  -F"
 
@@ -60,6 +60,7 @@ declare -a actions=(
     "󰀠 Wake on LAN|wolsel"
     "󰝳 Reset USB controllers|usb-reload"
     "󰌏 Unstuck mod keys|xdotool keyup Shift_L Shift_R Control_L Control_R Alt_L Alt_R Super_L Super_R Hyper_L Hyper_R Caps_Lock 204 205 206 207"
+    " Edit actions file|$TERMINAL -c floating -e $EDITOR $HOME/.config/rofiactionsrc"
 
     # session / power
     "󰌾 Lock screen|i3exit lock"
