@@ -226,7 +226,7 @@ bindsym $mod+y       exec --no-startup-id screenlayout
 bindsym $mod+Shift+y exec --no-startup-id screenlayout layout.sh
 
 bindsym $mod+i exec --no-startup-id wtoggle2 -d 75%x75% "$terminal2_floating fzf-agent"
-bindsym $mod+Shift+i exec --no-startup-id wtoggle2 -d 75%x75% $chat
+bindsym $mod+Shift+i exec --no-startup-id wtoggle2 -d 75%x75% "$terminal2_floating $chat"
 
 # layout toggling mode
 set $mode_codeopen codeopen: (t)erm (C)ursor (a)gent (n)vim (v)scode (i)dea (c)lion (g)oland lazy(G)it (p)ycharm (w)ebstorm (s)studio (r)ider (j)etbrains
