@@ -4,7 +4,7 @@
 # Add new entries as "Label|command" lines below.
 
 ROFI_ACTIONS_RC="${ROFI_ACTIONS_RC:-$HOME/.config/rofiactionsrc}"
-[ -f "$ROFI_ACTIONS_RC" ] && readarray -t more_actions < <(grep -Ev '(^$)|(^[ \t]*#.*$)' "$ROFI_ACTIONS_RC" | envsubst)
+[ -f "$ROFI_ACTIONS_RC" ] && readarray -t more_actions < <(grep -Ev '(^$)|(^[ \t]*#.*$)' "$ROFI_ACTIONS_RC" | sed ':a;N;$!ba;s/\\\n/ /g;' | envsubst)
 
 
 declare -a actions=(
