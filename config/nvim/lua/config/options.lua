@@ -4,8 +4,9 @@
 
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.expandtab = false -- prefer tabs for new buffers
 vim.opt.colorcolumn = "80"
 vim.opt.scrolloff = 2
 
-vim.b.autoformat = false
 vim.g.autoformat = false
