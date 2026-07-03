@@ -11,5 +11,15 @@ case $1 in
 	*)     state=$((1 - "$state")) ;;
 esac
 
+elevate_command=""
+if [ -t 0 ]; then
+	elevate_command="sudo"
+else
+	elevate_command="pkexec"
+fi
 
-echo $state | sudo tee "$setting"
+echo $state | $elevate_command tee "$setting"
+
+notify-send -u low -t 2000 -i battery-full-charged-symbolic "Battery conservation mode" "Battery conservation mode is now $(if [ "$state" -eq 1 ]; then echo "enabled"; else echo "disabled"; fi)."
+
+pkill -SIGRTMIN+9 i3status-rs 
