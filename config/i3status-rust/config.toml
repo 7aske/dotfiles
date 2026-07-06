@@ -84,6 +84,9 @@ tasks= "󰥪"
 [[block]]
 block = "scratchpad"
 format = "$icon$count.eng(range:1..)|"
+[[block.click]]
+button = "left"
+cmd = "i3-scratchpad-switcher --persistent"
 
 [[block]]
 block = "music"
