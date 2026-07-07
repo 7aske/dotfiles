@@ -51,6 +51,7 @@ declare -a actions=(
     " Browser profile|browser-profile"
 
     # utilities
+    "󰸉 Reload wallpaper|nitrogen --restore"
     "󰚰 System update|$TERMINAL -c floating -e yay -Syyu"
     "󰒍 Update mirrorlist|$TERMINAL -c floating -e sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist"
     " Task manager|$TERMINAL -c floating -e sh -c 'if command -v btop >/dev/null 2>&1; then exec btop; else exec htop; fi'"
