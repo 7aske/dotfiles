@@ -45,7 +45,7 @@ set $border_size        2
 set $status_cmd         i3status-rs
 set $codeopen_menu      rofi
 set $agent              $AGENT
-set $chat               "$terminal2_floating $CHAT"
+set $chat               $CHAT
 
 
 # sound&music                _  ___                       _
@@ -223,8 +223,8 @@ bindsym $mod+End  exec --no-startup-id idasen sit
 bindsym $mod+y       exec --no-startup-id screenlayout
 bindsym $mod+Shift+y exec --no-startup-id screenlayout layout.sh
 
-bindsym $mod+i exec --no-startup-id wtoggle2 -d 75%x75% "$terminal2_floating fzf-agent"
-bindsym $mod+Shift+i exec --no-startup-id wtoggle2 -d 75%x75% "$chat"
+bindsym $mod+i       exec --no-startup-id wtoggle2 -d 90%x90% "$terminal2_floating fzf-agent"
+bindsym $mod+Shift+i exec --no-startup-id wtoggle2 -d 90%x90% "$chat"
 
 # layout toggling mode
 set $mode_codeopen codeopen: (t)erm (C)ursor (a)gent (n)vim (v)scode (i)dea (c)lion (g)oland lazy(G)it (p)ycharm (w)ebstorm (s)studio (r)ider (j)etbrains
