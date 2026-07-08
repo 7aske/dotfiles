@@ -273,6 +273,10 @@ function tmux-agent() {
 
     cmd="$1"
     session_name="agent-$(basename "$PWD")"
+
+    if [ -n "$WINDOWID" ]; then
+        xprop -id "$WINDOWID" -f WM_WINDOW_ROLE 8s -set WM_WINDOW_ROLE "tmux-$session"
+    fi
     
     case "$cmd" in
         "a"|"attach") 
