@@ -110,10 +110,6 @@ _open_term() {
 
     arguments=("-d" "$PROJ")
 
-    if [ -n "$1" ]; then
-        arguments+=("-e" "$1")
-    fi
-
     if [ "$TERMINAL" = "st" ]; then
         if [ -n "$class" ]; then
             arguments+=("-c" "$class")
@@ -122,6 +118,10 @@ _open_term() {
         if [ -n "$class" ]; then
             arguments+=("--class" "$class")
         fi
+    fi
+
+    if [ -n "$1" ]; then
+        arguments+=("-e" "$1")
     fi
 
     notify-send -i terminal "codeopen" "opening $PROJ in $TERMINAL" &
