@@ -99,46 +99,52 @@ _select_project() {
 
 _open_term() {
     if [ -t 1 ]; then
+        cd "$PROJ" || exit 1
         if [ -n "$1" ]; then
-            cd "$PROJ" || exit 1
             exec $1
         else
-            cd "$PROJ" || exit 1
             exec $SHELL
         fi
+        exit 0
+    fi
+
+    arguments=("-d" "$PROJ")
+
+    if [ -n "$1" ]; then
+        arguments+=("-e" "$1")
+    fi
+
+    if [ "$TERMINAL" = "st" ]; then
+        if [ -n "$class" ]; then
+            arguments+=("-c" "$class")
+        fi
     else
-        if [ "$TERMINAL" = "st" ]; then
-            # 7aske 'st' build with '-d' option to chdir at start
-            notify-send -i terminal "codeopen" "opening $PROJ in $TERMINAL" &
-            if [ -n "$class" ]; then
-                _class="-c $class"
-            fi
-            $TERMINAL "$_class" -d "$PROJ" $([ -n "$1" ] && echo "-e $1")
-        else
-            notify-send -i terminal "codeopen" "opening $PROJ in $TERMINAL" &
-            if [ -n "$class" ]; then
-                _class="--class $class"
-            fi
-            $TERMINAL "$_class" -cd "$PROJ" $([ -n "$1" ] && echo "-e $1")
+        if [ -n "$class" ]; then
+            arguments+=("--class" "$class")
         fi
     fi
+
+    notify-send -i terminal "codeopen" "opening $PROJ in $TERMINAL" &
+    $TERMINAL "${arguments[@]}"
 }
 
 _open_vscode() {
     _select_project
 
-    if [ -x "$(command -v vscodium)" ]; then
-        CMD="vscodium"
-    elif [ -x "$(command -v code-insiders)" ]; then
-        CMD="code-insiders"
-    elif [ -x "$(command -v code)" ]; then
-        CMD="code"
-    else
+    for cmd in vscodium code-insiders code; do
+        if [ -x "$(command -v $cmd)" ]; then
+            CMD="$cmd"
+            break
+        fi
+    done
+
+    if [ -z "$CMD" ]; then
         errmsg="vscodium: command not found\ncode-insiders: command not found\ncode: command not found"
         echo -e "$errmsg"
         notify-send -i system-error "codeopen" "$errmsg"
         exit 1
     fi
+
     notify-send -i code "codeopen" "opening $PROJ"
     $CMD "$PROJ"
 }
@@ -214,7 +220,7 @@ _open_jetbrains() {
         CMD=$(for file in $(dir -1 "$BIN_DIR"); do grep -q "JetBrains" "$BIN_DIR/$file" && echo "$BIN_DIR/$file"; done | $menu_command)
         [ -z "$CMD" ] && exit 1
         notify-send -i "$(basename "$CMD")" "codeopen" "opening $PROJ"
-        setsid $(basename $CMD) "$PROJ" 2>/dev/null >/dev/null &
+        setsid "$(basename "$CMD")" "$PROJ" 2>/dev/null >/dev/null &
     else
         setsid "$1" "$PROJ" 2>/dev/null >/dev/null &
     fi
