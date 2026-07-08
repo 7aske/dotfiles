@@ -23,6 +23,9 @@ PACMAN_HOOKS_DST := /etc/pacman.d/hooks
 LOCALSEND_HOOKS_SRC := src/localsend/hooks
 LOCALSEND_HOOKS_DST := $(HOME)/.config/localsend/hooks
 
+CLAUDE_HOOKS_SRC := src/claude-hooks
+CLAUDE_HOOKS_DST := $(HOME)/.claude/hooks
+
 
 # ----------------------------
 # Uninstall arg passthrough
@@ -52,7 +55,7 @@ scripts-install:
 		shift 2; \
 	done
 
-scripts-uninstall: localsend-hooks-uninstall
+scripts-uninstall: localsend-hooks-uninstall claude-hooks-uninstall
 	@set -- $(SCRIPT_PAIRS); \
 	while [ $$# -gt 0 ]; do \
 		$(RUN) ./uninstall.sh $$1 $$2; \
@@ -72,6 +75,22 @@ localsend-hooks-uninstall:
 	@for f in $(LOCALSEND_HOOKS_SRC)/*; do \
 		[ -f "$$f" ] || continue; \
 		h="$(LOCALSEND_HOOKS_DST)/$$(basename "$$f")"; \
+		[ -f "$$h" ] && $(RUN) rm -v "$$h"; \
+	done
+
+.PHONY: claude-hooks claude-hooks-uninstall
+claude-hooks:
+	@mkdir -p "$(CLAUDE_HOOKS_DST)"
+	@for f in $(CLAUDE_HOOKS_SRC)/*; do \
+		[ -f "$$f" ] || continue; \
+		$(RUN) cp -v "$$f" "$(CLAUDE_HOOKS_DST)/$$(basename "$$f")"; \
+		$(RUN) chmod u+x "$(CLAUDE_HOOKS_DST)/$$(basename "$$f")"; \
+	done
+
+claude-hooks-uninstall:
+	@for f in $(CLAUDE_HOOKS_SRC)/*; do \
+		[ -f "$$f" ] || continue; \
+		h="$(CLAUDE_HOOKS_DST)/$$(basename "$$f")"; \
 		[ -f "$$h" ] && $(RUN) rm -v "$$h"; \
 	done
 
@@ -171,7 +190,7 @@ pacman-hooks:
 
 .PHONY: default install dotfiles-install
 
-install: scripts-install localsend-hooks dotfiles-install completions-install check-deps
+install: scripts-install localsend-hooks claude-hooks dotfiles-install completions-install check-deps
 
 # check-deps.sh dispatches to .deps/check-arch-deps.sh or .deps/check-apt-deps.sh via /etc/os-release
 
