@@ -62,6 +62,8 @@ declare -a actions=(
     "󰝳 Reset USB controllers|usb-reload"
     "󰌏 Unstuck mod keys|xdotool keyup Shift_L Shift_R Control_L Control_R Alt_L Alt_R Super_L Super_R Hyper_L Hyper_R Caps_Lock 204 205 206 207"
     " Edit actions file|$TERMINAL -c floating -e $EDITOR $HOME/.config/rofiactionsrc"
+    "󰃰 Edit crontab|$TERMINAL -c floating -e crontab -e"
+    "󰃰 Edit system crontab|$TERMINAL -c floating -e pkexec crontab -e"
 
     # session / power
     "󰌾 Lock screen|i3exit lock"
