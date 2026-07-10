@@ -1,0 +1,13 @@
+{
+  "Notification": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "~/.claude/hooks/notify-decision.sh"
+        }
+      ]
+    }
+  ]
+}

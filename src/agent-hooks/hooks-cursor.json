@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "command": "./hooks/notify-decision.sh",
+        "matcher": "AskQuestion|AskUserQuestion"
+      }
+    ],
+    "stop": [
+      {
+        "command": "./hooks/notify-agent-done.sh"
+      }
+    ]
+  }
+}
