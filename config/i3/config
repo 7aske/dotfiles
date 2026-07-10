@@ -494,6 +494,8 @@ assign [title=".*Micosoft Teams.*"] $ws7
 
 # Open games in specific workspaces
 assign [title="^World of Warcraft$"] g
+assign [title="^Ascension$"] g
+assign [title="^Ascension Launcher$"] g
 assign [title="Kerbal Space Program"] g
 assign [class="steam_app_.*"] g
 assign [class="Godot_Engine"] g
@@ -581,12 +583,14 @@ for_window [class="^steam$" title="Steam Big Picture Mode"] floating disable, fu
 for_window [class="^lutris-gamepad-ui$" title="Lutris Gamepad UI"] floating disable, fullscreen disable
 for_window [class="(?i)epicgameslauncher.exe"] floating enable, resize set 70ppt 70ppt, move position center
 for_window [class="(?i)lutris"] floating enable, resize set 75ppt 79ppt, move position center
+for_window [title="^Ascension$"] layout tabbed, border none, floating disable
+for_window [title="^Ascension Launcher$"] floating enable, border pixel $border_size, move position center, resize set 50 ppt 50 ppt
 
 # virtual machines
 for_window [class="VirtualBox Machine" title="(?i)^win"] move container to workspace w
 for_window [title=".*on QEMU/KVM"]      floating disable, border none, move container to workspace v
 for_window [class="VirtualBox Machine"] floating disable, border none, move container to workspace v
-for_window [class="VirtualBox Manager"] floating disable, border 2
+for_window [class="VirtualBox Manager"] floating disable, border pixel $border_size
 
 #            _                                                          _
 #  _ __ ___ (_)___  ___    ___ ___  _ __ ___  _ __ ___   __ _ _ __   __| |___
