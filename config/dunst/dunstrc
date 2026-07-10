@@ -179,6 +179,10 @@
 	appname = whatsapp-for-linux
 	new_icon = whatsapp
 
+[Thunderbird]
+	appname = Thunderbird
+	new_icon = thunderbird
+
 [padefault]
 	appname = padefault
 	history_ignore = yes
