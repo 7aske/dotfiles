@@ -45,6 +45,7 @@ export ZSH_THEME_AWS_PROFILE_PREFIX=" "
 export ZSH_THEME_AWS_PROFILE_SUFFIX=""
 export ZSH_THEME_AWS_REGION_PREFIX=""
 export ZSH_THEME_AWS_REGION_SUFFIX=""
+export ZSH_THEME_AWS_REGION_FULL=""
 export ZSH_THEME_AWS_DIVIDER=":"
 export SHOW_AWS_PROMPT=false
 
@@ -242,6 +243,11 @@ prompt_kubernetes() {
   fi
 
   current_ctx=${kubectx_mapping[$current_ctx]:-${current_ctx:gs/%/%%}}
+
+  # if this is not the only output add space to separate from previous segment
+  if [[ -n "$CURRENT_BG" && $CURRENT_BG != 'NONE' ]]; then
+    echo -n " "
+  fi
   
   if [[ "$current_ns" != "default" ]]; then
     prpt=" ${current_ns}:${current_ctx}"
@@ -286,7 +292,14 @@ prompt_aws2() {
   local aws_profile="$AWS_PROFILE"
   local _aws_to_show
   local region="${AWS_REGION:-${AWS_DEFAULT_REGION:-$AWS_PROFILE_REGION}}"
+  local rest="${region#*-}"       # west-1
+  local mid="${rest%%-*}"         # west
+  local region_abbrv="${region%%-*}${mid:0:1}${rest#*-}"
   local color=yellow
+
+  if [[ "$ZSH_THEME_AWS_REGION_FULL" != true ]]; then
+    region="$region_abbrv"
+  fi
 
   if [[ -n "$AWS_PROFILE" ]];then
     _aws_to_show+="${ZSH_THEME_AWS_PROFILE_PREFIX="<aws:"}${AWS_PROFILE}${ZSH_THEME_AWS_PROFILE_SUFFIX=">"}"
