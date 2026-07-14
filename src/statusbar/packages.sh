@@ -10,7 +10,7 @@ SWITCH="$HOME/.cache/statusbar_$(basename "$0")"
 libbar_getopts "$@"
 shift $((OPTIND-1))
 libbar_kill_switch "$(basename "$0")"
-libbar_required_commands yup notify-send i3-msg dunstctl zenity
+libbar_required_commands notify-send i3-msg dunstctl zenity
 
 # shellcheck disable=SC2034
 {
@@ -18,25 +18,25 @@ libbar_required_commands yup notify-send i3-msg dunstctl zenity
     libbar_json_icons["packages"]="update"
 }
 
-count="$(yup -c)"
+count="$(yay -Qu | wc -l)"
 
 do_update(){
-	i3-msg "exec --no-startup-id setsid -f $TERMINAL -c floating -e yup" 2>/dev/null 1>/dev/null
+	i3-msg "exec --no-startup-id setsid -f $TERMINAL -c floating -e yay -Syyu" 2>/dev/null 1>/dev/null
 }
 
 case "$BLOCK_BUTTON" in
 	1) 
 		if [ "$(dunstctl is-paused)" = true ]; then
-			yup -l | awk -F ' ' '{for(i=1;i<=NF;i++){ if (i != 3) {print $i}}}' | \
+			yay -Qu | awk -F ' ' '{for(i=1;i<=NF;i++){ if (i < 3) {print $i}}}' | \
 				zenity --list \
 				--column Name \
 				--column Current \
 				--column Updated \
 				--class=STATUSBAR_POPUP \
-				--title=yup \
+				--title=Packages \
 				--text="Available updates:"
 		else 
-			notify-send -i package -u low "updates available" "$(yup -l)"
+            notify-send -i package -u low "updates available" "$(yay -Qu | awk -F ' ' '{for(i=1;i<=NF;i++){ if (i == 1) {printf "<span foreground='"'$white'"'>%s</span> ", $i} else if (i == 2) { printf "<span foreground='"'$red'"'>%s</span> ", $i } else if (i == 4) {printf "<b><span foreground='"'$green'"'>%s</span></b>\n", $i}}}' | column -o ' ' -t)"
 		fi ;;
 	2) libbar_toggle_switch 1 ;;
 	3) do_update ;;
@@ -66,4 +66,3 @@ if [ -e "$SWITCH" ]; then
 else
     libbar_output "packages" "$count" "$state" "$color"
 fi
-
