@@ -19,3 +19,7 @@ map("n", "<C-A-Left>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 map("n", "<C-A-Right>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 
 map("n", "<leader>m", "<cmd>!make<cr>", { desc = "make" })
+
+map("n", "<leader>aa", function()
+  vim.fn.jobstart({ "codeopen", "-T", "-c", "floating", "-t", "agent", vim.fn.getcwd() }, { detach = true })
+end, { desc = "codeopen agent" })

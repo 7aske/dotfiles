@@ -31,10 +31,12 @@ _usage() {
 }
 
 dirty=false
+term=false
 class=""
-while getopts "hc:m:t:g" arg; do
+while getopts "hc:m:t:gT" arg; do
     case ${arg} in
     g) dirty=true ;;
+    T) term=true ;;
     c) class="$OPTARG" ;;
     h)
         _usage
@@ -55,6 +57,8 @@ done
 
 shift $((OPTIND - 1))
 
+PROJ="$1"
+
 menu_command="fzf"
 if [ "$MENU" = "dmenu" ]; then
     menu_command="dmenu -l 10 -f -i -p ${TYPE:-type}:"
@@ -73,28 +77,31 @@ if [ -z "$TYPE" ]; then
     exit 1
 fi
 
-PROJ=""
+PROJ="$1"
 
 _select_project() {
-    # use grep to remove $_code prefix
-    if [ $dirty = true ]; then
-        SELECTED="$(eval "cgs -md -sm | grep -oP '^$_code/\K.*' | $menu_command")"
-    else
-        SELECTED="$(eval "cgs -ad | grep -oP '^$_code/\K.*' | $menu_command")"
-    fi
+    if [ -z "$PROJ" ]; then
+        # use grep to remove $_code prefix
+        if [ $dirty = true ]; then
+            SELECTED="$(eval "cgs -md -sm | grep -oP '^$_code/\K.*' | $menu_command")"
+        else
+            SELECTED="$(eval "cgs -ad | grep -oP '^$_code/\K.*' | $menu_command")"
+        fi
         PROJ="$_code/$SELECTED"
 
-    if [ ! -e "$PROJ" ]; then
-        exit 0
+        if [ ! -e "$PROJ" ]; then
+            exit 0
+        fi
+
+        if [ -L "$PROJ" ]; then
+            PROJ="$(readlink -f "$PROJ")"
+        fi
+        
+        if ! ( git -C "$PROJ" rev-parse --is-inside-work-tree >/dev/null 2>&1); then
+            exit 1
+        fi
     fi
 
-    if [ -L "$PROJ" ]; then
-        PROJ="$(readlink -f "$PROJ")"
-    fi
-    
-    if ! ( git -C "$PROJ" rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-        exit 1
-    fi
 }
 
 _open_term() {
@@ -186,7 +193,22 @@ _open_agent() {
         tmux new-session -d -s "$session_name" -c "$PROJ" $AGENT || return 1
     fi
 
-    $TERMINAL -d "$PROJ" -e tmux attach-session -t "$session_name"
+    arguments=("-d" "$PROJ")
+
+    if [ "$TERMINAL" = "st" ]; then
+        if [ -n "$class" ]; then
+            arguments+=("-c" "$class")
+        fi
+    else
+        if [ -n "$class" ]; then
+            arguments+=("--class" "$class")
+        fi
+    fi
+
+    arguments+=("-e" "tmux" "attach-session" "-t" "$session_name")
+
+    notify-send -i terminal "codeopen" "opening $PROJ" &
+    $TERMINAL "${arguments[@]}"
 }
 
 _open_vim() {
@@ -203,7 +225,7 @@ _open_vim() {
         exit 1
     fi
 
-    if [ -t 1 ]; then
+    if [ -t 1 ] && ! [ "$term" = "true" ]; then
         $CMD "$PROJ"
     else
         notify-send -i "$CMD" "codeopen" "opening $PROJ"
