@@ -78,19 +78,28 @@ BASE_URL="http://api.openweathermap.org/data/2.5/weather"
     COLORS["unknown"]="$theme12"
 }
 
+function _update_latlon_cache() {
+    lat_lon=$(curl https://ipapi.co/json/ | \
+        jq -r '. | [.latitude,.longitude|tostring] | join(" ")')
+    echo "$lat_lon" > "$LATLON_CACHE"
+}
+
 
 [ -z "$OPENWEATHERMAP_API_KEY" ] && echo "<span size='x-large'>󰼯 </span>" && exit 0
 if [ -z "$OPENWEATHERMAP_CITY_ID" ]; then
     if [ -e "$LATLON_CACHE" ]; then
         lat_lon=$(cat "$LATLON_CACHE")
     else
-        lat_lon=$(curl https://ipapi.co/json/ | \
-            jq -r '. | [.latitude,.longitude|tostring] | join(" ")')
-        if [ -z "$lat_lon" ]; then
-            echo "<span size='x-large'>󰼯 </span>"
-            exit 0
-        fi
-        echo "$lat_lon" > "$LATLON_CACHE"
+        _update_latlon_cache
+    fi
+    
+    if [[ "$lat_lon" =~ ^null\ null.* ]]; then
+        _update_latlon_cache
+    fi
+
+    if [[ -z "$lat_lon" || "$lat_lon" =~ ^null\ null.* ]]; then
+        echo "<span size='x-large'>󰼯 </span>"
+        exit 0
     fi
 
     read -r OPENWEATHERMAP_LAT OPENWEATHERMAP_LON < <(cat "$LATLON_CACHE")
