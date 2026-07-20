@@ -1,6 +1,11 @@
 {
   "version": 1,
   "hooks": {
+    "beforeSubmitPrompt": [
+      {
+        "command": "./hooks/update-agent-working.sh"
+      }
+    ],
     "preToolUse": [
       {
         "command": "./hooks/notify-decision.sh",

@@ -80,6 +80,12 @@ cpu = [
     "<span font='13'>󰡴</span>",
 ]
 tasks= "󰥪"
+agent = "󰚩"
+agent_working = "󰔟"
+agent_waiting = "󰍩"
+agent_ready = "󰄬"
+agent_idle = "󰒲"
+agent_error = "󰅙"
 
 [[block]]
 block = "scratchpad"
@@ -230,6 +236,30 @@ update = true
 [[block.click]]
 button = "right"
 cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/disk -j /"
+sync = true
+update = true
+
+[[block]]
+block = "custom"
+command = "~/.local/bin/statusbar/agent -j"
+interval = 60
+json = true
+hide_when_empty = true
+signal = 11
+format = " $icon $text "
+[[block.click]]
+button = "left"
+cmd = "BLOCK_BUTTON=1 ~/.local/bin/statusbar/agent -j"
+sync = true
+update = true
+[[block.click]]
+button = "middle"
+cmd = "BLOCK_BUTTON=2 ~/.local/bin/statusbar/agent -j"
+sync = true
+update = true
+[[block.click]]
+button = "right"
+cmd = "BLOCK_BUTTON=3 ~/.local/bin/statusbar/agent -j"
 sync = true
 update = true
 

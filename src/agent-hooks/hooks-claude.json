@@ -9,5 +9,25 @@
         }
       ]
     }
+  ],
+  "UserPromptSubmit": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "~/.claude/hooks/update-agent-working.sh"
+        }
+      ]
+    }
+  ],
+  "Stop": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "~/.claude/hooks/notify-agent-done.sh"
+        }
+      ]
+    }
   ]
 }

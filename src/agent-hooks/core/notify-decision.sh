@@ -20,6 +20,10 @@ export CC_DIR="$cwd"
 export CC_SESSION="agent-$base"
 export CC_MSG="$message"
 
+printf '%s' "$input" | jq -c --arg session "$CC_SESSION" \
+  '{status:"waiting", cwd:(.cwd // ""), session:$session, agent:(.agent // "claude")}' \
+  | "$(dirname "$0")/update-agent-status.sh" || true
+
 case "$agent" in
   cursor)
     app_name="Cursor Agent"
@@ -33,10 +37,12 @@ case "$agent" in
     ;;
 esac
 
-body="$CC_MSG
-$CC_DIR"
+body="$(pango_span "$yellow" "$CC_MSG")"
+[ -n "$CC_DIR" ] && body="${body}
+$(pango_span "$color8" "$CC_DIR")"
 if [ -n "$session_id" ]; then
-  body="${body}  (session ${session_id})"
+  body="${body}
+$(pango_span "$color8" "(session ${session_id})")"
 fi
 
 export NOTIFY_TITLE="$title"

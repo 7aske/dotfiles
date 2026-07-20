@@ -20,6 +20,15 @@ project=$(basename "$workspace")
 export CC_DIR="$workspace"
 export CC_SESSION="agent-$project"
 
+case "$status" in
+  error) bar_status=error ;;
+  aborted) bar_status=idle ;;
+  *) bar_status=ready ;;
+esac
+printf '%s' "$input" | jq -c --arg session "$CC_SESSION" --arg status "$bar_status" \
+  '{status:$status, cwd:(.cwd // ""), session:$session, agent:(.agent // "cursor")}' \
+  | "$(dirname "$0")/update-agent-status.sh" || true
+
 case "$agent" in
   cursor)
     app_name="Cursor Agent"
@@ -35,33 +44,33 @@ case "$status" in
   completed)
     urgency=normal
     title="${app_name} — done"
-    body="Finished in ${project}"
+    body="$(pango_span "$green" "Finished in ${project}")"
     ;;
   error)
     urgency=critical
     title="${app_name} — error"
-    body="Stopped with an error in ${project}"
+    body="$(pango_span "$red" "Stopped with an error in ${project}")"
     ;;
   aborted)
     urgency=low
     title="${app_name} — stopped"
-    body="Run was interrupted in ${project}"
+    body="$(pango_span "$orange" "Run was interrupted in ${project}")"
     ;;
   *)
     urgency=normal
     title="${app_name} — ${status}"
-    body="${project}"
+    body="$(pango_span "$white" "$project")"
     ;;
 esac
 
 if [ -n "$workspace" ]; then
   body="${body}
-${workspace}"
+$(pango_span "$color8" "$workspace")"
 fi
 
 if [ "$loop_count" != "0" ] && [ "$loop_count" != "null" ]; then
   body="${body}
-(auto follow-up loop ${loop_count})"
+$(pango_span "$color8" "(auto follow-up loop ${loop_count})")"
 fi
 
 log_dir="${XDG_CACHE_HOME:-$HOME/.cache}/agent-hooks"

@@ -110,8 +110,14 @@ agent-hooks:
 	done
 	@$(RUN) cp -v "$(AGENT_HOOKS_SRC)/adapters/claude-notification.sh" "$(AGENT_HOOKS_CLAUDE_DST)/notify-decision.sh"
 	@$(RUN) chmod u+x "$(AGENT_HOOKS_CLAUDE_DST)/notify-decision.sh"
+	@$(RUN) cp -v "$(AGENT_HOOKS_SRC)/adapters/claude-user-prompt-submit.sh" "$(AGENT_HOOKS_CLAUDE_DST)/update-agent-working.sh"
+	@$(RUN) chmod u+x "$(AGENT_HOOKS_CLAUDE_DST)/update-agent-working.sh"
+	@$(RUN) cp -v "$(AGENT_HOOKS_SRC)/adapters/claude-stop.sh" "$(AGENT_HOOKS_CLAUDE_DST)/notify-agent-done.sh"
+	@$(RUN) chmod u+x "$(AGENT_HOOKS_CLAUDE_DST)/notify-agent-done.sh"
 	@$(RUN) cp -v "$(AGENT_HOOKS_SRC)/adapters/cursor-pretooluse-ask.sh" "$(AGENT_HOOKS_CURSOR_DST)/notify-decision.sh"
 	@$(RUN) chmod u+x "$(AGENT_HOOKS_CURSOR_DST)/notify-decision.sh"
+	@$(RUN) cp -v "$(AGENT_HOOKS_SRC)/adapters/cursor-before-submit.sh" "$(AGENT_HOOKS_CURSOR_DST)/update-agent-working.sh"
+	@$(RUN) chmod u+x "$(AGENT_HOOKS_CURSOR_DST)/update-agent-working.sh"
 	@$(RUN) cp -v "$(AGENT_HOOKS_SRC)/adapters/cursor-stop.sh" "$(AGENT_HOOKS_CURSOR_DST)/notify-agent-done.sh"
 	@$(RUN) chmod u+x "$(AGENT_HOOKS_CURSOR_DST)/notify-agent-done.sh"
 	@$(RUN) ./util/merge-hooks-json.sh claude "$(AGENT_HOOKS_CLAUDE_JSON_SRC)" "$(AGENT_HOOKS_CLAUDE_JSON_DST)"
@@ -123,7 +129,7 @@ agent-hooks-uninstall:
 		h="$(AGENT_HOOKS_SHARE)/$$(basename "$$f")"; \
 		[ -f "$$h" ] && $(RUN) rm -v "$$h"; \
 	done
-	@for f in notify-decision.sh notify-agent-done.sh; do \
+	@for f in notify-decision.sh notify-agent-done.sh update-agent-working.sh; do \
 		[ -f "$(AGENT_HOOKS_CLAUDE_DST)/$$f" ] && $(RUN) rm -v "$(AGENT_HOOKS_CLAUDE_DST)/$$f"; \
 		[ -f "$(AGENT_HOOKS_CURSOR_DST)/$$f" ] && $(RUN) rm -v "$(AGENT_HOOKS_CURSOR_DST)/$$f"; \
 	done
