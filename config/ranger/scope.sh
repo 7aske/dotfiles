@@ -195,7 +195,7 @@ case "$extension" in
     # Lightroom presets
     dcp)
         try exiftool "$path" && { dump | trim; exit 5; } || exit 1;;
-    md|markdown|mkd|mkdn|mdwn|mdown)
+    md|mdc|markdown|mkd|mkdn|mdwn|mdown)
         if command -v mdterm >/dev/null; then
             try safepipe mdterm --no-color -w "${width}" "${path}" && { dump | trim; exit 5; }
             exit 2
