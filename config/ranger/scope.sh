@@ -119,6 +119,22 @@ if [ "$preview_images" = "True" ] && ! is_ssh_session; then
                     -jpeg -tiffcompression jpeg \
                     -- "${path}" "${cached%.*}" \
                 && exit 6 || exit 1;;
+        application/wps-office.pptx|application/vnd.ms-powerpoint|application/vnd.ms-powerpoint.*|application/vnd.openxmlformats-officedocument.presentationml.presentation|application/vnd.openxmlformats-officedocument.presentationml.presentation.*)
+            if [ -z "$(command -v soffice)" ]; then
+                printf "LibreOffice is not installed.\nPlease install it to enable PPTX previews." | trim && exit 3
+            fi
+            tmpdir="$(mktemp -d)"
+            pdf_path="${tmpdir}/$(basename "${path%.*}").pdf"
+            soffice --headless --convert-to pdf --outdir "${tmpdir}" "${path}" >/dev/null 2>&1 \
+                && pdftoppm -f 1 -l 3 \
+                    -scale-to-x "${default_size%x*}" \
+                    -jpeg -tiffcompression jpeg \
+                    -- "${pdf_path}" "${cached%.*}" \
+                && magick convert "${cached%.*}-1.jpg" "${cached%.*}-2.jpg" "${cached%.*}-3.jpg" -gravity center -background none -append "${cached}" \
+                && rm -rf "${tmpdir}" \
+                && exit 6
+            rm -rf "${tmpdir}"
+            exit 1;;
         # Image previews for image files. w3mimgdisplay will be called for all
         # image files (unless overriden as above), but might fail for
         # unsupported types.
@@ -192,6 +208,15 @@ case "$extension" in
     # yay -S odt2txt
     odt|ods|odp|sxw)
         try odt2txt "$path" && { dump | trim; exit 5; } || exit 1;;
+    ppt|pptx)
+        tmpdir="$(mktemp -d)"
+        pdf_path="${tmpdir}/$(basename "${path%.*}").pdf"
+        soffice --headless --convert-to pdf --outdir "${tmpdir}" "${path}" >/dev/null 2>&1 \
+            && pdftotext -l 10 -nopgbrk -q "${pdf_path}" - \
+            && rm -rf "${tmpdir}" \
+            && exit 5
+        rm -rf "${tmpdir}"
+        exit 1;;
     # Lightroom presets
     dcp)
         try exiftool "$path" && { dump | trim; exit 5; } || exit 1;;
