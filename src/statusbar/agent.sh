@@ -328,7 +328,7 @@ _summary() {
         fi
     fi
 
-    if [ -e "$SWITCH" ]; then
+    if [ -e "$SWITCH" ] || [ "$kinds" -eq 1 ] ; then
         icon=$(_icon_for_status "$worst")
     else
         icon="agent"
