@@ -57,6 +57,7 @@ _agent_match_proc() {
     esac
 }
 
+# Prints "status age_seconds" when the hook file is still within TTL.
 _status_from_hooks() {
     local session="$1"
     local file="$STATUS_DIR/${session}.json"
@@ -73,19 +74,19 @@ _status_from_hooks() {
     case "$status" in
         waiting)
             [ "$age" -lt 300 ] || return 1
-            printf '%s' "$status"
+            printf '%s %s' "$status" "$age"
             ;;
         error)
             [ "$age" -lt 600 ] || return 1
-            printf '%s' "$status"
+            printf '%s %s' "$status" "$age"
             ;;
         ready|done)
             [ "$age" -lt 120 ] || return 1
-            printf 'ready'
+            printf 'ready %s' "$age"
             ;;
         working)
             [ "$age" -lt 180 ] || return 1
-            printf '%s' "$status"
+            printf '%s %s' "$status" "$age"
             ;;
         *)
             return 1
@@ -162,17 +163,38 @@ _status_from_pane() {
     printf 'idle'
 }
 
-# Merge hook file + live pane. Pane is ground truth for working/ready/idle;
-# hook "waiting" only wins when the pane doesn't clearly contradict it.
+# Merge hook file + live pane.
+# Fresh hooks win over lagging pane chrome (submit/stop/ask update the bar
+# before Cursor redraws spinners / "Add a follow-up"). After HOOK_FRESH_SECS,
+# pane is usually ground truth — except hook "working" still beats pane
+# ready/idle, because Cursor leaves "Add a follow-up" visible mid-run.
+HOOK_FRESH_SECS=45
+
 _merge_status() {
     local hook_status="$1"
     local pane_status="$2"
+    local hook_age="${3:-9999}"
+
+    # Recent hook event is authoritative while the pane catches up.
+    if [ -n "$hook_status" ] && [ "$hook_age" -lt "$HOOK_FRESH_SECS" ]; then
+        case "$hook_status" in
+            working|waiting|ready|error)
+                printf '%s' "$hook_status"
+                return
+                ;;
+        esac
+    fi
 
     case "$pane_status" in
         working) printf 'working'; return ;;
         ready)
-            # live ready beats stale waiting from smoke tests / old asks
-            printf 'ready'
+            # Cursor keeps "Add a follow-up" on screen while Running — don't
+            # let that override a still-valid working hook (within TTL).
+            if [ "$hook_status" = "working" ]; then
+                printf 'working'
+            else
+                printf 'ready'
+            fi
             return
             ;;
         idle)
@@ -180,8 +202,11 @@ _merge_status() {
                 printf 'error'
             elif [ "$hook_status" = "ready" ]; then
                 printf 'ready'
+            elif [ "$hook_status" = "working" ]; then
+                printf 'working'
+            elif [ "$hook_status" = "waiting" ]; then
+                printf 'waiting'
             else
-                # pane idle beats stale waiting/working hook files
                 printf 'idle'
             fi
             return
@@ -192,7 +217,6 @@ _merge_status() {
             ;;
     esac
 
-    # fallback
     if [ -n "$hook_status" ]; then
         printf '%s' "$hook_status"
     else
@@ -205,7 +229,7 @@ _list_sessions() {
 }
 
 _collect() {
-    local session pane_info pane_target pane_pid hook_status pane_status status name
+    local session pane_info pane_target pane_pid hook_line hook_status hook_age pane_status status name
     local -a lines=()
 
     while IFS= read -r session; do
@@ -217,9 +241,13 @@ _collect() {
         [ -n "$pane_pid" ] || continue
         _agent_match_proc "$pane_pid" || continue
 
-        hook_status=$(_status_from_hooks "$session" || true)
+        hook_line=$(_status_from_hooks "$session" || true)
+        hook_status=${hook_line%% *}
+        hook_age=${hook_line##* }
+        [ "$hook_status" = "$hook_line" ] && hook_age=9999
+        [ -z "$hook_line" ] && hook_status="" && hook_age=9999
         pane_status=$(_status_from_pane "$pane_target")
-        status=$(_merge_status "$hook_status" "$pane_status")
+        status=$(_merge_status "$hook_status" "$pane_status" "$hook_age")
 
         name="${session#agent-}"
         lines+=("$status	$name")

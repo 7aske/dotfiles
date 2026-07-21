@@ -46,7 +46,7 @@ jq -n \
   '{status:$status, session:$session, cwd:$cwd, agent:$agent, updated:$updated}' >"$tmp"
 mv "$tmp" "$STATUS_DIR/${session}.json"
 
-# nudge the status bar (best-effort; hooks often run outside the GUI session)
-pkill -SIGRTMIN+"$SIGNAL" i3status-rs 2>/dev/null || true
+# Nudge the status bar (best-effort; hooks may run outside the GUI session).
+pkill -x -SIGRTMIN+"$SIGNAL" i3status-rs 2>/dev/null || true
 
 exit 0
