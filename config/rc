@@ -155,7 +155,8 @@ if [ -n "$FZF_CODE" ]; then
             if [ -d "$_CODE/$1" ]; then
                 MATCH="$_CODE/$1"
             else
-                MATCH="$(cgs -ad | fzf -f "$1" | head -1)"
+                MATCHES="$(cgs -ad)"
+                SEARCH="$1"
             fi
 		elif [ $# -eq 2 ]; then
             if [ ! -d  "$_CODE/$1" ]; then 
@@ -165,11 +166,18 @@ if [ -n "$FZF_CODE" ]; then
 			if [ -d "$_CODE/$1/$2" ]; then
 				MATCH="$_CODE/$1/$2"
 			else
-                MATCH="$(fd . "$_CODE/$1" -d 2 -L -t d | fzf -f "$2" | head -1)"
+                MATCHES="$(cgs -ad | grep "^$_CODE/$1")"
+                SEARCH="$2"
             fi
 		fi
 
-		if [ -z "$MATCH" ] && [ -d "$MATCH" ]; then
+        if [ -n "$MATCHES" ]; then
+            MATCHES="$(echo "$MATCHES" | fzf -f "$SEARCH" --delimiter / --nth=-1 | awk -F'/' '{print length($NF), $0}' | sort -nr | cut -d' ' -f2- | tail -n 5)"
+            MATCH="$(echo "$MATCHES" | tail -n 1)"
+        fi
+
+		if [ -z "$MATCH" ] || ! [ -d "$MATCH" ]; then
+            echo "No matching directory found."
 			return 1
 		fi
 
@@ -201,7 +209,8 @@ else
 			if [ -d "$_CODE/$1" ]; then
 				MATCH="$_CODE/$1"
 			else
-				MATCH="$(cgs -ad | grep -E ".*$1.*" | sed -n '1p')"
+				MATCHES="$(cgs -ad)"
+				SEARCH="$1"
 			fi
 		elif [ $# -eq 2 ]; then
             if [ ! -d  "$_CODE/$1" ]; then 
@@ -211,11 +220,17 @@ else
 			if [ -d "$_CODE/$1/$2" ]; then
 				MATCH="$_CODE/$1/$2"
 			else
-				MATCH="$(find "$_CODE/$1" -maxdepth 1 -name "*$2*" | sed -n '1p')"
+				MATCHES="$(cgs -ad | grep "^$_CODE/$1")"
+				SEARCH="$2"
 			fi
 		fi
 
-		if [ -z "$MATCH" ] && [ -d "$MATCH" ]; then
+		if [ -n "$MATCHES" ]; then
+			MATCH="$(echo "$MATCHES" | grep "$SEARCH" | awk -F'/' '{print length($NF), $0}' | sort -n | cut -d' ' -f2- | sed -n '1p')"
+		fi
+
+		if [ -z "$MATCH" ] || ! [ -d "$MATCH" ]; then
+			echo "No matching directory found."
 			return 1
 		fi
 
