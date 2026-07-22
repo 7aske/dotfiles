@@ -742,7 +742,7 @@ set_from_resource $bg         background
 set               $bg_trans   #2E344077
 
 # class                    border  background       text indicator   cborder
-client.focused            $color3     $color3    $color0  $color13   $color3
+client.focused            $color2     $color2    $color0  $color13   $color2
 client.focused_inactive   $color4     $color4    $color0  $color13   $color4
 client.unfocused          $color4     $color4    $color0  $color13   $color4
 client.urgent             $color1     $color1    $color0   $color9   $color1
@@ -776,11 +776,11 @@ bar {
         separator             $color12
 
         #                     border      background        text
-        focused_workspace    $color3         $color3     $color0
-        active_workspace     $color8         $color8     $color3
+        focused_workspace    $color10        $color2     $color0
+        active_workspace     $color12        $color4     $color0
         inactive_workspace   $color8         $color0     $color7
-        binding_mode        $color13        $color13     $color0
-        urgent_workspace     $color1         $color1     $color0
+        binding_mode         $color13        $color5     $color0
+        urgent_workspace     $color9         $color1     $color0
     }
 }
 
