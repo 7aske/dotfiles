@@ -32,6 +32,7 @@ set $termfile           $TERMFILE
 set $reader             $READER
 set $player             $PLAYER
 set $mail               $MAIL
+set $notes              obsidian
 set $terminal           $TERMINAL
 set $terminal_floating  $TERMINAL -c floating
 set $terminal2          kitty
@@ -114,6 +115,7 @@ bindsym Mod1+XF86AudioLowerVolume exec --no-startup-id padefault mic-volume -5%;
 # applic|_|ati|_|ons
 bindsym $mod+Return          exec --no-startup-id $terminal
 bindsym $mod+BackSpace       exec --no-startup-id wtoggle2 -d 75%x75% $terminal
+bindsym $mod+backslash       exec --no-startup-id wtoggle2 -d 90%x90% $notes
 bindsym $mod+Shift+Return    exec --no-startup-id $terminal2
 bindsym $mod+a               exec --no-startup-id rofi -show run
 bindsym $mod+Shift+a         exec --no-startup-id rofi-actions
@@ -574,6 +576,7 @@ for_window [class="floating_popup"] floating enable, resize set 70ppt 70ppt, mov
 for_window [class="STATUSBAR_POPUP"] floating enable, resize set 20ppt 40ppt, move position center
 for_window [class="fullscreen"] fullscreen enable
 for_window [class="lazygit_flt"] floating enable, resize set 90ppt 90ppt, move position center
+for_window [class="dragon-drop"] floating enable, move position center
 
 # games
 for_window [title="^World of Warcraft$"] layout tabbed, border none, floating disable
@@ -672,7 +675,7 @@ exec_always --no-startup-id birdtray
 # exec_always --no-startup-id pamac-tray
 exec_always --no-startup-id pgrep udiskie || udiskie -s -f $file -a --appindicator
 exec_always --no-startup-id pgrep barrier || (sleep 3 && barrier)
-exec_always --no-startup-id pgrep pidswallow || pidswallow -gl
+exec_always --no-startup-id pgrep pidswallow || pidswallow -l
 exec_always --no-startup-id clipmenud
 exec_always --no-startup-id pgrep unclutter || unclutter --fork --timeout 5 --jitter 10 --ignore-scrolling
 # exec_always --no-startup-id pgrep xautolock || xautolock -resetsaver -detectsleep -time 10 -notify 10 -locker lock -cornersize 64 -corners ----
