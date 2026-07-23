@@ -282,6 +282,31 @@ if [ -n "$BASH" ]; then
 
 fi
 
+function tmux-vim() {
+    local cmd
+    local session_name
+
+    cmd="$1"
+    session_name="vim-$(basename "$PWD")"
+
+    if [ -n "$WINDOWID" ]; then
+        xprop -id "$WINDOWID" -f WM_WINDOW_ROLE 8s -set WM_WINDOW_ROLE "tmux-$session"
+    fi
+    
+    case "$cmd" in
+        "n"|"new") 
+            tmux new-session -d -s "$session_name" -c "$PWD" "$EDITOR" . || return 1
+            printf "Created tmux-vim session '%s'\nAttach with tmux -a '%s' or tmux-vim\n" "$session_name" "$session_name"
+            ;;
+        *) 
+            if ! tmux has-session -t "$session_name" 2>/dev/null; then
+                tmux new-session -d -s "$session_name" -c "$PWD" "$EDITOR" . || return 1
+            fi
+            tmux attach-session -t "$session_name" || return 1
+            ;;
+    esac
+}
+
 function tmux-agent() {
     local cmd
     local session_name
@@ -294,18 +319,21 @@ function tmux-agent() {
     fi
     
     case "$cmd" in
-        "a"|"attach") 
+        "n"|"new") 
+            tmux new-session -d -s "$session_name" -c "$PWD" "$AGENT" || return 1
+            printf "Created tmux session '%s' for %s\nAttach with tmux -a '%s' or tmux-agent\n" "$session_name" "$AGENT" "$session_name"
+            ;;
+        *) 
             if ! tmux has-session -t "$session_name" 2>/dev/null; then
                 tmux new-session -d -s "$session_name" -c "$PWD" "$AGENT" || return 1
             fi
             tmux attach-session -t "$session_name" || return 1
             ;;
-        *) 
-            tmux new-session -d -s "$session_name" -c "$PWD" "$AGENT" || return 1
-            printf "Created tmux session '%s' for agent\nAttach with tmux -a '%s' or tmux-agent a\n" "$session_name" "$session_name"
-            ;;
     esac
 }
+
+alias tv=tmux-vim
+alias ta=tmux-agent
 
 function agent() {
     $AGENT "$*"
