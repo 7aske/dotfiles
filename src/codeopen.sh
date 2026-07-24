@@ -226,10 +226,10 @@ _open_vim() {
     fi
 
     if [ -t 1 ] && ! [ "$term" = "true" ]; then
-        $CMD "$PROJ"
+        cd "$PROJ" && $CMD .
     else
         notify-send -i "$CMD" "codeopen" "opening $PROJ"
-        $TERMINAL -e $CMD "$PROJ"
+        $TERMINAL -d "$PROJ" -e $CMD .
     fi
 }
 
