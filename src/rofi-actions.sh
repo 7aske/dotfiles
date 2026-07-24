@@ -64,6 +64,7 @@ declare -a actions=(
     " Edit actions file|$TERMINAL -c floating -e $EDITOR $HOME/.config/rofiactionsrc"
     "󰃰 Edit crontab|$TERMINAL -c floating -e crontab -e"
     "󰃰 Edit system crontab|$TERMINAL -c floating -e pkexec crontab -e"
+    "󰣀 Edit SSH config|$TERMINAL -c floating -e $EDITOR $HOME/.ssh/config"
 
     # session / power
     "󰌾 Lock screen|i3exit lock"
