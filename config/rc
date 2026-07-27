@@ -42,7 +42,7 @@ alias wps='_setsid wps'
 alias wpp='_setsid wpp'
 alias cursor='_setsid cursor'
 alias lg='lazygit'
-alias dots="$EDITOR $CODE_DOTFILES"
+alias dots="cd $CODE_DOTFILES && $EDITOR ."
 
 alias cls='clear -x'
 alias autoremove='sudo pacman -R $(pacman -Qdtq)'
