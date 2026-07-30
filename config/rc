@@ -142,6 +142,8 @@ function open() {
 
 if [ -n "$FZF_CODE" ]; then
 	function code() {
+        local MATCHES
+        local MATCH
 		_CODE="$(cgs -C)"
 		if [ -z "$_CODE" ]; then
 			_CODE="$CODE"
@@ -196,6 +198,8 @@ if [ -n "$FZF_CODE" ]; then
 
 else
 	function code() {
+        local MATCH
+        local MATCHES
 		_CODE="$(cgs -C)"
 		if [ -z "$_CODE" ]; then
 			_CODE="$CODE"
