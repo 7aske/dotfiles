@@ -42,6 +42,7 @@ alias wps='_setsid wps'
 alias wpp='_setsid wpp'
 alias cursor='_setsid cursor'
 alias lg='lazygit'
+alias dots="cd $CODE_DOTFILES && $EDITOR ."
 
 alias cls='clear -x'
 alias autoremove='sudo pacman -R $(pacman -Qdtq)'
@@ -141,6 +142,8 @@ function open() {
 
 if [ -n "$FZF_CODE" ]; then
 	function code() {
+        local MATCHES
+        local MATCH
 		_CODE="$(cgs -C)"
 		if [ -z "$_CODE" ]; then
 			_CODE="$CODE"
@@ -195,6 +198,8 @@ if [ -n "$FZF_CODE" ]; then
 
 else
 	function code() {
+        local MATCH
+        local MATCHES
 		_CODE="$(cgs -C)"
 		if [ -z "$_CODE" ]; then
 			_CODE="$CODE"
