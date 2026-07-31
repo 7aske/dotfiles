@@ -503,6 +503,7 @@ assign [class="steam_app_.*"] g
 assign [class="Godot_Engine"] g
 assign [class="steam" title="Steam Big Picture Mode"] g
 assign [class="battle.net.exe"] w
+assign [class="^UltiMaker-Cura$"] c
 
 # Open specific applications in floating mode
 for_window [class="UltiMaker-Cura" title="Preferences"] floating enable, move position center
@@ -577,6 +578,7 @@ for_window [class="STATUSBAR_POPUP"] floating enable, resize set 20ppt 40ppt, mo
 for_window [class="fullscreen"] fullscreen enable
 for_window [class="lazygit_flt"] floating enable, resize set 90ppt 90ppt, move position center
 for_window [class="dragon-drop"] floating enable, move position center
+for_window [class="xinp"] floating enable
 
 # games
 for_window [title="^World of Warcraft$"] layout tabbed, border none, floating disable
