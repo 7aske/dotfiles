@@ -79,9 +79,18 @@ BASE_URL="http://api.openweathermap.org/data/2.5/weather"
 }
 
 function _update_latlon_cache() {
-    lat_lon=$(curl https://ipapi.co/json/ | \
-        jq -r '. | [.latitude,.longitude|tostring] | join(" ")')
-    echo "$lat_lon" > "$LATLON_CACHE"
+    # Prefer ip-api and fall back to ipwho.is if needed.
+    lat_lon=$(curl -fsS "http://ip-api.com/json/?fields=status,lat,lon" 2>/dev/null | \
+        jq -r 'if .status == "success" then "\(.lat) \(.lon)" else "" end' 2>/dev/null)
+
+    if [ -z "$lat_lon" ] || [[ "$lat_lon" =~ ^null\ null.* ]]; then
+        lat_lon=$(curl -fsS "https://ipwho.is/" 2>/dev/null | \
+            jq -r 'if .success == true then "\(.latitude) \(.longitude)" else "" end' 2>/dev/null)
+    fi
+
+    if [ -n "$lat_lon" ] && ! [[ "$lat_lon" =~ ^null\ null.* ]]; then
+        echo "$lat_lon" > "$LATLON_CACHE"
+    fi
 }
 
 
