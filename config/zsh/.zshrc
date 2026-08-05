@@ -204,8 +204,18 @@ function aws_profile() {
         profile=$1
     else
         profile=$(
-            sed -n 's/^\[profile \(.*\)\]/\1/p' "$AWS_CONFIG_FILE" |
-            fzf --header="Select AWS Profile"
+            awk '
+                function flush() {
+                    if (name != "")
+                        print (acct != "") ? name " (" acct ")" : name
+                }
+                /^\[profile / { flush(); name=$0; sub(/^\[profile /,"",name); sub(/\]$/,"",name); acct="" }
+                /^\[/ && !/^\[profile / { flush(); name=""; acct="" }
+                /^[[:space:]]*sso_account_id[[:space:]]*=/ { acct=$NF }
+                END { flush() }
+            ' "$AWS_CONFIG_FILE" |
+            fzf --header="Select AWS Profile" |
+            sed 's/ (.*//'
         )
     fi
 
