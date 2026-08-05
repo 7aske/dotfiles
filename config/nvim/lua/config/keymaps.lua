@@ -21,7 +21,7 @@ map("n", "<C-A-Right>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 map("n", "<leader>m", "<cmd>!make<cr>", { desc = "make" })
 
 map("n", "<leader>aa", function()
-  vim.fn.jobstart({ "codeopen", "-T", "-c", "floating", "-t", "agent", vim.fn.getcwd() }, { detach = true })
+  vim.fn.jobstart({ "codeopen", "-T", "-c", "floating", "-t", "agent", LazyVim.root() }, { detach = true })
 end, { desc = "codeopen agent" })
 
 -- Navigate uncommitted hunks (gitsigns)
