@@ -102,6 +102,32 @@ bindkey '^H' backward-delete-char
 bindkey -M viins '^[[A' history-substring-search-up
 bindkey -M viins '^[[B' history-substring-search-down
 
+# Alt+. / Alt+, — cycle through the last word of previous commands.
+# vi mode (bindkey -v) doesn't bind these like emacs mode does, so wire them
+# up explicitly in viins. Alt+. steps further back through history, Alt+,
+# steps forward again.
+typeset -gi _lastword_hist=0 _lastword_len=0
+_lastword_cycle() {
+    local dir=$1
+    if [[ $LASTWIDGET == _lastword_(back|fwd) ]]; then
+        (( _lastword_len > 0 )) && LBUFFER=${LBUFFER[1,-$(( _lastword_len + 1 ))]}
+    else
+        _lastword_hist=0
+        _lastword_len=0
+    fi
+    _lastword_hist=$(( _lastword_hist + dir ))
+    (( _lastword_hist < 1 )) && _lastword_hist=1
+    local word=${${(z)history[$(( HISTCMD - _lastword_hist ))]}[-1]}
+    LBUFFER+=$word
+    _lastword_len=${#word}
+}
+_lastword_back() { _lastword_cycle 1 }
+_lastword_fwd()  { _lastword_cycle -1 }
+zle -N _lastword_back
+zle -N _lastword_fwd
+bindkey -M viins '\e.' _lastword_back
+bindkey -M viins '\e,' _lastword_fwd
+
 # Change cursor shape for different vi modes.
 zle-keymap-select() {
   case $KEYMAP in
