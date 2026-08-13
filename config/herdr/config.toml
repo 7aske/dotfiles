@@ -1,0 +1,57 @@
+[ui]
+agent_panel_sort = "spaces"
+show_agent_labels_on_pane_borders = true
+# tmux: bind Q confirm-before ... — herdr confirms workspace close
+confirm_close = true
+# tmux creates windows immediately with no name prompt
+prompt_new_tab_name = false
+# tmux: set -g mouse on  +  set -s set-clipboard on / copy-pipe to clipboard
+mouse_capture = true
+copy_on_select = true
+
+[theme]
+# tmux: set -g @plugin "nordtheme/tmux"
+name = "nord"
+auto_switch = false
+
+[ui.toast]
+delivery = "system"
+
+[keys]
+# --- tmux bindings ported (source: ~/.config/tmux/.tmux.conf) ---
+# tmux: set-option -g prefix C-a
+prefix = "ctrl+a"
+
+# --- Splits -------------------------------------------------------------
+# tmux: bind "|" split-window -h   (side-by-side)
+split_vertical = "prefix+|"
+# tmux: bind "-" split-window -v   (stacked)
+split_horizontal = "prefix+minus"
+
+# --- Kill / close -------------------------------------------------------
+# tmux: bind x kill-pane
+close_pane = "prefix+x"
+# tmux: bind X kill-window
+close_tab = "prefix+shift+x"
+# tmux: bind Q confirm-before kill-session
+close_workspace = "prefix+shift+q"
+
+# --- Tabs (tmux windows) ------------------------------------------------
+# tmux: bind c new-window
+new_tab = "prefix+c"
+# tmux: bind -r C-h previous-window
+previous_tab = "prefix+ctrl+h"
+# tmux: bind -r C-l next-window
+next_tab = "prefix+ctrl+l"
+
+# --- Pane focus (tmux: bind -n C-Arrow select-pane, no prefix) ----------
+focus_pane_left = "ctrl+left"
+focus_pane_right = "ctrl+right"
+focus_pane_up = "ctrl+up"
+focus_pane_down = "ctrl+down"
+
+# --- Config reload ------------------------------------------------------
+# tmux: bind r source-file ~/.tmux.conf
+reload_config = "prefix+r"
+# moved off prefix+r (herdr default) so it doesn't clash with reload
+resize_mode = "prefix+shift+r"

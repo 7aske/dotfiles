@@ -1,0 +1,4 @@
+.plugins.lock
+*.log
+session.json
+config.toml.bak
