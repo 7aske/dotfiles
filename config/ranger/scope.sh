@@ -201,6 +201,30 @@ case "$extension" in
             { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
     json)
         safepipe jq --color-output . "$path" | trim && exit 5;;
+    # X.509 certificates, CSRs and keys (PEM or DER):
+    crt|cer|pem|der|csr|key|pub|p10|p12|pfx)
+        command -v openssl >/dev/null || exit 1
+        # pick DER input form for binary extensions, PEM otherwise
+        case "$extension" in
+            der|p10) form="DER" ;;
+            *)       form="PEM" ;;
+        esac
+        case "$extension" in
+            csr|p10)  openssl req  -in "$path" -inform "$form" -noout -text 2>/dev/null \
+                          && { dump | trim; exit 5; } ;;
+            key)      openssl pkey -in "$path" -noout -text 2>/dev/null \
+                          && { dump | trim; exit 5; } ;;
+            pub)      openssl pkey -in "$path" -pubin -noout -text 2>/dev/null \
+                          && { dump | trim; exit 5; } ;;
+            p12|pfx)  openssl pkcs12 -in "$path" -info -nokeys -passin pass: 2>/dev/null \
+                          && { dump | trim; exit 5; } ;;
+        esac
+        # default: treat as an X.509 certificate; try the chosen form then the other
+        openssl x509 -in "$path" -inform "$form" -noout -text 2>/dev/null \
+            && { dump | trim; exit 5; }
+        openssl x509 -in "$path" -inform DER -noout -text 2>/dev/null \
+            && { dump | trim; exit 5; }
+        exit 1;;
    # BitTorrent Files
     torrent)
         try transmission-show "$path" && { dump | trim; exit 5; } || exit 1;;
