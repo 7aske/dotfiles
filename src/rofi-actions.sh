@@ -25,8 +25,8 @@ declare -a actions=(
     "󱘝 Clear clipboard history|clipdel -d '.*'"
 
     # homelab
-    "󰟐 Home Assistant|xdg-open https://ha.home.local/dashboard-dashboard/0"
-    "󰐫 3D Printer|xdg-open https://ha.home.local/dashboard-dashboard/0"
+    "󰟐 Home Assistant|popup-browser https://ha.home.local/dashboard-dashboard/0"
+    "󰐫 3D Printer|xdg-open https://klipper.home.local/"
 
     # input / display
     " Toggle keyboard layout|kblang -l us,rs-latin,rs -t"
