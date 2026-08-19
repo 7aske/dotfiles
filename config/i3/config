@@ -223,7 +223,7 @@ bindsym $mod+Home exec --no-startup-id idasen stand
 bindsym $mod+End  exec --no-startup-id idasen sit
 
 bindsym $mod+y       exec --no-startup-id screenlayout
-bindsym $mod+Shift+y exec --no-startup-id screenlayout layout.sh
+bindsym $mod+Shift+y exec --no-startup-id screenlayout default.sh
 
 bindsym $mod+i       exec --no-startup-id wtoggle2 -d 90%x90% "$terminal2_floating fzf-agent"
 bindsym $mod+Shift+i exec --no-startup-id wtoggle2 -d 90%x90% "$chat"
