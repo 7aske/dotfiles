@@ -19,7 +19,7 @@ libbar_kill_switch "$(basename "$0")"
 # shellcheck disable=SC2034
 {
     libbar_icons["disk"]="󰋊"
-    libbar_json_icons["disk"]="disk"
+    libbar_json_icons["disk"]="disk_drive"
 }
 
 case $BLOCK_BUTTON in
