@@ -252,6 +252,22 @@ function aws_profile() {
 
     region=$(aws configure get region)
     aws_region "$region"
+
+    # SSO login prompt
+    if aws configure get sso_account_id --profile "$profile" &>/dev/null; then
+        if ! aws sts get-caller-identity --query 'Arn' --output text &>/dev/null; then
+            printf "Yes\nNo" | fzf --header="SSO login to $profile?" | grep -q 'Yes' && \
+                aws sso login --profile "$profile"
+        fi
+    fi
+
+    local user_id
+    user_id="$(aws sts get-caller-identity --query 'Arn' --output text 2>/dev/null | cut -d ':' -f 6)"
+    if [ -z "$user_id" ]; then
+        echo "Not logged in"
+    else
+        echo "Identity: $user_id"
+    fi
 }
 
 function aws_region() {
