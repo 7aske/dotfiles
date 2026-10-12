@@ -49,4 +49,11 @@ mv "$tmp" "$STATUS_DIR/${session}.json"
 # Nudge the status bar (best-effort; hooks may run outside the GUI session).
 pkill -x -SIGRTMIN+"$SIGNAL" i3status-rs 2>/dev/null || true
 
+# Ring the agent's tmux pane bell when it stops working (waiting/ready/error/idle),
+# so tmux flags the window (tmux-dash turns its title red). Hooks run detached from
+# the terminal with piped stdio, so write to the pane's tty looked up via TMUX_PANE.
+if [ "$status" != working ] && [ -n "${TMUX_PANE:-}" ]; then
+  tty=$(tmux display -p -t "$TMUX_PANE" '#{pane_tty}' 2>/dev/null) && [ -w "$tty" ] && printf '\a' >"$tty" || true
+fi
+
 exit 0
