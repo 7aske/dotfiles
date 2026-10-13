@@ -11,7 +11,7 @@ set $mod Mod4
 
 # notification popup duration
 set $notif_duration 1000
-popup_during_fullscreen smart
+popup_during_fullscreen leave_fullscreen
 
 
 # disable help button in most programs
@@ -225,7 +225,7 @@ bindsym $mod+End  exec --no-startup-id idasen sit
 bindsym $mod+y       exec --no-startup-id screenlayout
 bindsym $mod+Shift+y exec --no-startup-id screenlayout default.sh
 
-bindsym $mod+i       exec --no-startup-id wtoggle2 -d 90%x90% "$terminal2_floating fzf-agent"
+bindsym $mod+i       exec --no-startup-id wtoggle2 -d 90%x90% "$terminal2_floating herdr"
 bindsym $mod+Shift+i exec --no-startup-id wtoggle2 -d 90%x90% "$chat"
 
 # layout toggling mode
@@ -348,6 +348,9 @@ for_window [class="floating"] floating enable, resize set 70 ppt 70 ppt, move po
 
 # use Mouse+$mod to drag floating windows
 floating_modifier $mod
+
+# warps the mouse to an output on focus change
+mouse_warping output
 
 # middle button on the title bar kills the window
 bindsym --release button2 kill
