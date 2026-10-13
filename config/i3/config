@@ -502,6 +502,7 @@ assign [title=".*Micosoft Teams.*"] $ws7
 assign [title="^World of Warcraft$"] g
 assign [title="^Ascension$"] g
 assign [title="^Ascension Launcher$"] g
+assign [class="^octo-launcher$"] g
 assign [title="Kerbal Space Program"] g
 assign [class="steam_app_.*"] g
 assign [class="Godot_Engine"] g
@@ -564,6 +565,7 @@ for_window [class="qt5ct"] floating enable, sticky enable, border normal
 for_window [class="(?i)Bitwarden"] floating enable, resize set 70 ppt 80 ppt, move position center
 for_window [title=".*Emulator.*"] floating enable
 for_window [title="File Transfer*"] floating enable
+for_window [class="Nemo" instance="file_progress"] floating enable, move position center
 for_window [title="alsamixer"] floating enable
 for_window [class="calc"] floating enable, resize set 20ppt 40ppt, move position center, sticky enable
 for_window [title="i3_help"] floating enable, sticky enable, border normal
@@ -586,8 +588,10 @@ for_window [class="xinp"] floating enable
 
 # games
 for_window [title="^World of Warcraft$"] layout tabbed, border none, floating disable
+for_window [class="^octo-launcher$"] floating enable, resize set 70ppt 70ppt, move position center
 for_window [title="Kerbal Space Program"] layout tabbed, border none, floating disable
 for_window [class="steam_app_.*"] layout tabbed, border none, floating disable
+for_window [class="steam_app_default" title="Battle.net Login"] floating enable, move position center
 for_window [class="^steam$"] floating enable, resize set 70ppt 70ppt, move position center
 for_window [class="^steam$" title="Steam Big Picture Mode"] floating disable, fullscreen disable
 for_window [class="^lutris-gamepad-ui$" title="Lutris Gamepad UI"] floating disable, fullscreen disable
