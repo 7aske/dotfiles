@@ -1,0 +1,11 @@
+# gitleaks config for this repo.
+# https://github.com/gitleaks/gitleaks
+
+title = "dotfiles"
+
+[allowlist]
+description = "Known false positives in config dumps and vendored editor plugins"
+paths = [
+  '''config/VSCodium/User/keybindings\.json''',
+  '''config/nvim\.old/''',
+]
