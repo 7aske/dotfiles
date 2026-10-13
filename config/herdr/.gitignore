@@ -1,4 +1,9 @@
-.plugins.lock
 *.log
-session.json
+*.sock
 config.toml.bak
+.plugins.lock
+plugins
+plugins.json
+release-notes.json
+session-snapshots
+session.json
