@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
-# i3status-rs block: running agent tmux sessions (cursor-agent / claude).
-# Discovers sessions named agent-*, filters by $AGENT, reports count + status.
+# i3status-rs block: herdr agent statuses (working / blocked / done / idle).
 
 SWITCH="$HOME/.cache/statusbar_$(basename "$0")"
-STATUS_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/agent-statusbar"
-AGENT_BIN="${AGENT:-cursor-agent}"
 SIGNAL=11
 
 # shellcheck disable=SC1091
@@ -31,233 +28,49 @@ shift $((OPTIND - 1))
     libbar_icons["agent_error"]="󰅙"
 }
 
-_agent_kind() {
-    case "$AGENT_BIN" in
-        cursor-agent|cursor) printf 'cursor' ;;
-        claude|claude-code) printf 'claude' ;;
-        *) printf '%s' "$AGENT_BIN" ;;
+# Map herdr agent_status → bar status used by icons / priority.
+_normalize_status() {
+    case "$1" in
+        blocked) printf 'waiting' ;;
+        done) printf 'ready' ;;
+        working|waiting|ready|idle|error) printf '%s' "$1" ;;
+        unknown|"") printf 'idle' ;;
+        *) printf 'idle' ;;
     esac
 }
 
-_agent_match_proc() {
-    local pane_pid="$1"
-    local cmdline
-
-    cmdline=$(tr '\0' ' ' <"/proc/$pane_pid/cmdline" 2>/dev/null || true)
-    case "$AGENT_BIN" in
-        cursor-agent|cursor)
-            [[ "$cmdline" == *cursor-agent* ]] || [[ "$cmdline" == */opt/cursor-agent/* ]]
-            ;;
-        claude|claude-code)
-            [[ "$cmdline" == *claude* ]] && [[ "$cmdline" != *cursor-agent* ]]
-            ;;
-        *)
-            [[ "$cmdline" == *"$AGENT_BIN:"* ]]
-            ;;
-    esac
-}
-
-# Prints "status age_seconds" when the hook file is still within TTL.
-_status_from_hooks() {
-    local session="$1"
-    local file="$STATUS_DIR/${session}.json"
-    local status updated now age
-
-    [ -f "$file" ] || return 1
-
-    status=$(jq -r '.status // empty' "$file" 2>/dev/null) || return 1
-    updated=$(jq -r '.updated // 0' "$file" 2>/dev/null) || return 1
-    now=$(date +%s)
-    age=$((now - updated))
-
-    # TTLs: waiting only briefly (AskQuestion); working must outlive poll interval
-    case "$status" in
-        waiting)
-            [ "$age" -lt 300 ] || return 1
-            printf '%s %s' "$status" "$age"
-            ;;
-        error)
-            [ "$age" -lt 600 ] || return 1
-            printf '%s %s' "$status" "$age"
-            ;;
-        ready|done)
-            [ "$age" -lt 120 ] || return 1
-            printf 'ready %s' "$age"
-            ;;
-        working)
-            [ "$age" -lt 180 ] || return 1
-            printf '%s %s' "$status" "$age"
-            ;;
-        *)
-            return 1
-            ;;
-    esac
-}
-
-# Find the pane running $AGENT_BIN in a session (not a side nvim/shell pane).
-_agent_pane() {
-    local session="$1"
-    local target pid cmd
-
-    while IFS='|' read -r target pid; do
-        [ -n "$pid" ] || continue
-        if _agent_match_proc "$pid"; then
-            printf '%s|%s\n' "$target" "$pid"
-            return 0
-        fi
-        # worker may be child of a shell pane
-        cmd=$(tr '\0' ' ' <"/proc/$pid/cmdline" 2>/dev/null || true)
-        if [[ "$cmd" == *"$AGENT_BIN"* ]] || pgrep -P "$pid" -a 2>/dev/null | grep -q -- "$AGENT_BIN"; then
-            printf '%s|%s\n' "$target" "$pid"
-            return 0
-        fi
-    done < <(tmux list-panes -s -t "$session" -F '#{session_name}:#{window_index}.#{pane_index}|#{pane_pid}' 2>/dev/null)
-
-    return 1
-}
-
-_status_from_pane() {
-    local target="$1"
-    local pane bottom
-
-    # Only the bottom chrome matters — scrollback still contains old "Running"/"Searching".
-    pane=$(tmux capture-pane -t "$target" -p -S -12 2>/dev/null || true)
-    bottom=$(printf '%s\n' "$pane" | grep -v '^[[:space:]]*$' | tail -8)
-
-    if [ -z "$bottom" ]; then
-        printf 'idle'
-        return
-    fi
-
-    # Active turn: spinner or status verb in the bottom chrome.
-    # Do NOT key off "ctrl+c to stop" — Cursor shows that on the follow-up line too.
-    if printf '%s' "$bottom" | grep -qE '⠋|⠙|⠹|⠸|⠼|⠴|⠦|⠧|⠇|⠏|⣾|⣽|⣻|⢿|⡿|⣟|⣯|⣷|⠰|⠠'; then
-        printf 'working'
-        return
-    fi
-    if printf '%s' "$bottom" | grep -qiE '(^|[[:space:]])(Searching|Thinking|Planning|Reading|Running|Compacting|Generating|Working)[[:space:]]+[0-9]'; then
-        printf 'working'
-        return
-    fi
-    if printf '%s' "$bottom" | grep -qiE 'esc to interrupt|Esc to interrupt|ctrl\+c to cancel'; then
-        printf 'working'
-        return
-    fi
-
-    # Permission / ask prompts
-    if printf '%s' "$bottom" | grep -qiE 'Do you want|Allow this|Waiting for your|needs your (input|approval)|AskQuestion|Approve this'; then
-        printf 'waiting'
-        return
-    fi
-
-    # Post-turn ready vs cold idle (Cursor)
-    if printf '%s' "$bottom" | grep -q 'Add a follow-up'; then
-        printf 'ready'
-        return
-    fi
-    if printf '%s' "$bottom" | grep -q 'Plan, search, build anything'; then
-        printf 'idle'
-        return
-    fi
-
-    printf 'idle'
-}
-
-# Merge hook file + live pane.
-# Fresh hooks win over lagging pane chrome (submit/stop/ask update the bar
-# before Cursor redraws spinners / "Add a follow-up"). After HOOK_FRESH_SECS,
-# pane is usually ground truth — except hook "working" still beats pane
-# ready/idle, because Cursor leaves "Add a follow-up" visible mid-run.
-HOOK_FRESH_SECS=45
-
-_merge_status() {
-    local hook_status="$1"
-    local pane_status="$2"
-    local hook_age="${3:-9999}"
-
-    # Recent hook event is authoritative while the pane catches up.
-    if [ -n "$hook_status" ] && [ "$hook_age" -lt "$HOOK_FRESH_SECS" ]; then
-        case "$hook_status" in
-            working|waiting|ready|error)
-                printf '%s' "$hook_status"
-                return
-                ;;
-        esac
-    fi
-
-    case "$pane_status" in
-        working) printf 'working'; return ;;
-        ready)
-            # Cursor keeps "Add a follow-up" on screen while Running — don't
-            # let that override a still-valid working hook (within TTL).
-            if [ "$hook_status" = "working" ]; then
-                printf 'working'
-            else
-                printf 'ready'
-            fi
-            return
-            ;;
-        idle)
-            if [ "$hook_status" = "error" ]; then
-                printf 'error'
-            elif [ "$hook_status" = "ready" ]; then
-                printf 'ready'
-            elif [ "$hook_status" = "working" ]; then
-                printf 'working'
-            elif [ "$hook_status" = "waiting" ]; then
-                printf 'waiting'
-            else
-                printf 'idle'
-            fi
-            return
-            ;;
-        waiting)
-            printf 'waiting'
-            return
-            ;;
-    esac
-
-    if [ -n "$hook_status" ]; then
-        printf '%s' "$hook_status"
-    else
-        printf '%s' "${pane_status:-idle}"
-    fi
-}
-
-_list_sessions() {
-    tmux list-sessions -F '#{session_name}' 2>/dev/null | grep -E '^agent-' || true
-}
-
+# Lines: status<TAB>name<TAB>kind<TAB>pane_id
 _collect() {
-    local session pane_info pane_target pane_pid hook_line hook_status hook_age pane_status status name
-    local -a lines=()
+    local agents workspaces
 
-    while IFS= read -r session; do
-        [ -n "$session" ] || continue
-        pane_info=$(_agent_pane "$session" || true)
-        [ -n "$pane_info" ] || continue
-        pane_target=${pane_info%%|*}
-        pane_pid=${pane_info#*|}
-        [ -n "$pane_pid" ] || continue
-        _agent_match_proc "$pane_pid" || continue
+    command -v herdr >/dev/null 2>&1 || return 0
+    command -v jq >/dev/null 2>&1 || return 0
 
-        hook_line=$(_status_from_hooks "$session" || true)
-        hook_status=${hook_line%% *}
-        hook_age=${hook_line##* }
-        [ "$hook_status" = "$hook_line" ] && hook_age=9999
-        [ -z "$hook_line" ] && hook_status="" && hook_age=9999
-        pane_status=$(_status_from_pane "$pane_target")
-        status=$(_merge_status "$hook_status" "$pane_status" "$hook_age")
+    agents=$(herdr agent list 2>/dev/null) || return 0
+    printf '%s' "$agents" | jq -e '.result.agents' >/dev/null 2>&1 || return 0
 
-        name="${session#agent-}"
-        lines+=("$status	$name")
-    done < <(_list_sessions)
+    workspaces=$(herdr workspace list 2>/dev/null) || workspaces='{"result":{"workspaces":[]}}'
 
-    printf '%s\n' "${lines[@]}"
+    jq -n -r \
+        --slurpfile a <(printf '%s\n' "$agents") \
+        --slurpfile w <(printf '%s\n' "$workspaces") \
+        '
+        ($w[0].result.workspaces // []) as $ws
+        | ($a[0].result.agents // [])[]
+        | . as $a
+        | (
+            ($ws[] | select(.workspace_id == $a.workspace_id) | .label // empty)
+            // (if ($a.cwd // "") != "" then ($a.cwd | split("/") | last) else empty end)
+            // ($a.agent // "agent")
+          ) as $name
+        | "\($a.agent_status // "unknown")\t\($name)\t\($a.agent // "?")\t\($a.pane_id // "")"
+        ' | while IFS=$'\t' read -r raw name kind pane; do
+        [ -n "$raw" ] || continue
+        printf '%s\t%s\t%s\t%s\n' "$(_normalize_status "$raw")" "$name" "$kind" "$pane"
+    done
 }
 
 _priority_state() {
-    # worst → best for bar coloring
     case "$1" in
         waiting) printf 'Warning' ;;
         error) printf 'Critical' ;;
@@ -289,24 +102,13 @@ _glyph_for_status() {
     esac
 }
 
-_label_for_status() {
-    case "$1" in
-        waiting) printf 'wait' ;;
-        working) printf 'run' ;;
-        ready) printf 'ready' ;;
-        error) printf 'err' ;;
-        idle) printf 'idle' ;;
-        *) printf '%s' "$1" ;;
-    esac
-}
-
 _summary() {
     local data="$1"
     local total=0 waiting=0 working=0 ready=0 idle=0 error=0 kinds=0
-    local status name worst=idle text icon state color parts
+    local status name kind pane worst=idle text icon state color parts
     local -a detail=()
 
-    while IFS=$'\t' read -r status name; do
+    while IFS=$'\t' read -r status name kind pane; do
         [ -n "$status" ] || continue
         total=$((total + 1))
         case "$status" in
@@ -342,10 +144,8 @@ _summary() {
         [ "$error" -gt 0 ] && kinds=$((kinds + 1))
 
         if [ "$kinds" -le 1 ]; then
-            # single status → count only; $icon carries the meaning
             text="$total"
         else
-            # icon + count per status (no leading total — that made "2 1 1")
             parts=""
             [ "$working" -gt 0 ] && parts+="${parts:+ }$(_glyph_for_status working) $working"
             [ "$waiting" -gt 0 ] && parts+="${parts:+ }$(_glyph_for_status waiting) $waiting"
@@ -356,7 +156,7 @@ _summary() {
         fi
     fi
 
-    if [ -e "$SWITCH" ] || [ "$kinds" -eq 1 ] ; then
+    if [ -e "$SWITCH" ] || [ "$kinds" -eq 1 ]; then
         icon=$(_icon_for_status "$worst")
     else
         icon="agent"
@@ -370,10 +170,6 @@ _summary() {
         Good) color="${color2:-"#A3BE8C"}" ;;
         *) color="${color7:-"#D8DEE9"}" ;;
     esac
-
-    AGENT_DETAIL=$(printf '%s\n' "${detail[@]}")
-    AGENT_TOTAL=$total
-    export AGENT_DETAIL AGENT_TOTAL
 
     libbar_output "$icon" "$text" "$state" "$color"
 }
@@ -393,31 +189,35 @@ _pango_escape() {
 }
 
 _show_detail() {
-    local data detail kind status name color glyph
-    kind=$(_agent_kind)
+    local data detail status name kind pane color glyph
     data=$(_collect)
-    detail=$(while IFS=$'\t' read -r status name; do
+    detail=$(while IFS=$'\t' read -r status name kind pane; do
         [ -n "$status" ] || continue
         color=$(_status_color "$status")
         glyph=$(_glyph_for_status "$status")
-        printf '<span foreground="%s">%s</span>  <span foreground="%s"><b>%s</b></span>  <span foreground="%s">(%s)</span>\n' \
+        printf '<span foreground="%s">%s</span>  <span foreground="%s"><b>%s</b></span>  <span foreground="%s">%s</span>  <span foreground="%s">(%s)</span>\n' \
             "$color" "$glyph" \
             "${white:-#D8DEE9}" "$(_pango_escape "$name")" \
+            "${color8:-#4C566A}" "$(_pango_escape "$kind")" \
             "$color" "$(_pango_escape "$status")"
     done <<<"$data")
 
     if [ -z "$detail" ]; then
-        notify-send -a agent -i terminal "Agents ($kind)" \
-            "<span foreground='${color8:-#4C566A}'>No running agent sessions</span>"
+        notify-send -a agent -i terminal "Herdr agents" \
+            "<span foreground='${color8:-#4C566A}'>No running agents</span>"
         return
     fi
-    notify-send -a agent -i terminal "Agents ($kind)" "$detail"
+    notify-send -a agent -i terminal "Herdr agents" "$detail"
+}
+
+_open_herdr() {
+    i3-msg 'exec --no-startup-id wtoggle2 -d 90%x90% "kitty --override background_opacity=1 --class floating herdr"' >/dev/null 2>&1
 }
 
 case $BLOCK_BUTTON in
     1) _show_detail ;;
     2) libbar_toggle_switch "$SIGNAL" ;;
-    3) i3-msg "exec --no-startup-id wtoggle2 -d 90%x90% \"kitty --override background_opacity=1 --class floating fzf-agent\"" >/dev/null 2>&1 ;;
+    3) _open_herdr ;;
 esac
 
 data=$(_collect)

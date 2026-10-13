@@ -19,7 +19,7 @@ export FZF_DEFAULT_OPTS="
 --reverse --cycle
 "
 
-available_types=("term" "agent" "cursor" "vim" "vscode" "jetbrains" "idea" "pycharm" "clion" "studio" "goland" "webstorm" "rider")
+available_types=("term" "agent" "cursor" "vim" "vscode" "jetbrains" "idea" "pycharm" "clion" "studio" "goland" "webstorm" "rider" "herdr")
 available_menus=("dmenu" "rofi" "fzf")
 
 _usage() {
@@ -211,6 +211,34 @@ _open_agent() {
     $TERMINAL "${arguments[@]}"
 }
 
+_open_herdr() {
+    local session_name wid
+    if ! [ -x "$(command -v herdr)" ]; then
+        errmsg="herdr: command not found"
+        echo -e "$errmsg"
+        notify-send "codeopen" "$errmsg"
+        exit 1
+    fi
+
+    _select_project
+
+    session_name="$(basename "$PROJ")"
+    wid="$(herdr workspace list | jq -r '.result.workspaces[]| select(.label == "'"$session_name"'") | .workspace_id')"
+
+    if [ -z "$wid" ]; then
+        wid="$(herdr workspace create --cwd "$PROJ" | jq -r .result.workspace.workspace_id)"
+    fi
+
+    # already inside herdr (e.g. prefix+o popup): create/focus and exit so the popup closes
+    if [ "${HERDR_ENV:-}" = 1 ]; then
+        herdr workspace focus "$wid" >/dev/null
+        exit 0
+    fi
+
+    (sleep 1 && herdr workspace focus "$wid" >/dev/null) &
+    _open_term herdr
+}
+
 _open_vim() {
     _select_project
 
@@ -261,9 +289,11 @@ _open_lazygit() {
     fi
 }
 
+
 case "$TYPE" in
     "term") _select_project; _open_term ;;
     "cursor") _open_cursor ;;
+    "herdr") _open_herdr ;;
     "agent") _open_agent ;;
     "vscode") _open_vscode ;;
     "vim") _open_vim ;;

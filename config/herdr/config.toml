@@ -66,6 +66,8 @@ close_tab = "prefix+shift+x"
 close_workspace = "prefix+shift+q"
 detach = "prefix+d"
 goto = "prefix+s"
+# free prefix+o for codeopen (default: open_notification_target)
+open_notification_target = ""
 switch_tab = "prefix+1..9"
 switch_workspace = "prefix+shift+1..9"
 focus_agent = "prefix+alt+1..9"
@@ -91,10 +93,18 @@ reload_config = "prefix+r"
 resize_mode = "prefix+shift+r"
 
 [[keys.command]]
-key = "prefix+alt+g"
+key = "prefix+g"
 type = "popup"
 command = "lazygit"
 description = "run lazygit"
+width = "95%"
+height = "95%"
+
+[[keys.command]]
+key = "prefix+o"
+type = "popup"
+command = "codeopen -t herdr"
+description = "open project in herdr"
 width = "80%"
 height = "80%"
 

@@ -229,7 +229,7 @@ bindsym $mod+i       exec --no-startup-id wtoggle2 -d 90%x90% "$terminal2_floati
 bindsym $mod+Shift+i exec --no-startup-id wtoggle2 -d 90%x90% "$chat"
 
 # layout toggling mode
-set $mode_codeopen codeopen: (t)erm (C)ursor (a)gent (n)vim (v)scode (i)dea (c)lion (g)oland lazy(G)it (p)ycharm (w)ebstorm (s)studio (r)ider (j)etbrains
+set $mode_codeopen codeopen: (t)erm (h)erdr (C)ursor (a)gent (n)vim (v)scode (i)dea (c)lion (g)oland lazy(G)it (p)ycharm (w)ebstorm (s)studio (r)ider (j)etbrains
 bindsym $mod+o mode "$mode_codeopen"
 mode "$mode_codeopen" {
     bindsym t       exec --no-startup-id codeopen -m $codeopen_menu -t term;      mode default
@@ -237,6 +237,7 @@ mode "$mode_codeopen" {
     bindsym n       exec --no-startup-id codeopen -m $codeopen_menu -t vim;       mode default
     bindsym i       exec --no-startup-id codeopen -m $codeopen_menu -t idea;      mode default
     bindsym c       exec --no-startup-id codeopen -m $codeopen_menu -t clion;     mode default
+    bindsym h       exec --no-startup-id codeopen -m $codeopen_menu -t herdr;     mode default
     bindsym Shift+c exec --no-startup-id codeopen -m $codeopen_menu -t cursor;    mode default
     bindsym a       exec --no-startup-id codeopen -m $codeopen_menu -t agent;     mode default
     bindsym g       exec --no-startup-id codeopen -m $codeopen_menu -t goland;    mode default
