@@ -1,0 +1,9 @@
+mode = "sidebar"
+interval_seconds = 5
+clean_checkmark = true
+
+icon_staged = "󱇬"
+icon_modified = "±"
+icon_untracked = "?"
+icon_conflict = ""
+icon_clean = ""

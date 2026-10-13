@@ -1,0 +1,326 @@
+[
+  {
+    "plugin_id": "ez-corp.git-status",
+    "name": "Git Status",
+    "version": "1.6.0",
+    "min_herdr_version": "0.7.5",
+    "description": "Git working-tree status (staged/modified/untracked, ✓ when clean) per space.",
+    "manifest_path": "/home/nik/.local/src/rs/herdr-git-status/herdr-plugin.toml",
+    "plugin_root": "/home/nik/.local/src/rs/herdr-git-status",
+    "enabled": true,
+    "platforms": [
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "build": [
+      {
+        "command": [
+          "cargo",
+          "build",
+          "--release"
+        ]
+      }
+    ],
+    "startup": [
+      {
+        "command": [
+          "./target/release/git-status",
+          "--restore"
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "report",
+        "title": "Git status report",
+        "contexts": [
+          "workspace"
+        ],
+        "command": [
+          "./target/release/git-status",
+          "--once"
+        ]
+      },
+      {
+        "id": "status-disable",
+        "title": "Disable git status updater",
+        "command": [
+          "./target/release/git-status",
+          "--disable"
+        ]
+      },
+      {
+        "id": "status-enable",
+        "title": "Enable git status updater",
+        "command": [
+          "./target/release/git-status",
+          "--enable"
+        ]
+      },
+      {
+        "id": "status-toggle",
+        "title": "Toggle git status updater",
+        "command": [
+          "./target/release/git-status",
+          "--toggle"
+        ]
+      }
+    ],
+    "panes": [
+      {
+        "id": "dashboard",
+        "title": "Git status",
+        "placement": "overlay",
+        "command": [
+          "./target/release/git-status",
+          "--interval",
+          "3"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "local"
+    }
+  },
+  {
+    "plugin_id": "gitlab-ci-status",
+    "name": "GitLab & GitHub CI + Review Status",
+    "version": "0.4.0",
+    "min_herdr_version": "0.7.0",
+    "description": "GitLab & GitHub CI and merge-request review status in herdr: a live colored dot, MR/PR number, and review-state glyph on each space's label, plus on-demand CI-detail and 'My MRs' panes. Auto-detects the provider from the repo's origin host.",
+    "manifest_path": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github/gitlab-ci-status-a9604e03cdd3/herdr-plugin.toml",
+    "plugin_root": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github/gitlab-ci-status-a9604e03cdd3",
+    "enabled": true,
+    "platforms": [
+      "linux",
+      "macos"
+    ],
+    "actions": [
+      {
+        "id": "open",
+        "title": "Open CI status pane",
+        "contexts": [
+          "workspace"
+        ],
+        "command": [
+          "bash",
+          "open.sh"
+        ]
+      },
+      {
+        "id": "open-mr",
+        "title": "Open My MRs pane",
+        "contexts": [
+          "workspace"
+        ],
+        "command": [
+          "bash",
+          "open-mr.sh"
+        ]
+      },
+      {
+        "id": "start",
+        "title": "Start CI status dots",
+        "command": [
+          "bash",
+          "poller-ctl.sh",
+          "start"
+        ]
+      },
+      {
+        "id": "stop",
+        "title": "Stop CI status dots",
+        "command": [
+          "bash",
+          "poller-ctl.sh",
+          "stop"
+        ]
+      },
+      {
+        "id": "toggle",
+        "title": "Toggle CI status dots",
+        "command": [
+          "bash",
+          "poller-ctl.sh",
+          "toggle"
+        ]
+      }
+    ],
+    "panes": [
+      {
+        "id": "ci",
+        "title": "CI status",
+        "placement": "split",
+        "command": [
+          "bash",
+          "ci-pane.sh"
+        ]
+      },
+      {
+        "id": "mr",
+        "title": "My MRs",
+        "placement": "split",
+        "command": [
+          "bash",
+          "mr-pane.sh"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "github",
+      "owner": "krystof018",
+      "repo": "herdr-git-status",
+      "resolved_commit": "3d741c55dda03875916c9c1134324a8d9b5a40eb",
+      "managed_path": "/home/nik/.config/herdr/plugins/github/gitlab-ci-status-a9604e03cdd3",
+      "installed_unix_ms": 1791918443190
+    }
+  },
+  {
+    "plugin_id": "herdr-bar",
+    "name": "Bar",
+    "version": "0.7.3",
+    "min_herdr_version": "0.9.0",
+    "description": "Cmd+K command bar with agent icons, fuzzy search, and optional automatic tab titles",
+    "manifest_path": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github/herdr-bar-96eebe452a9c/herdr-plugin.toml",
+    "plugin_root": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github/herdr-bar-96eebe452a9c",
+    "enabled": true,
+    "platforms": [
+      "linux",
+      "macos"
+    ],
+    "startup": [
+      {
+        "command": [
+          "python3",
+          "run.py",
+          "--start-titles"
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "open",
+        "title": "Open bar",
+        "description": "Fuzzy-jump to any tab, pane, or agent",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "sh",
+          "-c",
+          "herdr_bin=\"${HERDR_BIN_PATH:-herdr}\"; [ -x \"$herdr_bin\" ] || herdr_bin=herdr; exec \"$herdr_bin\" plugin pane open --plugin herdr-bar --entrypoint bar --placement popup"
+        ]
+      },
+      {
+        "id": "start-titles",
+        "title": "Start tab watcher",
+        "description": "Start task title and tab status updates enabled in the plugin config",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "python3",
+          "run.py",
+          "--start-titles",
+          "--resume"
+        ]
+      },
+      {
+        "id": "stop-titles",
+        "title": "Stop tab watcher",
+        "description": "Stop this server's title and status watcher, restoring bare tab names",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "python3",
+          "run.py",
+          "--stop-titles"
+        ]
+      }
+    ],
+    "events": [
+      {
+        "on": "pane.agent_detected",
+        "command": [
+          "python3",
+          "run.py",
+          "--start-titles"
+        ]
+      }
+    ],
+    "panes": [
+      {
+        "id": "bar",
+        "title": "Bar",
+        "description": "Fuzzy-jump to any tab, pane, or agent",
+        "placement": "popup",
+        "width": "74%",
+        "height": "62%",
+        "command": [
+          "python3",
+          "run.py"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "github",
+      "owner": "jeffarese",
+      "repo": "herdr-bar",
+      "resolved_commit": "e22455068e26340b6be02cec8a07707fc1f11ae1",
+      "managed_path": "/home/nik/.config/herdr/plugins/github/herdr-bar-96eebe452a9c",
+      "installed_unix_ms": 1791906244665
+    }
+  },
+  {
+    "plugin_id": "ray.plugin-manager",
+    "name": "Plugin Manager",
+    "version": "0.5.0",
+    "min_herdr_version": "0.7.4",
+    "description": "Manage herdr plugins from a popup: list, install, update, enable/disable, uninstall, browse the marketplace, open repo in browser, edit plugins.json",
+    "manifest_path": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github/ray.plugin-manager-75f462e8e1d0/herdr-plugin.toml",
+    "plugin_root": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github/ray.plugin-manager-75f462e8e1d0",
+    "enabled": true,
+    "platforms": [
+      "macos",
+      "linux"
+    ],
+    "actions": [
+      {
+        "id": "open",
+        "title": "Open plugin manager",
+        "contexts": [
+          "workspace"
+        ],
+        "command": [
+          "bash",
+          "-c",
+          "exec \"${HERDR_BIN_PATH:-herdr}\" plugin pane open --plugin ray.plugin-manager --entrypoint manager --placement popup --focus"
+        ]
+      }
+    ],
+    "panes": [
+      {
+        "id": "manager",
+        "title": "Plugin Manager",
+        "placement": "popup",
+        "width": 82,
+        "height": 28,
+        "command": [
+          "bash",
+          "-c",
+          "exec bash \"$HERDR_PLUGIN_ROOT/bin/manager.sh\""
+        ]
+      }
+    ],
+    "source": {
+      "kind": "github",
+      "owner": "speardragon",
+      "repo": "herdr-plugin-manager",
+      "resolved_commit": "e4fef2693728a36cbb389af033a389cad2257869",
+      "managed_path": "/home/nik/.config/herdr/plugins/github/ray.plugin-manager-75f462e8e1d0",
+      "installed_unix_ms": 1791915217090
+    }
+  }
+]

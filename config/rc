@@ -317,7 +317,7 @@ function tmux-agent() {
     local session_name
 
     cmd="$1"
-    session_name="agent-$(basename "$PWD")"
+    session_name="agent-$(basename "${PWD//./}")"
 
     if [ -n "$WINDOWID" ]; then
         xprop -id "$WINDOWID" -f WM_WINDOW_ROLE 8s -set WM_WINDOW_ROLE "tmux-$session"
@@ -330,6 +330,7 @@ function tmux-agent() {
             ;;
         *) 
             if ! tmux has-session -t "$session_name" 2>/dev/null; then
+                printf "Created tmux session '%s' for %s" "$session_name" "$AGENT"
                 tmux new-session -d -s "$session_name" -c "$PWD" "$AGENT" || return 1
             fi
             tmux attach-session -t "$session_name" || return 1
