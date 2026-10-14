@@ -49,22 +49,17 @@ export NOTIFY_TITLE="$title"
 export NOTIFY_BODY="$body"
 export NOTIFY_ICON="$icon"
 export NOTIFY_APP="$app_name"
+# Hooks run inside the agent's herdr pane; remember it for the "open" action.
+export NOTIFY_HERDR_PANE="${HERDR_PANE_ID:-}"
+export NOTIFY_HERDR_OPEN="$(cd "$(dirname "$0")" && pwd)/herdr-open.sh"
 
 setsid -f bash -c '
   action=$(notify-send -u critical -i "$NOTIFY_ICON" -a "$NOTIFY_APP" \
-    -A "open=Open in tmux" \
+    -A "open=Open in herdr" \
     "$NOTIFY_TITLE" \
     "$NOTIFY_BODY")
   if [ "$action" = "open" ]; then
-    instance="$CC_SESSION"
-    wid=$(xdotool search --role "^tmux-${instance}$" 2>/dev/null | head -n1)
-    if [ -n "$wid" ]; then
-      i3-msg "[id=$wid] focus" >/dev/null 2>&1
-    else
-      exec kitty --name "$instance" --class floating \
-        --override background_opacity=1 \
-        fzf-agent "$instance"
-    fi
+    exec "$NOTIFY_HERDR_OPEN" "$NOTIFY_HERDR_PANE"
   fi
 ' >/dev/null 2>&1
 

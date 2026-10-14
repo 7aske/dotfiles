@@ -223,7 +223,8 @@ _open_herdr() {
     _select_project
 
     session_name="$(basename "$PROJ")"
-    wid="$(herdr workspace list | jq -r '.result.workspaces[]| select(.label == "'"$session_name"'") | .workspace_id')"
+    # must use ends with since plugins can change the label
+    wid="$(herdr workspace list | jq -r '.result.workspaces[]| select(.label | endswith("'"$session_name"'")) | .workspace_id')"
 
     if [ -z "$wid" ]; then
         wid="$(herdr workspace create --cwd "$PROJ" | jq -r .result.workspace.workspace_id)"

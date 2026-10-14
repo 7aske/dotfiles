@@ -190,15 +190,17 @@ $(DOTFILES):
 # ----------------------------
 HERDR_GIT_STATUS_DIR := $$(cgs -C)/rs/herdr-git-status
 herdr-plugins:
-	$(RUN) herdr plugin install speardragon/herdr-plugin-manager --yes
-	$(RUN) herdr plugin install krystof018/herdr-git-status --yes
-	$(RUN) herdr plugin install jeffarese/herdr-bar --yes
-	$(RUN) herdr plugin install kryptamine/herdr-auto-title --yes
-	$(RUN) herdr plugin install jeffarese/herdr-agent-grid --yes
+	$(RUN) herdr plugin install --yes AVGVSTVS96/herdr-drovr
+	$(RUN) herdr plugin install --yes amiramay/herdr-layout-cycle
+	$(RUN) herdr plugin install --yes jeffarese/herdr-agent-grid
+	$(RUN) herdr plugin install --yes jeffarese/herdr-bar
+	$(RUN) herdr plugin install --yes kryptamine/herdr-auto-title
+	$(RUN) herdr plugin install --yes krystof018/herdr-git-status
+	$(RUN) herdr plugin install --yes speardragon/herdr-plugin-manager
 	$(RUN) if ! [ -d $(HERDR_GIT_STATUS_DIR) ]; then \
-		mkdir -p $(HERDR_GIT_STATUS_DIR) \
+		mkdir -p $(HERDR_GIT_STATUS_DIR) && \
 		git clone https://github.com/7aske/herdr-git-status.git $(HERDR_GIT_STATUS_DIR) && \
-		herdr plugin link $(HERDR_GIT_STATUS_DIR) \
+		herdr plugin link $(HERDR_GIT_STATUS_DIR) && \
 		cd $(HERDR_GIT_STATUS_DIR) && cargo build --release
 	fi
 	$(RUN) herdr server reload-config

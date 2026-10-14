@@ -110,6 +110,11 @@ width = "95%"
 height = "95%"
 
 [[keys.command]]
+key = "prefix+shift+a"
+type = "shell"
+command = "bash -ic 'cd ~/.agent && herdr-create'"
+
+[[keys.command]]
 key = "prefix+o"
 type = "popup"
 command = "codeopen -t herdr"
@@ -128,3 +133,27 @@ key = "prefix+shift+p"
 type = "plugin_action"
 command = "ray.plugin-manager.open"
 description = "open plugin manager"
+
+[[keys.command]]
+key = "prefix+M"
+type = "plugin_action"
+command = "drovr.move-tab"
+description = "move tab to workspace"
+
+[[keys.command]]
+key = "prefix+m"
+type = "plugin_action"
+command = "drovr.move-pane"
+description = "move pane to tab"
+
+[[keys.command]]
+key = "prefix+l"
+type = "plugin_action"
+command = "herdr-layout-cycle.cycle-layout"
+description = "cycle layout"
+
+[[keys.command]]
+key = "prefix+shift+l"
+type = "plugin_action"
+command = "herdr-layout-cycle.cycle-layout-back"
+description = "cycle layout (back)"

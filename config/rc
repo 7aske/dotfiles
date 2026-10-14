@@ -341,6 +341,44 @@ function tmux-agent() {
 alias tv=tmux-vim
 alias ta=tmux-agent
 
+function herdr-create() {
+    local session_name wid args cwd
+    cwd="$(realpath "$PWD/$1")"
+
+    if ! [ -d "$cwd" ]; then
+        echo "Directory does not exist: $cwd" >&2
+        return 1
+    fi
+
+    session_name="$(basename "$cwd")"
+    # must use ends with since plugins can change the label
+    wid="$(herdr workspace list | jq -r '.result.workspaces[]| select(.label | endswith("'"$session_name"'")) | .workspace_id')"
+
+    args=()
+    if [ "$session_name" = ".agent" ]; then
+        args+=("--label" "default")
+    fi
+
+    if [ -z "$wid" ]; then
+        wid="$(herdr workspace create --cwd "$cwd" "${args[@]}" | jq -r .result.workspace.workspace_id)"
+    fi
+
+    echo "$wid" | head -n1
+}
+
+function herdr-open() {
+    local wid
+    wid="$(herdr-create "${1:-${PWD}}")"
+
+    # already inside herdr (e.g. prefix+o popup): create/focus and exit so the popup closes
+    if [ "${HERDR_ENV:-}" = 1 ]; then
+        herdr workspace focus "$wid" >/dev/null
+        exit 0
+    fi
+    wtoggle2 -d 90%x90% herdr
+    herdr workspace focus "$wid" >/dev/null
+}
+
 function agent() {
     $AGENT "$*"
 }
