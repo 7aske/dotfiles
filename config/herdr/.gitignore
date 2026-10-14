@@ -2,6 +2,7 @@
 *.sock
 config.toml.bak
 .plugins.lock
+plugins.json
 plugins/*
 !plugins/config
 release-notes.json
