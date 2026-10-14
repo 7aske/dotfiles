@@ -21,8 +21,8 @@ status_indicators = "dots"
 
 [ui.sidebar.agents]
 rows = [
-  ["state_icon", "machine", "workspace", "tab"],
-  ["agent"],
+  ["state_icon", "workspace", "tab"],
+  ["agent", "machine"],
 ]
 
 [ui.sidebar.spaces]

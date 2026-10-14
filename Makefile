@@ -188,6 +188,20 @@ $(DOTFILES):
 # ----------------------------
 # Dotfiles (special cases)
 # ----------------------------
+HERDR_GIT_STATUS_DIR := $$(cgs -C)/rs/herdr-git-status
+herdr-plugins:
+	$(RUN) herdr plugin install speardragon/herdr-plugin-manager --yes
+	$(RUN) herdr plugin install krystof018/herdr-git-status --yes
+	$(RUN) herdr plugin install jeffarese/herdr-bar --yes
+	$(RUN) herdr plugin install kryptamine/herdr-auto-title --yes
+	$(RUN) herdr plugin install jeffarese/herdr-agent-grid --yes
+	$(RUN) if ! [ -d $(HERDR_GIT_STATUS_DIR) ]; then \
+		mkdir -p $(HERDR_GIT_STATUS_DIR) \
+		git clone https://github.com/7aske/herdr-git-status.git $(HERDR_GIT_STATUS_DIR) && \
+		herdr plugin link $(HERDR_GIT_STATUS_DIR) \
+		cd $(HERDR_GIT_STATUS_DIR) && cargo build --release
+	fi
+	$(RUN) herdr server reload-config
 
 tmux:
 	$(RUN) ./util/mklink.sh tmux
@@ -279,7 +293,7 @@ completions-install: \
 
 dotfiles-install: \
 	$(DOTFILES) \
-	tmux vscode zsh \
+	tmux vscode zsh herdr \
 	$(SOURCES) \
 	xmodmap ideavim imwheel
 

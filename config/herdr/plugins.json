@@ -89,8 +89,8 @@
     "version": "0.4.0",
     "min_herdr_version": "0.7.0",
     "description": "GitLab & GitHub CI and merge-request review status in herdr: a live colored dot, MR/PR number, and review-state glyph on each space's label, plus on-demand CI-detail and 'My MRs' panes. Auto-detects the provider from the repo's origin host.",
-    "manifest_path": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github/gitlab-ci-status-a9604e03cdd3/herdr-plugin.toml",
-    "plugin_root": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github/gitlab-ci-status-a9604e03cdd3",
+    "manifest_path": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github-installations/gitlab-ci-status-a9604e03cdd3/622482-0/checkout/herdr-plugin.toml",
+    "plugin_root": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github-installations/gitlab-ci-status-a9604e03cdd3/622482-0/checkout",
     "enabled": true,
     "platforms": [
       "linux",
@@ -172,8 +172,68 @@
       "owner": "krystof018",
       "repo": "herdr-git-status",
       "resolved_commit": "3d741c55dda03875916c9c1134324a8d9b5a40eb",
-      "managed_path": "/home/nik/.config/herdr/plugins/github/gitlab-ci-status-a9604e03cdd3",
-      "installed_unix_ms": 1791918443190
+      "managed_path": "/home/nik/.config/herdr/plugins/github-installations/gitlab-ci-status-a9604e03cdd3/622482-0/checkout",
+      "installed_unix_ms": 1791938095886
+    }
+  },
+  {
+    "plugin_id": "herdr-agent-grid",
+    "name": "Herdr Agent Grid",
+    "version": "2.0.2",
+    "min_herdr_version": "0.9.0",
+    "description": "Your agents. One command center. Live status, tools, messages and API cost.",
+    "manifest_path": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github-installations/herdr-agent-grid-1439d786b922/622924-0/checkout/herdr-plugin.toml",
+    "plugin_root": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github-installations/herdr-agent-grid-1439d786b922/622924-0/checkout",
+    "enabled": true,
+    "platforms": [
+      "linux",
+      "macos"
+    ],
+    "build": [
+      {
+        "command": [
+          "sh",
+          "install.sh",
+          "--prepare-only"
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "open",
+        "title": "Open agent grid",
+        "description": "See every current agent's status and metrics, and jump to its terminal",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "sh",
+          "-c",
+          "herdr_bin=\"${HERDR_BIN_PATH:-herdr}\"; [ -x \"$herdr_bin\" ] || herdr_bin=herdr; exec \"$herdr_bin\" plugin pane open --plugin herdr-agent-grid --entrypoint grid --focus"
+        ]
+      }
+    ],
+    "panes": [
+      {
+        "id": "grid",
+        "title": "Agent Grid",
+        "description": "Compact status cards with live session metrics",
+        "placement": "popup",
+        "width": "100%",
+        "height": "100%",
+        "command": [
+          "sh",
+          "run.sh"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "github",
+      "owner": "jeffarese",
+      "repo": "herdr-agent-grid",
+      "resolved_commit": "67860ba750e4207ecab5020d3a35010eadb44773",
+      "managed_path": "/home/nik/.config/herdr/plugins/github-installations/herdr-agent-grid-1439d786b922/622924-0/checkout",
+      "installed_unix_ms": 1791938111135
     }
   },
   {
@@ -182,8 +242,8 @@
     "version": "0.7.3",
     "min_herdr_version": "0.9.0",
     "description": "Cmd+K command bar with agent icons, fuzzy search, and optional automatic tab titles",
-    "manifest_path": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github/herdr-bar-96eebe452a9c/herdr-plugin.toml",
-    "plugin_root": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github/herdr-bar-96eebe452a9c",
+    "manifest_path": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github-installations/herdr-bar-96eebe452a9c/622507-0/checkout/herdr-plugin.toml",
+    "plugin_root": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github-installations/herdr-bar-96eebe452a9c/622507-0/checkout",
     "enabled": true,
     "platforms": [
       "linux",
@@ -269,8 +329,91 @@
       "owner": "jeffarese",
       "repo": "herdr-bar",
       "resolved_commit": "e22455068e26340b6be02cec8a07707fc1f11ae1",
-      "managed_path": "/home/nik/.config/herdr/plugins/github/herdr-bar-96eebe452a9c",
-      "installed_unix_ms": 1791906244665
+      "managed_path": "/home/nik/.config/herdr/plugins/github-installations/herdr-bar-96eebe452a9c/622507-0/checkout",
+      "installed_unix_ms": 1791938098359
+    }
+  },
+  {
+    "plugin_id": "herdr.auto-title",
+    "name": "Auto Title",
+    "version": "0.13.2",
+    "min_herdr_version": "0.8.2",
+    "description": "Automatically generates contextual tab titles",
+    "manifest_path": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github-installations/herdr.auto-title-4b7d61f48ce8/622558-0/checkout/herdr-plugin.toml",
+    "plugin_root": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github-installations/herdr.auto-title-4b7d61f48ce8/622558-0/checkout",
+    "enabled": true,
+    "platforms": [
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "build": [
+      {
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "herdr-auto-title",
+          "./cmd/herdr-auto-title"
+        ]
+      },
+      {
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "herdr-auto-title.exe",
+          "./cmd/herdr-auto-title"
+        ]
+      }
+    ],
+    "startup": [
+      {
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "./herdr-auto-title"
+        ]
+      },
+      {
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          "./herdr-auto-title.exe"
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "restart",
+        "title": "Auto Title: restart",
+        "description": "Start a fresh Auto Title in place of the running one",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "./herdr-auto-title",
+          "restart"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "github",
+      "owner": "kryptamine",
+      "repo": "herdr-auto-title",
+      "resolved_commit": "8b2504514bb2aaa79ecbba6cb0e6c426652f4419",
+      "managed_path": "/home/nik/.config/herdr/plugins/github-installations/herdr.auto-title-4b7d61f48ce8/622558-0/checkout",
+      "installed_unix_ms": 1791938100251
     }
   },
   {
@@ -279,8 +422,8 @@
     "version": "0.5.0",
     "min_herdr_version": "0.7.4",
     "description": "Manage herdr plugins from a popup: list, install, update, enable/disable, uninstall, browse the marketplace, open repo in browser, edit plugins.json",
-    "manifest_path": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github/ray.plugin-manager-75f462e8e1d0/herdr-plugin.toml",
-    "plugin_root": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github/ray.plugin-manager-75f462e8e1d0",
+    "manifest_path": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github-installations/ray.plugin-manager-75f462e8e1d0/622411-0/checkout/herdr-plugin.toml",
+    "plugin_root": "/home/nik/.local/src/sh/dotfiles/config/herdr/plugins/github-installations/ray.plugin-manager-75f462e8e1d0/622411-0/checkout",
     "enabled": true,
     "platforms": [
       "macos",
@@ -319,8 +462,8 @@
       "owner": "speardragon",
       "repo": "herdr-plugin-manager",
       "resolved_commit": "e4fef2693728a36cbb389af033a389cad2257869",
-      "managed_path": "/home/nik/.config/herdr/plugins/github/ray.plugin-manager-75f462e8e1d0",
-      "installed_unix_ms": 1791915217090
+      "managed_path": "/home/nik/.config/herdr/plugins/github-installations/ray.plugin-manager-75f462e8e1d0/622411-0/checkout",
+      "installed_unix_ms": 1791938094504
     }
   }
 ]
