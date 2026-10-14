@@ -52,12 +52,6 @@ declare -a actions=(
 
     # herdr
     "󰆍 Open herdr|wtoggle2 -d 90%x90% \"kitty --override background_opacity=1 --class floating herdr\""
-    "󰒓 Herdr command bar|herdr plugin action invoke open --plugin herdr-bar"
-    "󰊢 Toggle herdr git status|herdr plugin action invoke status-toggle --plugin ez-corp.git-status"
-    "󰙨 Toggle herdr CI dots|herdr plugin action invoke toggle --plugin gitlab-ci-status"
-    " Herdr CI status|herdr plugin action invoke open --plugin gitlab-ci-status"
-    " Herdr My MRs/PRs|herdr plugin action invoke open-mr --plugin gitlab-ci-status"
-    "󰐱 Herdr plugin manager|herdr plugin action invoke open --plugin ray.plugin-manager"
 
     # utilities
     "󰸉 Reload wallpaper|nitrogen --restore"
@@ -82,6 +76,13 @@ declare -a actions=(
     "󱄌 Reboot|i3exit reboot"
     "⏻ Shutdown|i3exit shutdown"
 )
+
+if [ -x "$(command -v herdr)" ]; then
+    while IFS= read -r action; do
+        actions+=("$action")
+    done < <(herdr plugin action list | jq -r '.result.actions[] | "󰳆 \("Herdr: " + .title)|herdr plugin action invoke \(.action_id) --plugin \(.plugin_id)"')
+fi
+
 if [ ${#more_actions[@]} -gt 0 ]; then
     actions+=("${more_actions[@]}")
 fi
