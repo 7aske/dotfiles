@@ -197,6 +197,7 @@ herdr-plugins:
 	$(RUN) herdr plugin install --yes kryptamine/herdr-auto-title
 	$(RUN) herdr plugin install --yes krystof018/herdr-git-status
 	$(RUN) herdr plugin install --yes speardragon/herdr-plugin-manager
+	$(RUN) herdr plugin install --yes plannotator/herdr-annotate
 	$(RUN) if ! [ -d $(HERDR_GIT_STATUS_DIR) ]; then \
 		mkdir -p $(HERDR_GIT_STATUS_DIR) && \
 		git clone https://github.com/7aske/herdr-git-status.git $(HERDR_GIT_STATUS_DIR) && \

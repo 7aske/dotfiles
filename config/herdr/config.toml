@@ -115,6 +115,14 @@ type = "shell"
 command = "bash -ic 'cd ~/.agent && herdr-create'"
 
 [[keys.command]]
+key = "prefix+a"
+type = "popup"
+command = "herdr-plugin-actions"
+description = "picker for plugin actions"
+width = "80%"
+height = "80%"
+
+[[keys.command]]
 key = "prefix+o"
 type = "popup"
 command = "codeopen -t herdr"
