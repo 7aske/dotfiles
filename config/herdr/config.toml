@@ -21,8 +21,9 @@ status_indicators = "dots"
 
 [ui.sidebar.agents]
 rows = [
-  ["state_icon", "workspace", "tab"],
+  ["state_icon", "workspace"],
   ["agent", "machine"],
+  ["$limit", "$context"]
 ]
 
 [ui.sidebar.spaces]
@@ -174,3 +175,9 @@ key = "prefix+shift+l"
 type = "plugin_action"
 command = "herdr-layout-cycle.cycle-layout-back"
 description = "cycle layout (back)"
+
+[[keys.command]]
+key = "ctrl+shift+u"
+type = "plugin_action"
+command = "usagebar.open-limits"
+description = "Agent Usage: open limits pane"
