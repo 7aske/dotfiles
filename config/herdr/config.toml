@@ -21,8 +21,9 @@ status_indicators = "dots"
 
 [ui.sidebar.agents]
 rows = [
-  ["state_icon", "workspace", "tab"],
+  ["state_icon", "workspace"],
   ["agent", "machine"],
+  ["$limit", "$context"]
 ]
 
 [ui.sidebar.spaces]
@@ -112,7 +113,8 @@ height = "95%"
 [[keys.command]]
 key = "prefix+shift+a"
 type = "shell"
-command = "bash -ic 'cd ~/.agent && herdr-create'"
+command = "bash -ic 'cd ~/.agent && herdr-create | xargs herdr workspace focus'"
+description = "open a default agent workspace"
 
 [[keys.command]]
 key = "prefix+a"
@@ -120,7 +122,15 @@ type = "popup"
 command = "herdr-plugin-actions"
 description = "picker for plugin actions"
 width = "80%"
-height = "80%"
+height = "30%"
+
+[[keys.command]]
+key = "prefix+shift+g"
+type = "popup"
+command = "herdr-mrs"
+description = "open merge requests of workspace repo"
+width = "95%"
+height = "90%"
 
 [[keys.command]]
 key = "prefix+o"
@@ -165,3 +175,9 @@ key = "prefix+shift+l"
 type = "plugin_action"
 command = "herdr-layout-cycle.cycle-layout-back"
 description = "cycle layout (back)"
+
+[[keys.command]]
+key = "ctrl+shift+u"
+type = "plugin_action"
+command = "usagebar.open-limits"
+description = "Agent Usage: open limits pane"

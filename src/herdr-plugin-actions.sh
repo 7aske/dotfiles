@@ -5,7 +5,7 @@ declare -a actions=()
 if [ -x "$(command -v herdr)" ]; then
     while IFS= read -r action; do
         actions+=("$action")
-    done < <(herdr plugin action list | jq -r '.result.actions[] | "󰳆 \("Herdr: " + .title)|herdr plugin action invoke \(.action_id) --plugin \(.plugin_id)"')
+    done < <(herdr plugin action list | jq -r '.result.actions[] | "󰳆 \(.plugin_id + ": " + .title)|herdr plugin action invoke \(.action_id) --plugin \(.plugin_id)"')
 fi
 
 menu="fzf"
