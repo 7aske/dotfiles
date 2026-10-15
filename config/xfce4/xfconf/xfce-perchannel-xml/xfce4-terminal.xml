@@ -11,7 +11,7 @@
   <property name="dropdown-position-vertical" type="uint" value="51"/>
   <property name="dropdown-always-show-tabs" type="bool" value="false"/>
   <property name="dropdown-show-borders" type="bool" value="true"/>
-  <property name="font-name" type="string" value="Fira Code 12"/>
+  <property name="font-name" type="string" value="Fira Code 10"/>
   <property name="misc-always-show-tabs" type="bool" value="false"/>
   <property name="misc-bell" type="bool" value="false"/>
   <property name="misc-bell-urgent" type="bool" value="true"/>
