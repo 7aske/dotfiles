@@ -1,0 +1,60 @@
+# Agent Usage (usagebar) plugin config
+# Path: herdr plugin config-dir usagebar
+
+[notify]
+enabled = true
+# remaining % thresholds that may fire a toast (once per window/bucket)
+remaining_thresholds = [50, 20, 10, 5]
+
+[ui]
+# remaining (default): % left / higher is safer. used: fill as you burn.
+limit_percent = "remaining"
+# Set false to hide cache data from both sidebar and Agent Usage.
+cache_display = true
+
+# Multi-account Claude: uncomment and add one block per account.
+# Absence of any profile keeps the single default account (fully backward
+# compatible). config_dir must be unique per profile and may use ~.
+#
+# Once any profile exists, declare the default account too: bare `claude`
+# sets no CLAUDE_CONFIG_DIR, so the ~/.claude account is only recorded if
+# a profile claims that dir. `usagebar setup` warns when it is uncovered.
+#
+# [[claude.profiles]]
+# id = "claude"
+# label = "Claude"
+# config_dir = "~/.claude"
+# claude_json_path = "~/.claude.json"   # optional; defaults per config_dir
+#
+# [[claude.profiles]]
+# id = "claude-secondary"
+# label = "Claude (secondary)"
+# config_dir = "~/.claude-secondary"
+
+# Multi-account Codex: uncomment and add one block per CODEX_HOME.
+# Absence of any profile keeps the single default account at ~/.codex.
+# Once any profile exists, declare the default account too: bare `codex`
+# sets no CODEX_HOME, so ~/.codex is only recorded if a profile claims
+# that dir. `usagebar setup` warns when it is uncovered.
+#
+# [[codex.profiles]]
+# id = "codex"
+# label = "personal"
+# codex_home = "~/.codex"
+#
+# [[codex.profiles]]
+# id = "dev"
+# label = "product"
+# codex_home = "~/.codex-dev"
+
+# Multi-account Grok: one GROK_HOME per profile.
+# [[grok.profiles]]
+# id = "grok"
+# label = "personal"
+# grok_home = "~/.grok"
+#
+# Multi-account OpenCode: one OPENCODE_DATA_DIR per profile.
+# [[opencode.profiles]]
+# id = "opencode"
+# label = "personal"
+# data_dir = "~/.local/share/opencode"

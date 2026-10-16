@@ -22,8 +22,9 @@ status_indicators = "dots"
 [ui.sidebar.agents]
 rows = [
   ["state_icon", "workspace"],
-  ["agent", "machine"],
-  ["$limit", "$context"]
+  [{ token = "pane", dim = false }],
+  [{token = "agent", dim = true}, {token = "machine", dim = true}],
+  [{token = "$limit", dim = true}, {token = "$context", dim = true}]
 ]
 
 [ui.sidebar.spaces]
@@ -109,6 +110,14 @@ command = "lazygit"
 description = "run lazygit"
 width = "95%"
 height = "95%"
+
+[[keys.command]]
+key = "prefix+e"
+type = "popup"
+command = "ranger"
+description = "run ranger"
+width = "100%"
+height = "100%"
 
 [[keys.command]]
 key = "prefix+shift+a"
