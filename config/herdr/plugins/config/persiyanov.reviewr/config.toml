@@ -1,0 +1,7 @@
+theme = "nord"
+default_scope = "branch"
+markdown_view = "rendered"
+navigator_position = "right"
+toggle_placement = "overlay"
+toggle_direction = "down"
+auto_open = true

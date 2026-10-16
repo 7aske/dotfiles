@@ -9,7 +9,7 @@ prompt_new_tab_name = false
 # tmux: set -g mouse on  +  set -s set-clipboard on / copy-pipe to clipboard
 mouse_capture = true
 copy_on_select = true
-hide_tab_bar_when_single_tab = true
+hide_tab_bar_when_single_tab = false
 prompt_new_workspace_name = true
 
 tab_bar_right = [
