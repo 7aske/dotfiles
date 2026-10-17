@@ -17,10 +17,6 @@ export MAIL="thunderbird"
 export AGENT="cursor-agent"
 export CHAT="claude-desktop"
 
-# task
-export TASKDATA="$HOME/.config/task"
-export TASKRC="$HOME/.config/taskrc"
-
 export FZF_CODE=1
 
 # Thanks to Luke Smith https://github.com/LukeSmithxyz/voidrice
@@ -67,5 +63,14 @@ prepend_path "$HOME/.local/bin/scripts"
 unset prepend_path
 
 export PATH
+
+# task - active profile in ~/.taskprofile; wrappers re-read on each run
+if [ -x "$HOME/.local/bin/task-env" ]; then
+	eval "$("$HOME/.local/bin/task-env" export)"
+else
+	export TASKDATA="$HOME/.config/task"
+	export TASKRC="$HOME/.config/taskrc"
+	export TASK_PROFILE="personal"
+fi
 
 export QT_QPA_PLATFORMTHEME="qt5ct"

@@ -5,6 +5,12 @@
 
 uda.taskwarrior-tui.shortcuts.1=~/.local/bin/task-open
 uda.taskwarrior-tui.keyconfig.shortcut1=o
+uda.taskwarrior-tui.shortcuts.2=~/.local/bin/task-view
+uda.taskwarrior-tui.keyconfig.shortcut2=w
+uda.taskwarrior-tui.shortcuts.3=~/.local/bin/task-create
+uda.taskwarrior-tui.keyconfig.shortcut3=n
+
+uda.taskwarrior-tui.shortcuts.5=~/.local/bin/task-agent
 
 # Bugwarrior UDAs
 uda.gitlabtitle.type=string
@@ -66,6 +72,11 @@ uda.jirasubtasks.label=Jira Subtasks
 uda.jiraparent.type=string
 uda.jiraparent.label=Jira Parent
 # END Bugwarrior UDAs
+
+uda.localdir.type=string
+uda.localdir.label=Local Directory
+uda.longdescription.type=string
+uda.longdescription.label=Long Description
 
 include ~/.config/task/sync.taskrc
 # Here is an example of entries that use the default, override and blank values
@@ -133,6 +144,8 @@ color.tag.next=rgb440
 color.undo.after=green
 color.undo.before=red
 color.calendar.scheduled=rgb013 on white
+
+report.next.filter=status:pending -WAITING
 
 uda.taskwarrior-tui.selection.bold=yes
 uda.taskwarrior-tui.selection.reverse=yes

@@ -172,7 +172,7 @@ mode "$mode_lutris" {
 
 bindsym $mod+Mod1+Shift+d      exec --no-startup-id gnome-disks
 bindsym $mod+Shift+d           exec --no-startup-id wtoggle2 -T -f lazydocker
-bindsym $mod+bracketleft       exec --no-startup-id wtoggle2 -T -d60%x60% taskwarrior-tui
+bindsym $mod+bracketleft       exec --no-startup-id wtoggle2 -T -d75%x75% taskwarrior-tui
 bindsym $mod+Shift+bracketleft exec --no-startup-id wtoggle2 -T -d60%x60% calcurse
 bindsym $mod+bracketright      exec --no-startup-id wtoggle2 -T -d60%x60% newsboat
 bindsym $mod+Mod1+k            exec --no-startup-id wtoggle2 -T -d90%x80% k9s

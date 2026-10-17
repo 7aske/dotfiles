@@ -1,4 +1,9 @@
-#!/usr/bin/env bash 
+#!/usr/bin/env bash
+
+# Use active Taskwarrior profile (TASKDATA / TASKRC from ~/.taskprofile)
+if command -v task-env >/dev/null 2>&1; then
+	eval "$(task-env export)"
+fi
 
 _sync() {
 	[ -z "$1" ] && return 1

@@ -115,6 +115,14 @@ width = "95%"
 height = "95%"
 
 [[keys.command]]
+key = "prefix+shift+t"
+type = "popup"
+command = "taskwarrior-tui"
+description = "run taskwarrior-tui"
+width = "95%"
+height = "95%"
+
+[[keys.command]]
 key = "prefix+e"
 type = "popup"
 command = "ranger"

@@ -1,0 +1,3 @@
+#compdef task-view
+
+_arguments '1:task id or uuid:'

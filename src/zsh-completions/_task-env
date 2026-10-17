@@ -1,0 +1,18 @@
+#compdef task-env
+
+_arguments \
+	'1:command:(set export profile list personal work real help)' \
+	'2:arg:->arg'
+
+case $state in
+arg)
+	case $words[2] in
+	set)
+		_values 'profile' personal work
+		;;
+	real)
+		_values 'command' task taskwarrior-tui bugwarrior bugwarrior-pull
+		;;
+	esac
+	;;
+esac

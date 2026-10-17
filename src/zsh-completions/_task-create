@@ -1,0 +1,3 @@
+#compdef task-create
+
+_message 'interactively create a Taskwarrior task'
