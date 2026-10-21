@@ -8,3 +8,4 @@ plugins/*
 release-notes.json
 session-snapshots
 session.json
+update-check-state.json

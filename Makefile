@@ -10,7 +10,7 @@ else
 	RUN :=
 endif
 
-BIN_DIR          := ~/.local/bin
+BIN_DIR          := $(HOME)/.local/bin
 SRC_DIR          := src
 
 STATUS_DIR       := statusbar

@@ -14,7 +14,6 @@ prompt_new_workspace_name = true
 
 tab_bar_right = [
   { type = "zoom" },
-  { type = "command", command = "~/.local/share/agent-statusline/statusline.sh", interval_seconds = 5, timeout_seconds = 2 },
 ]
 tab_bar_right_separator = " | "
 status_indicators = "dots"
@@ -147,8 +146,8 @@ height = "30%"
 [[keys.command]]
 key = "prefix+shift+g"
 type = "popup"
-command = "herdr-mrs"
-description = "open merge requests of workspace repo"
+command = "env HERDR_GIT_TUI_EMBED=1 herdr-git-tui"
+description = "git MRs/PRs, CI jobs, and issues for workspace repo"
 width = "95%"
 height = "90%"
 
