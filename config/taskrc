@@ -4,13 +4,45 @@
 # 'man task-sync' or 'man taskrc'
 
 uda.taskwarrior-tui.shortcuts.1=~/.local/bin/task-open
-uda.taskwarrior-tui.keyconfig.shortcut1=o
+uda.taskwarrior-tui.keyconfig.shortcut1=O
 uda.taskwarrior-tui.shortcuts.2=~/.local/bin/task-view
-uda.taskwarrior-tui.keyconfig.shortcut2=w
+uda.taskwarrior-tui.keyconfig.shortcut2=o
 uda.taskwarrior-tui.shortcuts.3=~/.local/bin/task-create
 uda.taskwarrior-tui.keyconfig.shortcut3=n
+# herdr-flow: selected UUIDs as args; rofi menu then background start (was tw-agent --bg)
+uda.taskwarrior-tui.shortcuts.5=~/.local/bin/herdr-flow-tui
+uda.taskwarrior-tui.keyconfig.shortcut5=w
 
-uda.taskwarrior-tui.shortcuts.5=~/.local/bin/task-agent
+# Bugwarrior UDAs
+uda.githubtitle.type=string
+uda.githubtitle.label=Github Title
+uda.githubbody.type=string
+uda.githubbody.label=Github Body
+uda.githubcreatedon.type=date
+uda.githubcreatedon.label=Github Created
+uda.githubupdatedat.type=date
+uda.githubupdatedat.label=Github Updated
+uda.githubclosedon.type=date
+uda.githubclosedon.label=GitHub Closed
+uda.githubmilestone.type=string
+uda.githubmilestone.label=Github Milestone
+uda.githubrepo.type=string
+uda.githubrepo.label=Github Repo Slug
+uda.githuburl.type=string
+uda.githuburl.label=Github URL
+uda.githubtype.type=string
+uda.githubtype.label=Github Type
+uda.githubnumber.type=numeric
+uda.githubnumber.label=Github Issue/PR #
+uda.githubuser.type=string
+uda.githubuser.label=Github User
+uda.githubnamespace.type=string
+uda.githubnamespace.label=Github Namespace
+uda.githubstate.type=string
+uda.githubstate.label=GitHub State
+uda.githubdraft.type=numeric
+uda.githubdraft.label=GitHub Draft
+# END Bugwarrior UDAs
 
 # Bugwarrior UDAs
 uda.gitlabtitle.type=string
@@ -73,8 +105,6 @@ uda.jiraparent.type=string
 uda.jiraparent.label=Jira Parent
 # END Bugwarrior UDAs
 
-uda.localdir.type=string
-uda.localdir.label=Local Directory
 uda.longdescription.type=string
 uda.longdescription.label=Long Description
 
@@ -89,69 +119,79 @@ include ~/.config/task/sync.taskrc
 # Files
 data.location=/home/nik/.config/task
 
-color.blocked=magenta on black
-color.blocking=black on magenta
-color.active=green on black
-color.active=green on black
+# Nord palette — matches kitty-nord / Xresources (16-color names map via terminal)
+rule.color.merge=0
+
+color.label=
+color.label.sort=
+color.alternate=
+color.header=bold cyan
+color.footnote=yellow
+color.warning=bold black on yellow
+color.error=bold white on red
+color.debug=magenta
+
+color.completed=gray9
+color.deleted=bold gray9
+color.active=bold black on green
+color.recurring=bold magenta
+color.scheduled=
+color.until=
+color.blocking=black on yellow
+color.blocked=bold black on yellow
 color.tagged=
 color.project.none=
+
 color.due=red
-color.due.today=bold red on black
+color.due.today=bold white on red
 color.overdue=bold red
-color.completed=grey3
-color.deleted=grey3
-color.recurring=cyan
-color.until=magenta
 
 color.uda.priority.H=bold red
-color.uda.priority.M=yellow
+color.uda.priority.M=bold yellow
 color.uda.priority.L=cyan
 
-color.header=bold black
-color.footnote=grey3 on magenta
-color.warning=bold yellow
-color.error=bold red
-color.debug=green
+color.summary.bar=black on cyan
+color.summary.background=bright white on black
 
-color.summary.bar=black on green
-color.summary.background=on black
+color.calendar.due=bold black on blue
+color.calendar.due.today=bold black on cyan
+color.calendar.today=bold black on cyan
+color.calendar.overdue=white on red
+color.calendar.weekend=bright white on bright black
+color.calendar.holiday=bold cyan on bright black
+color.calendar.weeknumber=white
+color.calendar.scheduled=cyan on bright black
 
-color.calendar.today=cyan on black
-color.calendar.due=black on green
-color.calendar.due.today=bold black on magenta
-color.calendar.overdue=bold black on red
-color.calendar.weekend=grey3
-color.calendar.holiday=magenta on black
-color.calendar.weeknumber=black on grey3
+color.history.add=bold black on blue
+color.history.delete=bright white on bold black
+color.history.done=bold black on cyan
 
-color.history.add=on red
-color.history.done=black on green
-color.history.delete=black on yellow
-
-color.burndown.pending=on red
+color.burndown.pending=black on red
 color.burndown.started=black on yellow
-color.burndown.done=black on green
-
-color.label=bold blue
-color.label.sort=bold magenta
-color.alternate=on black
+color.burndown.done=bold black on green
 
 color.sync.added=green
 color.sync.changed=yellow
 color.sync.rejected=red
 
-color.tag.next=rgb440
+color.tag.next=yellow
 color.undo.after=green
 color.undo.before=red
-color.calendar.scheduled=rgb013 on white
 
 report.next.filter=status:pending -WAITING
 
+# taskwarrior-tui — explicit selection/chrome (herdr selection_bg #5E81AC ≈ blue)
 uda.taskwarrior-tui.selection.bold=yes
-uda.taskwarrior-tui.selection.reverse=yes
-uda.taskwarrior-tui.selection.dim=yes
+uda.taskwarrior-tui.selection.reverse=no
+uda.taskwarrior-tui.selection.dim=no
 uda.taskwarrior-tui.tabs.change-focus-rotate=yes
-uda.taskwarrior-tui.style.calendar.today=black on green
+uda.taskwarrior-tui.style.report.selection=bold white on blue
+uda.taskwarrior-tui.style.context.active=white on blue
+uda.taskwarrior-tui.style.report-menu.active=white on blue
+uda.taskwarrior-tui.style.calendar.title=white on bright black
+uda.taskwarrior-tui.style.calendar.today=bold black on cyan
+uda.taskwarrior-tui.style.report.scrollbar=blue
+uda.taskwarrior-tui.style.report.scrollbar.area=bright black
 uda.taskwarrior-tui.task-report.use-alternate-style=false
 uda.taskwarrior-tui.mark.indicator=󰄵
 uda.taskwarrior-tui.unmark.indicator=󰄱
@@ -162,3 +202,27 @@ uda.taskwarrior-tui.unmark-selection.indicator=󰄱
 rule.precedence.color=deleted,completed,active,keyword.,tag.,project.,overdue,scheduled,due.today,due,blocked,blocking,recurring,priority,uda.,tagged
 
 news.version=3.4.1
+# tw-agent types: spec | plan | build | test | review | ship
+# (aliases: impl->build, research->spec, generic->build; unset -> build)
+# repo: absolute path to git/non-git project (no localdir)
+uda.type.type=string
+uda.type.label=Type
+uda.repo.type=string
+uda.repo.label=Repo
+uda.branch.type=string
+uda.branch.label=Branch
+uda.round.type=numeric
+uda.round.label=Round
+uda.round.default=0
+# twparent: uuid of the pipeline phase that spawned this task (spec → plan → build → review)
+uda.twparent.type=string
+uda.twparent.label=Parent
+# herdr-flow UDAs (see herdr-flow/docs/udas.md)
+uda.phase.type=string
+uda.phase.label=Phase
+uda.artifact.type=string
+uda.artifact.label=Artifact
+uda.session.type=string
+uda.session.label=Session
+uda.shipcmd.type=string
+uda.shipcmd.label=ShipCmd
