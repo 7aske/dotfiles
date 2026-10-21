@@ -503,6 +503,13 @@ cmd = "dunstctl close-all"
 block = "time"
 interval = 1
 format = " $timestamp.datetime(f:'%H:%M:%S') "
+timezone = ["Europe/Belgrade", "America/New_York"]
+[[block.click]]
+button = "back"
+action = "next_timezone"
+[[block.click]]
+button = "forward"
+action = "prev_timezone"
 [[block.click]]
 button = "left"
 cmd = "notify-send -i date 'Current date' \"$(date +'%A %d %B %Y')\""
