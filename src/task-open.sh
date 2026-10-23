@@ -31,11 +31,13 @@ if [ -z "$URL" ]; then
   exit 1
 fi
 
-# Detect OS and open URL
+# Detect OS and open URL; hide taskwarrior window as well
 if command -v xdg-open >/dev/null 2>&1; then
   xdg-open "$URL"
+  wtoggle2 taskwarrior-tui
 elif command -v open >/dev/null 2>&1; then
   open "$URL"
+  wtoggle2 taskwarrior-tui
 else
   notify-send "task-open" "Don't know how to open URLs on this system."
   exit 1
