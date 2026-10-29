@@ -535,8 +535,8 @@ for_window [class="Arandr"] floating enable, move position center
 for_window [class="Baobab"] floating enable resize set 60 ppt 70 ppt, move position center
 for_window [class="Deluge"] floating enable move position center
 for_window [class="Evolution"] floating enable, resize set 70 ppt 70 ppt, move position center
-for_window [class="(?i)Thunderbird"] floating enable, resize set 80 ppt 80 ppt, move position center
-for_window [class="^org.mozilla.Thunderbird$"] floating enable, resize set 80 ppt 80 ppt, move position center
+for_window [class="(?i)Thunderbird" title="(?i)^(?!sending message)"] floating enable, resize set 80 ppt 80 ppt, move position center
+for_window [class="^org.mozilla.Thunderbird$" title="(?i)^(?!sending message)"] floating enable, resize set 80 ppt 80 ppt, move position center
 for_window [class="Gnome-font-viewer"] floating enable, move position center
 for_window [class="Kvantum Manager"] floating enable, move position center
 for_window [class="Lightdm-settings"] floating enable
