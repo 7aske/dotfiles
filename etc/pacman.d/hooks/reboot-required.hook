@@ -34,4 +34,4 @@ Description = Check if user should be informed about rebooting after certain sys
 When = PostTransaction
 Depends = libnotify
 NeedsTargets
-Exec = /usr/bin/notify-send -u critical -i system-reboot "System update" "Reboot required to apply changes to system packages"
+Exec = /bin/sh -c 'u="${SUDO_USER:-nik}"; [ -n "$u" ] && [ "$u" != root ] || exit 0; uid=$(id -u "$u"); bus="/run/user/$uid/bus"; [ -S "$bus" ] || exit 0; runuser -u "$u" -- env DBUS_SESSION_BUS_ADDRESS="unix:path=$bus" XDG_RUNTIME_DIR="/run/user/$uid" /usr/bin/notify-send -u critical -i system-reboot "System update" "Reboot required to apply changes to system packages"'
