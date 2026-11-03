@@ -78,6 +78,16 @@ padef_get_fixed_pid() {
     echo "$pid"
 }
 
+# prints "<pid> <sink> <sink-input index>" for each sink input
+# native pipewire clients (e.g. spotify) don't set application.process.id
+# on the stream, so fall back to the owning client's pid
+padef_list_sink_inputs() {
+    pactl -fjson list sink-inputs | jq -r --argjson clients "$(pactl -fjson list clients)" '
+        ($clients | map({key: (.index | tostring), value: .properties."application.process.id"})
+            | from_entries) as $client_pids
+        | .[] | "\(.properties."application.process.id" // $client_pids[.client | tostring]) \(.sink) \(.index)"'
+}
+
 padef_toggle_focus() {
 	declare -A application_ids # application pid -> sink number
 	declare -A application_idx # application pid -> sink index
@@ -86,8 +96,7 @@ padef_toggle_focus() {
 			application_ids+=(["${arr[0]}"]="${arr[1]}")
 			application_idx+=(["${arr[0]}"]="${arr[2]}")
 		done <<< "$line"
-    done <<< "$(pactl -fjson list sink-inputs | jq -r '.[] 
-        | "\(.properties."application.process.id") \(.sink) \(.index)"')"
+    done <<< "$(padef_list_sink_inputs)"
 
 	declare -a sinks # sink short names for move-to
 	declare -a indices # sink indexes
@@ -99,7 +108,7 @@ padef_toggle_focus() {
 			descs+=([${arr[1]}]="${arr[@]:2}")
 		done <<< "$line"
     done <<< "$(pactl -fjson list sinks | jq -cr '.[] 
-        | select(all(.ports[]; .availability != "not available")) 
+        | select(.active_port as $p | [.ports[] | select(.name == $p)][0].availability != "not available") 
         | "\(.index) \(.name) \(.description)"')"
 
 	# searching process trees for all related pids
@@ -177,7 +186,7 @@ padef_toggle() {
 			descs+=([${arr[1]}]="${arr[@]:2}")
 		done <<< "$line"
     done <<< "$(pactl -fjson list sinks | jq -cr '.[] 
-        | select(all(.ports[]; .availability != "not available")) 
+        | select(.active_port as $p | [.ports[] | select(.name == $p)][0].availability != "not available") 
         | "\(.index) \(.name) \(.description)"')"
 
 	local output=""
@@ -259,10 +268,9 @@ padef_spec_volume() {
 	declare -A application_idx # application pid -> sink index
 	while IFS= read -r line; do
 		while IFS=' ' read -r -a arr; do
-			application_idx+=([${arr[0]}]=${arr[1]})
+			application_idx+=([${arr[0]}]=${arr[2]})
 		done <<< "$line"
-    done <<< "$(pactl -fjson list sink-inputs | jq -r '.[] 
-        | "\(.properties."application.process.id") \(.index)"')"
+    done <<< "$(padef_list_sink_inputs)"
 
 	# searching process trees for all related pids
     local wpid
@@ -322,10 +330,9 @@ padef_focus_volume() {
 	declare -A application_idx # application pid -> sink index
 	while IFS= read -r line; do
 		while IFS=' ' read -r -a arr; do
-			application_idx+=([${arr[0]}]=${arr[1]})
+			application_idx+=([${arr[0]}]=${arr[2]})
 		done <<< "$line"
-    done <<< "$(pactl -fjson list sink-inputs | jq -r '.[] 
-        | "\(.properties."application.process.id") \(.index)"')"
+    done <<< "$(padef_list_sink_inputs)"
 
 	local wname; wname="$(xdotool getwindowfocus getwindowname)"
 	local wpid; wpid="$(xdotool getwindowfocus getwindowpid)"
